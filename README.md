@@ -1,2 +1,5 @@
 # HELK
-This page contains details for The incredible HELK (Hunting, Elasticsearch, Logastash, Kibana) VM.
+The incredible HELK (Hunting, Elasticsearch, Logstash, Kibana) VM. 
+
+More coming soon..
+
