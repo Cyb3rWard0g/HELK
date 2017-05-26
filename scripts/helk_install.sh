@@ -45,9 +45,10 @@ mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/backup_elasticsearch.
 echo "[HELK INFO] copying custom elasticsearch.yml file to /etc/elasticsearch/.."
 cp -v ../elasticsearch/elasticsearch.yml /etc/elasticsearch/
 
-echo "[HELK INFO] Setting elasticsearch to start automatically when the system boots.."
+echo "[HELK INFO] Starting elasticsearch and setting elasticsearch to start automatically when the system boots.."
 systemctl daemon-reload
 systemctl enable elasticsearch.service
+systemctl start elasticsearch.service
 
 
 echo "[HELK INFO] Installing updates.."
@@ -64,9 +65,10 @@ mv /etc/kibana/kibana.yml /etc/kibana/backup_kibana.yml
 echo "[HELK INFO] copying custom kibana.yml file to /etc/kibana/.."
 cp -v ../kibana/kibana.yml /etc/kibana/
 
-echo "[HELK INFO] Setting kibana to start automatically when the system boots.."
+echo "[HELK INFO] Starting kibana and setting kibana to start automatically when the system boots.."
 systemctl daemon-reload
 systemctl enable kibana.service
+systemctl start kibana.service
 
 
 # *********** Installing Nginx ***************
@@ -74,8 +76,8 @@ echo "[HELK INFO] Installing Nginx.."
 apt-get -y install nginx
 
 echo "[HELK INFO] Creating an admin user to Kibana.."
-echo "[HELK INFO] Naming the user helkadmin.."
-echo "kibadmin:`openssl passwd -apr1`" | sudo tee -a /etc/nginx/htpasswd.users
+echo "[HELK INFO] Naming the admin user helkadmin.."
+echo "helkadmin:`openssl passwd -apr1`" | sudo tee -a /etc/nginx/htpasswd.users
 
 echo "[HELK INFO] Creating a backup of Nginx's config file.."
 mv /etc/nginx/sites-available/default /etc/nginx/sites-available/backup_default
@@ -115,6 +117,3 @@ echo "[HELK INFO] replace 127.0.0.1 with your host's IP address"
 echo "[HELK INFO] finally run the following:"
 echo "[HELK INFO] sudo systemctl restart nginx"
 echo "[HELK INFO] Browse to the IP address from a different computer and enter the credentials for helkadmin"
-
-
-
