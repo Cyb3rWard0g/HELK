@@ -3,11 +3,9 @@
 
 FROM debian:jessie
 
-RUN apt-get update && apt-get install kibana && \
+RUN apt-get update && apt-get install -y --no-install-recommends kibana && \
 	mv /etc/kibana/kibana.yml /etc/kibana/backup_kibana.yml
 
-ADD ../kibana.yml /etc/kibana/kibana.yml
+ADD kibana.yml /etc/kibana/kibana.yml
 
-RUN systemctl daemon-reload && \
-	systemctl enable kibana.service && \
-	systemctl start kibana.service
+RUN systemctl restart kibana

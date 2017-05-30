@@ -7,6 +7,6 @@ RUN apt-get update && apt-get -y install nginx && \
 	echo "helkadmin:`openssl passwd -apr1 hunting`" | tee -a /etc/nginx/htpasswd.users && \
 	mv /etc/nginx/sites-available/default /etc/nginx/sites-available/backup_default
 
-ADD ../default /etc/nginx/sites-available/default
+ADD default /etc/nginx/sites-available/default
 
 RUN systemctl restart nginx
