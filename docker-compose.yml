@@ -6,6 +6,7 @@
 version: '2'
 
 services:
+
   elasticsearch:
     build: elasticsearch/docker/
     networks:
@@ -33,4 +34,4 @@ services:
 
 networks:
   helk:
-    driver: bridge		
+    driver: bridge
