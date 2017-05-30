@@ -1,0 +1,11 @@
+# Dockerfile for Logstash
+# Author: Roberto Rodriguez @Cyb3rWard0g
+
+FROM debian:jessie
+RUN apt-get update && apt-get install logstash
+
+ADD ../logstash/02-beats-input.conf /etc/logstash/conf.d/02-beats-input.conf && \
+	../logstash/50-elasticsearch-output.conf /etc/logstash/conf.d/50-elasticsearch-output.conf
+
+RUN systemctl start logstash && \
+	systemctl enable logstash

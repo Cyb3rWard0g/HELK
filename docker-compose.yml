@@ -1,0 +1,38 @@
+# Docker compose file for the HELK
+# HELK build version: 0.9 (BETA Script)
+# Author: Roberto Rodriguez @Cyb3rWard0g
+# ELK Version: 5x
+
+version: '2'
+
+services:
+	elasticsearch:
+		build: elasticsearch/docker/
+		networks:
+			- helk
+	kibana:
+		build: kibana/docker/
+		depends_on:
+			- elasticsearch
+		networks:
+			- helk
+	nginx:
+		build: nginx/docker/
+		ports:
+			- "80:80"
+		depends_on:
+			- kibana
+		networks:
+			- helk
+	logstash:
+		build: logstash/docker/
+		depends_on:
+			- elasticsearch
+		networks:
+			- helk
+
+networks:
+	helk:
+		driver: bridge
+
+		
