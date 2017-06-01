@@ -3,7 +3,7 @@
 
 FROM openjdk:8-jre
 
-RUN apt-get update && apt-get -y wget openssl && \
+RUN apt-get update && apt-get install -y wget openssl && \
     wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - && \
 	apt-get install -y --no-install-recommends apt-transport-https && \
 	echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-5.x.list && \
