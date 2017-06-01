@@ -10,7 +10,7 @@ RUN apt-get update && apt-get -y wget openssl && \
 	apt-get install -y --no-install-recommends elasticsearch kibana logstash nginx && \
 	echo "helkadmin:`openssl passwd -apr1 hunting`" | tee -a /etc/nginx/htpasswd.users && \
 	mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/backup_elasticsearch.yml && \
-	mv /etc/kibana/kibana.yml /etc/kibana/backup_kibana.yml
+	mv /etc/kibana/kibana.yml /etc/kibana/backup_kibana.yml && \
 	mv /etc/nginx/sites-available/default /etc/nginx/sites-available/backup_default
 
 ADD ./elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
