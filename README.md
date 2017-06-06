@@ -2,25 +2,55 @@
 The incredible HELK (Hunting, Elasticsearch, Logstash, Kibana) VM. 
 
 # Getting Started
-For now, this basic build can be installed with the help of a bash script. This script is based on most of the commands I used and described [HERE](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html) 
 
-### Requirements
+## Requirements
 * OS: Ubuntu-16.04.2 Server amd64 (Tested)
 * Network Connection: NAT or Bridge
 * RAM: 4GB (minimum)
+* Applications:
+	* Docker & Docker-compose (Needed for HELK Docker Installation ONLY)
 
-### Installation
-* Run `sudo su -`
-* Run `git clone https://github.com/Cyb3rWard0g/HELK.git`
-* Run `cd HELK/scripts`
-* Run `chmod +x helk_install.sh`
-* Run `./helk_install.sh`
+### Installing Docker & Docker-compose
+If you decide to build,(re)create, start and attach the specific containters needed for the HELK services (Elasticsearch, Logstash & Kibana), you will have to install Docker and Docker-compose first.
 
-### Custom Configuration
-Once the installation completes, your ELK Stack Web interface will ONLY be accessed locally (127.0.0.1). Edit your /etc/nginx/sites-available/default file doing the following:
-* Run `sudo nano /etc/nginx/sites-available/default`
-* Replace 127.0.0.1 with your host's IP address
-* Run `sudo systemctl restart nginx`
+```
+git clone https://github.com/Cyb3rWard0g/HELK.git
+cd HELK/scripts
+sudo ./helk_docker_install.sh
+
+```
+ 
+## HELK Installation
+The HELK can be installed via a bash script or a docker-compose file
+
+### Bash Script
+```
+git clone https://github.com/Cyb3rWard0g/HELK.git
+cd HELK/scripts
+sudo ./helk_install.sh
+
+```
+Once the installation completes, your ELK Stack Web interface will be available ONLY locally (127.0.0.1). Edit your /etc/nginx/sites-available/default file to give it an IP address:
+```
+
+sudo nano /etc/nginx/sites-available/default
+[Replace 127.0.0.1 with your host's IP address]
+
+sudo systemctl restart nginx
+
+```
+
+### Docker-compose
+```
+git clone https://github.com/Cyb3rWard0g/HELK.git
+cd HELK
+sudo docker-compose up
+
+```
+
+## Author
+* Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g)
+
 
 More coming soon...
 
