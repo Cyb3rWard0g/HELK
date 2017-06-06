@@ -1,7 +1,7 @@
 server {
     listen 80;
 
-    server_name 127.0.0.1;
+    server_name HELK;
 
     auth_basic "Restricted Access";
     auth_basic_user_file /etc/nginx/htpasswd.users;

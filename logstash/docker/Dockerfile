@@ -14,4 +14,3 @@ ADD 50-elasticsearch-output.conf /etc/logstash/conf.d/50-elasticsearch-output.co
 
 EXPOSE 5044
 
-CMD ["/bin/systemctl", "start", "logstash"]

@@ -8,28 +8,41 @@ version: '2'
 services:
 
   elasticsearch:
-    build: elasticsearch/docker/
-    restart: always
+    image: elasticsearch:latest
+    volumes:
+      - ./elasticsearch/docker/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     ports:
       - "9200:9200"
+    networks:
+      - helk
   kibana:
-    build: kibana/docker/
-    restart: always
+    image: kibana:latest
+    volumes:
+      - ./kibana/docker/kibana.yml:/usr/share/config/kibana/kibana.yml
     ports:
       - "5601:5601"
     depends_on:
       - elasticsearch
-  nginx:
-    build: nginx/docker/
-    restart: always
-    ports:
-      - "80:80"
-    depends_on:
-      - kibana
+    networks:
+      - helk
   logstash:
-    build: logstash/docker/
-    restart: always
+    image: logstash:latest
+    volumes:
+      - ./logstash/docker/02-beats-input.conf:/usr/share/logstash/pipeline/02-beats-input.conf
+      - ./logstash/docker/50-elasticsearch-output.conf:/usr/share/logstash/pipeline/50-elasticsearch-output.conf
+      - ./logstash/docker/logstash.yml:/usr/share/logstash/config/logstash.yml
     depends_on:
       - elasticsearch
     ports:
       - "5044:5044"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - helk
+
+networks:
+
+  helk:
+    driver: bridge
