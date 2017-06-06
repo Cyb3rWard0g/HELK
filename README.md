@@ -17,7 +17,6 @@ If you decide to build,(re)create, start and attach the specific containters nee
 git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/scripts
 sudo ./helk_docker_install.sh
-
 ```
  
 ## HELK Installation
@@ -27,30 +26,38 @@ The HELK can be installed via a bash script or a docker-compose file
 ```
 git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/scripts
-sudo ./helk_install.sh
 
-```
-Once the installation completes, your ELK Stack Web interface will be available ONLY locally (127.0.0.1). Edit your /etc/nginx/sites-available/default file to give it an IP address:
-```
+[if you want to access your ELK web interface remotely, you have to edit the custom nginx file that comes with the HELK]
 
-sudo nano /etc/nginx/sites-available/default
+sudo nano ../nginx/default
 [Replace 127.0.0.1 with your host's IP address]
 
-sudo systemctl restart nginx
-
+sudo ./helk_install.sh
 ```
 
 ### Docker-compose
 ```
 git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK
-sudo docker-compose up
 
+[if you want to access your ELK web interface remotely, you have to edit the custom kibana.yml file that comes with the HELK]
+
+sudo nano kibana/docker/kibana.yml
+[Replace server.host: "localhost" with server.host: "IP ADDRESS"]
+
+sudo docker-compose up
 ```
 
 ## Author
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g)
 
+## TO-Do
+- [ ] Integrate NGINX in the Docker image
+- [ ] Upload Kibana Dashboards
+- [ ] Add Winlogbeat scripts & files
+- [ ] Add/Ingest samples logs to the HELK
+- [ ] Install Elastalert
+- [ ] Create Elastalert rules
 
 More coming soon...
 
