@@ -27,7 +27,7 @@ The HELK can be installed via a bash script or a docker-compose file
 git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/scripts
 
-[if you want to access your ELK web interface remotely, you have to edit the custom nginx file that comes with the HELK]
+[ELK web interface remote access requires you to edit edit the repo nginx file]
 
 sudo nano ../nginx/default
 [Replace 127.0.0.1 with your host's IP address]
@@ -40,7 +40,7 @@ sudo ./helk_install.sh
 git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK
 
-[if you want to access your ELK web interface remotely, you have to edit the custom kibana.yml file that comes with the HELK]
+[ELK web interface remote access requires you to edit the docker kibana.yml file]
 
 sudo nano kibana/docker/kibana.yml
 [Replace server.host: "localhost" with server.host: "IP ADDRESS"]
