@@ -12,4 +12,6 @@ RUN apt-get update && \
 
 ADD kibana.yml /etc/kibana/kibana.yml
 
-RUN systemctl restart kibana
+EXPOSE 5601
+
+CMD ["/bin/systemctl", "start", "kibana"]

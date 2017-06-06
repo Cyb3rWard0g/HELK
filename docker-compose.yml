@@ -9,29 +9,27 @@ services:
 
   elasticsearch:
     build: elasticsearch/docker/
-    networks:
-      - helk
+    restart: always
+    ports:
+      - "9200:9200"
   kibana:
     build: kibana/docker/
+    restart: always
+    ports:
+      - "5601:5601"
     depends_on:
       - elasticsearch
-    networks:
-      - helk
   nginx:
     build: nginx/docker/
+    restart: always
     ports:
       - "80:80"
     depends_on:
       - kibana
-    networks:
-      - helk
   logstash:
     build: logstash/docker/
+    restart: always
     depends_on:
       - elasticsearch
-    networks:
-      - helk
-
-networks:
-  helk:
-    driver: bridge
+    ports:
+      - "5044:5044"

@@ -9,4 +9,6 @@ RUN apt-get update && apt-get -y install nginx && \
 
 ADD default /etc/nginx/sites-available/default
 
-RUN systemctl restart nginx
+EXPOSE 80
+
+CMD ["/bin/systemctl", "restart", "nginx"]

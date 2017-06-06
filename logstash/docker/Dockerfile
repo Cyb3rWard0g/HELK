@@ -12,4 +12,6 @@ RUN apt-get update && \
 ADD 02-beats-input.conf /etc/logstash/conf.d/02-beats-input.conf
 ADD 50-elasticsearch-output.conf /etc/logstash/conf.d/50-elasticsearch-output.conf
 
-RUN systemctl start logstash
+EXPOSE 5044
+
+CMD ["/bin/systemctl", "start", "logstash"]

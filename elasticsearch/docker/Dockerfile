@@ -12,4 +12,7 @@ RUN apt-get update && \
 
 ADD elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
-RUN systemctl restart elasticsearch
+EXPOSE 9200
+
+CMD ["/bin/systemctl", "start", "elasticsearch"]
+
