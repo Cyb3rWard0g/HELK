@@ -10,7 +10,7 @@ services:
   elasticsearch:
     image: elasticsearch:latest
     volumes:
-      - ./elasticsearch/docker/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/docker/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     ports:
@@ -30,9 +30,8 @@ services:
   logstash:
     image: logstash:latest
     volumes:
-      - ./logstash/docker/02-beats-input.conf:/usr/share/logstash/pipeline/02-beats-input.conf
-      - ./logstash/docker/50-elasticsearch-output.conf:/usr/share/logstash/pipeline/50-elasticsearch-output.conf
-      - ./logstash/docker/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/docker/pipeline:/usr/share/logstash/pipeline
+      - ./logstash/docker/config/logstash.yml:/usr/share/logstash/config/logstash.yml
     depends_on:
       - elasticsearch
     ports:

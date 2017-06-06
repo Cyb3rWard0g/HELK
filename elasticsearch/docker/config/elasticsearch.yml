@@ -14,7 +14,8 @@
 #
 # Use a descriptive name for your cluster:
 #
-#cluster.name: my-application
+#from: https://github.com/elastic/elasticsearch-docker/blob/master/build/elasticsearch/elasticsearch.yml
+cluster.name: "docker-cluster"
 #
 # ------------------------------------ Node ------------------------------------
 #
@@ -52,7 +53,7 @@
 #
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
-network.host: localhost
+network.host: 0.0.0.0
 #
 # Set a custom port for HTTP:
 #
@@ -69,7 +70,7 @@ network.host: localhost
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):
 #
-#discovery.zen.minimum_master_nodes: 3
+discovery.zen.minimum_master_nodes: 1
 #
 # For more information, consult the zen discovery module documentation.
 #
@@ -86,3 +87,15 @@ network.host: localhost
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
+discovery.type: single-node
+
+## from; https://github.com/deviantony/docker-elk/blob/master/elasticsearch/config/elasticsearch.yml
+## Disable X-Pack
+## see https://www.elastic.co/guide/en/x-pack/current/xpack-settings.html
+##     https://www.elastic.co/guide/en/x-pack/current/installing-xpack.html#xpack-enabling
+
+xpack.security.enabled: false
+xpack.monitoring.enabled: false
+xpack.ml.enabled: false
+xpack.graph.enabled: false
+xpack.watcher.enabled: false
