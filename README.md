@@ -1,5 +1,5 @@
 # HELK [Beta]
-The incredible HELK (Hunting, Elasticsearch, Logstash, Kibana) VM. 
+The incredible HELK (Hunting, Elasticsearch, Logstash, Kibana) VM.
 
 # Getting Started
 
@@ -27,7 +27,7 @@ The HELK can be installed via a bash script or a docker-compose file
 git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/scripts
 
-[ELK web interface remote access requires you to edit edit the repo nginx file]
+[ELK web interface remote access requires you to edit the repo nginx file]
 
 sudo nano ../nginx/default
 [Replace 127.0.0.1 with your host's IP address]
