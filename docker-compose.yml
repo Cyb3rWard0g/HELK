@@ -15,6 +15,7 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     ports:
       - "9200:9200"
+      - "9300:9300"
     networks:
       - helk
   kibana:
