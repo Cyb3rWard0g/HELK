@@ -31,7 +31,8 @@ services:
   logstash:
     image: logstash:latest
     volumes:
-      - ./logstash/docker/pipeline:/usr/share/logstash/pipeline
+      # - ./logstash/docker/pipeline:/usr/share/logstash/pipeline
+      - ./logstash/docker/pipeline:/etc/logstash/conf.d
       - ./logstash/docker/config/logstash.yml:/usr/share/logstash/config/logstash.yml
     depends_on:
       - elasticsearch
