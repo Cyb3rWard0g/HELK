@@ -13,17 +13,12 @@ services:
       - ./elasticsearch/docker/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     networks:
       - helk
   kibana:
     image: docker.elastic.co/kibana/kibana:5.4.1
     volumes:
       - ./kibana/docker/kibana.yml:/usr/share/config/kibana/kibana.yml
-    ports:
-      - "5601:5601"
     depends_on:
       - elasticsearch
     networks:
@@ -39,6 +34,17 @@ services:
       - "5044:5044"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - helk
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/docker/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/docker/htpasswd.users:/etc/nginx/htpasswd.users
+    ports:
+      - "80:80"
+    depends_on:
+      - kibana
     networks:
       - helk
 

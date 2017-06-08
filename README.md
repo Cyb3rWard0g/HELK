@@ -20,18 +20,12 @@ sudo ./helk_docker_install.sh
 ```
  
 ## HELK Installation
-The HELK can be installed via a bash script or a docker-compose file
+The HELK can be installed via a bash script or a docker-compose file. After installing the HELK, browse to your HELK (host) IP address and log on with username:helk & password:hunting.
 
 ### Bash Script
 ```
 sudo git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/scripts
-
-[ELK web interface remote access requires you to edit the repo nginx file]
-
-sudo nano ../nginx/default
-[Replace 127.0.0.1 with your host's IP address]
-
 sudo ./helk_install.sh
 ```
 
@@ -39,12 +33,6 @@ sudo ./helk_install.sh
 ```
 sudo git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK
-
-[ELK web interface remote access requires you to edit the docker kibana.yml file]
-
-sudo nano kibana/docker/kibana.yml
-[Replace server.host: "localhost" with server.host: "IP ADDRESS"]
-
 sudo docker-compose up
 ```
 
@@ -52,7 +40,7 @@ sudo docker-compose up
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g)
 
 ## TO-Do
-- [ ] Integrate NGINX in the Docker image
+- [X] Integrate NGINX in the Docker image
 - [ ] Upload Kibana Dashboards
 - [ ] Add Winlogbeat scripts & files
 - [ ] Add/Ingest samples logs to the HELK
