@@ -41,6 +41,17 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - helk
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/docker/default:/etc/nginx/sites-available/default
+      - ./nginx/docker/htpasswd.users:/etc/nginx/htpasswd.users
+    ports:
+      - "80:80"
+    depends_on:
+      - kibana
+    networks:
+      - helk	
 
 networks:
 
