@@ -138,12 +138,11 @@ ERROR=$?
         echoerror "Could not install nginx (Error Code: $ERROR)."
     fi
     
-echo "[HELK INFO] Creating an admin user to Kibana.."
-echo "[HELK INFO] Naming the admin user helkadmin.."
-echo "helkadmin:`openssl passwd -apr1`" | sudo tee -a /etc/nginx/htpasswd.users
+echo "[HELK INFO] Adding a htpasswd.users file to nginx.."
+cp -v ../nginx/docker/htpasswd.users /etc/nginx/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not set a user for nginx (Error Code: $ERROR)."
+        echoerror "Could not add a htpasswd.users file to nginx (Error Code: $ERROR)."
     fi
     
 echo "[HELK INFO] Creating a backup of Nginx's config file.."
@@ -200,13 +199,14 @@ systemctl enable logstash >> $LOGFILE 2>&1
 
 ERROR=$?
       if [ $ERROR -ne 0 ]; then
-        echoerror "Install Failure: lxde (Error Code: $ERROR)"
-      else
-        echo "[HELK INFO] Your HELK has been succesfully installed.."
-        echo "[HELK INFO] Your HELK can be accessed ONLY locally by default. PLEASE run the following to give it an IP address and be able to access it from a different computer:"
-        echo "[HELK INFO] sudo nano /etc/nginx/sites-available/default"
-        echo "[HELK INFO] replace 127.0.0.1 with your host's IP address"
-        echo "[HELK INFO] finally run the following:"
-        echo "[HELK INFO] sudo systemctl restart nginx"
-        echo "[HELK INFO] Browse to the IP address from a different computer and enter the credentials for helkadmin"
+        echoerror "Could not start logstash and set it to start automatically when the system boots (Error Code: $ERROR)"
       fi
+echo "**********************************************************************************************************"
+echo "[HELK INFO] Your HELK has been installed"
+echo "[HELK INFO] Browse to your host IP  address from a different computer and enter the following credentials:"
+echo "username: helk"
+echo "password: hunting"
+echo " "
+echo "HAPPY HUNTING!!!!!"
+echo "**********************************************************************************************************"
+

@@ -39,8 +39,8 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./nginx/docker/nginx.conf:/usr/share/nginx/conf/nginx.conf
-      - ./nginx/docker/htpasswd.users:/usr/share/nginx/htpasswd.users
+      - ./nginx/docker/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/docker/htpasswd.users:/etc/nginx/htpasswd.users
     ports:
       - "80:80"
     depends_on:
