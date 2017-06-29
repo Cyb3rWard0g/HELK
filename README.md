@@ -1,6 +1,17 @@
 # HELK [Beta]
 The incredible HELK (Hunting, Elasticsearch, Logstash, Kibana) VM.
 
+# Goals
+* Provide a free hunting platform to the community and share the basics of Threat Hunting.
+* Make sense of a large amount of event logs and add more context to suspicious events during hunting.
+* Expedite the time it takes to deploy an ELK stack.
+* Improve the testing of hunting use cases in an easier and more affordable way. 
+
+# Resources
+* [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
+* [Elastic Producs](https://www.elastic.co/products)
+* [docker-elk](https://github.com/deviantony/docker-elk)
+
 # Getting Started
 
 ## Requirements
@@ -36,10 +47,15 @@ cd HELK
 sudo docker-compose up
 ```
 
-## Author
+# Author
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g)
 
-## TO-Do
+# Contributors
+
+# Contributing
+There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below, but I would also woult love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring 
+
+# TO-Do
 - [X] Integrate NGINX in the Docker image
 - [ ] Upload Kibana Dashboards
 - [ ] Add Winlogbeat scripts & files
