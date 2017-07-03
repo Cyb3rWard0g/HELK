@@ -23,6 +23,7 @@ winlogbeat.event_logs:
   - name: Security
   - name: System
   - name: Microsoft-windows-sysmon/operational
+    event_id: 4103, 4104
 
 #================================ General =====================================
 
