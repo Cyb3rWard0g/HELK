@@ -25,6 +25,7 @@ services:
       - helk
   logstash:
     image: docker.elastic.co/logstash/logstash:5.5.1
+    command: rm -f /usr/share/logstash/pipeline/logstash.conf
     volumes:
       - ./logstash/docker/pipeline/:/usr/share/logstash/pipeline/
       - ./logstash/docker/config/logstash.yml:/usr/share/logstash/config/logstash.yml
