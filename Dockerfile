@@ -21,7 +21,7 @@ RUN apt-get update && \
 ###########################################
 
 RUN \
-	wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add - \
+	wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
 	&& apt-get install apt-transport-https \ 
 	&& apt-get install -qqy openjdk-8-jdk \
 	&& apt-get clean
@@ -31,7 +31,7 @@ RUN \
 ###########################################
 
 RUN \
-	echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-5.x.list \
+	echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-5.x.list \
 	&& apt-get update \
 	&& apt-get install elasticsearch \
 	&& mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/backup_elasticsearch.yml
