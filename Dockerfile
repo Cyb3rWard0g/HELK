@@ -31,7 +31,7 @@ RUN \
 RUN \
 	echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-5.x.list \
 	&& apt-get update \
-	&& apt-get install elasticsearch
+	&& apt-get install elasticsearch \
 	&& mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/backup_elasticsearch.yml
 
 ADD	elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
@@ -43,7 +43,7 @@ ADD	elasticsearch/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml
 
 RUN \
 	apt-get update \
-	&& apt-get install kibana
+	&& apt-get install kibana \
 	&& mv /etc/kibana/kibana.yml /etc/kibana/backup_kibana.yml
 
 ADD kibana/kibana.yml /etc/kibana/kibana.yml
