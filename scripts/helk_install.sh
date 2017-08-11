@@ -185,9 +185,9 @@ ERROR=$?
     fi
  
 echo "[HELK INFO] Copying logstash's .conf files.."
-cp -v ../pipeline/logstash/02-beats-input.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
-cp -v ../pipeline/logstash/10-powershell-filter.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
-cp -v ../pipeline/logstash/50-elasticsearch-output.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
+cp -v ../logstash/pipeline/02-beats-input.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
+cp -v ../logstash/pipeline/10-powershell-filter.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
+cp -v ../logstash/pipeline/50-elasticsearch-output.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not copy logstash files (Error Code: $ERROR)."
