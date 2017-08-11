@@ -2,7 +2,7 @@
 # HELK build version: 0.9 (BETA Script)
 # Author: Roberto Rodriguez @Cyb3rWard0g
 
-FROM java:8
+FROM phusion/baseimage
 MAINTAINER Roberto Rodriguez @cyb3rward0g
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -22,7 +22,9 @@ RUN apt-get update && \
 
 RUN \
 	wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add - \
-	&& apt-get install apt-transport-https
+	&& apt-get install apt-transport-https \ 
+	&& apt-get install -qqy openjdk-8-jdk \
+	&& apt-get clean
 
 ###########################################
 ############ ELASTICSEARCH ################
