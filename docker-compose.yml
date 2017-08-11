@@ -47,21 +47,6 @@ services:
       - kibana
     networks:
       - helk
-  rabbitmq:
-    image: specterops/ace-rabbitmq:firsttry
-    hostname: "ace-rabbitmq"
-    labels:
-      NAME: "ace-rabbitmq"
-    environment:
-      RABBITMQ_DEFAULT_USER: "user"
-      RABBITMQ_DEFAULT_PASS: "P@ssw0rd!"
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    depends_on:
-      - elasticsearch
-    networks:
-      - helk
 
 networks:
 
