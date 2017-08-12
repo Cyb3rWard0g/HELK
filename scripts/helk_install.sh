@@ -190,6 +190,7 @@ cp -v ../logstash/pipeline/03-ace-rabbitmq-input.conf /etc/logstash/conf.d/ >> $
 cp -v ../logstash/pipeline/10-powershell-filter.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
 cp -v ../logstash/pipeline/50-elasticsearch-output.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
 cp -v ../logstash/pipeline/51-rabbitmq-elasticsearch-output.conf /etc/logstash/conf.d/ >> $LOGFILE 2>&1
+
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not copy logstash files (Error Code: $ERROR)."
