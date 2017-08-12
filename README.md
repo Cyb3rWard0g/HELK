@@ -29,6 +29,20 @@ git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/scripts
 sudo ./helk_docker_install.sh
 ```
+
+## Enrichments?
+You can use this basic HELK build and integrate it with other hunting platforms. So far you can use this build and integrate it with the following platforms:
+
+### Automated Collection and Enrichment (ACE)
+[ACE](https://github.com/Invoke-IR/ACE) is a suite of tools for threat hunters to collect data from many endpoints in a network and automatically enrich the data. The data is collected by running scripts on each computer without installing any software on the target. ACE supports collecting from Windows, macOS, and Linux hosts.
+Once you have the HELK cloned locally, you will just have to update the custom ace-rabbimq-input.conf with your ACE-rabbitmq IP address,user & password. Then, you will ned to copy the custom ace-rabbitmq logstash configs to the HELK's default logstash/pipeline folder before installing it.
+
+```
+cd HELK
+sudo nano enrichments/ACE/logstash/03-ace-rabbitmq-input.conf
+
+sudo cp -a enrichments/ACE/logstash/* logstash/pipeline/
+```
  
 ## HELK Installation
 The HELK can be installed via a bash script or a docker-compose file. After installing the HELK, browse to your HELK (host) IP address and log on with username:helk & password:hunting.
