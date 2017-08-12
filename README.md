@@ -44,7 +44,8 @@ sudo ./helk_install.sh
 ```
 sudo git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK
-sudo docker-compose up
+sudo docker-compose build
+sudo docker-compose up -d
 ```
 
 # Author
