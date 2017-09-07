@@ -11,6 +11,9 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.5.1
     volumes:
       - ./elasticsearch/docker/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
@@ -52,3 +55,7 @@ networks:
 
   helk:
     driver: bridge
+
+volumes:
+  edsdata:
+    driver: local
