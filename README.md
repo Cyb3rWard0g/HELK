@@ -44,8 +44,11 @@ sudo nano enrichments/ACE/logstash/03-ace-rabbitmq-input.conf
 sudo cp -a enrichments/ACE/logstash/* logstash/pipeline/
 ```
  
-## HELK Installation
-The HELK can be installed via a bash script or a docker-compose file. After installing the HELK, browse to your HELK (host) IP address and log on with username:helk & password:hunting.
+## HELK Configuration & Installation
+The HELK can be installed via a bash script or a docker-compose file. HELK will by default create a docker named volume `helk_esdata` which will persist your elasticsearch data between containers. Additionally, HELK by default starts elasticsearch with 256mb of RAM allocated, if HELK will be used in higher resource environments, `ES_JAVA_OPTS: "-Xmx256m -Xms256m"` can be modified in the docker-compose.yml, however do not allocate more than 50% of available memory. After installing the HELK, browse to your HELK (host) IP address and log on with 
+
+* username: helk 
+* password: hunting
 
 ### Bash Script
 ```
@@ -65,6 +68,7 @@ sudo docker-compose up -d
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g)
 
 # Contributors
+* Robby Winchester [@robwinchester3](https://twitter.com/robwinchester3)
 
 # Contributing
 There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below, but I would also woult love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring 
