@@ -57,5 +57,5 @@ networks:
     driver: bridge
 
 volumes:
-  edsdata:
+  esdata:
     driver: local
