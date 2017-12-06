@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from OTXv2 import OTXv2
 from pandas.io.json import json_normalize
-import datetime
 
 otx = OTXv2("API Key")
 
@@ -63,9 +62,8 @@ def OTXEnrichment():
 
     iocs = [IPV4, IMPHASH, MD5, SHA1, SHA256]
     for i in iocs:
-        date = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         df = json_normalize(i)
-        df.to_csv(('otx_'+i[0]['ioc_name']+'_'+date+'_.csv'), index=False, header=False, encoding='utf-8', columns=("indicator_name", "pulse_name"))
+        df.to_csv(('/opt/otx/otx_'+i[0]['ioc_name']+'_.csv'), index=False, header=False, encoding='utf-8', columns=("indicator_name", "pulse_name"))
 
 if __name__=="__main__":
     OTXEnrichment()

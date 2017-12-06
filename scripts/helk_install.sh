@@ -176,6 +176,48 @@ ERROR=$?
         echoerror "Could not install update (Error Code: $ERROR)."
     fi
 
+# *********** Installing Python ***************
+echo "[HELK INFO] Installing Python.."
+apt-get -y install python >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install python (Error Code: $ERROR)."
+    fi
+
+# *********** Installing PIP ***************
+echo "[HELK INFO] Installing PIP.."
+apt-get -y install python-pip >> $LOGFILE 2>&1
+pip install --upgrade pip >> $LOGFILE 2>&1
+ERROR=$?
+  if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install python-pip (Error Code: $ERROR)."
+  fi
+
+# *********** Installing AlienVault OTX Python SDK ***************
+echo "[HELK INFO] Installing AlienVault OTX Python SDK.."
+pip install OTXv2 >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install OTX Python SDK (Error Code: $ERROR)."
+    fi
+
+# *********** Installing Pandas ***************
+echo "[HELK INFO] Installing Pandas.."
+pip install pandas>> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install Pandas (Error Code: $ERROR)."
+    fi
+
+# *********** Copying Intel files to HELK ***************
+echo "[HELK INFO] Copying Intel files to HELK"
+mkdir /opt/otx
+cp -V ../logstash/intel/* /opt/otx/>> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not copy intel files to HELK (Error Code: $ERROR)."
+    fi
+
 # *********** Installing Logstash ***************
 echo "[HELK INFO] Installing Logstash.."
 apt-get install logstash >> $LOGFILE 2>&1
@@ -201,6 +243,7 @@ ERROR=$?
       if [ $ERROR -ne 0 ]; then
         echoerror "Could not start logstash and set it to start automatically when the system boots (Error Code: $ERROR)"
       fi
+
 echo "**********************************************************************************************************"
 echo "[HELK INFO] Your HELK has been installed"
 echo "[HELK INFO] Browse to your host IP  address from a different computer and enter the following credentials:"
