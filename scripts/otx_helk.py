@@ -43,7 +43,7 @@ def OTXEnrichment():
 
     def pull_indicators(lst, name):
         object = {
-            'indicator_name' : i['indicator_name'],
+            'indicator_name' : (i['indicator_name']).upper(),
             'pulse_name' : i['pulse_name'],
             'ioc_name': name
         }

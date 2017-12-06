@@ -212,7 +212,7 @@ ERROR=$?
 # *********** Copying Intel files to HELK ***************
 echo "[HELK INFO] Copying Intel files to HELK"
 mkdir /opt/otx
-cp -V ../logstash/intel/* /opt/otx/>> $LOGFILE 2>&1
+cp -v ../logstash/intel/* /opt/otx/>> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not copy intel files to HELK (Error Code: $ERROR)."
