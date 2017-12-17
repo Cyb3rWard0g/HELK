@@ -218,6 +218,37 @@ ERROR=$?
         echoerror "Could not copy intel files to HELK (Error Code: $ERROR)."
     fi
 
+# *********** Download Neo4j public signing key **********.
+echo "[HELK INFO] Downloading Neo4j public signing key and adding it to the host.."
+wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add - >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not download Neo4j public signing key and add it to the host (Error Code: $ERROR)."
+    fi
+
+# *********** Upgrade repository sources **********.
+echo "[HELK INFO] Upgrading repository sources.."
+echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee /etc/apt/sources.list.d/neo4j.list >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not upgrade repository sources (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Installing updates.."
+apt-get update >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install update (Error Code: $ERROR)."
+    fi
+
+# *********** Install Neo4j **********.
+echo "[HELK INFO] Installing Neo4j.."
+apt-get -y install neo4j >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install neo4j (Error Code: $ERROR)."
+    fi
+
 # *********** Installing Logstash ***************
 echo "[HELK INFO] Installing Logstash.."
 apt-get install logstash >> $LOGFILE 2>&1
