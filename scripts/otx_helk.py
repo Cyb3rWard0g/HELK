@@ -3,9 +3,12 @@ from OTXv2 import OTXv2
 from pandas.io.json import json_normalize
 
 otx = OTXv2("API Key")
+time_range = 30
+timedelta_days = timedelta(days=int(time_range))
+pull_time = (datetime.now() - timedelta_days).isoformat()
 
 def OTXEnrichment():
-    pulses = otx.getall()
+    pulses = otx.getsince(pull_time)
     data = []
     object = {}
     for p in pulses:
@@ -62,8 +65,11 @@ def OTXEnrichment():
 
     iocs = [IPV4, IMPHASH, MD5, SHA1, SHA256]
     for i in iocs:
-        df = json_normalize(i)
-        df.to_csv(('/opt/otx/otx_'+i[0]['ioc_name']+'_.csv'), index=False, header=False, encoding='utf-8', columns=("indicator_name", "pulse_name"))
+        try:
+            df = json_normalize(i)
+            df.to_csv(('/opt/otx/otx_'+i[0]['ioc_name']+'_.csv'), index=False, header=False, encoding='utf-8', columns=("indicator_name", "pulse_name"))
+        except:
+            print "Not available Intelligence for one indicator in the past 30 days"
 
 if __name__=="__main__":
     OTXEnrichment()
