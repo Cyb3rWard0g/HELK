@@ -22,7 +22,6 @@ ERROR=$?
         echoerror "Could not install updates (Error Code: $ERROR)."
     fi
 
-
 echo "[HELK INFO] Installing openjdk-8-jre-headless.."
 apt-get install -y openjdk-8-jre-headless >> $LOGFILE 2>&1
 ERROR=$?
@@ -203,7 +202,7 @@ ERROR=$?
 
 # *********** Installing Pandas ***************
 echo "[HELK INFO] Installing Pandas.."
-pip install pandas>> $LOGFILE 2>&1
+pip install pandas >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install Pandas (Error Code: $ERROR)."
@@ -211,42 +210,22 @@ ERROR=$?
 
 # *********** Copying Intel files to HELK ***************
 echo "[HELK INFO] Copying Intel files to HELK"
-mkdir /opt/otx
-cp -v ../logstash/intel/* /opt/otx/>> $LOGFILE 2>&1
+mkdir /opt/helk/
+mkdir /opt/helk/otx
+cp -v ../logstash/intel/* /opt/helk/otx/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not copy intel files to HELK (Error Code: $ERROR)."
     fi
-
-# *********** Download Neo4j public signing key **********.
-echo "[HELK INFO] Downloading Neo4j public signing key and adding it to the host.."
-wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add - >> $LOGFILE 2>&1
+# *********** Creating Cron Job to run OTX script every monday at 8AM and capture last 30 days of Intel *************
+echo "[HELK INFO] Creating a cronjob for OTX intel script"
+mkdir /opt/helk/scripts
+cp -v otx_helk.py /opt/helk/scripts/
+cronjob="0 8 * * 1 python /opt/helk/scripts/otx_helk.py"
+(crontab -u root -l; echo "$cronjob" ) | crontab -u root - >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not download Neo4j public signing key and add it to the host (Error Code: $ERROR)."
-    fi
-
-# *********** Upgrade repository sources **********.
-echo "[HELK INFO] Upgrading repository sources.."
-echo 'deb https://debian.neo4j.org/repo stable/' | sudo tee /etc/apt/sources.list.d/neo4j.list >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not upgrade repository sources (Error Code: $ERROR)."
-    fi
-
-echo "[HELK INFO] Installing updates.."
-apt-get update >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install update (Error Code: $ERROR)."
-    fi
-
-# *********** Install Neo4j **********.
-echo "[HELK INFO] Installing Neo4j.."
-apt-get -y install neo4j >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install neo4j (Error Code: $ERROR)."
+        echoerror "Could not create cronjob for OTX intel script (Error Code: $ERROR)."
     fi
 
 # *********** Installing Logstash ***************
