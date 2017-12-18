@@ -39,7 +39,7 @@ ERROR=$?
 
 # Before installing elasticsearch, we have to set the elastic packages definitions to our source list.
 # For this step, elastic recommends to have "apt-transport-https" installed already or install it before adding the elasticsearch apt repository source list definition to your /etc/apt/sources.list
-echo "Installing apt-transport-https.."
+echo "[HELK INFO] Installing apt-transport-https.."
 apt-get install apt-transport-https >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
@@ -212,7 +212,7 @@ ERROR=$?
 echo "[HELK INFO] Copying Intel files to HELK"
 mkdir /opt/helk/
 mkdir /opt/helk/otx
-cp -v ../logstash/intel/* /opt/helk/otx/ >> $LOGFILE 2>&1
+cp -v ../enrichments/otx/* /opt/helk/otx/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not copy intel files to HELK (Error Code: $ERROR)."
@@ -222,7 +222,7 @@ echo "[HELK INFO] Creating a cronjob for OTX intel script"
 mkdir /opt/helk/scripts
 cp -v otx_helk.py /opt/helk/scripts/
 cronjob="0 8 * * 1 python /opt/helk/scripts/otx_helk.py"
-(crontab -u root -l; echo "$cronjob" ) | crontab -u root - >> $LOGFILE 2>&1
+echo "$cronjob" | crontab - >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not create cronjob for OTX intel script (Error Code: $ERROR)."
