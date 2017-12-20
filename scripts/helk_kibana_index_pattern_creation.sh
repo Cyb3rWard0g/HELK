@@ -13,22 +13,23 @@
 
 set -euo pipefail
 url="http://localhost:5601"
-declare -A index_patterns=("sysmon-*"
+declare -a index_patterns=("sysmon-*"
                            "winevent-security-*"
                            "winevent-system-*" 
                            "winevent-application-*"
                            "powershell-*"
                            )
 time_field="@timestamp"
+default_index="sysmon-*"
 # Create index pattern
 # curl -f to fail on error
 # For loop to create every single intex pattern
 for index in ${!index_patterns[@]}; do 
   curl -f -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: anything" \
-  "$url/api/saved_objects/index-pattern/${index}" \
-  -d"{\"attributes\":{\"title\":\"${index}\",\"timeFieldName\":\"$time_field\"}}"
+  "$url/api/saved_objects/index-pattern/${index_patterns[${index}]}" \
+  -d"{\"attributes\":{\"title\":\"${index_patterns[${index}]}\",\"timeFieldName\":\"$time_field\"}}"
 done
 # Make Sysmon the default index
 curl -XPOST -H "Content-Type: application/json" -H "kbn-xsrf: anything" \
   "$url/api/kibana/settings/defaultIndex" \
-  -d"{\"value\":\"sysmon-*\"}"
+  -d"{\"value\":\"$default_index\"}"
