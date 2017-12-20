@@ -1,12 +1,14 @@
 #!/bin/bash
 
-# HELK Installation Script (Elasticsearch, Logstash, Kibana & Nginx)
-# HELK build version: 0.9 (BETA Script)
-# Author: Roberto Rodriguez @Cyb3rWard0g
+# HELK script: helk_install.sh
+# HELK script description: Install all the needed components of the HELK
+# HELK build version: 0.9 (BETA)
+# HELK ELK version: 6.x
+# Author: Roberto Rodriguez (@Cyb3rWard0g)
+# License: BSD 3-Clause
 
-# Description: This script installs every single component of the ELK Stack plus Nginx
-# ELK version: 5x
-# Blog: https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
+# References: 
+# https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
 
 LOGFILE="/var/log/helk-install.log"
 
@@ -47,7 +49,7 @@ ERROR=$?
     fi
 
 echo "[HELK INFO] Adding elastic packages source list definitions to your sources list.."
-echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-5.x.list >> $LOGFILE 2>&1
+echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not add elastic packages source list definitions to your source list (Error Code: $ERROR)."
@@ -128,6 +130,9 @@ ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not start kibana and set kibana to start automatically when the system boots (Error Code: $ERROR)."
     fi
+
+echo "[HELK INFO] Creating Index Patterns in Kibana"
+
 
 # *********** Installing Nginx ***************
 echo "[HELK INFO] Installing Nginx.."
@@ -219,9 +224,9 @@ ERROR=$?
     fi
 # *********** Creating Cron Job to run OTX script every monday at 8AM and capture last 30 days of Intel *************
 echo "[HELK INFO] Creating a cronjob for OTX intel script"
-mkdir /opt/helk/scripts
-cp -v otx_helk.py /opt/helk/scripts/
-cronjob="0 8 * * 1 python /opt/helk/scripts/otx_helk.py"
+mkdir /opt/helk/scripts >> $LOGFILE 2>&1
+cp -v helk_otx.py /opt/helk/scripts/ >> $LOGFILE 2>&1
+cronjob="0 8 * * 1 python /opt/helk/scripts/helk_otx.py"
 echo "$cronjob" | crontab - >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
@@ -234,6 +239,14 @@ apt-get install logstash >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install logstash (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Creating templates directory and copying custom templates over.."
+mkdir /opt/helk/templates >> $LOGFILE 2>&1
+cp -v ../logstash/output_templates/* /opt/helk/templates/ >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create templates directory and copy custom templates over (Error Code: $ERROR)."
     fi
  
 echo "[HELK INFO] Copying logstash's .conf files.."
@@ -253,6 +266,14 @@ ERROR=$?
       if [ $ERROR -ne 0 ]; then
         echoerror "Could not start logstash and set it to start automatically when the system boots (Error Code: $ERROR)"
       fi
+
+# *********** Create Kibana Index Patterns ***************
+echo "[HELK INFO] Creating Kibana index patterns automatically.."
+sh ./helk_kibana_index_pattern_creation.sh >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create kibana index patterns (Error Code: $ERROR)."
+    fi
 
 echo "**********************************************************************************************************"
 echo "[HELK INFO] Your HELK has been installed"

@@ -1,0 +1,92 @@
+{
+  "template" : "sysmon-*",
+  "settings" : {
+    "index.refresh_interval": "5s"
+  },
+  "mappings":{
+    "doc":{
+      "dynamic_templates": [{
+        "strings":{
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "text",
+            "norms": false,
+            "fields": {
+              "raw": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      }],
+      "properties":{
+        "@timestamp":{"type":"date"},
+        "destination":{
+          "properties":{
+            "port":{
+              "properties":{
+                "number":{"type":"integer"}
+              }
+            }
+          }
+        },
+        "event_data":{"type":"object"},
+        "event_id":{"type":"integer"},
+        "geoip":{
+          "properties":{
+            "dma_code":{"type":"integer"},
+            "latitude":{"type":"float"},
+            "location":{"type": "geo_point"},
+            "longitude":{"type":"float"},
+            "postal_code":{"type":"integer"}
+          }
+        },
+        "network":{
+          "properties":{
+            "initiated":{"type":"boolean"}
+          }
+        },
+        "process":{
+          "properties":{
+            "id":{"type":"integer"},
+            "image":{
+              "properties":{
+                "signed":{"type":"boolean"}
+              }
+            },
+            "parent":{
+              "properties":{
+                "id":{"type":"integer"}
+              }
+            },
+            "source":{
+              "properties":{
+                "id":{"type":"integer"},
+                "threadid":{"type":"integer"}
+              }
+            },
+            "target":{
+              "properties":{
+                "id":{"type":"integer"}
+              }
+            },
+            "terminalsessionid":{"type":"integer"}
+          }
+        },
+        "process_id":{"type":"integer"},
+        "source":{
+          "properties":{
+            "port":{
+              "properties":{
+                "number":{"type":"integer"}
+              }
+            }
+          }
+        },
+        "thread_id":{"type":"integer"},
+        "version":{"type":"integer"}
+      }
+    }
+  }
+}

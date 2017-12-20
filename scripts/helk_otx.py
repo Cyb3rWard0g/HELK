@@ -1,4 +1,12 @@
 #!/usr/bin/env python
+
+# HELK script: helk_otx.py
+# HELK script description: Pulling intelligence from OTX (AlienVault)
+# HELK build version: 0.9 (BETA)
+# HELK ELK version: 6.x
+# Author: Roberto Rodriguez (@Cyb3rWard0g)
+# License: BSD 3-Clause
+
 from OTXv2 import OTXv2
 from pandas.io.json import json_normalize
 

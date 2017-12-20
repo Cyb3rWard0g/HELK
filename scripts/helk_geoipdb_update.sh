@@ -1,9 +1,17 @@
 #!/bin/bash
+
+# HELK script: helk_geoipdb_update.sh
+# HELK script description: Update the MaxMind GeoIP databases
+# HELK build version: 0.9 (BETA)
+# HELK ELK version: 6.x
+# Author: Roberto Rodriguez (@Cyb3rWard0g)
+# License: BSD 3-Clause
+
+# References: 
+
 # HELK Supporting script
-#
-# Original script from: SOF-ELK Supporting script (C)2016 Lewes Technology Consulting, LLC
-#
-# This script is used to update the MaxMind GeoIP databases
+# SOF-ELK Supporting script (C)2016 Lewes Technology Consulting, LLC
+# https://github.com/philhagen/sof-elk/blob/develop/supporting-scripts/geoip_update.sh
 
 GEOIP_LIBDIR=/etc/logstash/geoip
 GEOIP_CITYSOURCEURL=http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz

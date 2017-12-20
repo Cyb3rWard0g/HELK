@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Docker & Docker-compose Installation Script
-# Author: Roberto Rodriguez @Cyb3rWard0g
+# HELK script: helk_docker_install.sh
+# HELK script description: Installs Docker & Docker-Compose on your HELK server.
+# HELK build version: 0.9 (BETA)
+# HELK ELK version: 6.x
+# Author: Roberto Rodriguez (@Cyb3rWard0g)
+# License: BSD 3-Clause
 
-# Description: This script installs Docker & Docker-Compose on your HELK server.
-# ELK version: 5x
 # References: 
 #  https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
 #  https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04 
