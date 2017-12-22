@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # HELK script: helk_kibana_index_pattern_creation.sh
 # HELK script description: Creates Kibana index patterns automatically.
@@ -11,14 +11,8 @@
 # https://github.com/elastic/kibana/issues/3709 (https://github.com/hobti01)
 # https://explainshell.com/explain?cmd=set+-euxo%20pipefail
 
-set -euo pipefail
 url="http://localhost:5601"
-declare -a index_patterns=("sysmon-*"
-                           "winevent-security-*"
-                           "winevent-system-*" 
-                           "winevent-application-*"
-                           "powershell-*"
-                           )
+declare -a index_patterns=("sysmon-*" "winevent-security-*" "winevent-system-*" "winevent-application-*" "powershell-*")
 time_field="@timestamp"
 default_index="sysmon-*"
 # Create index pattern

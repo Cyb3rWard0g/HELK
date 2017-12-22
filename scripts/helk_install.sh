@@ -269,7 +269,7 @@ ERROR=$?
 
 # *********** Create Kibana Index Patterns ***************
 echo "[HELK INFO] Creating Kibana index patterns automatically.."
-sh ./helk_kibana_index_pattern_creation.sh >> $LOGFILE 2>&1
+./helk_kibana_index_pattern_creation.sh >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not create kibana index patterns (Error Code: $ERROR)."

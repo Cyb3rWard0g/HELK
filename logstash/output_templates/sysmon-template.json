@@ -1,5 +1,5 @@
 {
-  "template" : "sysmon-*",
+  "template" : "sysmon",
   "settings" : {
     "index.refresh_interval": "5s"
   },
