@@ -258,9 +258,8 @@ ERROR=$?
     fi
     
 echo "[HELK INFO] Starting logstash and setting Logstash to start automatically when the system boots.."
-systemctl start logstash >> $LOGFILE 2>&1
-systemctl restart logstash >> $LOGFILE 2>&1
 systemctl enable logstash >> $LOGFILE 2>&1
+systemctl start logstash >> $LOGFILE 2>&1
 
 ERROR=$?
       if [ $ERROR -ne 0 ]; then
