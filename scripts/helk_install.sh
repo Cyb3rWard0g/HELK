@@ -239,7 +239,7 @@ ERROR=$?
     fi
 
 echo "[HELK INFO] Creating Elastalert index.."
-elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix None --old-index None >> $LOGFILE 2>&1
+elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not create new elastalert index! (Error Code: $ERROR)."
