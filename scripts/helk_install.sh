@@ -242,7 +242,9 @@ echo "[HELK INFO] Creating Elastalert index.."
 elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "You may need to run elastalert-create-index manually if not already created. (Error Code: $ERROR). Enter: "elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None" If you get "Index elastalert_status already exists. Skipping index creation." then no action is needed"
+        echoerror "You may need to run elastalert-create-index. 
+	echo "Enter: "elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None" 
+	echo "If you get "Index elastalert_status already exists. Skipping index creation." then no action is needed"
     fi
 
 echo "[HELK INFO] Installing elastalert dependencies.."
@@ -300,8 +302,8 @@ echo "[HELK] Elastalert Slack Notification Setup"
 read -p  "Please enter your Slack Web Hook: (Leave empty to set up later) " slackhook
 if [ ! -z "$slackhook" ]
 then
-        sed -i "s/SLACKWEBHOOK/$slackhook/g" /etc/elastalert/alert_rules/*
-        systemctl enable elastalert.service
+        sed -i "s|SLACKWEBHOOK|$slackhook|g" /etc/elastalert/alert_rules/*
+        systemctl enable elastalert.service 2> /dev/null
         systemctl start elastalert.service
 fi
 
