@@ -297,14 +297,13 @@ ERROR=$?
     fi	
 	
 echo "[HELK] Elastalert Slack Notification Setup"
-read -p  "Please enter your Slack Web Hook: (Leave empty to set up later)" slackhook
-while [[$slackhook != '']]
-do
-        sed "s/SLACKWEBHOOK/$slackhook/g" /etc/elastalert/alert_rules/*
+read -p  "Please enter your Slack Web Hook: (Leave empty to set up later) " slackhook
+if [ ! -z "$slackhook" ]
+then
+        sed -i "s/SLACKWEBHOOK/$slackhook/g" /etc/elastalert/alert_rules/*
         systemctl enable elastalert.service
         systemctl start elastalert.service
-done
-
+fi
 
 
 
