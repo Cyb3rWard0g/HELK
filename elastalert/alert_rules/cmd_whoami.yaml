@@ -4,7 +4,7 @@ name: "whoami"
 index: winlogbeat-*
 filter:
 - terms:
- event_data.CommandLine: ["whoami"]
+    event_data.CommandLine: ["whoami"]
 type: any
 alert:
 - slack
