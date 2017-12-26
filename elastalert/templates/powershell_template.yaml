@@ -8,4 +8,4 @@ filter:
 type: any
 alert:
 - slack
-slack_webhook_url: "SLACK_WEB_HOOK"
+slack_webhook_url: "SLACKWEBHOOK"
