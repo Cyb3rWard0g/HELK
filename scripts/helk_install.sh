@@ -270,7 +270,7 @@ echo "[HELK INFO] Copying Elastalert Config File.."
 cp ../elastalert/config.yaml /etc/elastalert/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install elastalert requirements(Error Code: $ERROR)."
+        echoerror "Could not copy elastalert config file (Error Code: $ERROR)."
     fi
 
 echo "[HELK INFO] Making alert_rules directory.."
