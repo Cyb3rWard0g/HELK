@@ -1,0 +1,11 @@
+[Unit]
+Description=elastalert
+After=multi-user.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/elastalert
+ExecStart=/usr/bin/elastalert
+
+[Install]
+WantedBy=multi-user.target
