@@ -242,7 +242,9 @@ echo "[HELK INFO] Creating Elastalert index.."
 elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not create new elastalert index! (Error Code: $ERROR)."
+        echoerror "You may need to run elastalert-create-index manually if not already created. (Error Code: $ERROR)."
+	echoerror " Enter: "elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None"
+	echoerror "         If you get "Index elastalert_status already exists. Skipping index creation." then no action is needed"
     fi
 
 echo "[HELK INFO] Installing elastalert dependencies.."
