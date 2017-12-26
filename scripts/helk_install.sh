@@ -289,6 +289,25 @@ ERROR=$?
         echoerror "Could not copy elastalert rule samples (Error Code: $ERROR)."
     fi
 	
+echo "[HELK INFO] Setting elastalert as a service.."
+cp ../elastalert/elastalert.service /lib/systemd/system/elastalert.service >> $LOGFILE 2>&1
+ln -s /lib/systemd/system/elastalert.service /etc/systemd/system/elastalert.service >> $LOGFILE 2>&1
+systemctl daemon-reload >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create elastalert as a service (Error Code: $ERROR)."
+    fi	
+	
+echo "[HELK] Elastalert Slack Notification Setup"
+echo "Please enter your Slack Web Hook: (Leave empty to set up later)"
+read slack_hook
+while [$slack_hook != '']
+do
+	sed -i 's/SLACK_WEB_HOOK/$slack_hook/g' /etc/elastalert/alert_rules/*
+	systemctl enable elastalert.service
+	systemctl start elastalert.service
+done
+
 
 
 echo "**********************************************************************************************************"
@@ -299,4 +318,3 @@ echo "password: hunting"
 echo " "
 echo "HAPPY HUNTING!!!!!"
 echo "**********************************************************************************************************"
-
