@@ -274,10 +274,10 @@ ERROR=$?
     fi
 	
 echo "[HELK INFO] Creating Elastalert index.."
-printf '\n' | elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth  >> $LOGFILE 2>&1
+elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth  >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not copy elastalert rule samples (Error Code: $ERROR)."
+        echoerror "Could not create new elastalert index! (Error Code: $ERROR)."
     fi
 
 echo "**********************************************************************************************************"
