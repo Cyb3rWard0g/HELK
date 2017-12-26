@@ -239,13 +239,7 @@ ERROR=$?
     fi
 
 echo "[HELK INFO] Creating Elastalert index.."
-elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "You may need to run elastalert-create-index. 
-	echo "Enter: "elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None" 
-	echo "If you get "Index elastalert_status already exists. Skipping index creation." then no action is needed"
-    fi
+elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None 2> /dev/null
 
 echo "[HELK INFO] Installing elastalert dependencies.."
 pip install -r /etc/elastalert/requirements.txt >> $LOGFILE 2>&1
@@ -298,8 +292,9 @@ ERROR=$?
         echoerror "Could not create elastalert as a service (Error Code: $ERROR)."
     fi	
 	
-echo "[HELK] Elastalert Slack Notification Setup"
-read -p  "Please enter your Slack Web Hook: (Leave empty to set up later) " slackhook
+echo "[HELK INFO] Elastalert Slack Notification Setup"
+echo "Please enter your Slack Web Hook: (Leave empty to set up later)"
+read slackhook
 if [ ! -z "$slackhook" ]
 then
         sed -i "s|SLACKWEBHOOK|$slackhook|g" /etc/elastalert/alert_rules/*
