@@ -210,11 +210,11 @@ ERROR=$?
         echoerror "Could not git elastalert (Error Code: $ERROR)."
     fi
  
-echo "[HELK INFO] Copying elastalert to /usr/local/bin.."
-cp -r elastalert /usr/local/bin/ >> $LOGFILE 2>&1
+echo "[HELK INFO] Copying elastalert to /etc/.."
+cp -r elastalert /etc/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not copy elastalert (Error Code: $ERROR)."
+        echoerror "Could not copy elastalert to etc (Error Code: $ERROR)."
     fi
 
 echo "[HELK INFO] Installing python-pip.."
@@ -223,62 +223,71 @@ ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install python-pip (Error Code: $ERROR)."
     fi
-
+    
+echo "[HELK INFO] Installing ElasticSearch Python Tools.."
+pip install "elasticsearch>=5.0.0" >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install elasticsearch-py (Error Code: $ERROR)."
+    fi
+    
 echo "[HELK INFO] Installing elastalert.."
 pip install elastalert >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install elastalert (Error Code: $ERROR)."
     fi
-	
+
+echo "[HELK INFO] Creating Elastalert index.."
+elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix None --old-index None >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create new elastalert index! (Error Code: $ERROR)."
+    fi
+
 echo "[HELK INFO] Installing elastalert dependencies.."
-pip install -r /usr/local/bin/elastalert/requirements.txt >> $LOGFILE 2>&1
+pip install -r /etc/elastalert/requirements.txt >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install elastalert requirements (Error Code: $ERROR)."
     fi
 
 echo "[HELK INFO] Making templates directory.."
-mkdir /usr/local/bin/elastalert/templates >> $LOGFILE 2>&1
+mkdir /etc/elastalert/templates >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not create templates directory (Error Code: $ERROR)."
     fi
 	
 echo "[HELK INFO] Copying elastalert templates to templates.."
-cp ../elastalert/templates/* /usr/local/bin/elastalert/templates/ >> $LOGFILE 2>&1
+cp ../elastalert/templates/* /etc/elastalert/templates/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not copy elastalert rule templates (Error Code: $ERROR)."
     fi
 	
 echo "[HELK INFO] Copying Elastalert Config File.."
-cp ../elastalert/config.yaml /usr/local/bin/elastalert/ >> $LOGFILE 2>&1
+cp ../elastalert/config.yaml /etc/elastalert/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install elastalert requirements(Error Code: $ERROR)."
     fi
 
 echo "[HELK INFO] Making alert_rules directory.."
-mkdir /usr/local/bin/elastalert/alert_rules >> $LOGFILE 2>&1
+mkdir /etc/elastalert/alert_rules >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not create alert_rules directory (Error Code: $ERROR)."
     fi
 	
 echo "[HELK INFO] Copying elastalert sample rules to rules.."
-cp ../elastalert/alert_rules/* /usr/local/bin/elastalert/alert_rules/ >> $LOGFILE 2>&1
+cp ../elastalert/alert_rules/* /etc/elastalert/alert_rules/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not copy elastalert rule samples (Error Code: $ERROR)."
     fi
 	
-echo "[HELK INFO] Creating Elastalert index.."
-elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth  >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not create new elastalert index! (Error Code: $ERROR)."
-    fi
+
 
 echo "**********************************************************************************************************"
 echo "[HELK INFO] Your HELK has been installed"
