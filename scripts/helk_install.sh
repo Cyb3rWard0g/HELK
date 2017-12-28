@@ -302,7 +302,34 @@ then
         systemctl start elastalert.service
 fi
 
+# *********** Installing Curator ***************
+echo "[HELK INFO] Installing Curator.." 
+pip install elasticsearch-curator >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install curator (Error Code: $ERROR)."
+    fi
 
+echo "[HELK INFO] Creating Curator Config Directory" 
+mkdir /etc/curator >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create /etc/curator directory (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Copying Curator Config Files to Directory" 
+cp ../curator/* /etc/curator/ >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not copy config files to /etc/curator (Error Code: $ERROR)."
+    fi
+ 
+echo "[HELK INFO] Adding Curator to cron" 
+(crontab -l 2>/dev/null; echo "5 0 * * * /etc/curator/cleanup.sh") | crontab - >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not add job to cron.. (Error Code: $ERROR)."
+    fi
 
 echo "**********************************************************************************************************"
 echo "[HELK INFO] Your HELK has been installed"
