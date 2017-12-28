@@ -6,7 +6,7 @@ do
 daysreplace='unit_count: '$days
 echo $daysreplace
 sed -i "s/DAYSPLACEHOLDER/$daysreplace/" delete-after.yml
-curator --config /etc/curator/config.yml --dry-run /etc/curator/delete-after.yml
+curator --config /etc/curator/config.yml /etc/curator/delete-after.yml
 disk=$(df -H | grep -vE '^Mounted| /.' | awk '{ print $1 " " $5 " " $6 }' | awk 'NR == 2' | awk '{print $2}' |sed 's/%//')
 days=$[$days-1]
 echo $days
