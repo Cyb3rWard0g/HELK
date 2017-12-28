@@ -1,0 +1,20 @@
+actions:
+  1:
+    action: delete_indices
+    description: >-
+      Delete indices older than X days (based on index name), for winlogbeat-
+      prefixed indices. Ignore the error if the filter does not result in an
+      actionable list of indices (ignore_empty_list) and exit cleanly.
+    options:
+      ignore_empty_list: True
+      disable_action: False
+    filters:
+    - filtertype: pattern
+      kind: prefix
+      value: winlogbeat-
+    - filtertype: age
+      source: name
+      direction: older
+      timestring: '%Y.%m.%d'
+      unit: days
+      DAYSPLACEHOLDER
