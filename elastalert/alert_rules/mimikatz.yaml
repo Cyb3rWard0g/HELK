@@ -20,4 +20,4 @@ timeframe:
 type: any
 alert:
 - slack
-slack_webhook_url: "https://hooks.slack.com/services/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"
+slack_webhook_url: "SLACKWEBHOOK"
