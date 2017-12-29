@@ -1,0 +1,12 @@
+es_host: localhost
+es_port: 9200
+name: "winscard"
+index: winlogbeat-*
+filter:
+- query:
+    wildcard:
+        event_data.ImageLoaded: "*winscard*"
+type: any
+alert:
+    - command
+command: ":"

@@ -201,6 +201,136 @@ ERROR=$?
       if [ $ERROR -ne 0 ]; then
         echoerror "Could not start logstash and set it to start automatically when the system boots (Error Code: $ERROR)"
       fi
+
+# *********** Installing Elastalert ***************
+echo "[HELK INFO] Installing Elastalert.."
+git clone https://github.com/yelp/elastalert >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not git elastalert (Error Code: $ERROR)."
+    fi
+ 
+echo "[HELK INFO] Copying elastalert to /etc/.."
+cp -r elastalert /etc/ >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not copy elastalert to etc (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Installing python-pip.."
+apt-get install -y python-pip >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install python-pip (Error Code: $ERROR)."
+    fi
+    
+echo "[HELK INFO] Installing ElasticSearch Python Tools.."
+pip install "elasticsearch>=5.0.0" >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install elasticsearch-py (Error Code: $ERROR)."
+    fi
+    
+echo "[HELK INFO] Installing elastalert.."
+pip install elastalert >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install elastalert (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Creating Elastalert index.."
+elastalert-create-index --host localhost --port 9200 --index elastalert_status --no-ssl --no-auth --url-prefix '' --old-index None 2> /dev/null
+
+echo "[HELK INFO] Installing elastalert dependencies.."
+pip install -r /etc/elastalert/requirements.txt >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install elastalert requirements (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Making templates directory.."
+mkdir /etc/elastalert/templates >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create templates directory (Error Code: $ERROR)."
+    fi
+	
+echo "[HELK INFO] Copying elastalert templates to templates.."
+cp ../elastalert/templates/* /etc/elastalert/templates/ >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not copy elastalert rule templates (Error Code: $ERROR)."
+    fi
+	
+echo "[HELK INFO] Copying Elastalert Config File.."
+cp ../elastalert/config.yaml /etc/elastalert/ >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not copy elastalert config file (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Making alert_rules directory.."
+mkdir /etc/elastalert/alert_rules >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create alert_rules directory (Error Code: $ERROR)."
+    fi
+	
+echo "[HELK INFO] Copying elastalert sample rules to rules.."
+cp ../elastalert/alert_rules/* /etc/elastalert/alert_rules/ >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not copy elastalert rule samples (Error Code: $ERROR)."
+    fi
+	
+echo "[HELK INFO] Setting elastalert as a service.."
+cp ../elastalert/elastalert.service /lib/systemd/system/elastalert.service >> $LOGFILE 2>&1
+ln -s /lib/systemd/system/elastalert.service /etc/systemd/system/elastalert.service >> $LOGFILE 2>&1
+systemctl daemon-reload >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create elastalert as a service (Error Code: $ERROR)."
+    fi	
+	
+echo "[HELK INFO] Elastalert Slack Notification Setup"
+echo "Please enter your Slack Web Hook: (Leave empty to set up later)"
+read slackhook
+if [ ! -z "$slackhook" ]
+then
+        sed -i "s|SLACKWEBHOOK|$slackhook|g" /etc/elastalert/alert_rules/*
+        systemctl enable elastalert.service 2> /dev/null
+        systemctl start elastalert.service
+fi
+
+# *********** Installing Curator ***************
+echo "[HELK INFO] Installing Curator.." 
+pip install elasticsearch-curator >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install curator (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Creating Curator Config Directory" 
+mkdir /etc/curator >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create /etc/curator directory (Error Code: $ERROR)."
+    fi
+
+echo "[HELK INFO] Copying Curator Config Files to Directory" 
+cp ../curator/* /etc/curator/ >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not copy config files to /etc/curator (Error Code: $ERROR)."
+    fi
+ 
+echo "[HELK INFO] Adding Curator to cron" 
+(crontab -l 2>/dev/null; echo "5 0 * * * /etc/curator/cleanup.sh") | crontab - >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not add job to cron.. (Error Code: $ERROR)."
+    fi
+
 echo "**********************************************************************************************************"
 echo "[HELK INFO] Your HELK has been installed"
 echo "[HELK INFO] Browse to your host IP  address from a different computer and enter the following credentials:"
@@ -209,4 +339,3 @@ echo "password: hunting"
 echo " "
 echo "HAPPY HUNTING!!!!!"
 echo "**********************************************************************************************************"
-

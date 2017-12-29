@@ -1,0 +1,11 @@
+es_host: localhost
+es_port: 9200
+name: "PLACEHOLDER"
+index: winlogbeat-*
+filter:
+- terms:
+    event_data.CommandLine: ["PLACEHOLDER"]
+type: any
+alert:
+- slack
+slack_webhook_url: "SLACKWEBHOOK"

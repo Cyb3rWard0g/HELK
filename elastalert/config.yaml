@@ -1,0 +1,13 @@
+rules_folder: alert_rules
+run_every:
+    seconds: 30
+buffer_time:
+    seconds: 60
+es_host: localhost
+es_port: 9200
+alert_time_limit:
+    days: 1
+writeback_index: elastalert_status
+alert_text: "Username: {0} \nHost: {1} \nTime: {2} \nLog:{3}"
+alert_text_type: alert_text_only
+alert_text_args: ["user.name","host", "@timestamp","log_name"]
