@@ -1,0 +1,13 @@
+es_host: localhost
+es_port: 9200
+name: "wminetuti:"
+index: winlogbeat-*
+filter:
+- query:
+    wildcard:
+        event_data.ImageLoaded: "*wminet*"
+type: any
+alert:
+    - command
+command: ":"
+

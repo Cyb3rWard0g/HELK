@@ -1,0 +1,23 @@
+es_host: localhost
+es_port: 9200
+name: "Mimikatz"
+index: elastalert_status
+type: cardinality
+cardinality_field: rule_name
+max_cardinality: 1
+filter:
+- terms:
+    rule_name:
+        - winscard
+        - cryptdll
+        - hid
+        - samlib
+        - vaultcli
+- term:
+    alert_sent: true
+timeframe:
+    seconds: 10
+type: any
+alert:
+- slack
+slack_webhook_url: "https://hooks.slack.com/services/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"
