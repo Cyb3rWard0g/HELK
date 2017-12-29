@@ -4,7 +4,7 @@ name: "invoke-webrequest"
 index: winlogbeat-*
 filter:
 - terms:
-    powershell.scriptblock.text: ["invoke","webrequest"]
+    powershell.scriptblock.text: ["webrequest"]
 type: any
 alert:
 - slack
