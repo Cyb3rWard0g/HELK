@@ -16,7 +16,6 @@ echoerror() {
     printf "${RC} * ERROR${EC}: $@\n" 1>&2;
 }
 
-
 echo "[HELK INFO] Installing updates.."
 apt-get update >> $LOGFILE 2>&1
 ERROR=$?
@@ -131,9 +130,6 @@ ERROR=$?
         echoerror "Could not start kibana and set kibana to start automatically when the system boots (Error Code: $ERROR)."
     fi
 
-echo "[HELK INFO] Creating Index Patterns in Kibana"
-
-
 # *********** Installing Nginx ***************
 echo "[HELK INFO] Installing Nginx.."
 apt-get -y install nginx >> $LOGFILE 2>&1
@@ -143,7 +139,7 @@ ERROR=$?
     fi
     
 echo "[HELK INFO] Adding a htpasswd.users file to nginx.."
-cp -v ../nginx/docker/htpasswd.users /etc/nginx/ >> $LOGFILE 2>&1
+cp -v ../nginx/htpasswd.users /etc/nginx/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not add a htpasswd.users file to nginx (Error Code: $ERROR)."
@@ -242,8 +238,8 @@ ERROR=$?
     fi
 
 echo "[HELK INFO] Creating templates directory and copying custom templates over.."
-mkdir /opt/helk/templates >> $LOGFILE 2>&1
-cp -v ../logstash/output_templates/* /opt/helk/templates/ >> $LOGFILE 2>&1
+mkdir /opt/helk/output_templates >> $LOGFILE 2>&1
+cp -v ../logstash/output_templates/* /opt/helk/output_templates/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not create templates directory and copy custom templates over (Error Code: $ERROR)."
@@ -260,19 +256,77 @@ ERROR=$?
 echo "[HELK INFO] Starting logstash and setting Logstash to start automatically when the system boots.."
 systemctl enable logstash >> $LOGFILE 2>&1
 systemctl start logstash >> $LOGFILE 2>&1
-
 ERROR=$?
       if [ $ERROR -ne 0 ]; then
         echoerror "Could not start logstash and set it to start automatically when the system boots (Error Code: $ERROR)"
       fi
 
-# *********** Create Kibana Index Patterns ***************
-echo "[HELK INFO] Creating Kibana index patterns automatically.."
-./helk_kibana_index_pattern_creation.sh >> $LOGFILE 2>&1
+# *********** Creating Kibana Index-patterns, Dashboards and Visualization ***************
+echo "[HELK INFO] Creating Kibana index-patterns, dashboards and visualizations automatically.."
+mkdir /opt/helk/dashbords>> $LOGFILE 2>&1
+cp -v ../kibana/dashboards/* /opt/helk/dashboards/ >> $LOGFILE 2>&1
+./helk_kibana_setup.sh >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not create kibana index patterns (Error Code: $ERROR)."
+        echoerror "Could not create kibana index-patterns, dashboards or visualizations (Error Code: $ERROR)."
     fi
+
+# *********** Install unzip ***************
+echo "[HELK INFO] Installing unzip.."
+apt-get install unzip >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install unzip (Error Code: $ERROR)."
+    fi
+
+# *********** Install ES-Hadoop ***************
+echo "[HELK INFO] Installing ES-Hadoop Connector.."
+mkdir /opt/helk/es-hadoop >> $LOGFILE 2>&1
+wget http://download.elastic.co/hadoop/elasticsearch-hadoop-6.1.1.zip -P /opt/helk/es-hadoop/ >> $LOGFILE 2>&1
+unzip /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ >> $LOGFILE 2>&1
+rm /opt/helk/es-hadoop/*.zip >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install ES-Hadoop (Error Code: $ERROR)."
+    fi
+
+# *********** Install ipython & ipython-notebook***************
+echo "[HELK INFO] Installing ipython & ipython-notebook.."
+apt-get -y install ipython ipython-notebook >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install iPython & iPython-notebook (Error Code: $ERROR)."
+    fi
+
+# *********** Install Jupyter***************
+echo "[HELK INFO] Installing Jupyter.."
+pip install jupyter >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install jupyter (Error Code: $ERROR)."
+    fi
+
+# *********** Install Spark ***************
+echo "[HELK INFO] Installing Spark.."
+mkdir /opt/helk/spark >> $LOGFILE 2>&1
+sudo wget -qO- http://mirrors.gigenet.com/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | sudo tar xvz -C /opt/helk/spark/ >> $LOGFILE 2>&1
+cp -f ../enrichments/spark/.bashrc ~/.bashrc >> $LOGFILE 2>&1
+cp -v ../enrichments/spark/log4j.properties /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/ >> $LOGFILE 2>&1
+cp -v ../enrichments/spark/spark-defaults.conf /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/ >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install spark (Error Code: $ERROR)."
+    fi
+
+# Adding SPARK location
+export SPARK_HOME=/opt/helk/spark/spark-2.2.1-bin-hadoop2.7
+export PATH=$SPARK_HOME/bin:$PATH
+
+# Adding Jupyter Notebook Integration
+export PYSPARK_DRIVER_PYTHON=/usr/local/bin/jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS="notebook --NotebookApp.open_browser=False --NotebookApp.ip='*' --NotebookApp.port=8880 --allow-root"
+export PYSPARK_PYTHON=/usr/bin/python
+
 
 echo "**********************************************************************************************************"
 echo "[HELK INFO] Your HELK has been installed"
@@ -282,4 +336,3 @@ echo "password: hunting"
 echo " "
 echo "HAPPY HUNTING!!!!!"
 echo "**********************************************************************************************************"
-

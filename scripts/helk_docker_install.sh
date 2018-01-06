@@ -18,77 +18,57 @@ echoerror() {
 }
 
 # *********** Installing Docker ***************
-echo "[HELK DOCKER INSTALLATION INFO] Installing updates.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Installing updates.."
 apt-get update >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install updates (Error Code: $ERROR)."
     fi
 
-echo "[HELK DOCKER INSTALLATION INFO] Adding the GPG key for the official Docker repository to the system.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Adding the GPG key for the official Docker repository to the system.."
 apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not add the GPG key for the official Docker repository to the system.. (Error Code: $ERROR)."
     fi
 
-echo "[HELK DOCKER INSTALLATION INFO] Installing updates.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Installing updates.."
 apt-get update >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install updates (Error Code: $ERROR)."
     fi
 
-echo "[HELK DOCKER INSTALLATION INFO] Adding the docker repository to APT sources.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Adding the docker repository to APT sources.."
 apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main' >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not add the docker repository to APT sources.. (Error Code: $ERROR)."
     fi
 
-echo "[HELK DOCKER INSTALLATION INFO] Updating the package database with the Docker packages from the newly added repo.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Updating the package database with the Docker packages from the newly added repo.."
 apt-get update >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not update the package database with the Docker packages from the newly added repo.. (Error Code: $ERROR)."
     fi
 
-echo "[HELK DOCKER INSTALLATION INFO] Making sure that Docker is being installed from the Docker repo and not the default Ubuntu 16.04 repo.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Making sure that Docker is being installed from the Docker repo and not the default Ubuntu 16.04 repo.."
 apt-cache policy docker-engine >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "something went wrong.. (Error Code: $ERROR)."
     fi	
 
-echo "[HELK DOCKER INSTALLATION INFO] Installing Docker.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Installing Docker.."
 apt-get install -y docker-engine >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install Docker.. (Error Code: $ERROR)."
     fi
 
-# *********** Installing Docker-Compose ***************
-echo "[HELK DOCKER INSTALLATION INFO] Installing Docker-Compose.."	
-curl -o /usr/local/bin/docker-compose -L "https://github.com/docker/compose/releases/download/1.13.0/docker-compose-$(uname -s)-$(uname -m)" >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install Docker.. (Error Code: $ERROR)."
-    fi
-
-echo "[HELK DOCKER INSTALLATION INFO] Setting permissions to the docker-compose binary.."
-chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not set permissions to the docker-compose binary.. (Error Code: $ERROR)."
-    fi
-
-echo "[HELK DOCKER INSTALLATION INFO] Docker & Docker-Compose have been successfully installed.."
-echo "***********************************************"
-echo "[HELK DOCKER INSTALLATION INFO] Docker Version:"
+echo "[HELK-DOCKER-INSTALLATION-INFO] Docker has been successfully installed.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Docker Version:"
 docker -v
-echo "***********************************************"
-echo "[HELK DOCKER INSTALLATION INFO] Docker-Compose Version:"
-docker-compose -v
-
 
 

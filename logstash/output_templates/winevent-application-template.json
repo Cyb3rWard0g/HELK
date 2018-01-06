@@ -1,0 +1,37 @@
+{
+  "template" : "winevent-application-*",
+  "settings" : {
+    "index.refresh_interval": "5s"
+  },
+  "mappings":{
+    "doc":{
+      "dynamic_templates": [{
+        "strings":{
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "text",
+            "norms": false,
+            "fields": {
+              "raw": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          }
+        }
+      }],
+      "properties":{
+        "@timestamp":{"type":"date"},
+        "spp":{
+          "properties":{
+            "restart":{
+              "properties":{
+                "scheduled":{"type":"date"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

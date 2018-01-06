@@ -1,5 +1,5 @@
 {
-  "template" : "sysmon-*",
+  "template" : "winevent-security-*",
   "settings" : {
     "index.refresh_interval": "5s"
   },
@@ -22,36 +22,18 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "destination":{
+        "system":{
           "properties":{
-            "port":{
-              "properties":{
-                "number":{"type":"integer"}
-              }
-            }
-          }
-        },
-        "event_id":{"type":"integer"},
-        "geoip":{
-          "properties":{
-            "dma_code":{"type":"integer"},
-            "latitude":{"type":"float"},
-            "location":{"type": "geo_point"},
-            "longitude":{"type":"float"},
-            "postal_code":{"type":"integer"}
-          }
-        },
-        "network":{
-          "properties":{
-            "initiated":{"type":"boolean"}
+            "newtime":{"type":"date"},
+            "previoustime":{"type":"date"}
           }
         },
         "process":{
           "properties":{
             "id":{"type":"integer"},
-            "image":{
+            "target":{
               "properties":{
-                "signed":{"type":"boolean"}
+                "id":{"type":"integer"}
               }
             },
             "parent":{
@@ -59,21 +41,9 @@
                 "id":{"type":"integer"}
               }
             },
-            "source":{
-              "properties":{
-                "id":{"type":"integer"},
-                "threadid":{"type":"integer"}
-              }
-            },
-            "target":{
-              "properties":{
-                "id":{"type":"integer"}
-              }
-            },
             "terminalsessionid":{"type":"integer"}
           }
         },
-        "process_id":{"type":"integer"},
         "source":{
           "properties":{
             "port":{
@@ -83,7 +53,15 @@
             }
           }
         },
-        "thread_id":{"type":"integer"},
+        "destination":{
+          "properties":{
+            "port":{
+              "properties":{
+                "number":{"type":"integer"}
+              }
+            }
+          }
+        },
         "version":{"type":"integer"}
       }
     }
