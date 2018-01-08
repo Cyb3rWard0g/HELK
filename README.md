@@ -119,7 +119,8 @@ source ~/.bashrc && pyspark
 * Open the Check_Spark_Graphframes_Integrations notebook
 	* Check the saved output (Make sure that you have Sysmon * Windows Security event logs being sent to your HELK. Otherwise you will get errors in your Jupyter Notebook when trying to replicate the basic commands)
 	* Clear the output from the notebook and run everything again
-![alt text](resources/images/HELK_checking_integations.png "HELK Checking Integrations")
+
+![alt text](resources/images/HELK_checking_integrations.png "HELK Checking Integrations")
 
 ## HELK's Heap Size
 By default, HELK calculates how much memory the host has and assigns 50% of it to it (You can change that by manually modifying the /etc/elasticsearch/jvm.options file after the installation and restarting your elasticsearch service)
