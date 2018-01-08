@@ -7,7 +7,7 @@ A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilit
 * Make sense of a large amount of event logs and add more context to suspicious events during hunting.
 * Expedite the time it takes to deploy an ELK stack.
 * Improve the testing of hunting use cases in an easier and more affordable way.
-* Learn Data Science via Apache Spark, GraphFrames & Jupyter Notebooks.
+* Enable Data Science via Apache Spark, GraphFrames & Jupyter Notebooks.
 
 # Resources
 * [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
