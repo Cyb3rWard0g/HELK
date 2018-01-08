@@ -17,7 +17,9 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Installing Prerequisites ***************
 # -qq : No output except for errors
-RUN apt-get update -qq \
+RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Ubuntu base image.." \
+  && apt-get update -qq \
+  && echo "[HELK-DOCKER-INSTALLATION-INFO] Extracting templates from packages.." \
   && apt-get install -qqy \
   openjdk-8-jre-headless \
   wget \
@@ -57,9 +59,9 @@ RUN wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key
 # *********** Installing Elasticsearch ***************
 RUN apt-get install -qq elasticsearch \
   && mv /etc/elasticsearch/elasticsearch.yml /etc/elasticsearch/backup_elasticsearch.yml
-ADD elasticsearch/elasticsearch.yml /etc/elasticsearch/
+ADD elasticsearch/docker/elasticsearch.yml /etc/elasticsearch/
 RUN apt-get update -qq
-VOLUME esdata:/etc/elasticsearch/data
+VOLUME /var/lib/elasticsearch
 
 # *********** Installing Kibana ***************
 RUN apt-get install -qq kibana \

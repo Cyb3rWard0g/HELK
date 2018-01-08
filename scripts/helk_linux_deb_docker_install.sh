@@ -11,6 +11,27 @@
 #  https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
 #  https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04 
 
+# *********** Check if user is root ***************
+if [[ $EUID -ne 0 ]]; then
+   echo "[HELK-DOCKER-INSTALLATION-INFO] YOU MUST BE ROOT TO RUN THIS SCRIPT!!!" 
+   exit 1
+fi
+
+# *********** Check System Kernel Name ***************
+systemKernel="$(uname -s)"
+
+if [ "$systemKernel" == "Linux" ]; then
+    # *********** Check if docker is installed ***************
+    if [ -f /etc/debian_version ]; then
+        echo "[HELK-DOCKER-INSTALLATION-INFO] This is a debian-based system.."
+        echo "[HELK-DOCKER-INSTALLATION-INFO] Installing Docker.."
+    else
+        echo "[HELK-DOCKER-INSTALLATION-INFO] This is not a debian-based system.."
+        echo "[HELK-DOCKER-INSTALLATION-INFO] Install docker with the right procedures for your system.."
+        exit 1
+    fi
+fi
+
 LOGFILE="/var/log/helk-docker-install.log"
 
 echoerror() {
