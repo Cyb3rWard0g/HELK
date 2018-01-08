@@ -11,76 +11,145 @@ A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilit
 
 # Resources
 * [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
+* [An Integrated API for Mixing Graph and Relational Queries](https://cs.stanford.edu/~matei/papers/2016/grades_graphframes.pdf)
+* [Graph queries in Spark SQL](https://www.slideshare.net/SparkSummit/graphframes-graph-queries-in-spark-sql)
+* [Graphframes Overview](http://graphframes.github.io/index.html)
 * [Elastic Producs](https://www.elastic.co/products)
-* [docker-elk](https://github.com/deviantony/docker-elk)
+* [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+* [spujadas elk-docker](https://github.com/spujadas/elk-docker)
+* [deviantony docker-elk](https://github.com/deviantony/docker-elk)
 
 # Getting Started
 
 ## Requirements
-* OS: Ubuntu-16.04.2 Server amd64 (Tested)
+* OS Name: Linux (Debian-based systems)
+	* Tested on Ubuntu-16.04.2 Server amd64
 * Network Connection: NAT or Bridge
 * RAM: 4GB (minimum)
 * Applications:
 	* Docker(Needed for HELK Docker Installation ONLY)
+* Winlogbeat running on your endpoints (At least sending Sysmon and Windows Security event logs)
+	* HELK's current version parses logs shipped by Winlogbeat ONLY (Nxlog parsing is coming soon)
 
-## Pulling from DockerHub
-You can pull a Docker Image from my DockerHub. You will need to install Docker first:
-
-```
-git clone https://github.com/Cyb3rWard0g/HELK.git
-cd HELK/scripts
-sudo ./helk_docker_install.sh
-```
-```
-sudo docker pull cyb3rward0g/helk
-sudo docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 cyb3rward0g/helk
-```
-Access your Docker Image by first getting the Container ID and then running Docker exec:
-```
-sudo docker ps
-sudo docker exec -ti 23669faeafb0  bash
-```
-You can then browse to your host's IP and provide the default HELK credentials (helk:hunting)
-
-## Installing from source via Docker
-You can also run the DockerFile and create your own image locally.
-
+## Automatic Installation Options
+The HELK project comes with three options:
+* Pulling the latest HELK Docker Image from cyb3rward0g dockerhub
+* Building the HELK image from a local Dockerfile
+* Installing the HELK from a local bash script
 ```
 git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/
-sudo ./helk_docker_start.sh
-```
-
-## Installing from source via bash script
-
-```
-git clone https://github.com/Cyb3rWard0g/HELK.git
-cd HELK/scripts
 sudo ./helk_install.sh
+
+**********************************************
+**           HELK - M E N U                 **
+**                                          **
+** Author: Roberto Rodriguez (@Cyb3rWard0g) **
+** HELK build version: 0.9 (BETA)           **
+** HELK ELK version: 6.x                    **
+** License: BSD 3-Clause                    **
+**********************************************
+ 
+1. Pull the latest HELK image from DockerHub
+2. Build the HELK image from local Dockerfile
+3. Install the HELK from local bash script
+4. Exit
+ 
+[HELK-INSTALLATION-INFO] Enter choice [ 1 - 4]
 ```
 
-## HELK Settings
-HELK will by default create a docker named volume `helk_esdata` which will persist your elasticsearch data between containers. If HELK will be used in higher resource environments, `ES_JAVA_OPTS: "-Xmx256m -Xms256m"` can be modified, however do not allocate more than 50% of available memory. After installing the HELK, browse to your HELK (host) IP address and log on with 
+## HELK Initial Settings
+At the end of the HELK installation, you will have a similar output with the information you need to access the primary HELK components. Remember that the default username and password for the HELK are helk:hunting.
 
-* username: helk 
-* password: hunting
+```
+**********************************************************************************************************
+[HELK-INSTALLATION-INFO] YOUR HELK IS READY
+[HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK
+**********************************************************************************************************
+ 
+HELK KIBANA URL: http://192.168.1.243
+HELK KIBANA USER: helk
+HELK KIBANA PASSWORD: hunting
+HELK JUPYTER CURRENT TOKEN: bf329433d64f735ae50dce73bab995bb240194a98b84bfd2
+HELK SPARK UI: http://192.168.1.243:4040
+HELK JUPYTER NOTEBOOK URI: http://192.168.1.243:8880
+HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash
+ 
+IT IS HUNTING SEASON!!!!!
+```
+
+## (Docker) Accessing the HELK's container
+By default, the HELK's container is run in the background. Therefore, you will have to access your docker container by running the following commands:
+```
+sudo docker exec -ti helk bash
+root@7a9d6443a4bf:/opt/helk/scripts#
+```
+
+## Checking HELK integrations (Spark, Graphframes & Jupyter)
+* (Bash script Install) If the HELK was installed via the local bash script, make sure you enable the .bashrc file before starting the Jupyter server.
+```
+source ~/.bashrc && pyspark
+```
+* (Docker Install) By default, the Jupyter server gets started automatically after building or pulling the HELK's container.
+* Access the Jupyter Server: 
+	* Go to your <Container's IP>:8880 in your preferred browser
+	* Enter the token provided after installing the HELK
+* Go to the scripts/training/jupyter_notebooks/getting_started/ folder
+* Open the Check_Spark_Graphframes_Integrations notebook
+	* Check the saved output (Make sure that you have Sysmon * Windows Security event logs being sent to your HELK. Otherwise you will get errors in your Jupyter Notebook when trying to replicate the basic commands)
+	* Clear the output from the notebook and run everything again
+![alt text](resources/images/HELK_checking_integations.png "HELK Checking Integrations")
+
+## HELK's Heap Size
+By default, HELK calculates how much memory the host has and assigns 50% of it to it (You can change that by manually modifying the /etc/elasticsearch/jvm.options file after the installation and restarting your elasticsearch service)
+```
+sudo nano /etc/elasticsearch/jvm.options
+sudo service elasticsearch restart
+```
+
+# Troubleshooting the HELK:
+## HELK Installation Logs
+* HELK Bash Script Install Logs: 
+	* /var/log/helk-install.log
+* HELK Docker Install Logs: 
+```
+sudo docker logs helk
+```
+* Docker Application Install: 
+	* /var/log/helk-docker-install.log
+
+## HELK Application Logs
+* Elasticsearch:
+	* /var/log/elasticsearch/elasticsearch.log 
+* Logstash:
+	* /var/log/logstash/logstash-plain.log
+* Kibana:
+	* /var/log/kibana/kibana.stdout
+	* /var/log/kibana/kibana.stderr
 
 # Author
-* Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g)
+* Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g) [@THE_HELK](https://twitter.com/THE_HELK)
 
 # Contributors
 * Robby Winchester [@robwinchester3](https://twitter.com/robwinchester3)
+* Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
+* Jordan Potti [@ok_bye_now](https://twitter.com/ok_bye_now)
 
 # Contributing
-There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below, but I would also woult love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring 
+There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below. I would love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring
 
 # TO-Do
-- [X] Integrate NGINX in the Docker image
-- [X] Upload Kibana Dashboards
-- [X] Add Winlogbeat scripts & files
+- [X] Upload basic Kibana Dashboards
+- [X] Integrate Spark & Graphframes
+- [X] Add Jupyter Notebook on the top of Spark
 - [ ] Install Elastalert
 - [ ] Create Elastalert rules
+- [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook) 
+- [ ] Somehow integrate neo4j spark connectors with build
+- [ ] Nxlog parsers (Logstash Filters)
 - [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
+- [ ] Enhance elasticsearch configuration to make it more scalable
+- [ ] Add more network data sources (i.e Bro)
 
 More coming soon...
 
