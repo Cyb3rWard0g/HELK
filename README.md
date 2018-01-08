@@ -78,6 +78,27 @@ HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash
 IT IS HUNTING SEASON!!!!!
 ```
 
+## Visualize your logs (Discovery)
+Make sure you have logs being sent to your HELK first (At least Windows security events). Then, go to http://<HELK's IP> in your preferred browser. (If you dont have logs being sent to your HELK you will have to wait and repeat the first steps of this section)
+Currently, the HELK has 6 indices created automatically by its default configs:
+* "*" - All
+* "sysmon-*"
+* "winevent-security-*"
+* "winevent-application-*"
+* "winevent-system-*"
+* "powershell-*"
+
+![alt text](resources/images/HELK_winevent_security_discovery.png "HELK Winevent Security Discovery")
+
+## Visualize your logs (Dashboards)
+Make sure you have logs being sent to your HELK first (At least Windows security events). Then, go to http://<HELK's IP> in your preferred browser. (If you dont have logs being sent to your HELK you will have to wait and repeat the first steps of this section)
+Currently, the HELK provides 3 dashboards:
+* Global_Dashboard
+* Network_Dashboard
+* Sysmon_Dashboard
+
+![alt text](resources/images/HELK_Network_Dashboard.png "HELK Network Dashboard")
+
 ## (Docker) Accessing the HELK's container
 By default, the HELK's container is run in the background. Therefore, you will have to access your docker container by running the following commands:
 ```
@@ -144,6 +165,7 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Add Jupyter Notebook on the top of Spark
 - [ ] Install Elastalert
 - [ ] Create Elastalert rules
+- [ ] MITRE ATT&CK mapping to logs or dashboards
 - [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook) 
 - [ ] Somehow integrate neo4j spark connectors with build
 - [ ] Nxlog parsers (Logstash Filters)
