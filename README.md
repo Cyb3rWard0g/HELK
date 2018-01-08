@@ -1,11 +1,13 @@
 # HELK [Beta]
-The incredible HELK (Hunting, Elasticsearch, Logstash, Kibana) VM.
+A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilities.
+![alt text](resources/images/HELK_Stack.png "HELK Infrastructure")
 
 # Goals
 * Provide a free hunting platform to the community and share the basics of Threat Hunting.
 * Make sense of a large amount of event logs and add more context to suspicious events during hunting.
 * Expedite the time it takes to deploy an ELK stack.
-* Improve the testing of hunting use cases in an easier and more affordable way. 
+* Improve the testing of hunting use cases in an easier and more affordable way.
+* Learn Data Science via Apache Spark, GraphFrames & Jupyter Notebooks.
 
 # Resources
 * [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
@@ -19,50 +21,49 @@ The incredible HELK (Hunting, Elasticsearch, Logstash, Kibana) VM.
 * Network Connection: NAT or Bridge
 * RAM: 4GB (minimum)
 * Applications:
-	* Docker & Docker-compose (Needed for HELK Docker Installation ONLY)
+	* Docker(Needed for HELK Docker Installation ONLY)
 
-### Installing Docker & Docker-compose
-If you decide to build,(re)create, start and attach the specific containters needed for the HELK services (Elasticsearch, Logstash & Kibana), you will have to install Docker and Docker-compose first.
+## Pulling from DockerHub
+You can pull a Docker Image from my DockerHub. You will need to install Docker first:
 
 ```
 git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/scripts
 sudo ./helk_docker_install.sh
 ```
+```
+sudo docker pull cyb3rward0g/helk
+sudo docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 cyb3rward0g/helk
+```
+Access your Docker Image by first getting the Container ID and then running Docker exec:
+```
+sudo docker ps
+sudo docker exec -ti 23669faeafb0  bash
+```
+You can then browse to your host's IP and provide the default HELK credentials (helk:hunting)
 
-## Enrichments?
-You can use this basic HELK build and integrate it with other hunting platforms. So far you can use this build and integrate it with the following platforms:
-
-### Automated Collection and Enrichment (ACE)
-[ACE](https://github.com/Invoke-IR/ACE) is a suite of tools for threat hunters to collect data from many endpoints in a network and automatically enrich the data. The data is collected by running scripts on each computer without installing any software on the target. ACE supports collecting from Windows, macOS, and Linux hosts.
-Once you have the HELK cloned locally, you will just have to update the custom ace-rabbimq-input.conf with your ACE-rabbitmq IP address,user & password. Then, you will ned to copy the custom ace-rabbitmq logstash configs to the HELK's default logstash/pipeline folder before installing it.
+## Installing from source via Docker
+You can also run the DockerFile and create your own image locally.
 
 ```
-cd HELK
-sudo nano enrichments/ACE/logstash/03-ace-rabbitmq-input.conf
-
-sudo cp -a enrichments/ACE/logstash/* logstash/pipeline/
+git clone https://github.com/Cyb3rWard0g/HELK.git
+cd HELK/
+sudo ./helk_docker_start.sh
 ```
- 
-## HELK Configuration & Installation
-The HELK can be installed via a bash script or a docker-compose file. HELK will by default create a docker named volume `helk_esdata` which will persist your elasticsearch data between containers. Additionally, HELK by default starts elasticsearch with 256mb of RAM allocated, if HELK will be used in higher resource environments, `ES_JAVA_OPTS: "-Xmx256m -Xms256m"` can be modified in the docker-compose.yml, however do not allocate more than 50% of available memory. After installing the HELK, browse to your HELK (host) IP address and log on with 
 
-* username: helk 
-* password: hunting
+## Installing from source via bash script
 
-### Bash Script
 ```
-sudo git clone https://github.com/Cyb3rWard0g/HELK.git
+git clone https://github.com/Cyb3rWard0g/HELK.git
 cd HELK/scripts
 sudo ./helk_install.sh
 ```
 
-### Docker-compose
-```
-sudo git clone https://github.com/Cyb3rWard0g/HELK.git
-cd HELK
-sudo docker-compose up -d
-```
+## HELK Settings
+HELK will by default create a docker named volume `helk_esdata` which will persist your elasticsearch data between containers. If HELK will be used in higher resource environments, `ES_JAVA_OPTS: "-Xmx256m -Xms256m"` can be modified, however do not allocate more than 50% of available memory. After installing the HELK, browse to your HELK (host) IP address and log on with 
+
+* username: helk 
+* password: hunting
 
 # Author
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g)
@@ -75,11 +76,11 @@ There are a few things that I would like to accomplish with the HELK as shown in
 
 # TO-Do
 - [X] Integrate NGINX in the Docker image
-- [ ] Upload Kibana Dashboards
-- [ ] Add Winlogbeat scripts & files
-- [ ] Add/Ingest samples logs to the HELK
+- [X] Upload Kibana Dashboards
+- [X] Add Winlogbeat scripts & files
 - [ ] Install Elastalert
 - [ ] Create Elastalert rules
+- [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
 
 More coming soon...
 
