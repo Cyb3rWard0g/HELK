@@ -50,6 +50,13 @@ ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install openjdk-8-jre-headless (Error Code: $ERROR)."
     fi
+    
+echo "[HELK-BASH-INSTALLATION-INFO] Installing curl.."
+apt-get install -y curl >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install curl (Error Code: $ERROR)."
+    fi    
 
 # Elastic signs all of their packages with their own Elastic PGP signing key.
 echo "[HELK-BASH-INSTALLATION-INFO] Downloading and installing (writing to a file) the public signing key to the host.."
