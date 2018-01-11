@@ -26,7 +26,7 @@ if [ "$systemKernel" == "Linux" ]; then
         echo "[HELK-BASH-INSTALLATION-INFO] Installing the HELK.."
     else
         echo "[HELK-BASH-INSTALLATION-INFO] This is not a debian-based system.."
-        echo "[HELK-BASH-INSTALLATION-INFO] Install docker in your system and try to use the HELK's docker option.."
+        echo "[HELK-BASH-INSTALLATION-INFO] Install docker in your system and try to use one of the HELK's docker options.."
         exit 1
     fi
 fi

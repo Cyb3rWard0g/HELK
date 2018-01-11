@@ -13,101 +13,57 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+LOGFILE="/var/log/helk-install.log"
+echoerror() {
+    printf "${RC} * ERROR${EC}: $@\n" 1>&2;
+}
+
 # *********** Check System Kernel Name ***************
 systemKernel="$(uname -s)"
 
 # *********** Pulling latest HELK image from DockerHub ***************
 one(){
-	if [ "$systemKernel" == "Linux" ]; then
-        # *********** Check if docker is installed ***************
-        if [ -x "$(command -v docker)" ]; then
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Docker already installed"
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Dockerizing HELK.."
-        else
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Installing docker first"
-            scripts/helk_linux_deb_docker_install.sh
-        fi
-    else
-        # *********** Check if docker is installed ***************
-        if [ -x "$(command -v docker)" ]; then
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Docker already installed"
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Dockerizing HELK.."
-        else
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Install docker first"
-            exit 1
-        fi
-    fi
-
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Checking local vm.max_map_count variable"
-    MAX_MAP_COUNT=262144
-    if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
-        sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT
-    fi
-
     echo "[HELK-DOCKER-INSTALLATION-INFO] Building the HELK container from source.."
-    docker pull cyb3rward0g/helk
+    docker pull cyb3rward0g/helk >> $LOGFILE 2>&1
     echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
-    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 --name helk cyb3rward0g/helk -e "bootstrap.memory_lock=true" --ulimit memlock=-1:-1
+    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 --name helk cyb3rward0g/helk -e "bootstrap.memory_lock=true" --ulimit memlock=-1:-1 >> $LOGFILE 2>&1
 
     # *********** Getting Jupyter Token ***************
     echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for Jupyter Server to start.."
     until curl -s localhost:8880 -o /dev/null; do
         sleep 1
     done
-    jupyter_token="$(docker exec -ti helk jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')"
+    jupyter_token="$(docker exec -ti helk jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
     docker_access="HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash"
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not pull latest HELK image from Dockerhub (Error Code: $ERROR)."
+    fi
 }
 
 # *********** Building HELK image from local Dockerfile ***************
 two(){
-    if [ "$systemKernel" == "Linux" ]; then
-        # *********** Check if docker is installed ***************
-        if [ -x "$(command -v docker)" ]; then
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Docker already installed"
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Dockerizing HELK.."
-        else
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Installing docker first"
-            scripts/helk_linux_deb_docker_install.sh
-        fi
-    else
-        # *********** Check if docker is installed ***************
-        if [ -x "$(command -v docker)" ]; then
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Docker already installed"
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Dockerizing HELK.."
-        else
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Install docker first.."
-            exit 1
-        fi
-    fi
-
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Checking local vm.max_map_count variable"
-    MAX_MAP_COUNT=262144
-    if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
-        sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT
-    fi
-
     echo "[HELK-DOCKER-INSTALLATION-INFO] Building the HELK container from local Dockerfile.."
-    docker build -t my_helk .
+    docker build -t my_helk . >> $LOGFILE 2>&1
     echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
-    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 --name helk my_helk -e "bootstrap.memory_lock=true" --ulimit memlock=-1:-1
+    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 --name helk my_helk -e "bootstrap.memory_lock=true" --ulimit memlock=-1:-1 >> $LOGFILE 2>&1
 
     # *********** Getting Jupyter Token ***************
     echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for Jupyter Server to start.."
     until curl -s localhost:8880 -o /dev/null; do
         sleep 1
     done
-    jupyter_token="$(docker exec -ti helk jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')"
+    jupyter_token="$(docker exec -ti helk jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
     docker_access="HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash"
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not build HELK image from local Dockerfile (Error Code: $ERROR)."
+    fi
 }
 
 # *********** Building the HELK from local bash script ***************
 three(){
     echo "[HELK-BASH-INSTALLATION-INFO] Installing the HELK from local bash script"
-    echo "[HELK-BASH-INSTALLATION-INFO] Checking local vm.max_map_count variable"
-    MAX_MAP_COUNT=262144
-    if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
-        sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT
-    fi
     cd scripts/
     ./helk_linux_deb_install.sh
     jupyter_token=" First, run the following: source ~/.bashrc && pyspark"
@@ -135,6 +91,113 @@ show_menus() {
 read_options(){
 	local choice
 	read -p "[HELK-INSTALLATION-INFO] Enter choice [ 1 - 4] " choice
+    if [ $choice = "1" ] || [ $choice = "2" ]; then
+        if [ "$systemKernel" == "Linux" ]; then
+            # Reference: https://get.docker.com/
+            echo "[HELK-DOCKER-INSTALLATION-INFO] HELK identified Linux as the system kernel"
+            echo "[HELK-DOCKER-INSTALLATION-INFO] Checking distribution list and version"
+            # *********** Check distribution list ***************
+            lsb_dist="$(. /etc/os-release && echo "$ID")"
+            lsb_dist="$(echo "$lsb_dist" | tr '[:upper:]' '[:lower:]')"
+
+            # *********** Check distribution version ***************
+            case "$lsb_dist" in
+                ubuntu)
+                    if [ -x "$(command -v lsb_release)" ]; then
+                        dist_version="$(lsb_release --codename | cut -f2)"
+                    fi
+                    if [ -z "$dist_version" ] && [ -r /etc/lsb-release ]; then
+                        dist_version="$(. /etc/lsb-release && echo "$DISTRIB_CODENAME")"
+                    fi
+                ;;
+                debian|raspbian)
+                    dist_version="$(sed 's/\/.*//' /etc/debian_version | sed 's/\..*//')"
+                    case "$dist_version" in
+                        9)
+                            dist_version="stretch"
+                        ;;
+                        8)
+                            dist_version="jessie"
+                        ;;
+                        7)
+                            dist_version="wheezy"
+                        ;;
+                    esac
+                ;;
+                centos)
+                    if [ -z "$dist_version" ] && [ -r /etc/os-release ]; then
+                        dist_version="$(. /etc/os-release && echo "$VERSION_ID")"
+                    fi
+                ;;
+                rhel|ol|sles)
+                    ee_notice "$lsb_dist"
+                    exit 1
+                    ;;
+                *)
+                    if [ -x "$(command -v lsb_release)"]; then
+                        dist_version="$(lsb_release --release | cut -f2)"
+                    fi
+                    if [ -z "$dist_version" ] && [ -r /etc/os-release ]; then
+                        dist_version="$(. /etc/os-release && echo "$VERSION_ID")"
+                    fi
+                ;;
+            esac
+            echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $lsb_dist version $dist_version"
+            
+            ERROR=$?
+            if [ $ERROR -ne 0 ]; then
+                echoerror "Could not verify distribution or version of the OS (Error Code: $ERROR)."
+            fi
+
+            # *********** Check if docker is installed ***************
+            if [ -x "$(command -v docker)" ]; then
+                echo "[HELK-DOCKER-INSTALLATION-INFO] Docker already installed"
+                echo "[HELK-DOCKER-INSTALLATION-INFO] Dockerizing HELK.."
+            else
+                echo "[HELK-DOCKER-INSTALLATION-INFO] Docker is not installed"
+                echo "[HELK-DOCKER-INSTALLATION-INFO] Checking if curl is installed first"
+                if [ -x "$(command -v curl)" ]; then
+                    echo "[HELK-DOCKER-INSTALLATION-INFO] curl is already installed"
+                    echo "[HELK-DOCKER-INSTALLATION-INFO] Ready to install  Docker.."
+                else
+                    echo "[HELK-DOCKER-INSTALLATION-INFO] curl is not installed"
+                    echo "[HELK-DOCKER-INSTALLATION-INFO] Installing curl before installing docker.."
+                    apt-get curl >> $LOGFILE 2>&1
+                    ERROR=$?
+                    if [ $ERROR -ne 0 ]; then
+                        echoerror "Could not install curl (Error Code: $ERROR)."
+                    fi
+                fi
+                # ****** Installing via convenience script ***********
+                echo "[HELK-DOCKER-INSTALLATION-INFO] Installing docker via convenience script.."
+                curl -fsSL get.docker.com -o scripts/get-docker.sh >> $LOGFILE 2>&1
+                chmod +x scripts/get-docker.sh >> $LOGFILE 2>&1
+                scripts/get-docker.sh >> $LOGFILE 2>&1
+                ERROR=$?
+                if [ $ERROR -ne 0 ]; then
+                    echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
+                fi
+            fi
+        else
+            # *********** Check if docker is installed ***************
+            if [ -x "$(command -v docker)" ]; then
+                echo "[HELK-DOCKER-INSTALLATION-INFO] Docker already installed"
+                echo "[HELK-DOCKER-INSTALLATION-INFO] Dockerizing HELK.."
+            else
+                echo "[HELK-DOCKER-INSTALLATION-INFO] Install docker for $systemKernel"
+                exit 1
+            fi
+        fi
+    fi
+    echo "[HELK-INSTALLATION-INFO] Checking local vm.max_map_count variable and setting it to 262144"
+    MAX_MAP_COUNT=262144
+    if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
+        sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT >> $LOGFILE 2>&1
+        ERROR=$?
+        if [ $ERROR -ne 0 ]; then
+            echoerror "Could not set vm.max_map_count to 262144 (Error Code: $ERROR)."
+        fi
+    fi
 	case $choice in
 		1) one ;;
 		2) two ;;
@@ -150,7 +213,7 @@ read_options
 
 # *********** Getting Host IP ***************
 # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
-echo "[HELK-DOCKER-INSTALLATION-INFO] Obtaining current host IP.."
+echo "[HELK-INSTALLATION-INFO] Obtaining current host IP.."
 case "${systemKernel}" in
     Linux*)     host_ip=$(ip route get 1 | awk '{print $NF;exit}');;
     Darwin*)    host_ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
@@ -160,10 +223,10 @@ esac
 echo " "
 echo " "
 echo " "
-echo "**********************************************************************************************************"
-echo "[HELK-INSTALLATION-INFO] YOUR HELK IS READY"
-echo "[HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK"
-echo "**********************************************************************************************************"
+echo "***********************************************************************************"
+echo "** [HELK-INSTALLATION-INFO] YOUR HELK IS READY                                   **"
+echo "** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **"
+echo "***********************************************************************************"
 echo " "
 echo "HELK KIBANA URL: http://${host_ip}"
 echo "HELK KIBANA USER: helk"
