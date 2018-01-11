@@ -23,7 +23,7 @@ A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilit
 
 ## Requirements
 * OS Name: Linux (Debian-based systems)
-	* Tested on Ubuntu-16.04.2 Server amd64
+	* Bash Script Option: Tested on Ubuntu-16.04.2 Server amd64 (Xenial)
 * Network Connection: NAT or Bridge
 * RAM: 4GB (minimum)
 * Applications:
@@ -131,14 +131,12 @@ sudo service elasticsearch restart
 
 # Troubleshooting the HELK:
 ## HELK Installation Logs
-* HELK Bash Script Install Logs: 
+* HELK Install Logs: 
 	* /var/log/helk-install.log
-* HELK Docker Install Logs: 
+* HELK Docker Logs: 
 ```
 sudo docker logs helk
 ```
-* Docker Application Install: 
-	* /var/log/helk-docker-install.log
 
 ## HELK Application Logs
 * Elasticsearch:
