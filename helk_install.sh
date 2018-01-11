@@ -162,7 +162,7 @@ read_options(){
                 else
                     echo "[HELK-DOCKER-INSTALLATION-INFO] curl is not installed"
                     echo "[HELK-DOCKER-INSTALLATION-INFO] Installing curl before installing docker.."
-                    apt-get curl >> $LOGFILE 2>&1
+                    apt-get install -y curl >> $LOGFILE 2>&1
                     ERROR=$?
                     if [ $ERROR -ne 0 ]; then
                         echoerror "Could not install curl (Error Code: $ERROR)."
