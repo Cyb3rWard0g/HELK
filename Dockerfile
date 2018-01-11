@@ -28,9 +28,7 @@ RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Ubuntu base image.." \
   apt-transport-https \
   python \
   python-pip \
-  unzip \
-  ipython \
-  ipython-notebook
+  unzip
 RUN apt-get -qy clean \
   autoremove
 
@@ -98,9 +96,9 @@ RUN wget http://download.elastic.co/hadoop/elasticsearch-hadoop-6.1.1.zip -P /op
 
 # *********** Install Spark ***************
 RUN wget -qO- http://mirrors.gigenet.com/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | sudo tar xvz -C /opt/helk/spark/
-ADD enrichments/spark/.bashrc ~/.bashrc
-ADD enrichments/spark/log4j.properties /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/
-ADD enrichments/spark/spark-defaults.conf /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/
+ADD spark/.bashrc ~/.bashrc
+ADD spark/log4j.properties /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/
+ADD spark/spark-defaults.conf /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/
 
 # Adding SPARK location
 ENV SPARK_HOME=/opt/helk/spark/spark-2.2.1-bin-hadoop2.7

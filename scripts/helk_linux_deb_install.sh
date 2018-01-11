@@ -20,7 +20,7 @@ fi
 systemKernel="$(uname -s)"
 
 if [ "$systemKernel" == "Linux" ]; then
-    # *********** Check if docker is installed ***************
+    # *********** Check if debian-system is present ***************
     if [ -f /etc/debian_version ]; then
         echo "[HELK-BASH-INSTALLATION-INFO] This is a debian-based system.."
         echo "[HELK-BASH-INSTALLATION-INFO] Installing the HELK.."
@@ -324,14 +324,6 @@ ERROR=$?
         echoerror "Could not install ES-Hadoop (Error Code: $ERROR)."
     fi
 
-# *********** Install ipython & ipython-notebook***************
-echo "[HELK-BASH-INSTALLATION-INFO] Installing ipython & ipython-notebook.."
-apt-get -y install ipython ipython-notebook >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install iPython & iPython-notebook (Error Code: $ERROR)."
-    fi
-
 # *********** Install Jupyter***************
 echo "[HELK-BASH-INSTALLATION-INFO] Installing Jupyter.."
 pip install jupyter >> $LOGFILE 2>&1
@@ -343,9 +335,9 @@ ERROR=$?
 # *********** Install Spark ***************
 echo "[HELK-BASH-INSTALLATION-INFO] Installing Spark.."
 sudo wget -qO- http://mirrors.gigenet.com/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | sudo tar xvz -C /opt/helk/spark/ >> $LOGFILE 2>&1
-cp -f ../enrichments/spark/.bashrc ~/.bashrc >> $LOGFILE 2>&1
-cp -v ../enrichments/spark/log4j.properties /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/ >> $LOGFILE 2>&1
-cp -v ../enrichments/spark/spark-defaults.conf /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/ >> $LOGFILE 2>&1
+cp -f ../spark/.bashrc ~/.bashrc >> $LOGFILE 2>&1
+cp -v ../spark/log4j.properties /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/ >> $LOGFILE 2>&1
+cp -v ../spark/spark-defaults.conf /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install spark (Error Code: $ERROR)."
