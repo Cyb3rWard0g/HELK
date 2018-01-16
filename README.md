@@ -174,6 +174,7 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [ ] Create Elastalert rules
 - [ ] Nxlog parsers (Logstash Filters)
 - [ ] Add more network data sources (i.e Bro)
+- [ ] Create wiki article on setting up endpoint to send logs into HELK
 
 More coming soon...
 
