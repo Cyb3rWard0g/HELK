@@ -1,6 +1,6 @@
 # HELK [Beta]
 A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilities.
-![alt text](resources/images/HELK_Stack.png "HELK Infrastructure")
+![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
 
 # Goals
 * Provide a free hunting platform to the community and share the basics of Threat Hunting.
@@ -62,10 +62,10 @@ sudo ./helk_install.sh
 At the end of the HELK installation, you will have a similar output with the information you need to access the primary HELK components. Remember that the default username and password for the HELK are helk:hunting.
 
 ```
-********************************************************************************
-[HELK-INSTALLATION-INFO] YOUR HELK IS READY
-[HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK
-********************************************************************************
+***********************************************************************************
+** [HELK-INSTALLATION-INFO] YOUR HELK IS READY                                   **
+** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
+***********************************************************************************
  
 HELK KIBANA URL: http://192.168.1.243
 HELK KIBANA USER: helk
@@ -163,14 +163,15 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Upload basic Kibana Dashboards
 - [X] Integrate Spark & Graphframes
 - [X] Add Jupyter Notebook on the top of Spark
-- [ ] Install Elastalert
-- [ ] Create Elastalert rules
+- [ ] Kafka Integration
+- [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
+- [ ] Enhance elasticsearch configuration to make it more scalable
 - [ ] MITRE ATT&CK mapping to logs or dashboards
 - [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook) 
 - [ ] Somehow integrate neo4j spark connectors with build
+- [ ] Install Elastalert
+- [ ] Create Elastalert rules
 - [ ] Nxlog parsers (Logstash Filters)
-- [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
-- [ ] Enhance elasticsearch configuration to make it more scalable
 - [ ] Add more network data sources (i.e Bro)
 
 More coming soon...

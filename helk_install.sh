@@ -23,7 +23,7 @@ systemKernel="$(uname -s)"
 
 # *********** Pulling latest HELK image from DockerHub ***************
 one(){
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Building the HELK container from source.."
+    echo "[HELK-DOCKER-INSTALLATION-INFO] Pulling the latest HELK image from Dockerhub.."
     docker pull cyb3rward0g/helk >> $LOGFILE 2>&1
     echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
     docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 --name helk cyb3rward0g/helk -e "bootstrap.memory_lock=true" --ulimit memlock=-1:-1 >> $LOGFILE 2>&1
