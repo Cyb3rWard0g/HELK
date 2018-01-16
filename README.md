@@ -1,5 +1,6 @@
 # HELK [Beta]
 A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilities.
+
 ![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
 
 # Goals
