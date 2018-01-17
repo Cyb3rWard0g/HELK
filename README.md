@@ -1,6 +1,7 @@
 # HELK [Beta]
 A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilities.
-![alt text](resources/images/HELK_Stack.png "HELK Infrastructure")
+
+![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
 
 # Goals
 * Provide a free hunting platform to the community and share the basics of Threat Hunting.
@@ -23,7 +24,7 @@ A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilit
 
 ## Requirements
 * OS Name: Linux (Debian-based systems)
-	* Tested on Ubuntu-16.04.2 Server amd64
+	* Bash Script Option: Tested on Ubuntu-16.04.2 Server amd64 (Xenial)
 * Network Connection: NAT or Bridge
 * RAM: 4GB (minimum)
 * Applications:
@@ -62,10 +63,10 @@ sudo ./helk_install.sh
 At the end of the HELK installation, you will have a similar output with the information you need to access the primary HELK components. Remember that the default username and password for the HELK are helk:hunting.
 
 ```
-**********************************************************************************************************
-[HELK-INSTALLATION-INFO] YOUR HELK IS READY
-[HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK
-**********************************************************************************************************
+***********************************************************************************
+** [HELK-INSTALLATION-INFO] YOUR HELK IS READY                                   **
+** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
+***********************************************************************************
  
 HELK KIBANA URL: http://192.168.1.243
 HELK KIBANA USER: helk
@@ -78,7 +79,7 @@ HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash
 IT IS HUNTING SEASON!!!!!
 ```
 
-## Visualize your logs (Discovery)
+## Visualize your logs (Discover)
 Make sure you have logs being sent to your HELK first (At least Windows security events). Then, go to http://<HELK's IP> in your preferred browser. (If you dont have logs being sent to your HELK you will have to wait and repeat the first steps of this section)
 Currently, the HELK has 6 indices created automatically by its default configs:
 * "*" - All
@@ -131,14 +132,12 @@ sudo service elasticsearch restart
 
 # Troubleshooting the HELK:
 ## HELK Installation Logs
-* HELK Bash Script Install Logs: 
+* HELK Install Logs: 
 	* /var/log/helk-install.log
-* HELK Docker Install Logs: 
+* HELK Docker Logs: 
 ```
 sudo docker logs helk
 ```
-* Docker Application Install: 
-	* /var/log/helk-docker-install.log
 
 ## HELK Application Logs
 * Elasticsearch:
@@ -156,6 +155,7 @@ sudo docker logs helk
 * Robby Winchester [@robwinchester3](https://twitter.com/robwinchester3)
 * Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
 * Jordan Potti [@ok_bye_now](https://twitter.com/ok_bye_now)
+* esebese [esebese](https://github.com/esebese)
 
 # Contributing
 There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below. I would love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring
@@ -164,15 +164,17 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Upload basic Kibana Dashboards
 - [X] Integrate Spark & Graphframes
 - [X] Add Jupyter Notebook on the top of Spark
-- [ ] Install Elastalert
-- [ ] Create Elastalert rules
+- [ ] Kafka Integration
+- [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
+- [ ] Enhance elasticsearch configuration to make it more scalable
 - [ ] MITRE ATT&CK mapping to logs or dashboards
 - [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook) 
 - [ ] Somehow integrate neo4j spark connectors with build
+- [ ] Install Elastalert
+- [ ] Create Elastalert rules
 - [ ] Nxlog parsers (Logstash Filters)
-- [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
-- [ ] Enhance elasticsearch configuration to make it more scalable
 - [ ] Add more network data sources (i.e Bro)
+- [ ] Create wiki article on setting up endpoint to send logs into HELK
 
 More coming soon...
 
