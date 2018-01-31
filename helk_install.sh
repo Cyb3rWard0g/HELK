@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# HELK script: helk_docker_start.sh
+# HELK script: helk_install.sh
 # HELK script description: Start
-# HELK build version: 0.9 (BETA)
-# HELK ELK version: 6.x
+# HELK build version: 0.9 (Alpha)
+# HELK ELK version: 6.1.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
@@ -26,7 +26,7 @@ one(){
     echo "[HELK-DOCKER-INSTALLATION-INFO] Pulling the latest HELK image from Dockerhub.."
     docker pull cyb3rward0g/helk >> $LOGFILE 2>&1
     echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
-    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 --name helk cyb3rward0g/helk -e "bootstrap.memory_lock=true" --ulimit memlock=-1:-1 >> $LOGFILE 2>&1
+    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 -e "bootstrap.memory_lock=true" -e ADVERTISED_LISTENER="${host_ip}" --ulimit memlock=-1:-1 --name helk cyb3rward0g/helk >> $LOGFILE 2>&1
 
     # *********** Getting Jupyter Token ***************
     echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for Jupyter Server to start.."
@@ -38,6 +38,7 @@ one(){
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not pull latest HELK image from Dockerhub (Error Code: $ERROR)."
+        exit 1
     fi
 }
 
@@ -45,8 +46,13 @@ one(){
 two(){
     echo "[HELK-DOCKER-INSTALLATION-INFO] Building the HELK container from local Dockerfile.."
     docker build -t my_helk . >> $LOGFILE 2>&1
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not build HELK image from local Dockerfile (Error Code: $ERROR)."
+        exit 1
+    fi
     echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
-    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 --name helk my_helk -e "bootstrap.memory_lock=true" --ulimit memlock=-1:-1 >> $LOGFILE 2>&1
+    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 -p 2181:2181 -p 9092:9092 -p 9093:9093 -p 9094:9094 -e "bootstrap.memory_lock=true" -e ADVERTISED_LISTENER="${host_ip}" --ulimit memlock=-1:-1 --name helk my_helk  >> $LOGFILE 2>&1
 
     # *********** Getting Jupyter Token ***************
     echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for Jupyter Server to start.."
@@ -55,17 +61,18 @@ two(){
     done
     jupyter_token="$(docker exec -ti helk jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
     docker_access="HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash"
-    ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not build HELK image from local Dockerfile (Error Code: $ERROR)."
-    fi
 }
 
 # *********** Building the HELK from local bash script ***************
 three(){
     echo "[HELK-BASH-INSTALLATION-INFO] Installing the HELK from local bash script"
     cd scripts/
-    ./helk_linux_deb_install.sh
+    ./helk_debian_tar_install.sh
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not build HELK image from bash script (Error Code: $ERROR)."
+        exit 1
+    fi
     jupyter_token=" First, run the following: source ~/.bashrc && pyspark"
 }
  
@@ -166,6 +173,7 @@ read_options(){
                     ERROR=$?
                     if [ $ERROR -ne 0 ]; then
                         echoerror "Could not install curl (Error Code: $ERROR)."
+                        exit 1
                     fi
                 fi
                 # ****** Installing via convenience script ***********
@@ -176,6 +184,7 @@ read_options(){
                 ERROR=$?
                 if [ $ERROR -ne 0 ]; then
                     echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
+                    exit 1
                 fi
             fi
         else
@@ -207,18 +216,18 @@ read_options(){
 	esac
 }
 
-# *********** Running selected option ***************
-show_menus
-read_options
-
 # *********** Getting Host IP ***************
 # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
 echo "[HELK-INSTALLATION-INFO] Obtaining current host IP.."
 case "${systemKernel}" in
     Linux*)     host_ip=$(ip route get 1 | awk '{print $NF;exit}');;
     Darwin*)    host_ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
-    *)          ip="UNKNOWN:${unameOut}"
+    *)          host_ip="UNKNOWN:${unameOut}"
 esac
+
+# *********** Running selected option ***************
+show_menus
+read_options
 
 echo " "
 echo " "

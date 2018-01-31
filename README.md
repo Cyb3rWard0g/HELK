@@ -1,4 +1,4 @@
-# HELK [Beta]
+# HELK [Alpha]
 A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilities.
 
 ![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
@@ -9,6 +9,19 @@ A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilit
 * Expedite the time it takes to deploy an ELK stack.
 * Improve the testing of hunting use cases in an easier and more affordable way.
 * Enable Data Science via Apache Spark, GraphFrames & Jupyter Notebooks.
+
+# Current Status: Alpha
+The project is currently in an alpha stage, which means that the code and the functionality are still changing. We haven't yet tested the system with large data sources and in many scenarios. We invite you to try it and welcome any feedback.
+
+# HELK Features
+* **Kafka:** A distributed publish-subscribe messaging system that is designed to be fast, scalable, fault-tolerant, and durable.
+* **Elasticsearch:** A highly scalable open-source full-text search and analytics engine.
+* **Logstash:** A data collection engine with real-time pipelining capabilities.
+* **Kibana:** An open source analytics and visualization platform designed to work with Elasticsearch.
+* **ES-Hadoop:** An open-source, stand-alone, self-contained, small library that allows Hadoop jobs (whether using Map/Reduce or libraries built upon it such as Hive, Pig or Cascading or new upcoming libraries like Apache Spark ) to interact with Elasticsearch.
+* **Spark:** A fast and general-purpose cluster computing system. It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general execution graphs.
+* **GraphFrames:** A package for Apache Spark which provides DataFrame-based Graphs.
+* **Jupyter Notebook:** An open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
 
 # Resources
 * [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
@@ -26,11 +39,11 @@ A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilit
 * OS Name: Linux (Debian-based systems)
 	* Bash Script Option: Tested on Ubuntu-16.04.2 Server amd64 (Xenial)
 * Network Connection: NAT or Bridge
-* RAM: 4GB (minimum)
+* RAM: 16GB (minimum)
 * Applications:
 	* Docker(Needed for HELK Docker Installation ONLY)
 * Winlogbeat running on your endpoints (At least sending Sysmon and Windows Security event logs)
-	* HELK's current version parses logs shipped by Winlogbeat ONLY (Nxlog parsing is coming soon)
+	* HELK's current version parses logs shipped by Winlogbeat ONLY (Nxlog parsing is coming soon..)
 
 ## Automatic Installation Options
 The HELK project comes with three options:
@@ -131,6 +144,10 @@ sudo service elasticsearch restart
 ```
 
 # Troubleshooting the HELK:
+I recommend to use the following commands while installing the HELK to get more details about what is being installed and configured:
+```
+tail -f /var/log/helk-install.log
+```
 ## HELK Installation Logs
 * HELK Install Logs: 
 	* /var/log/helk-install.log
@@ -145,8 +162,7 @@ sudo docker logs helk
 * Logstash:
 	* /var/log/logstash/logstash-plain.log
 * Kibana:
-	* /var/log/kibana/kibana.stdout
-	* /var/log/kibana/kibana.stderr
+	* /var/log/kibana/kibana.log
 
 # Author
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g) [@THE_HELK](https://twitter.com/THE_HELK)
@@ -164,7 +180,7 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Upload basic Kibana Dashboards
 - [X] Integrate Spark & Graphframes
 - [X] Add Jupyter Notebook on the top of Spark
-- [ ] Kafka Integration
+- [X] Kafka Integration
 - [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
 - [ ] Enhance elasticsearch configuration to make it more scalable
 - [ ] MITRE ATT&CK mapping to logs or dashboards

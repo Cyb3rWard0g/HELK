@@ -37,8 +37,7 @@
             "dma_code":{"type":"integer"},
             "latitude":{"type":"float"},
             "location":{"type": "geo_point"},
-            "longitude":{"type":"float"},
-            "postal_code":{"type":"integer"}
+            "longitude":{"type":"float"}
           }
         },
         "network":{

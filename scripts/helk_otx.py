@@ -2,8 +2,8 @@
 
 # HELK script: helk_otx.py
 # HELK script description: Pulling intelligence from OTX (AlienVault)
-# HELK build version: 0.9 (BETA)
-# HELK ELK version: 6.x
+# HELK build version: 0.9 (Alpha)
+# HELK ELK version: 6.1.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 

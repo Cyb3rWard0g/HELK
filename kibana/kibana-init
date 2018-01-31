@@ -1,22 +1,21 @@
 #!/bin/sh
-# Init script for logstash
+# Init script for Kibana
 # Maintained by Roberto Rodriguez @Cyb3rWard0g
 # Reference: 
 # https://github.com/elastic/logstash/blob/master/distribution/rpm/src/main/packaging/init.d/logstash
-# https://github.com/spujadas/elk-docker/blob/master/logstash-init
 
 ### BEGIN INIT INFO
-# Provides:          logstash
+# Provides:          kibana
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description:
-# Description:        Starts Logstash as a daemon.
+# Short-Description: 
+# Description:       Starts Kibana as a daemon
 ### END INIT INFO
 
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
-NAME=logstash
+NAME=kibana
 DEFAULT=/etc/default/$NAME
 export PATH
 
@@ -32,22 +31,18 @@ if [ -r /etc/default/rcS ]; then
 fi
 
 # The following variables can be overwritten in $DEFAULT
-
-JAVACMD=/usr/bin/java
-LS_HOME=/usr/share/logstash
-LS_SETTINGS_DIR=/etc/logstash
-LS_CONF_PATH=/etc/logstash/pipeline
-LS_LOGS_PATH=/var/log/logstash
-LS_LOGS_FILE=${LS_LOGS_PATH}/${NAME}-plain.log
-LS_JAVA_OPTS=""
-LS_PIDFILE=/var/run/logstash.pid
-LS_USER=logstash
-LS_GROUP=logstash
-LS_GC_LOG_FILE=/var/log/logstash/gc.log
-LS_OPEN_FILES=16384
-LS_NICE=19
-SERVICE_NAME="logstash"
-SERVICE_DESCRIPTION="logstash"
+KIBANA_HOME=/usr/share/$NAME
+KIBANA_CONF=/etc/$NAME
+KIBANA_USER="kibana"
+KIBANA_GROUP="kibana"
+KIBANA_CHROOT="/"
+KIBANA_CHDIR="/"
+KIBANA_NICE=""
+KIBANA_PIDFILE=/var/run/kibana.pid
+KIBANA_LOG_DIR=/var/log/kibana
+KIBANA_LOG_FILE="${KIBANA_LOG_DIR}/$NAME.log"
+SERVICE_NAME="kibana"
+SERVICE_DESCRIPTION="kibana"
 
 # End of variables that can be overwritten in $DEFAULT
 
@@ -57,59 +52,33 @@ if [ -f "$DEFAULT" ]; then
 fi
 
 # Define other required variables
-LS_EXEC=$LS_HOME/bin/logstash
-#LS_EXEC_OPTS="--path.settings ${LS_SETTINGS_DIR} --path.config ${LS_CONF_PATH} --path.logs ${LS_LOGS_PATH}"
-LS_EXEC_OPTS="--path.settings ${LS_SETTINGS_DIR}"
+KIBANA_EXEC=$KIBANA_HOME/bin/$NAME
+KIBANA_EXEC_OPTS="--config ${KIBANA_CONF}/kibana.yml --log-file ${KIBANA_LOG_FILE}"
 
-export LS_JAVA_OPTS
-export LS_HOME
-export LS_SETTINGS_DIR
+[ -z "$KIBANA_NICE" ] && KIBANA_NICE=0
 
-if [ ! -x "$LS_EXEC" ]; then
-	echo "The logstash startup script does not exists or it is not executable, tried: $LS_EXEC"
+if [ ! -x "$KIBANA_EXEC" ]; then
+	echo "The Kibana startup script does not exists or it is not executable, tried: $KIBANA_EXEC"
 	exit 1
 fi
 
-touch ${LS_LOGS_FILE}
-chown ${LS_USER}:${LS_GROUP} ${LS_LOGS_FILE}
-
-checkJava() {
-    if [ -x "$JAVACMD" ]; then
-        JAVA="$JAVACMD"
-    else
-        JAVA=`which java`
-    fi
-
-    if [ ! -x "$JAVA" ]; then
-        echo "Could not find any executable java binary. Please install java in your PATH or set JAVACMD"
-        exit 1
-    fi
-}
-
 start() {
-	checkJava
-
 	echo "Starting $NAME"
 
-	if [ -n "$LS_PIDFILE" ] && [ ! -e "$LS_PIDFILE" ]; then
-		touch "$LS_PIDFILE" && chown logstash:logstash "$LS_PIDFILE"
-	fi
-
-	if [ -n "$LS_OPEN_FILES" ]; then
-		ulimit -n $LS_OPEN_FILES
+	if [ -n "$KIBANA_PIDFILE" ] && [ ! -e "$KIBANA_PIDFILE" ]; then
+		touch "$KIBANA_PIDFILE" && chown kibana:kibana "$KIBANA_PIDFILE"
 	fi
 
 	# Start Service
-	nice -n$LS_NICE chroot --userspec $LS_USER:$LS_GROUP / sh -c "
-        cd $LS_HOME
-        ulimit -n ${LS_OPEN_FILES}
-        exec $LS_EXEC $LS_EXEC_OPTS
+	nice -n$KIBANA_NICE chroot --userspec $KIBANA_USER:$KIBANA_GROUP / sh -c "
+        cd $KIBANA_HOME
+        exec $KIBANA_EXEC $KIBANA_EXEC_OPTS
     " &
 
   # Generate the pidfile from here. If we instead made the forked process
   # generate it there will be a race condition between the pidfile writing
   # and a process possibly asking for status.
-  echo $! > $LS_PIDFILE
+  echo $! > $KIBANA_PIDFILE
 
   echo "$NAME started."
   return 0
@@ -118,7 +87,7 @@ start() {
 stop() {
   # Try a few times to kill TERM the program
   if status; then
-    pid=$(cat "$LS_PIDFILE")
+    pid=$(cat "$KIBANA_PIDFILE")
     echo "Killing $NAME (pid $pid) with SIGTERM"
     kill -TERM $pid
     # Wait for it to exit.
@@ -131,14 +100,14 @@ stop() {
       echo "$NAME stop failed; still running."
     else
       echo "$NAME stopped."
-      rm -f $LS_PIDFILE
+      rm -f $KIBANA_PIDFILE
     fi
   fi
 }
 
 status() {
-  if [ -f "$LS_PIDFILE" ] ; then
-    pid=$(cat "$LS_PIDFILE")
+  if [ -f "$KIBANA_PIDFILE" ] ; then
+    pid=$(cat "$KIBANA_PIDFILE")
     if kill -0 $pid > /dev/null 2> /dev/null; then
       # process by this pid is running.
       # It may not be our pid, but that's what you get with just pidfiles.
@@ -157,8 +126,8 @@ status() {
 force_stop() {
   if status; then
     stop
-    status && kill -KILL $(cat "$LS_PIDFILE")
-    rm -f $LS_PIDFILE
+    status && kill -KILL $(cat "$KIBANA_PIDFILE")
+    rm -f $KIBANA_PIDFILE
   fi
 }
 

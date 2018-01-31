@@ -3,8 +3,8 @@ set -e
 
 # HELK script: helk_docker_edge_install.sh
 # HELK script description: Installs Docker on your HELK server.
-# HELK build version: 0.9 (BETA)
-# HELK ELK version: 6.x
+# HELK build version: 0.9 (Alpha)
+# HELK ELK version: 6.1.3
 # Author: Docker
 # Maintained by: Docker
 # Default Channel: EDGE
