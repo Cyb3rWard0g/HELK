@@ -59,8 +59,8 @@ sudo ./helk_install.sh
 **           HELK - M E N U                 **
 **                                          **
 ** Author: Roberto Rodriguez (@Cyb3rWard0g) **
-** HELK build version: 0.9 (BETA)           **
-** HELK ELK version: 6.x                    **
+** HELK build version: 0.9 (Alpha)          **
+** HELK ELK version: 6.1.3                  **
 ** License: BSD 3-Clause                    **
 **********************************************
  
@@ -172,6 +172,7 @@ sudo docker logs helk
 * Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
 * Jordan Potti [@ok_bye_now](https://twitter.com/ok_bye_now)
 * esebese [esebese](https://github.com/esebese)
+* Lee Christensen [@tifkin_](https://twitter.com/tifkin_)
 
 # Contributing
 There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below. I would love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring
