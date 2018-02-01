@@ -26,7 +26,7 @@ one(){
     echo "[HELK-DOCKER-INSTALLATION-INFO] Pulling the latest HELK image from Dockerhub.."
     docker pull cyb3rward0g/helk >> $LOGFILE 2>&1
     echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
-    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 -e "bootstrap.memory_lock=true" -e ADVERTISED_LISTENER="${host_ip}" --ulimit memlock=-1:-1 --name helk cyb3rward0g/helk >> $LOGFILE 2>&1
+    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 -p 2181:2181 -p 9092:9092 -p 9093:9093 -p 9094:9094 -e "bootstrap.memory_lock=true" -e ADVERTISED_LISTENER="${host_ip}" --ulimit memlock=-1:-1 --name helk cyb3rward0g/helk >> $LOGFILE 2>&1
 
     # *********** Getting Jupyter Token ***************
     echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for Jupyter Server to start.."
