@@ -306,7 +306,7 @@ ERROR=$?
 
 # *********** Install ES-Hadoop ***************
 echo "[HELK-BASH-INSTALLATION-INFO] Installing ES-Hadoop Connector.."
-wget http://download.elastic.co/hadoop/elasticsearch-hadoop-6.1.1.zip -P /opt/helk/es-hadoop/ >> $LOGFILE 2>&1
+wget http://download.elastic.co/hadoop/elasticsearch-hadoop-6.1.3.zip -P /opt/helk/es-hadoop/ >> $LOGFILE 2>&1
 unzip /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ >> $LOGFILE 2>&1
 rm /opt/helk/es-hadoop/*.zip >> $LOGFILE 2>&1
 ERROR=$?

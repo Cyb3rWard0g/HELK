@@ -127,7 +127,7 @@ RUN cronjob="0 8 * * 1 python /opt/helk/scripts/helk_otx.py" \
   && echo "$cronjob" | crontab
 
 # *********** Install ES-Hadoop ***************
-RUN wget http://download.elastic.co/hadoop/elasticsearch-hadoop-6.1.1.zip -P /opt/helk/es-hadoop/ \
+RUN wget http://download.elastic.co/hadoop/elasticsearch-hadoop-6.1.3.zip -P /opt/helk/es-hadoop/ \
   && unzip /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ \
   && rm /opt/helk/es-hadoop/*.zip
 
