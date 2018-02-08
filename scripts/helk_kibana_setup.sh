@@ -20,7 +20,7 @@ DEFAULT_INDEX="sysmon-*"
 DIR=/opt/helk/dashboards
 
 # *********** Setting Index Pattern Array ***************
-declare -a index_patterns=("*" "sysmon-*" "winevent-security-*" "winevent-system-*" "winevent-application-*" "powershell-*")
+declare -a index_patterns=("*" "sysmon-*" "winevent-security-*" "winevent-system-*" "winevent-application-*" "winevent-wmiactivity-*" "powershell-*")
 
 # *********** Waiting for Kibana to be available ***************
 until curl -s localhost:5601 -o /dev/null; do
