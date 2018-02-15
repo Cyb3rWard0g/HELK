@@ -97,3 +97,6 @@ server.host: "localhost"
 # Set the interval in milliseconds to sample system and process performance
 # metrics. Minimum is 100ms. Defaults to 5000.
 #ops.interval: 5000
+
+# Experimental Visualizations:
+# "vega": {"enableExternalUrls": true}

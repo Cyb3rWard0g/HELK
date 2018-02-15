@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# HELK script: helk_debian_deb_install.sh (Deprecated soon..)
+# HELK script: helk_debian_deb_install.sh (Deprecated - NOT UPDATED ANYMORE)
 # HELK script description: Install all the needed components of the HELK for Devian-based systems
 # HELK build version: 0.9 (Alpha)
 # HELK ELK version: 6.1.3

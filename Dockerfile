@@ -1,7 +1,7 @@
 # HELK script: HELK Dockerfile
 # HELK script description: Dockerize the HELK build
 # HELK build version: 0.9 (ALPHA)
-# HELK ELK version: 6.1.3
+# HELK ELK version: 6.2.0
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
@@ -25,9 +25,9 @@ RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Ubuntu base image.." \
   wget \
   sudo \
   nano \
-  apt-transport-https \
   python \
   python-pip \
+  python-tk \
   unzip
 RUN apt-get -qy clean \
   autoremove
@@ -35,20 +35,35 @@ RUN apt-get -qy clean \
 # *********** Upgrading PIP ***************
 RUN pip install --upgrade pip
 
-# *********** Installing AlienVault OTX Python SDK & Pandas ***************
+# *********** Installing HELK python packages ***************
 RUN pip install \
   OTXv2 \
-  pandas \
+  pandas==0.22.0 \
   jupyter
 
-# *********** Creating the right directories ***************
-RUN bash -c 'mkdir -pv /opt/helk/{scripts,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana}'
+RUN pip install scipy==1.0.0 \
+  scikit-learn==0.19.1 \
+  nltk==3.2.5 \
+  matplotlib==2.1.2 \
+  seaborn==0.8.1 \
+  datasketch==1.2.5 \
+  tensorflow==1.5.0 \
+  keras==2.1.3 \
+  pyflux==0.4.15 \
+  imbalanced-learn==0.3.2 \
+  lime==0.1.1.29
 
-# *********** Adding HELK scripts to Container ***************
-ADD scripts/ /opt/helk/scripts/
+# *********** Creating the right directories ***************
+RUN bash -c 'mkdir -pv /opt/helk/{scripts,training,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana,cerebro,ksql}'
+
+# *********** Adding HELK scripts and files to Container ***************
+ADD scripts/helk_otx.py /opt/helk/scripts/
+ADD scripts/helk_kibana_setup.sh /opt/helk/scripts/
+ADD scripts/helk_docker_entrypoint.sh /opt/helk/scripts/
+ADD training/ /opt/helk/training/
 
 # *********** ELK Version ***************
-ENV ELK_VERSION=6.1.3
+ENV ELK_VERSION=6.2.0
 
 # *********** Installing Elasticsearch ***************
 ENV ES_HELK_HOME=/opt/helk/elasticsearch
@@ -127,21 +142,36 @@ RUN cronjob="0 8 * * 1 python /opt/helk/scripts/helk_otx.py" \
   && echo "$cronjob" | crontab
 
 # *********** Install ES-Hadoop ***************
-RUN wget http://download.elastic.co/hadoop/elasticsearch-hadoop-6.1.3.zip -P /opt/helk/es-hadoop/ \
+RUN wget https://artifacts.elastic.co/downloads/elasticsearch-hadoop/elasticsearch-hadoop-6.2.0.zip -P /opt/helk/es-hadoop/ \
   && unzip /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ \
   && rm /opt/helk/es-hadoop/*.zip
 
 # *********** Install Spark ***************
-RUN wget -qO- http://mirrors.gigenet.com/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | sudo tar xvz -C /opt/helk/spark/
+ENV SPARK_LOGS_PATH=/var/log/spark
+RUN wget -qO- http://mirrors.gigenet.com/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | sudo tar xvz -C /opt/helk/spark/ \
+  && mkdir -v $SPARK_LOGS_PATH
 ADD spark/.bashrc ~/.bashrc
 ADD spark/log4j.properties /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/
 ADD spark/spark-defaults.conf /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/
+ADD spark/spark-init /etc/init.d/spark
 
 # *********** Install Kafka ***************
+ENV KAFKA_LOGS_PATH=/var/log/kafka
 RUN wget -qO- http://apache.mirrors.lucidnetworks.net/kafka/1.0.0/kafka_2.11-1.0.0.tgz | sudo tar xvz -C /opt/helk/kafka/ \
+  && mkdir -v $KAFKA_LOGS_PATH \
   && mv /opt/helk/kafka/kafka_2.11-1.0.0/config/server.properties /opt/helk/kafka/kafka_2.11-1.0.0/config/backup_server.properties
 ADD kafka/*.properties /opt/helk/kafka/kafka_2.11-1.0.0/config/
 ADD kafka/kafka-init /etc/init.d/kafka
+
+# *********** Download KSQL (Experiment) ***************
+# RUN wget -qO- https://github.com/confluentinc/ksql/archive/v0.4.tar.gz | sudo tar xvz -C /opt/helk/ksql/
+
+# *********** Install Cerebro ***************
+ENV CEREBRO_HOME=/opt/helk/cerebro
+ENV CEREBRO_LOGS_PATH=/var/log/cerebro
+RUN wget -qO- https://github.com/lmenezes/cerebro/releases/download/v0.7.2/cerebro-0.7.2.tgz | sudo tar xvz -C ${CEREBRO_HOME} \
+  && mkdir -v $CEREBRO_LOGS_PATH
+ADD cerebro/cerebro-init /etc/init.d/cerebro
 
 # Adding SPARK location
 ENV SPARK_HOME=/opt/helk/spark/spark-2.2.1-bin-hadoop2.7
@@ -153,6 +183,6 @@ ENV PYSPARK_DRIVER_PYTHON_OPTS="notebook --NotebookApp.open_browser=False --Note
 ENV PYSPARK_PYTHON=/usr/bin/python
 
 # *********** RUN HELK ***************
-EXPOSE 80 5044 4040 8880 2181 9092 9093 9094
+EXPOSE 80 5044 4040 8880 2181 9092 9093 9094 9000 8082
 WORKDIR "/opt/helk/scripts/"
 ENTRYPOINT ["./helk_docker_entrypoint.sh"]

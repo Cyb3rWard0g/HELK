@@ -3,7 +3,7 @@
 # HELK script: helk_install.sh
 # HELK script description: Start
 # HELK build version: 0.9 (Alpha)
-# HELK ELK version: 6.1.3
+# HELK ELK version: 6.2.0
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
@@ -21,25 +21,25 @@ echoerror() {
 # *********** Check System Kernel Name ***************
 systemKernel="$(uname -s)"
 
-# *********** Pulling latest HELK image from DockerHub ***************
-one(){
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Pulling the latest HELK image from Dockerhub.."
-    docker pull cyb3rward0g/helk >> $LOGFILE 2>&1
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
-    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 -p 2181:2181 -p 9092:9092 -p 9093:9093 -p 9094:9094 -e "bootstrap.memory_lock=true" -e ADVERTISED_LISTENER="${host_ip}" --ulimit memlock=-1:-1 --name helk cyb3rward0g/helk >> $LOGFILE 2>&1
-
-    # *********** Getting Jupyter Token ***************
+# *********** Getting Jupyter Token ***************
+get_token(){
     echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for HELK services and Jupyter Server to start.."
     until curl -s localhost:8880 -o /dev/null; do
         sleep 1
     done
     jupyter_token="$(docker exec -ti helk jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
     docker_access="HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash"
-    ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not pull latest HELK image from Dockerhub (Error Code: $ERROR)."
-        exit 1
-    fi
+}
+
+# *********** Pulling latest HELK image from DockerHub ***************
+one(){
+    echo "[HELK-DOCKER-INSTALLATION-INFO] Pulling the latest HELK image from Dockerhub.."
+    docker pull cyb3rward0g/helk >> $LOGFILE 2>&1
+    echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
+    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 -p 2181:2181 -p 9092:9092 -p 9093:9093 -p 9094:9094 -p 9000:9000 -p 8082:8082 -e "bootstrap.memory_lock=true" -e ADVERTISED_LISTENER="${host_ip}" --ulimit memlock=-1:-1 --name helk cyb3rward0g/helk >> $LOGFILE 2>&1
+
+    # *********** Getting Jupyter Token ***************
+    get_token
 }
 
 # *********** Building HELK image from local Dockerfile ***************
@@ -52,15 +52,10 @@ two(){
         exit 1
     fi
     echo "[HELK-DOCKER-INSTALLATION-INFO] Running the HELK container in the background.."
-    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 -p 2181:2181 -p 9092:9092 -p 9093:9093 -p 9094:9094 -e "bootstrap.memory_lock=true" -e ADVERTISED_LISTENER="${host_ip}" --ulimit memlock=-1:-1 --name helk my_helk  >> $LOGFILE 2>&1
+    docker run -d -p 80:80 -p 5044:5044 -p 8880:8880 -p 4040:4040 -p 2181:2181 -p 9092:9092 -p 9093:9093 -p 9094:9094 -p 9000:9000 -p 8082:8082 -e "bootstrap.memory_lock=true" -e ADVERTISED_LISTENER="${host_ip}" --ulimit memlock=-1:-1 --name helk my_helk  >> $LOGFILE 2>&1
 
     # *********** Getting Jupyter Token ***************
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for HELK services and Jupyter Server to start.."
-    until curl -s localhost:8880 -o /dev/null; do
-        sleep 1
-    done
-    jupyter_token="$(docker exec -ti helk jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
-    docker_access="HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash"
+    get_token
 }
 
 # *********** Building the HELK from local bash script ***************
@@ -73,7 +68,13 @@ three(){
         echoerror "Could not build HELK image from bash script (Error Code: $ERROR)."
         exit 1
     fi
-    jupyter_token=" First, run the following: source ~/.bashrc && pyspark"
+
+    # *********** Getting Jupyter Token ***************
+    echo "[HELK-BASH-INSTALLATION-INFO] Waiting for Jupyter Server to start.."
+    until curl -s localhost:8880 -o /dev/null; do
+        sleep 1
+    done
+    jupyter_token="$( cat /var/log/spark/spark_pyspark.log | grep -oP '(?<=token=).*(?=)' | sort -u)"
 }
  
 # *********** Showing HELK Docker menu options ***************
@@ -84,7 +85,7 @@ show_menus() {
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
     echo "** HELK build version: 0.9 (Alpha)          **"
-    echo "** HELK ELK version: 6.1.3                  **"
+    echo "** HELK ELK version: 6.2.0                  **"
     echo "** License: BSD 3-Clause                    **"
     echo "**********************************************"
     echo " "
@@ -98,6 +99,7 @@ show_menus() {
 read_options(){
 	local choice
 	read -p "[HELK-INSTALLATION-INFO] Enter choice [ 1 - 4] " choice
+    get_host_ip
     if [ $choice = "1" ] || [ $choice = "2" ]; then
         if [ "$systemKernel" == "Linux" ]; then
             # Reference: https://get.docker.com/
@@ -149,8 +151,7 @@ read_options(){
                     fi
                 ;;
             esac
-            echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $lsb_dist version $dist_version"
-            
+            echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $lsb_dist version $dist_version"            
             ERROR=$?
             if [ $ERROR -ne 0 ]; then
                 echoerror "Could not verify distribution or version of the OS (Error Code: $ERROR)."
@@ -216,20 +217,36 @@ read_options(){
 	esac
 }
 
-# *********** Getting Host IP ***************
-# https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
-echo "[HELK-INSTALLATION-INFO] Obtaining current host IP.."
-case "${systemKernel}" in
-    Linux*)     host_ip=$(ip route get 1 | awk '{print $NF;exit}');;
-    Darwin*)    host_ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
-    *)          host_ip="UNKNOWN:${unameOut}"
-esac
+get_host_ip(){
+    # *********** Getting Host IP ***************
+    # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
+    echo "[HELK-INSTALLATION-INFO] Obtaining current host IP.."
+    case "${systemKernel}" in
+        Linux*)     host_ip=$(ip route get 1 | awk '{print $NF;exit}');;
+        Darwin*)    host_ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
+        *)          host_ip="UNKNOWN:${unameOut}"
+    esac
+    
+    # *********** Accepting Defaults or Allowing user to set HELK IP ***************
+    local ip_choice
+    local read_input
+    read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: " -e -i ${host_ip} ip_choice
+    read_input=$?
+    ip_choice="${ip_choice:-$host_ip}"
+    if [ $ip_choice != $host_ip ]; then
+        host_ip=$ip_choice
+    fi
+    if [ $read_input  = 142 ]; then
+       echo -e "\n[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}" 
+    else
+    echo "[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}"
+    fi
+}
 
 # *********** Running selected option ***************
 show_menus
 read_options
 
-echo " "
 echo " "
 echo " "
 echo "***********************************************************************************"
@@ -238,8 +255,10 @@ echo "** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH TH
 echo "***********************************************************************************"
 echo " "
 echo "HELK KIBANA URL: http://${host_ip}"
-echo "HELK KIBANA USER: helk"
-echo "HELK KIBANA PASSWORD: hunting"
+echo "HELK ELASTICSEARCH EXTERNAL URL: http://${host_ip}:8082"
+echo "HELK CEREBRO URL: http://${host_ip}:9000"
+echo "HELK KIBANA & ELASTICSEARCH USER: helk"
+echo "HELK KIBANA & ELASTICSEARCH PASSWORD: hunting"
 echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
 echo "HELK SPARK UI: http://${host_ip}:4040"
 echo "HELK JUPYTER NOTEBOOK URI: http://${host_ip}:8880"

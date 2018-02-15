@@ -1,0 +1,163 @@
+#!/bin/bash
+# Init script for cerebro
+# Maintained by Roberto Rodriguez @Cyb3rWard0g
+# Reference:
+# https://github.com/elastic/logstash/blob/master/distribution/rpm/src/main/packaging/init.d/logstash
+# https://github.com/spujadas/elk-docker/blob/master/logstash-init
+
+### BEGIN INIT INFO
+# Provides:  cerebro
+# Required-Start:
+# Required-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: cerebro service
+### END INIT INFO
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
+NAME=cerebro
+DEFAULT=/etc/default/$NAME
+export PATH
+
+if [ $(id -u) -ne 0 ]; then
+   echo "You need root privileges to run this script"
+   exit 1
+fi
+
+# Source function library.
+. /lib/lsb/init-functions
+
+if [ -r /etc/default/rcS ]; then
+  . /etc/default/rcS
+fi
+
+CEREBRO_HOME=/opt/helk/cerebro/cerebro-0.7.2
+CEREBRO_EXEC=$CEREBRO_HOME/bin/$NAME
+CEREBRO_USER=root
+CEREBRO_GROUP=root
+CEREBRO_NICE=""
+SERVICE_NAME="cerebro"
+SERVICE_DESCRIPTION="cerebro"
+CEREBRO_PIDFILE=/var/run/cerebro.pid
+CEREBRO_CONSOLE_LOG=/var/log/cerebro/cerebro.log
+CEREBRO_CONFIG="2>&1 >> $CEREBRO_CONSOLE_LOG 2>&1"
+
+# End of variables that can be overwritten in $DEFAULT
+
+# overwrite settings from default file
+if [ -f "$DEFAULT" ]; then
+	. "$DEFAULT"
+fi
+
+[ -z "$CEREBRO_NICE" ] && CEREBRO_NICE=0
+
+if [ ! -x "$CEREBRO_EXEC" ]; then
+	echo "The cerebro startup script does not exists or it is not executable, tried: $CEREBRO_EXEC"
+	exit 1
+fi
+
+start() {
+	echo "Starting $NAME"
+
+	if [ -n "$CEREBRO_PIDFILE" ] && [ ! -e "$CEREBRO_PIDFILE" ]; then
+		touch "$CEREBRO_PIDFILE" && chown $CEREBRO_USER:$CEREBRO_GROUP "$CEREBRO_PIDFILE"
+	fi
+
+	# Start Service
+	nice -n$CEREBRO_NICE chroot --userspec $CEREBRO_USER:$CEREBRO_GROUP / sh -c "
+        exec $CEREBRO_EXEC $CEREBRO_CONFIG
+    " &
+
+  # Generate the pidfile from here. If we instead made the forked process
+  # generate it there will be a race condition between the pidfile writing
+  # and a process possibly asking for status.
+  echo $! > $CEREBRO_PIDFILE
+
+  echo "$NAME started."
+  return 0
+}
+
+stop() {
+  # Try a few times to kill TERM the program
+  if status; then
+    pid=$(cat "$CEREBRO_PIDFILE")
+    echo "Killing $NAME (pid $pid) with SIGTERM"
+    kill -TERM $pid
+    # Wait for it to exit.
+    for i in 1 2 3 4 5; do
+      echo "Waiting for $NAME (pid $pid) to die..."
+      status || break
+      sleep 1
+    done
+    if status; then
+      echo "$NAME stop failed; still running."
+    else
+      echo "$NAME stopped."
+      rm -f $CEREBRO_PIDFILE
+    fi
+  fi
+}
+
+status() {
+  if [ -f "$CEREBRO_PIDFILE" ] ; then
+    pid=$(cat "$CEREBRO_PIDFILE")
+    if kill -0 $pid > /dev/null 2> /dev/null; then
+      # process by this pid is running.
+      # It may not be our pid, but that's what you get with just pidfiles.
+      # TODO(sissel): Check if this process seems to be the same as the one we
+      # expect. It'd be nice to use flock here, but flock uses fork, not exec,
+      # so it makes it quite awkward to use in this case.
+      return 0
+    else
+      return 2 # program is dead but pid file exists
+    fi
+  else
+    return 3 # program is not running
+  fi
+}
+
+force_stop() {
+  if status; then
+    stop
+    status && kill -KILL $(cat "$CEREBRO_PIDFILE")
+    rm -f $CEREBRO_PIDFILE
+  fi
+}
+
+case "$1" in
+  start)
+    status
+    code=$?
+    if [ $code -eq 0 ]; then
+      echo "$NAME is already running"
+    else
+      start
+      code=$?
+    fi
+    exit $code
+    ;;
+
+  stop) stop ;;
+
+  force-stop) force_stop ;;
+
+  status)
+    status
+    code=$?
+    if [ $code -eq 0 ]; then
+      echo "$NAME is running"
+    else
+      echo "$NAME is not running"
+    fi
+    exit $code
+    ;;
+
+  restart) stop && start ;;
+
+  *)
+    echo "Usage: $SCRIPTNAME {start|stop|force-stop|status|restart}" >&2
+    exit 3
+    ;;
+esac
+
+exit $?

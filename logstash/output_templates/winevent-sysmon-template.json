@@ -1,5 +1,5 @@
 {
-  "template" : "sysmon-*",
+  "template" : "logs-endpoint-winevent-sysmon-*",
   "settings" : {
     "index.refresh_interval": "5s"
   },
@@ -48,6 +48,7 @@
         "process":{
           "properties":{
             "id":{"type":"integer"},
+            "threadid":{"type":"integer"},
             "image":{
               "properties":{
                 "signed":{"type":"boolean"}
@@ -56,12 +57,6 @@
             "parent":{
               "properties":{
                 "id":{"type":"integer"}
-              }
-            },
-            "source":{
-              "properties":{
-                "id":{"type":"integer"},
-                "threadid":{"type":"integer"}
               }
             },
             "target":{

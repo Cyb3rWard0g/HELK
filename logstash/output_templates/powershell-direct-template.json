@@ -1,5 +1,5 @@
 {
-  "template" : "logs-endpoint-winevent-application-*",
+  "template" : "logs-endpoint-powershell-direct-*",
   "settings" : {
     "index.refresh_interval": "5s"
   },
@@ -22,13 +22,10 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "spp":{
+        "process":{
           "properties":{
-            "restart":{
-              "properties":{
-                "scheduled":{"type":"date"}
-              }
-            }
+            "id":{"type":"integer"},
+            "threadid":{"type":"integer"}
           }
         }
       }

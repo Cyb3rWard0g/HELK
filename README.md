@@ -34,84 +34,15 @@ The project is currently in an alpha stage, which means that the code and the fu
 * [deviantony docker-elk](https://github.com/deviantony/docker-elk)
 
 # Getting Started
-
-## Requirements
-* OS Name: Linux (Debian-based systems)
-	* Bash Script Option: Tested on Ubuntu-16.04.2 Server amd64 (Xenial)
-* Network Connection: NAT or Bridge
-* RAM: 16GB (minimum)
-* Applications:
-	* Docker(Needed for HELK Docker Installation ONLY)
-* Winlogbeat running on your endpoints (At least sending Sysmon and Windows Security event logs)
-	* HELK's current version parses logs shipped by Winlogbeat ONLY (Nxlog parsing is coming soon..)
-
-## Automatic Installation Options
-The HELK project comes with three options:
-* Pulling the latest HELK Docker Image from cyb3rward0g dockerhub
-* Building the HELK image from a local Dockerfile
-* Installing the HELK from a local bash script
-```
-git clone https://github.com/Cyb3rWard0g/HELK.git
-cd HELK/
-sudo ./helk_install.sh
-
-**********************************************
-**           HELK - M E N U                 **
-**                                          **
-** Author: Roberto Rodriguez (@Cyb3rWard0g) **
-** HELK build version: 0.9 (Alpha)          **
-** HELK ELK version: 6.1.3                  **
-** License: BSD 3-Clause                    **
-**********************************************
- 
-1. Pull the latest HELK image from DockerHub
-2. Build the HELK image from local Dockerfile
-3. Install the HELK from local bash script
-4. Exit
- 
-[HELK-INSTALLATION-INFO] Enter choice [ 1 - 4]
-```
-
-## HELK Initial Settings
-At the end of the HELK installation, you will have a similar output with the information you need to access the primary HELK components. Remember that the default username and password for the HELK are helk:hunting.
-
-```
-***********************************************************************************
-** [HELK-INSTALLATION-INFO] YOUR HELK IS READY                                   **
-** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
-***********************************************************************************
- 
-HELK KIBANA URL: http://192.168.1.243
-HELK KIBANA USER: helk
-HELK KIBANA PASSWORD: hunting
-HELK JUPYTER CURRENT TOKEN: bf329433d64f735ae50dce73bab995bb240194a98b84bfd2
-HELK SPARK UI: http://192.168.1.243:4040
-HELK JUPYTER NOTEBOOK URI: http://192.168.1.243:8880
-HELK DOCKER BASH ACCESS: sudo docker exec -ti helk bash
- 
-IT IS HUNTING SEASON!!!!!
-```
-
-## Visualize your logs (Discover)
-Make sure you have logs being sent to your HELK first (At least Windows security events). Then, go to http://<HELK's IP> in your preferred browser. (If you dont have logs being sent to your HELK you will have to wait and repeat the first steps of this section)
-Currently, the HELK has 6 indices created automatically by its default configs:
-* "*" - All
-* "sysmon-*"
-* "winevent-security-*"
-* "winevent-application-*"
-* "winevent-system-*"
-* "powershell-*"
-
-![alt text](resources/images/HELK_winevent_security_discovery.png "HELK Winevent Security Discovery")
-
-## Visualize your logs (Dashboards)
-Make sure you have logs being sent to your HELK first (At least Windows security events). Then, go to http://<HELK's IP> in your preferred browser. (If you dont have logs being sent to your HELK you will have to wait and repeat the first steps of this section)
-Currently, the HELK provides 3 dashboards:
-* Global_Dashboard
-* Network_Dashboard
-* Sysmon_Dashboard
-
-![alt text](resources/images/HELK_Network_Dashboard.png "HELK Network Dashboard")
+## WIKI
+* [Introduction](https://github.com/Cyb3rWard0g/HELK/wiki)
+* [Architecture Overview](https://github.com/Cyb3rWard0g/HELK/wiki/Architecture-Overview)
+  * [Kafka](https://github.com/Cyb3rWard0g/HELK/wiki/Kafka)
+  * [Logstash](https://github.com/Cyb3rWard0g/HELK/wiki/Logstash)
+  * [Elasticsearch](https://github.com/Cyb3rWard0g/HELK/wiki/Elasticsearch)
+  * [Kibana](https://github.com/Cyb3rWard0g/HELK/wiki/Kibana)
+  * [Spark](https://github.com/Cyb3rWard0g/HELK/wiki/Spark)
+* [Installation](https://github.com/Cyb3rWard0g/HELK/wiki/Installation)
 
 ## (Docker) Accessing the HELK's container
 By default, the HELK's container is run in the background. Therefore, you will have to access your docker container by running the following commands:
@@ -120,55 +51,12 @@ sudo docker exec -ti helk bash
 root@7a9d6443a4bf:/opt/helk/scripts#
 ```
 
-## Checking HELK integrations (Spark, Graphframes & Jupyter)
-* (Bash script Install) If the HELK was installed via the local bash script, make sure you enable the .bashrc file before starting the Jupyter server.
-```
-source ~/.bashrc && pyspark
-```
-* (Docker Install) By default, the Jupyter server gets started automatically after building or pulling the HELK's container.
-* Access the Jupyter Server: 
-	* Go to your <Container's IP>:8880 in your preferred browser
-	* Enter the token provided after installing the HELK
-* Go to the scripts/training/jupyter_notebooks/getting_started/ folder
-* Open the Check_Spark_Graphframes_Integrations notebook
-	* Check the saved output (Make sure that you have Sysmon * Windows Security event logs being sent to your HELK. Otherwise you will get errors in your Jupyter Notebook when trying to replicate the basic commands)
-	* Clear the output from the notebook and run everything again
-
-![alt text](resources/images/HELK_checking_integrations.png "HELK Checking Integrations")
-
-## HELK's Heap Size
-By default, HELK calculates how much memory the host has and assigns 50% of it to it (You can change that by manually modifying the /etc/elasticsearch/jvm.options file after the installation and restarting your elasticsearch service)
-```
-sudo nano /etc/elasticsearch/jvm.options
-sudo service elasticsearch restart
-```
-
-# Troubleshooting the HELK:
-I recommend to use the following commands while installing the HELK to get more details about what is being installed and configured:
-```
-tail -f /var/log/helk-install.log
-```
-## HELK Installation Logs
-* HELK Install Logs: 
-	* /var/log/helk-install.log
-* HELK Docker Logs: 
-```
-sudo docker logs helk
-```
-
-## HELK Application Logs
-* Elasticsearch:
-	* /var/log/elasticsearch/elasticsearch.log 
-* Logstash:
-	* /var/log/logstash/logstash-plain.log
-* Kibana:
-	* /var/log/kibana/kibana.log
-
 # Author
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g) [@THE_HELK](https://twitter.com/THE_HELK)
 
 # Contributors
 * Robby Winchester [@robwinchester3](https://twitter.com/robwinchester3)
+* Jared Atkinson [@jaredatkinson](https://twitter.com/jaredcatkinson)
 * Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
 * Jordan Potti [@ok_bye_now](https://twitter.com/ok_bye_now)
 * esebese [esebese](https://github.com/esebese)

@@ -3,7 +3,6 @@
 # HELK script: helk_geoipdb_update.sh
 # HELK script description: Update the MaxMind GeoIP databases
 # HELK build version: 0.9 (Alpha)
-# HELK ELK version: 6.1.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 

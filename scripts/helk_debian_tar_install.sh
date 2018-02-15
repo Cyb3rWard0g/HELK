@@ -3,7 +3,7 @@
 # HELK script: helk_debian_tar_install.sh
 # HELK script description: Install all the needed components of the HELK via Tar File
 # HELK build version: 0.9 (Alpha)
-# HELK ELK version: 6.1.3
+# HELK ELK version: 6.2.0
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
@@ -32,7 +32,7 @@ if [ "$systemKernel" == "Linux" ]; then
 fi
 
 # *********** Latest Supported ELK packages ***************
-ELK_VERSION=6.1.3
+ELK_VERSION=6.2.0
 
 # *********** HELK Installation Logs ***************
 LOGFILE="/var/log/helk-install.log"
@@ -51,7 +51,7 @@ ERROR=$?
 
 # *********** Install Prerequisites ***************
 echo "[HELK-BASH-INSTALLATION-INFO] Installing Prerequisites.."
-declare -a prereq_list=("openjdk-8-jre-headless" "curl" "unzip" "python" "python-pip" "apt-transport-https")
+declare -a prereq_list=("openjdk-8-jre-headless" "curl" "unzip" "python" "python-pip" "python-tk")
 for prereq in ${!prereq_list[@]}; do 
     echo "[HELK-BASH-INSTALLATION-INFO] Installing ${prereq_list[${prereq}]}.."
     apt-get install -y ${prereq_list[${prereq}]} >> $LOGFILE 2>&1
@@ -67,23 +67,47 @@ echo "[HELK-BASH-INSTALLATION-INFO] Upgrading pip.."
 pip install --upgrade pip >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not upgrade python-pip (Error Code: $ERROR)."
+        echoerror "Could not upgrade pip (Error Code: $ERROR)."
         exit 1
     fi
 
-# *********** Installing Pandas ***************
-echo "[HELK-BASH-INSTALLATION-INFO] Installing Pandas.."
-pip install pandas >> $LOGFILE 2>&1
+# *********** Installing HELK Python packages ***************
+echo "[HELK-BASH-INSTALLATION-INFO] Installing additional HELK python packages.."
+pip install \
+    OTXv2 \
+    pandas==0.22.0 \
+    jupyter >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install Pandas (Error Code: $ERROR)."
+        echoerror "Could not install HELK python packages (Error Code: $ERROR)."
+        exit 1
+    fi
+
+pip install \
+    scipy==1.0.0 \
+    scikit-learn==0.19.1 \
+    nltk==3.2.5 \
+    matplotlib==2.1.2 \
+    seaborn==0.8.1 \
+    datasketch==1.2.5 \
+    tensorflow==1.5.0 \
+    keras==2.1.3 \
+    pyflux==0.4.15 \
+    imbalanced-learn==0.3.2 \
+    lime==0.1.1.29 >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install HELK python packages (Error Code: $ERROR)."
         exit 1
     fi
 
 # *********** Creating needed folders for the HELK ***************
 echo "[HELK-BASH-INSTALLATION-INFO] Creating needed folders for the HELK.."
-mkdir -pv /opt/helk/{scripts,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana} >> $LOGFILE 2>&1
-cp -vr * /opt/helk/scripts/ >> $LOGFILE 2>&1
+mkdir -pv /opt/helk/{scripts,training,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana,cerebro,ksql} >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Copying HELK files over.."
+cp -v helk_kibana_setup.sh /opt/helk/scripts/ >> $LOGFILE 2>&1
+cp -v helk_otx.py /opt/helk/scripts/ >> $LOGFILE 2>&1
+cp -vr ../training/* /opt/helk/training/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not create needed folders for the HELK (Error Code: $ERROR)."
@@ -110,6 +134,7 @@ cp -v ../elasticsearch/elasticsearch /etc/default/elasticsearch >> $LOGFILE 2>&1
 cp -v ../elasticsearch/elasticsearch-init /etc/init.d/elasticsearch >> $LOGFILE 2>&1
 mv /usr/share/elasticsearch/config/* ${ES_PATH_CONF} >> $LOGFILE 2>&1
 yes | cp -rfv ../elasticsearch/elasticsearch.yml ${ES_PATH_CONF} >> $LOGFILE 2>&1
+
 echo "[HELK-BASH-INSTALLATION-INFO] Creating elasticsearch user and group.."
 groupadd -r elasticsearch -g ${ES_GID}
 useradd -r -s /usr/sbin/nologin -M -c "Elasticsearch user" -u ${ES_UID} -g elasticsearch elasticsearch
@@ -161,6 +186,7 @@ echo "[HELK-BASH-INSTALLATION-INFO] copying custom kibana config files.."
 cp -v ../kibana/kibana-init /etc/init.d/kibana >> $LOGFILE 2>&1
 mv /usr/share/kibana/config/* ${KIBANA_PATH_CONF} >> $LOGFILE 2>&1
 yes | cp -rfv ../kibana/kibana.yml ${KIBANA_PATH_CONF} >> $LOGFILE 2>&1
+
 echo "[HELK-BASH-INSTALLATION-INFO] Creating kibana user and group.."
 groupadd -r kibana -g ${KIBANA_GID}
 useradd -r -s /usr/sbin/nologin -M -c "Kibana user" -u ${KIBANA_UID} -g kibana kibana
@@ -213,6 +239,7 @@ mv /usr/share/logstash/config/* ${LS_SETTINGS_DIR} >> $LOGFILE 2>&1
 yes | cp -rfv ../logstash/logstash.yml ${LS_SETTINGS_DIR} >> $LOGFILE 2>&1
 echo "[HELK-BASH-INSTALLATION-INFO] Creating templates directory and copying custom templates over.."
 cp -v ../logstash/output_templates/* /opt/helk/output_templates/ >> $LOGFILE 2>&1 
+
 echo "[HELK-BASH-INSTALLATION-INFO] Creating logstash user and group.."
 groupadd -r logstash -g ${LS_GID}
 useradd -r -s /usr/sbin/nologin -M -c "Logstash user" -u ${LS_UID} -g logstash logstash
@@ -234,6 +261,11 @@ ERROR=$?
         echoerror "Could not set the Logstash JVM heap size... (Error Code: $ERROR)."
         exit 1
     fi
+
+    # *********** Setting Logstash Workers ***************
+# cpu_number="$(getconf _NPROCESSORS_ONLN)"
+# LS_CONFIG_FILE=${LS_SETTINGS_DIR}/logstash.yml
+# echo "[HELK-BASH-INSTALLATION-INFO] Setting Logstash pipeline workers to $cpu_number.."
 
 echo "[HELK-BASH-INSTALLATION-INFO] Starting Logstash and setting it to start automatically when the system boots.."
 update-rc.d logstash defaults 96 9>> $LOGFILE 2>&1
@@ -260,6 +292,7 @@ echo "[HELK-BASH-INSTALLATION-INFO] copying custom nginx config file to /etc/ngi
 cp -v ../nginx/default /etc/nginx/sites-available/ >> $LOGFILE 2>&1  
 echo "[HELK-BASH-INSTALLATION-INFO] testing nginx configuration.."
 nginx -t >> $LOGFILE 2>&1
+
 echo "[HELK-BASH-INSTALLATION-INFO] Restarting nginx service.."
 service nginx restart >> $LOGFILE 2>&1
 update-rc.d nginx defaults 96 9
@@ -278,15 +311,7 @@ ERROR=$?
     fi
 
 # *********** Installing AlienVault OTX Python SDK ***************
-echo "[HELK-BASH-INSTALLATION-INFO] Installing AlienVault OTX Python SDK.."
-pip install OTXv2 >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install OTX Python SDK (Error Code: $ERROR)."
-        exit 1
-    fi
-
-echo "[HELK-BASH-INSTALLATION-INFO] Copying Intel files to HELK"
+echo "[HELK-BASH-INSTALLATION-INFO] Copying AlienVault Intel files to HELK"
 cp -v ../enrichments/otx/* /opt/helk/otx/ >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
@@ -305,8 +330,8 @@ ERROR=$?
     fi
 
 # *********** Install ES-Hadoop ***************
-echo "[HELK-BASH-INSTALLATION-INFO] Installing ES-Hadoop Connector.."
-wget http://download.elastic.co/hadoop/elasticsearch-hadoop-6.1.3.zip -P /opt/helk/es-hadoop/ >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Downloading ES-Hadoop Connector.."
+wget https://artifacts.elastic.co/downloads/elasticsearch-hadoop/elasticsearch-hadoop-6.2.0.zip -P /opt/helk/es-hadoop/ >> $LOGFILE 2>&1
 unzip /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ >> $LOGFILE 2>&1
 rm /opt/helk/es-hadoop/*.zip >> $LOGFILE 2>&1
 ERROR=$?
@@ -315,54 +340,18 @@ ERROR=$?
         exit 1
     fi
 
-# *********** Install Jupyter***************
-echo "[HELK-BASH-INSTALLATION-INFO] Installing Jupyter.."
-pip install jupyter >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install jupyter (Error Code: $ERROR)."
-        exit 1
-    fi
-
 # *********** Install Spark ***************
-echo "[HELK-BASH-INSTALLATION-INFO] Installing Spark.."
+SPARK_HOME=/opt/helk/spark/spark-2.2.1-bin-hadoop2.7
+SPARK_LOGS_PATH=/var/log/spark
+
+echo "[HELK-BASH-INSTALLATION-INFO] Downloading Spark.."
 sudo wget -qO- http://mirrors.gigenet.com/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | sudo tar xvz -C /opt/helk/spark/ >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Creating Spark log folder .."
+mkdir -v ${SPARK_LOGS_PATH} >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Copying custom spark files"
 cp -f ../spark/.bashrc ~/.bashrc >> $LOGFILE 2>&1
 cp -v ../spark/log4j.properties /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/ >> $LOGFILE 2>&1
 cp -v ../spark/spark-defaults.conf /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/ >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install spark (Error Code: $ERROR)."
-        exit 1
-    fi
-
-# *********** Install Kafka ***************
-echo "[HELK-BASH-INSTALLATION-INFO] Installing Kafka.."
-echo "[HELK-BASH-INSTALLATION-INFO] Setting preferIPv4Stack to True.."
-echo "[HELK-BASH-INSTALLATION-INFO] Downloading Kafka package.."
-wget -qO- http://apache.mirrors.lucidnetworks.net/kafka/1.0.0/kafka_2.11-1.0.0.tgz | sudo tar xvz -C /opt/helk/kafka/ >> $LOGFILE 2>&1
-echo "[HELK-BASH-INSTALLATION-INFO] Creating a backup of default server.properties" 
-mv /opt/helk/kafka/kafka_2.11-1.0.0/config/server.properties /opt/helk/kafka/kafka_2.11-1.0.0/config/backup_server.properties >> $LOGFILE 2>&1
-echo "[HELK-BASH-INSTALLATION-INFO] Copying custom server.properties files" 
-cp -v ../kafka/*.properties /opt/helk/kafka/kafka_2.11-1.0.0/config/ >> $LOGFILE 2>&1
-echo "[HELK-BASH-INSTALLATION-INFO] Obtaining current host IP.."
-host_ip=$(ip route get 1 | awk '{print $NF;exit}')
-echo "[HELK-BASH-INSTALLATION-INFO] Setting current host IP to brokers server.properties files.."
-sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9092/advertised\.listeners\=PLAINTEXT\:\/\/${host_ip}\:9092/g" /opt/helk/kafka/kafka_2.11-1.0.0/config/server.properties >> $LOGFILE 2>&1
-sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9093/advertised\.listeners\=PLAINTEXT\:\/\/${host_ip}\:9093/g" /opt/helk/kafka/kafka_2.11-1.0.0/config/server-1.properties >> $LOGFILE 2>&1
-sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9094/advertised\.listeners\=PLAINTEXT\:\/\/${host_ip}\:9094/g" /opt/helk/kafka/kafka_2.11-1.0.0/config/server-2.properties >> $LOGFILE 2>&1
-echo "[HELK-BASH-INSTALLATION-INFO] Starting Kafka.."
-cp -v ../kafka/kafka-init /etc/init.d/kafka >> $LOGFILE 2>&1
-update-rc.d kafka defaults 96 9
-service kafka start >> $LOGFILE 2>&1
-sleep 20
-echo "[HELK-BASH-INSTALLATION-INFO] Creating Kafka Winlogbeat Topic.."
-/opt/helk/kafka/kafka_2.11-1.0.0/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 1 --topic winlogbeat >> $LOGFILE 2>&1
-ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install kafka (Error Code: $ERROR)."
-        exit 1
-    fi
 
 echo "[HELK-BASH-INSTALLATION-INFO] Adding Spark environment variables.."
 # Adding SPARK location
@@ -375,3 +364,69 @@ export PYSPARK_DRIVER_PYTHON=/usr/local/bin/jupyter
 export PYSPARK_DRIVER_PYTHON_OPTS="notebook --NotebookApp.open_browser=False --NotebookApp.ip='*' --NotebookApp.port=8880 --allow-root"
 export PYSPARK_PYTHON=/usr/bin/python
 
+echo "[HELK-BASH-INSTALLATION-INFO] Starting spark and setting it to start automatically when the system boots.."
+cp -v ../spark/spark-init /etc/init.d/spark >> $LOGFILE 2>&1
+update-rc.d spark defaults 96 9
+service spark start >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install spark (Error Code: $ERROR)."
+        exit 1
+    fi
+
+# *********** Install Kafka ***************
+KAFKA_LOGS_PATH=/var/log/kafka
+
+echo "[HELK-BASH-INSTALLATION-INFO] Downloading Kafka package.."
+wget -qO- http://apache.mirrors.lucidnetworks.net/kafka/1.0.0/kafka_2.11-1.0.0.tgz | sudo tar xvz -C /opt/helk/kafka/ >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Creating Kafka log folder .."
+mkdir -v ${KAFKA_LOGS_PATH} >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Creating a backup of default server.properties" 
+mv /opt/helk/kafka/kafka_2.11-1.0.0/config/server.properties /opt/helk/kafka/kafka_2.11-1.0.0/config/backup_server.properties >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Copying custom server.properties and custom files" 
+cp -v ../kafka/*.properties /opt/helk/kafka/kafka_2.11-1.0.0/config/ >> $LOGFILE 2>&1
+cp -v ../kafka/kafka-init /etc/init.d/kafka >> $LOGFILE 2>&1
+
+echo "[HELK-BASH-INSTALLATION-INFO] Obtaining current host IP.."
+host_ip=$(ip route get 1 | awk '{print $NF;exit}')
+echo "[HELK-BASH-INSTALLATION-INFO] Setting current host IP to brokers server.properties files.."
+sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9092/advertised\.listeners\=PLAINTEXT\:\/\/${host_ip}\:9092/g" /opt/helk/kafka/kafka_2.11-1.0.0/config/server.properties >> $LOGFILE 2>&1
+sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9093/advertised\.listeners\=PLAINTEXT\:\/\/${host_ip}\:9093/g" /opt/helk/kafka/kafka_2.11-1.0.0/config/server-1.properties >> $LOGFILE 2>&1
+sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9094/advertised\.listeners\=PLAINTEXT\:\/\/${host_ip}\:9094/g" /opt/helk/kafka/kafka_2.11-1.0.0/config/server-2.properties >> $LOGFILE 2>&1
+
+echo "[HELK-BASH-INSTALLATION-INFO] Starting Kafka and setting it to start automatically when the system boots.."
+echo "[HELK-BASH-INSTALLATION-INFO] Setting preferIPv4Stack to True.."
+update-rc.d kafka defaults 96 9
+service kafka start >> $LOGFILE 2>&1
+sleep 25
+echo "[HELK-BASH-INSTALLATION-INFO] Creating Kafka Winlogbeat Topic.."
+/opt/helk/kafka/kafka_2.11-1.0.0/bin/kafka-topics.sh --create --zookeeper $host_ip:2181 --replication-factor 3 --partitions 1 --topic winlogbeat >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install kafka (Error Code: $ERROR)."
+        exit 1
+    fi
+
+# *********** Download KSQL (Experiment) ***************
+#echo "[HELK-BASH-INSTALLATION-INFO] Downloading KSQL package.."
+#wget -qO- https://github.com/confluentinc/ksql/archive/v0.4.tar.gz | sudo tar xvz -C /opt/helk/ksql/ >> $LOGFILE 2>&1
+
+# *********** Install Cerebro***************
+CEREBRO_HOME=/opt/helk/cerebro
+CEREBRO_LOGS_PATH=/var/log/cerebro
+
+echo "[HELK-BASH-INSTALLATION-INFO] Downloading Cerebro package.."
+wget -qO- https://github.com/lmenezes/cerebro/releases/download/v0.7.2/cerebro-0.7.2.tgz | sudo tar xvz -C ${CEREBRO_HOME} >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Creating Kafka log folder .."
+mkdir -v ${CEREBRO_LOGS_PATH} >> $LOGFILE 2>&1
+echo "[HELK-BASH-INSTALLATION-INFO] Starting Cerebro and setting it to start automatically when the system boots.."
+cp -v ../cerebro/cerebro-init /etc/init.d/cerebro >> $LOGFILE 2>&1
+update-rc.d cerebro defaults 96 9
+service cerebro start >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install cerebro (Error Code: $ERROR)."
+        exit 1
+    fi
+
+echo "[HELK-BASH-INSTALLATION-INFO] HELK installation completed.."

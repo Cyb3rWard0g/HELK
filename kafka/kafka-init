@@ -39,12 +39,12 @@ KAFKA_NICE=18
 SERVICE_NAME="kafka"
 SERVICE_DESCRIPTION="kafka"
 KAFKA_PIDFILE_ZOOKEEPER=/var/run/kafka_zookeeper.pid
-KAFKA_CONSOLE_LOG_ZOOKEEPER=/var/log/helk-kafka_zookeeper.log
-KAFKA_CONSOLE_LOG=/var/log/helk-kafka.log
+KAFKA_CONSOLE_LOG_ZOOKEEPER=/var/log/kafka/helk-kafka_zookeeper.log
+KAFKA_CONSOLE_LOG=/var/log/kafka/helk-kafka.log
 KAFKA_PIDFILE=/var/run/kafka.pid
-KAFKA_CONSOLE_LOG_1=/var/log/helk-kafka_1.log
+KAFKA_CONSOLE_LOG_1=/var/log/kafka/helk-kafka_1.log
 KAFKA_PIDFILE_1=/var/run/kafka_1.pid
-KAFKA_CONSOLE_LOG_2=/var/log/helk-kafka_2.log
+KAFKA_CONSOLE_LOG_2=/var/log/kafka/helk-kafka_2.log
 KAFKA_PIDFILE_2=/var/run/kafka_2.pid
 
 if [ -f "$DEFAULT" ]; then

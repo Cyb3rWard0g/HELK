@@ -1,5 +1,5 @@
 {
-  "template" : "winevent-wmiactivity-*",
+  "template" : "logs-endpoint-winevent-wmiactivity-*",
   "settings" : {
     "index.refresh_interval": "5s"
   },

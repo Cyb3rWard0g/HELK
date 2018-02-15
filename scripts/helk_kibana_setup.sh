@@ -3,7 +3,6 @@
 # HELK script: helk_kibana_setup.sh
 # HELK script description: Creates Kibana index patterns, dashboards and visualizations automatically.
 # HELK build version: 0.9 (Alpha)
-# HELK ELK version: 6.1.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
@@ -16,11 +15,11 @@
 # *********** Setting Variables ***************
 KIBANA="http://localhost:5601"
 TIME_FIELD="@timestamp"
-DEFAULT_INDEX="sysmon-*"
+DEFAULT_INDEX="logs-endpoint-winevent-sysmon-*"
 DIR=/opt/helk/dashboards
 
 # *********** Setting Index Pattern Array ***************
-declare -a index_patterns=("*" "sysmon-*" "winevent-security-*" "winevent-system-*" "winevent-application-*" "winevent-wmiactivity-*" "powershell-*")
+declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*")
 
 # *********** Waiting for Kibana to be available ***************
 until curl -s localhost:5601 -o /dev/null; do
