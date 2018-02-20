@@ -34,7 +34,7 @@ fi
 
 KAFKA_HOME=/opt/helk/kafka/kafka_2.11-1.0.0
 KAFKA_USER=root
-KAFKA_USER=root
+KAFKA_GROUP=root
 KAFKA_NICE=18
 SERVICE_NAME="kafka"
 SERVICE_DESCRIPTION="kafka"
