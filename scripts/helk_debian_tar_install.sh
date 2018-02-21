@@ -94,7 +94,8 @@ pip install \
     keras==2.1.3 \
     pyflux==0.4.15 \
     imbalanced-learn==0.3.2 \
-    lime==0.1.1.29 >> $LOGFILE 2>&1
+    lime==0.1.1.29 \
+	elasticsearch-curator==5.4.1 >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install HELK python packages (Error Code: $ERROR)."
@@ -103,7 +104,7 @@ ERROR=$?
 
 # *********** Creating needed folders for the HELK ***************
 echo "[HELK-BASH-INSTALLATION-INFO] Creating needed folders for the HELK.."
-mkdir -pv /opt/helk/{scripts,training,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana,cerebro,ksql} >> $LOGFILE 2>&1
+mkdir -pv /opt/helk/{scripts,training,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana,cerebro,ksql,curator} >> $LOGFILE 2>&1
 echo "[HELK-BASH-INSTALLATION-INFO] Copying HELK files over.."
 cp -v helk_kibana_setup.sh /opt/helk/scripts/ >> $LOGFILE 2>&1
 cp -v helk_otx.py /opt/helk/scripts/ >> $LOGFILE 2>&1
@@ -429,4 +430,22 @@ ERROR=$?
         exit 1
     fi
 
+# *********** Configure Curator***************
+
+echo "[HELK-BASH-INSTALLATION-INFO] Creating a cronjob for curator"
+cp ../curator/* /opt/helk/curator
+cronjob="0 0 * * * /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/delete-after.yml"
+crontab -l | { cat; echo "$cronjob"; } | crontab - >> $LOGFILE 2>&1
+cronjob="0 * * * 0 /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/forcemerge.yml"
+crontab -l | { cat; echo "$cronjob"; } | crontab - >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create cronjob for curator (Error Code: $ERROR)."
+        exit 1
+    fi
+
+
 echo "[HELK-BASH-INSTALLATION-INFO] HELK installation completed.."
+
+
+

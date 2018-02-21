@@ -1,0 +1,29 @@
+actions:
+  1:
+    action: forcemerge
+    description: >-
+      forceMerge all indices older than 2 days (based on index
+      creation_date) to 2 segments per shard.  Delay 120 seconds between each
+      forceMerge operation to allow the cluster to quiesce. Skip indices that
+      have already been forcemerged to the minimum number of segments to avoid
+      reprocessing.
+    options:
+      max_num_segments: 2
+      delay: 120
+      timeout_override:
+      continue_if_exception: False
+      disable_action: False
+    filters:
+    - filtertype: pattern
+      kind: timestring
+      value: '%Y.%m.%d'
+      exclude:
+    - filtertype: age
+      source: creation_date
+      direction: older
+      unit: days
+      unit_count: 7
+      exclude:
+    - filtertype: forcemerged
+      max_num_segments: 2
+      exclude:
