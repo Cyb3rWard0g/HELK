@@ -94,7 +94,8 @@ pip install \
     keras==2.1.3 \
     pyflux==0.4.15 \
     imbalanced-learn==0.3.2 \
-    lime==0.1.1.29 >> $LOGFILE 2>&1
+    lime==0.1.1.29 \
+	elasticsearch-curator==5.4.1 >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install HELK python packages (Error Code: $ERROR)."
