@@ -15,7 +15,7 @@ actions:
       disable_action: True
     filters:
     - filtertype: pattern
-      kind: pattern
+      kind: timestring
       value: '%Y.%m.%d'
       exclude:
     - filtertype: age
