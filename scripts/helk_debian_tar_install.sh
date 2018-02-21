@@ -430,11 +430,10 @@ ERROR=$?
         exit 1
     fi
 
-echo "[HELK-BASH-INSTALLATION-INFO] HELK installation completed.."
-
 # *********** Configure Curator***************
 
 echo "[HELK-BASH-INSTALLATION-INFO] Creating a cronjob for curator"
+cp ../curator/* /opt/helk/curator
 cronjob="0 0 * * * /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/delete-after.yml"
 echo "$cronjob" | crontab - >> $LOGFILE 2>&1
 cronjob2="0 * * * 0 /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/forcemerge.yml"
@@ -444,4 +443,9 @@ ERROR=$?
         echoerror "Could not create cronjob for curator (Error Code: $ERROR)."
         exit 1
     fi
+
+
+echo "[HELK-BASH-INSTALLATION-INFO] HELK installation completed.."
+
+
 
