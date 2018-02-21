@@ -12,7 +12,7 @@ actions:
       delay: 120
       timeout_override:
       continue_if_exception: False
-      disable_action: True
+      disable_action: False
     filters:
     - filtertype: pattern
       kind: timestring
