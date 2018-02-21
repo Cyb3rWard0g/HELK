@@ -104,7 +104,7 @@ ERROR=$?
 
 # *********** Creating needed folders for the HELK ***************
 echo "[HELK-BASH-INSTALLATION-INFO] Creating needed folders for the HELK.."
-mkdir -pv /opt/helk/{scripts,training,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana,cerebro,ksql} >> $LOGFILE 2>&1
+mkdir -pv /opt/helk/{scripts,training,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana,cerebro,ksql,curator} >> $LOGFILE 2>&1
 echo "[HELK-BASH-INSTALLATION-INFO] Copying HELK files over.."
 cp -v helk_kibana_setup.sh /opt/helk/scripts/ >> $LOGFILE 2>&1
 cp -v helk_otx.py /opt/helk/scripts/ >> $LOGFILE 2>&1
@@ -431,3 +431,17 @@ ERROR=$?
     fi
 
 echo "[HELK-BASH-INSTALLATION-INFO] HELK installation completed.."
+
+# *********** Configure Curator***************
+
+echo "[HELK-BASH-INSTALLATION-INFO] Creating a cronjob for curator"
+cronjob="0 0 * * * /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/delete-after.yml"
+echo "$cronjob" | crontab - >> $LOGFILE 2>&1
+cronjob2="0 * * * 0 /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/forcemerge.yml"
+echo "$cronjob2" | crontab - >> $LOGFILE 2>&1
+ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not create cronjob for curator (Error Code: $ERROR)."
+        exit 1
+    fi
+
