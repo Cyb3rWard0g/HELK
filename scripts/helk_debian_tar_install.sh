@@ -435,9 +435,10 @@ ERROR=$?
 echo "[HELK-BASH-INSTALLATION-INFO] Creating a cronjob for curator"
 cp ../curator/* /opt/helk/curator
 cronjob="0 0 * * * /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/delete-after.yml"
+crontab -l | { cat; echo "$cronjob"; } | crontab - >> $LOGFILE 2>&1
 echo "$cronjob" | crontab - >> $LOGFILE 2>&1
-cronjob2="0 * * * 0 /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/forcemerge.yml"
-echo "$cronjob2" | crontab - >> $LOGFILE 2>&1
+cronjob="0 * * * 0 /usr/local/bin/curator --config /opt/helk/curator/config.yml /opt/helk/curator/forcemerge.yml"
+crontab -l | { cat; echo "$cronjob"; } | crontab - >> $LOGFILE 2>&1
 ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not create cronjob for curator (Error Code: $ERROR)."
