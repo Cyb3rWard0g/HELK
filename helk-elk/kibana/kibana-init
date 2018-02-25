@@ -1,0 +1,171 @@
+#!/bin/sh
+# /etc/init.d/kibana-- startup script for Kibana
+# Maintained by Roberto Rodriguez @Cyb3rWard0g
+# Reference: 
+# https://github.com/elastic/logstash/blob/master/distribution/rpm/src/main/packaging/init.d/logstash
+
+### BEGIN INIT INFO
+# Provides:          kibana
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: 
+# Description:       Starts Kibana as a daemon
+### END INIT INFO
+
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+NAME=kibana
+DEFAULT=/etc/default/$NAME
+export PATH
+
+if [ $(id -u) -ne 0 ]; then
+   echo "You need root privileges to run this script"
+   exit 1
+fi
+
+. /lib/lsb/init-functions
+
+if [ -r /etc/default/rcS ]; then
+	. /etc/default/rcS
+fi
+
+# The following variables can be overwritten in $DEFAULT
+KIBANA_HOME=/usr/share/$NAME
+KIBANA_CONF=/etc/$NAME
+KIBANA_USER="kibana"
+KIBANA_GROUP="kibana"
+KIBANA_CHROOT="/"
+KIBANA_CHDIR="/"
+KIBANA_NICE=""
+KIBANA_PIDFILE=/var/run/kibana.pid
+KIBANA_LOG_DIR=/var/log/kibana
+KIBANA_LOG_FILE="${KIBANA_LOG_DIR}/$NAME.log"
+SERVICE_NAME="kibana"
+SERVICE_DESCRIPTION="kibana"
+
+# End of variables that can be overwritten in $DEFAULT
+
+# overwrite settings from default file
+if [ -f "$DEFAULT" ]; then
+	. "$DEFAULT"
+fi
+
+# Define other required variables
+KIBANA_EXEC=$KIBANA_HOME/bin/$NAME
+KIBANA_EXEC_OPTS="--config ${KIBANA_CONF}/kibana.yml --log-file ${KIBANA_LOG_FILE}"
+
+[ -z "$KIBANA_NICE" ] && KIBANA_NICE=0
+
+if [ ! -x "$KIBANA_EXEC" ]; then
+	echo "The Kibana startup script does not exists or it is not executable, tried: $KIBANA_EXEC"
+	exit 1
+fi
+
+start() {
+	echo "Starting $NAME"
+
+	if [ -n "$KIBANA_PIDFILE" ] && [ ! -e "$KIBANA_PIDFILE" ]; then
+		touch "$KIBANA_PIDFILE" && chown kibana:kibana "$KIBANA_PIDFILE"
+	fi
+
+	# Start Service
+	nice -n$KIBANA_NICE chroot --userspec $KIBANA_USER:$KIBANA_GROUP / sh -c "
+        cd $KIBANA_HOME
+        exec $KIBANA_EXEC $KIBANA_EXEC_OPTS
+    " &
+
+  # Generate the pidfile from here. If we instead made the forked process
+  # generate it there will be a race condition between the pidfile writing
+  # and a process possibly asking for status.
+  echo $! > $KIBANA_PIDFILE
+
+  echo "$NAME started."
+  return 0
+}
+
+stop() {
+  # Try a few times to kill TERM the program
+  if status; then
+    pid=$(cat "$KIBANA_PIDFILE")
+    echo "Killing $NAME (pid $pid) with SIGTERM"
+    kill -TERM $pid
+    # Wait for it to exit.
+    for i in 1 2 3 4 5; do
+      echo "Waiting for $NAME (pid $pid) to die..."
+      status || break
+      sleep 1
+    done
+    if status; then
+      echo "$NAME stop failed; still running."
+    else
+      echo "$NAME stopped."
+      rm -f $KIBANA_PIDFILE
+    fi
+  fi
+}
+
+status() {
+  if [ -f "$KIBANA_PIDFILE" ] ; then
+    pid=$(cat "$KIBANA_PIDFILE")
+    if kill -0 $pid > /dev/null 2> /dev/null; then
+      # process by this pid is running.
+      # It may not be our pid, but that's what you get with just pidfiles.
+      # TODO(sissel): Check if this process seems to be the same as the one we
+      # expect. It'd be nice to use flock here, but flock uses fork, not exec,
+      # so it makes it quite awkward to use in this case.
+      return 0
+    else
+      return 2 # program is dead but pid file exists
+    fi
+  else
+    return 3 # program is not running
+  fi
+}
+
+force_stop() {
+  if status; then
+    stop
+    status && kill -KILL $(cat "$KIBANA_PIDFILE")
+    rm -f $KIBANA_PIDFILE
+  fi
+}
+
+case "$1" in
+  start)
+    status
+    code=$?
+    if [ $code -eq 0 ]; then
+      echo "$NAME is already running"
+    else
+      start
+      code=$?
+    fi
+    exit $code
+    ;;
+
+  stop) stop ;;
+
+  force-stop) force_stop ;;
+
+  status)
+    status
+    code=$?
+    if [ $code -eq 0 ]; then
+      echo "$NAME is running"
+    else
+      echo "$NAME is not running"
+    fi
+    exit $code
+    ;;
+
+  restart) stop && start ;;
+
+  *)
+    echo "Usage: $SCRIPTNAME {start|stop|force-stop|status|restart}" >&2
+    exit 3
+    ;;
+esac
+
+exit $?
+

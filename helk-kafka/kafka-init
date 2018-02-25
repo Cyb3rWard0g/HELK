@@ -1,0 +1,222 @@
+#!/bin/bash
+# /etc/init.d/kafka -- startup script for Kafka
+# Maintained by Roberto Rodriguez @Cyb3rWard0g
+# Reference:
+# https://github.com/elastic/logstash/blob/master/distribution/rpm/src/main/packaging/init.d/logstash
+# https://github.com/spujadas/elk-docker/blob/master/logstash-init
+
+### BEGIN INIT INFO
+# Provides:  kafka
+# Required-Start:
+# Required-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: kafka service
+### END INIT INFO
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
+NAME=kafka
+DEFAULT=/etc/default/$NAME
+export PATH
+export KAFKA_OPTS="-Djava.net.preferIPv4Stack=True"
+
+if [ $(id -u) -ne 0 ]; then
+   echo "You need root privileges to run this script"
+   exit 1
+fi
+
+# Source function library.
+. /lib/lsb/init-functions
+
+if [ -r /etc/default/rcS ]; then
+  . /etc/default/rcS
+fi
+
+KAFKA_HOME=/opt/helk/kafka/kafka_2.11-1.0.0
+KAFKA_USER=root
+KAFKA_GROUP=root
+KAFKA_NICE=18
+SERVICE_NAME="kafka"
+SERVICE_DESCRIPTION="kafka"
+KAFKA_PIDFILE_ZOOKEEPER=/var/run/kafka_zookeeper.pid
+KAFKA_CONSOLE_LOG_ZOOKEEPER=/var/log/kafka/helk-kafka_zookeeper.log
+KAFKA_CONSOLE_LOG=/var/log/kafka/helk-kafka.log
+KAFKA_PIDFILE=/var/run/kafka.pid
+KAFKA_CONSOLE_LOG_1=/var/log/kafka/helk-kafka_1.log
+KAFKA_PIDFILE_1=/var/run/kafka_1.pid
+KAFKA_CONSOLE_LOG_2=/var/log/kafka/helk-kafka_2.log
+KAFKA_PIDFILE_2=/var/run/kafka_2.pid
+
+if [ -f "$DEFAULT" ]; then
+  . "$DEFAULT"
+fi
+
+KAFKA_SCRIPT_ZOOKEEPER=$KAFKA_HOME/bin/zookeeper-server-start.sh
+KAFKA_SCRIPT=$KAFKA_HOME/bin/kafka-server-start.sh
+KAFKA_CONFIG_ZOOKEEPER="$KAFKA_HOME/config/zookeeper.properties 2>&1 >> $KAFKA_CONSOLE_LOG_ZOOKEEPER 2>&1"
+KAFKA_CONFIG="$KAFKA_HOME/config/server.properties 2>&1 >> $KAFKA_CONSOLE_LOG 2>&1"
+KAFKA_CONFIG_1="$KAFKA_HOME/config/server-1.properties 2>&1 >> $KAFKA_CONSOLE_LOG_1 2>&1"
+KAFKA_CONFIG_2="$KAFKA_HOME/config/server-2.properties 2>&1 >> $KAFKA_CONSOLE_LOG_2 2>&1"
+
+checkJava() {
+    if [ -x "$JAVACMD" ]; then
+        JAVA="$JAVACMD"
+    else
+        JAVA=`which java`
+    fi
+
+    if [ ! -x "$JAVA" ]; then
+        echo "Could not find any executable java binary. Please install java in your PATH or set JAVACMD"
+        exit 1
+    fi
+}
+
+start() {
+  checkJava
+  echo "Starting Zookeeper"
+  if [ -n "$KAFKA_PIDFILE_ZOOKEEPER" ] && [ ! -e "$KAFKA_PIDFILE_ZOOKEEPER" ]; then
+    touch "$KAFKA_PIDFILE_ZOOKEEPER" && chown $KAFKA_USER:$KAFKA_GROUP "$KAFKA_PIDFILE_ZOOKEEPER"
+  fi
+
+  # Start Service
+  nice -n$KAFKA_NICE chroot --userspec $KAFKA_USER:$KAFKA_GROUP / sh -c "
+    cd $KAFKA_HOME
+    exec $KAFKA_SCRIPT_ZOOKEEPER $KAFKA_CONFIG_ZOOKEEPER
+  " &
+  # Generate the pidfile from here. If we instead made the forked process
+  # generate it there will be a race condition between the pidfile writing
+  # and a process possibly asking for status.
+  echo $! > $KAFKA_PIDFILE_ZOOKEEPER
+  echo "Kafka Zookeeper started."
+  sleep 5
+
+  declare -a pids=($KAFKA_PIDFILE $KAFKA_PIDFILE_1 $KAFKA_PIDFILE_2)
+  for p in ${pids[@]}; do 
+    echo "Starting $NAME"
+    if [ -n "${p}" ] && [ ! -e "${p}" ]; then
+      touch "${p}" && chown $KAFKA_USER:$KAFKA_GROUP "${p}"
+    fi
+
+    case ${p} in
+      /var/run/kafka.pid)
+        CONFIG=$KAFKA_CONFIG
+        BROKER_ID=0
+        ;;
+      /var/run/kafka_1.pid)
+        CONFIG=$KAFKA_CONFIG_1
+        BROKER_ID=1
+        ;;
+      /var/run/kafka_2.pid)
+        CONFIG=$KAFKA_CONFIG_2
+        BROKER_ID=2
+    esac
+    
+    # Start Service
+    nice -n$KAFKA_NICE chroot --userspec $KAFKA_USER:$KAFKA_GROUP / sh -c "
+      cd $KAFKA_HOME
+      exec $KAFKA_SCRIPT $CONFIG
+    " &
+
+    # Generate the pidfile from here. If we instead made the forked process
+    # generate it there will be a race condition between the pidfile writing
+    # and a process possibly asking for status.
+    echo $! > ${p}
+    echo "$NAME BROKER $BROKER_ID started."
+  done
+  return 0
+}
+
+stop() {
+  echo -n $"Stopping $NAME: "
+  declare -a pids=($KAFKA_PIDFILE_1 $KAFKA_PIDFILE_2 $KAFKA_PIDFILE $KAFKA_PIDFILE_ZOOKEEPER)
+  for p in ${pids[@]}; do 
+    # Try a few times to kill TERM the program
+    if status; then
+      pid=$(cat "${p}")
+      echo "Killing $NAME (pid $pid) with SIGTERM"
+      kill -TERM $pid
+      # Wait for it to exit.
+      for i in 1 2 3 4 5; do
+        echo "Waiting for $NAME (pid $pid) to die..."
+        status || break
+        sleep 1
+      done
+      if status; then
+        echo "$NAME stop failed; still running."
+      else
+        echo "$NAME stopped."
+        rm -f ${p}
+      fi
+    fi
+  done
+}
+
+status() {
+  declare -a pids=($KAFKA_PIDFILE_1 $KAFKA_PIDFILE_2 $KAFKA_PIDFILE $KAFKA_PIDFILE_ZOOKEEPER )
+  for p in ${pids[@]}; do 
+    if [ -f "${p}" ] ; then
+      pid=$(cat "${p}")
+      if kill -0 $pid > /dev/null 2> /dev/null; then
+        # process by this pid is running.
+        # It may not be our pid, but that's what you get with just pidfiles.
+        # TODO(sissel): Check if this process seems to be the same as the one we
+        # expect. It'd be nice to use flock here, but flock uses fork, not exec,
+        # so it makes it quite awkward to use in this case.
+        return 0
+      else
+        return 2 # program is dead but pid file exists
+      fi
+    else
+      return 3 # program is not running
+    fi
+  done
+}
+
+force_stop() {
+  declare -a pids=($KAFKA_PIDFILE_1 $KAFKA_PIDFILE_2 $KAFKA_PIDFILE $KAFKA_PIDFILE_ZOOKEEPER)
+  for p in ${pids[@]}; do 
+    if status; then
+      stop
+      status && kill -KILL $(cat "${p}")
+      rm -f ${p}
+    fi
+  done
+}
+
+
+case "$1" in
+  start)
+    status
+    code=$?
+    if [ $code -eq 0 ]; then
+      echo "$NAME is already running"
+    else
+      start
+      code=$?
+    fi
+    exit $code
+    ;;
+
+  stop) stop ;;
+
+  force-stop) force_stop ;;
+
+  status)
+    status
+    code=$?
+    if [ $code -eq 0 ]; then
+      echo "$NAME is running"
+    else
+      echo "$NAME is not running"
+    fi
+    exit $code
+    ;;
+
+  restart) stop && start ;;
+
+  *)
+    echo "Usage: $SCRIPTNAME {start|stop|force-stop|status|restart}" >&2
+    exit 3
+    ;;
+esac
+exit $?

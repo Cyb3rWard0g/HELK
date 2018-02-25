@@ -44,10 +44,10 @@ The project is currently in an alpha stage, which means that the code and the fu
   * [Spark](https://github.com/Cyb3rWard0g/HELK/wiki/Spark)
 * [Installation](https://github.com/Cyb3rWard0g/HELK/wiki/Installation)
 
-## (Docker) Accessing the HELK's container
-By default, the HELK's container is run in the background. Therefore, you will have to access your docker container by running the following commands:
+## (Docker) Accessing the HELK's Images
+By default, the HELK's containers are run in the background (Detached). Therefore, you will have to access your docker images by running the following commands:
 ```
-sudo docker exec -ti helk bash
+sudo docker exec -ti <image-name> bash
 root@7a9d6443a4bf:/opt/helk/scripts#
 ```
 
@@ -71,12 +71,10 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Add Jupyter Notebook on the top of Spark
 - [X] Kafka Integration
 - [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
-- [ ] Enhance elasticsearch configuration to make it more scalable
 - [ ] MITRE ATT&CK mapping to logs or dashboards
 - [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook) 
 - [ ] Somehow integrate neo4j spark connectors with build
-- [ ] Install Elastalert
-- [ ] Create Elastalert rules
+- [ ] Install Elastalert & Create Rules
 - [ ] Nxlog parsers (Logstash Filters)
 - [ ] Add more network data sources (i.e Bro)
 

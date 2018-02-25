@@ -1,0 +1,68 @@
+version: '3.2'
+
+services:
+
+  helk-elk:
+    image: cyb3rward0g/helk-elk:6.2.2
+    container_name: helk-elk
+    volumes:
+      - esdata:/var/lib/elasticsearch
+    environment:
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "80:80"
+      - "5044:5044"
+      - "9000:9000"
+      - "8082:8082"
+    restart: always
+    networks:
+      helk:
+        ipv4_address: 172.18.0.2
+        aliases:
+          - helk_elk.hunt.local
+  helk-kafka:
+    image: cyb3rward0g/helk-kafka:1.0.0
+    container_name: helk-kafka
+    env_file: ./helk.env
+    ports:
+      - "2181:2181"
+      - "9092:9092"
+      - "9093:9093"
+      - "9094:9094"
+    restart: always
+    depends_on:
+      - helk-elk
+    networks:
+      helk:
+        ipv4_address: 172.18.0.3
+        aliases:
+          - helk_kafka.hunt.local
+  helk-analytics:
+    image: cyb3rward0g/helk-analytics:0.0.1
+    container_name: helk-analytics
+    ports:
+      - "8880:8880"
+      - "4040:4040"
+    restart: always
+    depends_on:
+      - helk-elk
+    networks:
+      helk:
+        ipv4_address: 172.18.0.4
+        aliases:
+          - helk_analytics.hunt.local
+networks:
+  helk:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+volumes:
+  esdata:
+    driver: local
+  
