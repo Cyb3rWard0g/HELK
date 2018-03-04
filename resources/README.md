@@ -93,4 +93,4 @@ Helpful resources to learn a little bit more about the HELK and its components.
 
 | Name | Description | Author |
 |--------|---------|-------|
-| [GraphFrames](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Graphframes_Introduction.pdf) | An Integrated API for Mixing Graph and Relational Queries | Ankur Dave, Alekh Jindal, Li Erran Li, Reynold Xin, Joseph Gonzalez, Matei Zaharia |
+| [GraphFrames](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/GraphFrames_Introduction.pdf) | An Integrated API for Mixing Graph and Relational Queries | Ankur Dave, Alekh Jindal, Li Erran Li, Reynold Xin, Joseph Gonzalez, Matei Zaharia |
