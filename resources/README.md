@@ -51,10 +51,10 @@ Helpful resources to learn a little bit more about the HELK and its components.
 | [Kibana Vega vs VegaLite](https://www.elastic.co/guide/en/kibana/current/vega-vs-vegalite.html) | Details about Vega and VegaLite | [@elastic](https://twitter.com/elastic)|
 
 ## others
-| Name | Description | type |
-|--------|---------|-------|
-| [Kibana import/export dashboard api](https://discuss.elastic.co/t/kibana-import-export-dashboard-api/108180) | Discuss Elastic|
-| [How to pull data data from 2 kafka topics using logstash and index the data in two separate index in elasticsearch](https://discuss.elastic.co/t/how-to-pull-data-data-from-2-kafka-topics-using-logstash-and-index-the-data-in-two-separate-index-in-elasticsearch/114977) | Discuss Elastic|
+| Name | type |
+|--------|---------|
+| [Kibana import/export dashboard api](https://discuss.elastic.co/t/kibana-import-export-dashboard-api/108180) | Elastic Forums|
+| [How to pull data data from 2 kafka topics using logstash and index the data in two separate index in elasticsearch](https://discuss.elastic.co/t/how-to-pull-data-data-from-2-kafka-topics-using-logstash-and-index-the-data-in-two-separate-index-in-elasticsearch/114977) | Elastic Forums |
 
 # Spark
 
@@ -82,8 +82,8 @@ Helpful resources to learn a little bit more about the HELK and its components.
 
 ## Presentations
 
-| Session Title | Description | Speaker | Reference |
-|--------|---------|-------|-------|
+| Session Title | Description | Speaker |
+|--------|---------|-------|
 | [GraphFrames: Graph Queries In Spark SQL](https://www.youtube.com/watch?v=76LOOORaKBU) | Introduction of GraphFrames. Research focused behind GraphFrames | [@ankurdave](https://twitter.com/ankurdave) |
 | [Finding Graph Isomorphisms In GraphX And GraphFrames](https://www.youtube.com/watch?v=B6_dSfPKDXk&t=340s) | Introduction of GraphFrames. Research focused behind GraphFrames | [@michaelmalak](https://twitter.com/michaelmalak) |
 | [A Tale of Two Graph Frameworks on Spark: GraphFrames and Tinkerpop](https://www.youtube.com/watch?v=DW09q18OHfc&t=1690s) | Showing two frameworks for doing analytics in graphs with spark as the underline framework for execution | [@__aliv](https://twitter.com/__ali) & [@RussSpitzer](https://twitter.com/RussSpitzer) |
@@ -93,5 +93,4 @@ Helpful resources to learn a little bit more about the HELK and its components.
 
 | Name | Description | Author |
 |--------|---------|-------|
-| [GraphFrames](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Graphframes_Introduction.pdf) | An Integrated API for Mixing Graph and
-Relational Queries | Ankur Dave, Alekh Jindal, Li Erran Li, Reynold Xin, Joseph Gonzalez, Matei Zaharia |
+| [GraphFrames](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Graphframes_Introduction.pdf) | An Integrated API for Mixing Graph and Relational Queries | Ankur Dave, Alekh Jindal, Li Erran Li, Reynold Xin, Joseph Gonzalez, Matei Zaharia |

@@ -77,6 +77,7 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [ ] Install Elastalert & Create Rules
 - [ ] Nxlog parsers (Logstash Filters)
 - [ ] Add more network data sources (i.e Bro)
+- [ ] Research & integrate spark structured direct streaming
+- [ ] Research & intgrate KSQL
 
 More coming soon...
-
