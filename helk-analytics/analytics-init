@@ -31,10 +31,12 @@ if [ -r /etc/default/rcS ]; then
   . /etc/default/rcS
 fi
 
-SPARK_HOME=/opt/helk/spark/spark-2.2.1-bin-hadoop2.7
+SPARK_VERSION=2.3.0
+APACHE_HADOOP_VERSION=2.7
+SPARK_HOME=/opt/helk/spark/spark-$SPARK_VERSION-bin-hadoop$APACHE_HADOOP_VERSION
 ANALYTIC_CONSOLE_LOG=/var/log/analytics/analytics.log
 ANALYTIC_EXEC=$SPARK_HOME/bin/pyspark
-ANALYTIC_OPTS=">> $ANALYTIC_CONSOLE_LOG 2>&1"
+ANALYTIC_LOGS=">> $ANALYTIC_CONSOLE_LOG 2>&1"
 ANALYTIC_USER=root
 ANALYTIC_GROUP=root
 ANALYTIC_NICE=""
@@ -73,7 +75,7 @@ start() {
 	# Start Service
 	nice -n$ANALYTIC_NICE chroot --userspec $ANALYTIC_USER:$ANALYTIC_GROUP / sh -c "
         cd /opt/helk
-        exec $ANALYTIC_EXEC $SPARK_OPTS $ANALYTIC_OPTS
+        exec $ANALYTIC_EXEC $SPARK_OPTS $ANALYTIC_LOGS
     " &
 
   # Generate the pidfile from here. If we instead made the forked process

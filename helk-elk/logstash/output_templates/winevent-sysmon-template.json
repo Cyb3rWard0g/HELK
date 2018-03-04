@@ -22,15 +22,7 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "destination":{
-          "properties":{
-            "port":{
-              "properties":{
-                "number":{"type":"integer"}
-              }
-            }
-          }
-        },
+        "dst_port_number":{"type":"integer"},
         "event_id":{"type":"integer"},
         "geoip":{
           "properties":{
@@ -40,43 +32,14 @@
             "longitude":{"type":"float"}
           }
         },
-        "network":{
-          "properties":{
-            "initiated":{"type":"boolean"}
-          }
-        },
-        "process":{
-          "properties":{
-            "id":{"type":"integer"},
-            "threadid":{"type":"integer"},
-            "image":{
-              "properties":{
-                "signed":{"type":"boolean"}
-              }
-            },
-            "parent":{
-              "properties":{
-                "id":{"type":"integer"}
-              }
-            },
-            "target":{
-              "properties":{
-                "id":{"type":"integer"}
-              }
-            },
-            "terminalsessionid":{"type":"integer"}
-          }
-        },
+        "network_initiated":{"type":"boolean"},
         "process_id":{"type":"integer"},
-        "source":{
-          "properties":{
-            "port":{
-              "properties":{
-                "number":{"type":"integer"}
-              }
-            }
-          }
-        },
+        "thread_newthreadid":{"type":"integer"},
+        "image_signed":{"type":"boolean"},
+        "process_parent_id":{"type":"integer"},
+        "process_target_id":{"type":"integer"},
+        "terminal_session_id":{"type":"integer"},
+        "src_port_number":{"type":"integer"},
         "thread_id":{"type":"integer"},
         "version":{"type":"integer"}
       }

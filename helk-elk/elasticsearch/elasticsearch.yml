@@ -88,3 +88,4 @@ network.host: ["localhost", "172.18.0.2"]
 #
 #action.destructive_requires_name: true
 discovery.type: single-node
+discovery.zen.minimum_master_nodes: 1

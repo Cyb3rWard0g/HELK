@@ -22,15 +22,7 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "spp":{
-          "properties":{
-            "restart":{
-              "properties":{
-                "scheduled":{"type":"date"}
-              }
-            }
-          }
-        }
+        "spp_restart_scheduled":{"type":"date"}
       }
     }
   }

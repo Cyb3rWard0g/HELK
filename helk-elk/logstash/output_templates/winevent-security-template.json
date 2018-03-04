@@ -22,46 +22,13 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "system":{
-          "properties":{
-            "newtime":{"type":"date"},
-            "previoustime":{"type":"date"}
-          }
-        },
-        "process":{
-          "properties":{
-            "id":{"type":"integer"},
-            "target":{
-              "properties":{
-                "id":{"type":"integer"}
-              }
-            },
-            "parent":{
-              "properties":{
-                "id":{"type":"integer"}
-              }
-            },
-            "terminalsessionid":{"type":"integer"}
-          }
-        },
-        "source":{
-          "properties":{
-            "port":{
-              "properties":{
-                "number":{"type":"integer"}
-              }
-            }
-          }
-        },
-        "destination":{
-          "properties":{
-            "port":{
-              "properties":{
-                "number":{"type":"integer"}
-              }
-            }
-          }
-        },
+        "system_new_time":{"type":"date"},
+        "system_previous_time":{"type":"date"},
+        "process_id":{"type":"integer"},
+        "process_target_id":{"type":"integer"},
+        "process_parent_id":{"type":"integer"},
+        "src_port_number":{"type":"integer"},
+        "dst_port_number":{"type":"integer"},
         "version":{"type":"integer"}
       }
     }

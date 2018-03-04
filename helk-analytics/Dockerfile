@@ -68,16 +68,18 @@ RUN wget https://artifacts.elastic.co/downloads/elasticsearch-hadoop/elasticsear
   && rm /opt/helk/es-hadoop/*.zip
 
 # *********** Install Spark ***************
+ENV SPARK_VERSION=2.3.0
+ENV APACHE_HADOOP_VERSION=2.7
 ENV ANALYTIC_LOGS_PATH=/var/log/analytics
-RUN wget -qO- http://mirrors.gigenet.com/apache/spark/spark-2.2.1/spark-2.2.1-bin-hadoop2.7.tgz | sudo tar xvz -C /opt/helk/spark/ \
+RUN wget -qO- http://download.nextag.com/apache/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${APACHE_HADOOP_VERSION}.tgz | sudo tar xvz -C /opt/helk/spark/ \
   && mkdir -v $ANALYTIC_LOGS_PATH
 ADD spark/.bashrc ~/.bashrc
-ADD spark/log4j.properties /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/
-ADD spark/spark-defaults.conf /opt/helk/spark/spark-2.2.1-bin-hadoop2.7/conf/
+ADD spark/log4j.properties /opt/helk/spark/spark-${SPARK_VERSION}-bin-hadoop${APACHE_HADOOP_VERSION}/conf/
+ADD spark/spark-defaults.conf /opt/helk/spark/spark-${SPARK_VERSION}-bin-hadoop${APACHE_HADOOP_VERSION}/conf/
 ADD analytics-init /etc/init.d/analytics
 
 # Adding SPARK environment variables
-ENV SPARK_HOME=/opt/helk/spark/spark-2.2.1-bin-hadoop2.7
+ENV SPARK_HOME=/opt/helk/spark/spark-${SPARK_VERSION}-bin-hadoop${APACHE_HADOOP_VERSION}
 ENV PATH=$SPARK_HOME/bin:$PATH
 #ENV SPARK_OPTS="--driver-java-options=-Xms1024M --driver-java-options=-Xmx2096M --driver-java-options=-Dlog4j.logLevel=info --master=local[4]"
 ENV SPARK_OPTS="--master local[*]"

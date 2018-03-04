@@ -22,16 +22,8 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "process":{
-          "properties":{
-            "id":{"type":"integer"},
-            "target":{
-              "properties":{
-                "id":{"type":"integer"}
-              }
-            }
-          }
-        }
+        "process_id":{"type":"integer"},
+        "process_target_id":{"type":"integer"}
       }
     }
   }
