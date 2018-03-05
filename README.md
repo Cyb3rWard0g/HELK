@@ -59,7 +59,6 @@ root@7a9d6443a4bf:/opt/helk/scripts#
 * Jared Atkinson [@jaredatkinson](https://twitter.com/jaredcatkinson)
 * Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
 * Jordan Potti [@ok_bye_now](https://twitter.com/ok_bye_now)
-* esebese [esebese](https://github.com/esebese)
 * Lee Christensen [@tifkin_](https://twitter.com/tifkin_)
 
 # Contributing
