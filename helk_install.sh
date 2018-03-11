@@ -116,7 +116,36 @@ prepare_helk(){
         # *********** Check if docker is installed ***************
         if [ -x "$(command -v docker)" ]; then
             echo "[HELK-INSTALLATION-INFO] Docker already installed"
+            if [ -x "$(command -v docker-compose)" ]; then
+                echo "[HELK-INSTALLATION-INFO] Docker-Compose already installed"
+            else
+                echo "[HELK-INSTALLATION-INFO] Docker-Compose is not installed"
+                echo "[HELK-INSTALLATION-INFO] Checking if curl is installed first"
+                if [ -x "$(command -v curl)" ]; then
+                    echo "[HELK-INSTALLATION-INFO] curl is already installed"
+                    echo "[HELK-INSTALLATION-INFO] Ready to install  Docker-Compose.."
+                else
+                    echo "[HELK-INSTALLATION-INFO] curl is not installed"
+                    echo "[HELK-INSTALLATION-INFO] Installing curl before installing docker-compose.."
+                    apt-get install -y curl >> $LOGFILE 2>&1
+                    ERROR=$?
+                    if [ $ERROR -ne 0 ]; then
+                        echoerror "Could not install curl (Error Code: $ERROR)."
+                        exit 1
+                    fi
+                fi
+                # ****** Installing docker-compose ***********
+                echo "[HELK-INSTALLATION-INFO] Installing docker-compose .."
+                curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
+                chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
+                ERROR=$?
+                if [ $ERROR -ne 0 ]; then
+                    echoerror "Could not install docker-compose (Error Code: $ERROR)."
+                    exit 1
+                fi
+            fi
             echo "[HELK-INSTALLATION-INFO] Dockerizing HELK.."
+    
         else
             echo "[HELK-INSTALLATION-INFO] Docker is not installed"
             echo "[HELK-INSTALLATION-INFO] Checking if curl is installed first"
