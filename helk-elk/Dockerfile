@@ -26,7 +26,10 @@ RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Ubuntu base image.." \
   nano \
   python \
   python-pip \
-  unzip
+  python3-pip \
+  unzip \
+  git \
+  jq
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -35,6 +38,7 @@ RUN apt-get -qy clean \
 
 # *********** Upgrading PIP ***************
 RUN pip install --upgrade pip
+RUN pip3 install --upgrade pip
 
 # *********** Installing HELK python packages ***************
 RUN pip install \
@@ -43,7 +47,7 @@ RUN pip install \
 
 # *********** Creating the right directories ***************
 #RUN bash -c 'mkdir -pv /opt/helk/{scripts,training,otx,es-hadoop,spark,output_templates,dashboards,kafka,elasticsearch,logstash,kibana,cerebro,ksql}'
-RUN bash -c 'mkdir -pv /opt/helk/{scripts,otx,output_templates,dashboards,elasticsearch,logstash,kibana,cerebro,ksql}'
+RUN bash -c 'mkdir -pv /opt/helk/{scripts,otx,output_templates,dashboards,elasticsearch,logstash,kibana,cerebro,ksql,sigma}'
 
 # *********** Adding HELK scripts and files to Container ***************
 ADD scripts/helk_otx.py /opt/helk/scripts/
@@ -130,6 +134,10 @@ ADD enrichments/otx/ /opt/helk/otx/
 # *********** Creating Cron Job to run OTX script every monday at 8AM and capture last 30 days of Intel *************
 RUN cronjob="0 8 * * 1 python /opt/helk/scripts/helk_otx.py" \
   && echo "$cronjob" | crontab
+
+# *********** Pulling Sigma Git Repository and install Python dependencies *************
+RUN git clone https://github.com/Neo23x0/sigma.git /opt/helk/sigma
+RUN pip3 install -r /opt/helk/sigma/tools/requirements.txt
 
 # *********** Install Cerebro ***************
 ENV CEREBRO_HOME=/opt/helk/cerebro

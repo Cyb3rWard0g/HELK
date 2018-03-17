@@ -17,6 +17,7 @@ KIBANA="http://localhost:5601"
 TIME_FIELD="@timestamp"
 DEFAULT_INDEX="logs-endpoint-winevent-sysmon-*"
 DIR=/opt/helk/dashboards
+SIGMA_DIR=/opt/helk/sigma
 
 # *********** Setting Index Pattern Array ***************
 declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*")
@@ -46,3 +47,8 @@ do
     -H 'Content-type:application/json' -d @${file} || exit 1
     echo
 done
+
+# *********** Loading Sigma searches ***************
+cd $SIGMA_DIR
+tools/sigmac -t kibana -c tools/config/helk.yml -Ooutput=curl -o import-sigma-to-kibana.sh -r rules/
+. import-sigma-to-kibana.sh
