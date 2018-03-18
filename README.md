@@ -22,6 +22,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 * **Spark:** A fast and general-purpose cluster computing system. It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general execution graphs.
 * **GraphFrames:** A package for Apache Spark which provides DataFrame-based Graphs.
 * **Jupyter Notebook:** An open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
+* **Sigma:** A generic signature format for log events. All Sigma signatures contained in the repository are preloaded into Kibana.
 
 # Resources
 * [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
@@ -32,6 +33,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 * [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
 * [spujadas elk-docker](https://github.com/spujadas/elk-docker)
 * [deviantony docker-elk](https://github.com/deviantony/docker-elk)
+* [Sigma](https://github.com/Neo23x0/sigma)
 
 # Getting Started
 ## WIKI
