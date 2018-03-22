@@ -37,9 +37,9 @@ RUN pip3 install --upgrade pip
 # *********** Installing HELK python packages ***************
 RUN pip3 install \
   pandas==0.22.0 \
+  tornado==4.* \
   jupyter \
-  jupyterhub==0.8.1 \
-  jupyterlab==0.31.8 \
+  jupyterlab==0.31.12 \
   https://dist.apache.org/repos/dist/dev/incubator/toree/0.2.0/snapshots/dev1/toree-pip/toree-0.2.0.dev1.tar.gz
 
 RUN pip3 install scipy==1.0.0 \
@@ -55,7 +55,7 @@ RUN pip3 install scipy==1.0.0 \
   bokeh==0.12.14
 
 # *********** Creating the right directories ***************
-RUN bash -c 'mkdir -pv /opt/helk/{scripts,training,es-hadoop,spark,packages}'
+RUN bash -c 'mkdir -pv /opt/helk/{scripts,training,es-hadoop,spark}'
 
 # *********** Adding HELK scripts and files to Container ***************
 ADD scripts/analytics-entrypoint.sh /opt/helk/scripts/
@@ -63,7 +63,8 @@ RUN chmod +x /opt/helk/scripts/analytics-entrypoint.sh
 ADD training/ /opt/helk/training/
 
 # *********** Install ES-Hadoop ***************
-RUN wget https://artifacts.elastic.co/downloads/elasticsearch-hadoop/elasticsearch-hadoop-6.2.2.zip -P /opt/helk/es-hadoop/ \
+ENV ESHADOOP_VERSION=6.2.3
+RUN wget https://artifacts.elastic.co/downloads/elasticsearch-hadoop/elasticsearch-hadoop-${ESHADOOP_VERSION}.zip -P /opt/helk/es-hadoop/ \
   && unzip /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ \
   && rm /opt/helk/es-hadoop/*.zip
 

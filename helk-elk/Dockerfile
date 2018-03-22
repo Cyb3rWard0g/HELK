@@ -1,6 +1,6 @@
 # HELK script: HELK ELK Dockerfile
 # HELK build version: 0.9 (ALPHA)
-# HELK ELK version: 6.2.2
+# HELK ELK version: 6.2.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
@@ -53,7 +53,7 @@ RUN chmod +x /opt/helk/scripts/elk-kibana-setup.sh
 RUN chmod +x /opt/helk/scripts/elk-entrypoint.sh
 
 # *********** ELK Version ***************
-ENV ELK_VERSION=6.2.2
+ENV ELK_VERSION=6.2.3
 
 # *********** Installing Elasticsearch ***************
 ENV ES_HELK_HOME=/opt/helk/elasticsearch

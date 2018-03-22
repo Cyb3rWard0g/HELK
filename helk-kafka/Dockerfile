@@ -7,6 +7,8 @@ FROM phusion/baseimage
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Kafka."
 
+USER root
+
 ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Installing Prerequisites ***************
@@ -27,16 +29,22 @@ RUN apt-get -qy clean \
 
 # *********** Creating the right directories ***************
 RUN bash -c 'mkdir -pv /opt/helk/{scripts,kafka}'
-
+ 
 # *********** Install Kafka ***************
 ENV KAFKA_LOGS_PATH=/var/log/kafka
-RUN wget -qO- http://apache.mirrors.lucidnetworks.net/kafka/1.0.0/kafka_2.11-1.0.0.tgz | sudo tar xvz -C /opt/helk/kafka/ \
+ENV KAFKA_HOME=/opt/helk/kafka/kafka_2.11-1.0.1
+
+RUN wget -qO- http://mirrors.advancedhosters.com/apache/kafka/1.0.1/kafka_2.11-1.0.1.tgz | sudo tar xvz -C /opt/helk/kafka/ \
   && mkdir -v $KAFKA_LOGS_PATH \
-  && mv /opt/helk/kafka/kafka_2.11-1.0.0/config/server.properties /opt/helk/kafka/kafka_2.11-1.0.0/config/backup_server.properties
-ADD *.properties /opt/helk/kafka/kafka_2.11-1.0.0/config/
+  && mv ${KAFKA_HOME}/config/server.properties ${KAFKA_HOME}/config/backup_server.properties
+ADD *.properties ${KAFKA_HOME}/config/
 ADD kafka-init /etc/init.d/kafka
 ADD scripts/kafka-entrypoint.sh /opt/helk/scripts/
 RUN chmod +x /opt/helk/scripts/kafka-entrypoint.sh
+
+# *********** Download KSQL ******************************
+ENV KSQL_VERSION=0.4
+RUN wget -qO- https://github.com/confluentinc/ksql/releases/download/v${KSQL_VERSION}/ksql-${KSQL_VERSION}.tgz | sudo tar xvz -C /opt/helk/
 
 EXPOSE 2181 9092 9093 9094
 WORKDIR "/opt/helk/scripts/"

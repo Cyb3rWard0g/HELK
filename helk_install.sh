@@ -3,7 +3,7 @@
 # HELK script: helk_install.sh
 # HELK script description: Start
 # HELK build version: 0.9 (Alpha)
-# HELK ELK version: 6.2.2
+# HELK ELK version: 6.2.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
@@ -30,15 +30,41 @@ get_token(){
     jupyter_token="$(docker exec -ti helk-analytics jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
 }
 
+# ********** Install Curl ********************
+install_curl(){
+    echo "[HELK-INSTALLATION-INFO] Checking if curl is installed first"
+    if [ -x "$(command -v curl)" ]; then
+        echo "[HELK-INSTALLATION-INFO] curl is already installed"
+    else
+        echo "[HELK-INSTALLATION-INFO] curl is not installed"
+        echo "[HELK-INSTALLATION-INFO] Installing curl before installing docker.."
+        apt-get install -y curl >> $LOGFILE 2>&1
+        ERROR=$?
+        if [ $ERROR -ne 0 ]; then
+            echoerror "Could not install curl (Error Code: $ERROR)."
+            exit 1
+        fi
+    fi
+}
+
 # *********** Building and Running HELK Images ***************
 build_run(){
-    echo "[HELK-INSTALLATION-INFO] Installing HELK via docker-compose"
+    echo "[HELK-INSTALLATION-INFO] Building HELK via docker-compose"
     echo "ADVERTISED_LISTENER=$host_ip" >> helk.env
-    docker-compose up -d >> $LOGFILE 2>&1
+    docker-compose build >> $LOGFILE 2>&1
+    ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not build HELK via docker-compose (Error Code: $ERROR)."
+        echo "get more details in /var/log/helk-install.log locally"
         exit 1
-    fi 
+    fi
+    echo "[HELK-INSTALLATION-INFO] Running HELK via docker-compose"
+    docker-compose up -d >> $LOGFILE 2>&1
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not run HELK via docker-compose (Error Code: $ERROR)."
+        exit 1
+    fi
 }
  
 # *********** Showing HELK Docker menu options ***************
@@ -49,7 +75,7 @@ show_banner() {
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
     echo "** HELK build version: 0.9 (Alpha)          **"
-    echo "** HELK ELK version: 6.2.2                  **"
+    echo "** HELK ELK version: 6.2.3                  **"
     echo "** License: BSD 3-Clause                    **"
     echo "**********************************************"
     echo " "
@@ -116,23 +142,13 @@ prepare_helk(){
         # *********** Check if docker is installed ***************
         if [ -x "$(command -v docker)" ]; then
             echo "[HELK-INSTALLATION-INFO] Docker already installed"
-            echo "[HELK-INSTALLATION-INFO] Dockerizing HELK.."
+            
         else
             echo "[HELK-INSTALLATION-INFO] Docker is not installed"
-            echo "[HELK-INSTALLATION-INFO] Checking if curl is installed first"
-            if [ -x "$(command -v curl)" ]; then
-                echo "[HELK-INSTALLATION-INFO] curl is already installed"
-                echo "[HELK-INSTALLATION-INFO] Ready to install  Docker.."
-            else
-                echo "[HELK-INSTALLATION-INFO] curl is not installed"
-                echo "[HELK-INSTALLATION-INFO] Installing curl before installing docker.."
-                apt-get install -y curl >> $LOGFILE 2>&1
-                ERROR=$?
-                if [ $ERROR -ne 0 ]; then
-                    echoerror "Could not install curl (Error Code: $ERROR)."
-                    exit 1
-                fi
-            fi
+
+            # ****** Install Curl if it is not installed *********
+            install_curl
+
             # ****** Installing via convenience script ***********
             echo "[HELK-INSTALLATION-INFO] Installing docker via convenience script.."
             curl -fsSL get.docker.com -o scripts/get-docker.sh >> $LOGFILE 2>&1
@@ -143,6 +159,16 @@ prepare_helk(){
                 echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
                 exit 1
             fi
+        fi
+        # ********** Check if docker-compose is installed *******
+        if [ -x "$(command -v docker-compose)" ]; then
+            echo "[HELK-INSTALLATION-INFO] Docker-compose already installed"
+        else
+            echo "[HELK-INSTALLATION-INFO] Docker-compose is not installed"
+
+            # ****** Install Curl if it is not installed *********
+            install_curl
+
             # ****** Installing docker-compose ***********
             echo "[HELK-INSTALLATION-INFO] Installing docker-compose .."
             curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
@@ -155,14 +181,14 @@ prepare_helk(){
         fi
     else
         # *********** Check if docker is installed ***************
-        if [ -x "$(command -v docker)" ]; then
-            echo "[HELK-INSTALLATION-INFO] Docker already installed"
-            echo "[HELK-INSTALLATION-INFO] Dockerizing HELK.."
+        if [ -x "$(command -v docker)" ] && [ -x "$(command -v docker-compose)" ]; then
+            echo "[HELK-INSTALLATION-INFO] Docker & Docker-compose already installed"
         else
-            echo "[HELK-INSTALLATION-INFO] Install docker for $systemKernel"
+            echo "[HELK-INSTALLATION-INFO] Install Docker & Docker-compose for $systemKernel"
             exit 1
         fi
     fi
+    echo "[HELK-INSTALLATION-INFO] Dockerizing HELK.."
     echo "[HELK-INSTALLATION-INFO] Checking local vm.max_map_count variable and setting it to 262144"
     MAX_MAP_COUNT=262144
     if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
@@ -205,6 +231,7 @@ show_banner
 prepare_helk
 build_run
 get_token
+sleep 20
 
 echo " "
 echo " "

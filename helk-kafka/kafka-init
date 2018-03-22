@@ -32,7 +32,7 @@ if [ -r /etc/default/rcS ]; then
   . /etc/default/rcS
 fi
 
-KAFKA_HOME=/opt/helk/kafka/kafka_2.11-1.0.0
+KAFKA_HOME=/opt/helk/kafka/kafka_2.11-1.0.1
 KAFKA_USER=root
 KAFKA_GROUP=root
 KAFKA_NICE=18
@@ -88,7 +88,6 @@ start() {
   # and a process possibly asking for status.
   echo $! > $KAFKA_PIDFILE_ZOOKEEPER
   echo "Kafka Zookeeper started."
-  sleep 5
 
   declare -a pids=($KAFKA_PIDFILE $KAFKA_PIDFILE_1 $KAFKA_PIDFILE_2)
   for p in ${pids[@]}; do 

@@ -1,9 +1,9 @@
-version: '3.2'
+version: '3'
 
 services:
 
   helk-elk:
-    build: ./helk-elk
+    image: cyb3rward0g/helk-elk:6.2.3
     container_name: helk-elk
     volumes:
       - esdata:/var/lib/elasticsearch
@@ -25,7 +25,7 @@ services:
         aliases:
           - helk_elk.hunt.local
   helk-kafka:
-    build: ./helk-kafka
+    image: cyb3rward0g/helk-kafka:1.0.1
     container_name: helk-kafka
     env_file: ./helk.env
     ports:
@@ -42,7 +42,7 @@ services:
         aliases:
           - helk_kafka.hunt.local
   helk-analytics:
-    build: ./helk-analytics/
+    image: cyb3rward0g/helk-analytics:0.0.2
     container_name: helk-analytics
     ports:
       - "8880:8880"

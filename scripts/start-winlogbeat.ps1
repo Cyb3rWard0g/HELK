@@ -29,10 +29,10 @@ function start-winlogbeat
         }    
     }
     
-    $winInstall_source = "https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-6.0.0-windows-x86_64.zip"
-    $winInstall_dest = ($env:ProgramFiles + "\winlogbeat-6.0.0-windows-x86_64.zip")
+    $winInstall_source = "https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-6.2.3-windows-x86_64.zip"
+    $winInstall_dest = ($env:ProgramFiles + "\winlogbeat-6.2.3-windows-x86_64.zip")
     $winconfig_dest = ($env:ProgramFiles + "\winlogbeat\winlogbeat.yml")
-    $winInstall_old = $env:ProgramFiles + "\winlogbeat-6.0.0-windows-x86_64"
+    $winInstall_old = $env:ProgramFiles + "\winlogbeat-6.2.3-windows-x86_64"
     $winInstall_new = $env:ProgramFiles + "\winlogbeat"
 
     if (Get-WmiObject -class win32_service | Where-Object {$_.Name -like "winlogbeat"})
