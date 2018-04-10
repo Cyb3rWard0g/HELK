@@ -3,11 +3,9 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
-FROM phusion/baseimage
+FROM cyb3rward0g/helk-base:0.0.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Kafka."
-
-USER root
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -17,24 +15,20 @@ RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Ubuntu base image.." \
   && apt-get update -qq \
   && echo "[HELK-DOCKER-INSTALLATION-INFO] Extracting templates from packages.." \
   && apt-get install -qqy \
-  openjdk-8-jre-headless \
-  wget \
-  sudo \
-  nano
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen
+  openjdk-8-jre-headless
+
 RUN apt-get -qy clean \
-  autoremove \
-  && rm -rf /var/lib/apt/lists/*
+  autoremove
 
 # *********** Creating the right directories ***************
-RUN bash -c 'mkdir -pv /opt/helk/{scripts,kafka}'
+RUN bash -c 'mkdir -pv /opt/helk/kafka'
  
 # *********** Install Kafka ***************
+ENV KAFKA_VERSION=1.1.0
 ENV KAFKA_LOGS_PATH=/var/log/kafka
-ENV KAFKA_HOME=/opt/helk/kafka/kafka_2.11-1.0.1
+ENV KAFKA_HOME=/opt/helk/kafka/kafka_2.11-${KAFKA_VERSION}
 
-RUN wget -qO- http://mirrors.advancedhosters.com/apache/kafka/1.0.1/kafka_2.11-1.0.1.tgz | sudo tar xvz -C /opt/helk/kafka/ \
+RUN wget -qO- http://mirrors.ocf.berkeley.edu/apache/kafka/1.1.0/kafka_2.11-${KAFKA_VERSION}.tgz | sudo tar xvz -C /opt/helk/kafka/ \
   && mkdir -v $KAFKA_LOGS_PATH \
   && mv ${KAFKA_HOME}/config/server.properties ${KAFKA_HOME}/config/backup_server.properties
 ADD *.properties ${KAFKA_HOME}/config/

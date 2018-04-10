@@ -22,7 +22,7 @@ echoerror() {
 systemKernel="$(uname -s)"
 
 # *********** Getting Jupyter Token ***************
-get_token(){
+get_jupyter_token(){
     echo "[HELK-INSTALLATION-INFO] Waiting for HELK services and Jupyter Server to start.."
     until curl -s localhost:8880 -o /dev/null; do
         sleep 1
@@ -48,7 +48,7 @@ install_curl(){
 }
 
 # *********** Building and Running HELK Images ***************
-build_run(){
+install_helk(){
     echo "[HELK-INSTALLATION-INFO] Building HELK via docker-compose"
     echo "ADVERTISED_LISTENER=$host_ip" >> helk.env
     docker-compose build >> $LOGFILE 2>&1
@@ -66,23 +66,62 @@ build_run(){
         exit 1
     fi
 }
- 
-# *********** Showing HELK Docker menu options ***************
-show_banner() {
-    echo " "
-	echo "**********************************************"	
-	echo "**          HELK - THE HUNTING ELK          **"
-    echo "**                                          **"
-    echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: 0.9 (Alpha)          **"
-    echo "** HELK ELK version: 6.2.3                  **"
-    echo "** License: BSD 3-Clause                    **"
-    echo "**********************************************"
-    echo " "
+
+install_docker(){
+    # ****** Installing via convenience script ***********
+    echo "[HELK-INSTALLATION-INFO] Installing docker via convenience script.."
+    curl -fsSL get.docker.com -o get-docker.sh >> $LOGFILE 2>&1
+    chmod +x get-docker.sh >> $LOGFILE 2>&1
+    ./get-docker.sh >> $LOGFILE 2>&1
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
+        exit 1
+    fi
+}
+
+install_docker_compose(){
+    echo "[HELK-INSTALLATION-INFO] Installing docker-compose.."
+    curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
+    chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not install docker-compose (Error Code: $ERROR)."
+        exit 1
+    fi
+}
+
+get_host_ip(){
+    # *********** Getting Host IP ***************
+    # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
+    echo "[HELK-INSTALLATION-INFO] Obtaining current host IP.."
+    case "${systemKernel}" in
+        Linux*)     host_ip=$(ip route get 1 | awk '{print $NF;exit}');;
+        Darwin*)    host_ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
+        *)          host_ip="UNKNOWN:${unameOut}"
+    esac
+}
+
+set_helk_ip(){    
+    # *********** Accepting Defaults or Allowing user to set HELK IP ***************
+    local ip_choice
+    local read_input
+    read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: " -e -i ${host_ip} ip_choice
+    read_input=$?
+    ip_choice="${ip_choice:-$host_ip}"
+    if [ $ip_choice != $host_ip ]; then
+        host_ip=$ip_choice
+    fi
+    if [ $read_input  = 142 ]; then
+       echo -e "\n[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}" 
+    else
+    echo "[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}"
+    fi
 }
 
 prepare_helk(){
     get_host_ip
+    set_helk_ip
     if [ "$systemKernel" == "Linux" ]; then
         # Reference: https://get.docker.com/
         echo "[HELK-INSTALLATION-INFO] HELK identified Linux as the system kernel"
@@ -148,17 +187,8 @@ prepare_helk(){
 
             # ****** Install Curl if it is not installed *********
             install_curl
-
-            # ****** Installing via convenience script ***********
-            echo "[HELK-INSTALLATION-INFO] Installing docker via convenience script.."
-            curl -fsSL get.docker.com -o scripts/get-docker.sh >> $LOGFILE 2>&1
-            chmod +x scripts/get-docker.sh >> $LOGFILE 2>&1
-            scripts/get-docker.sh >> $LOGFILE 2>&1
-            ERROR=$?
-            if [ $ERROR -ne 0 ]; then
-                echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
-                exit 1
-            fi
+            # ****** Installing Docker if it is not installed *********
+            install_docker
         fi
         # ********** Check if docker-compose is installed *******
         if [ -x "$(command -v docker-compose)" ]; then
@@ -168,16 +198,8 @@ prepare_helk(){
 
             # ****** Install Curl if it is not installed *********
             install_curl
-
-            # ****** Installing docker-compose ***********
-            echo "[HELK-INSTALLATION-INFO] Installing docker-compose .."
-            curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
-            chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
-            ERROR=$?
-            if [ $ERROR -ne 0 ]; then
-                echoerror "Could not install docker-compose (Error Code: $ERROR)."
-                exit 1
-            fi
+            # ****** Installing Docker-Compose *******************
+            install_docker_compose
         fi
     else
         # *********** Check if docker is installed ***************
@@ -200,38 +222,23 @@ prepare_helk(){
     fi
 }
 
-get_host_ip(){
-    # *********** Getting Host IP ***************
-    # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
-    echo "[HELK-INSTALLATION-INFO] Obtaining current host IP.."
-    case "${systemKernel}" in
-        Linux*)     host_ip=$(ip route get 1 | awk '{print $NF;exit}');;
-        Darwin*)    host_ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
-        *)          host_ip="UNKNOWN:${unameOut}"
-    esac
-    
-    # *********** Accepting Defaults or Allowing user to set HELK IP ***************
-    local ip_choice
-    local read_input
-    read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: " -e -i ${host_ip} ip_choice
-    read_input=$?
-    ip_choice="${ip_choice:-$host_ip}"
-    if [ $ip_choice != $host_ip ]; then
-        host_ip=$ip_choice
-    fi
-    if [ $read_input  = 142 ]; then
-       echo -e "\n[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}" 
-    else
-    echo "[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}"
-    fi
-}
+# *********** Showing HELK Docker menu options ***************
+echo " "
+echo "**********************************************"	
+echo "**          HELK - THE HUNTING ELK          **"
+echo "**                                          **"
+echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
+echo "** HELK build version: 0.9 (Alpha)          **"
+echo "** HELK ELK version: 6.2.3                  **"
+echo "** License: BSD 3-Clause                    **"
+echo "**********************************************"
+echo " "
 
 # *********** Running selected option ***************
-show_banner
 prepare_helk
-build_run
-get_token
-sleep 20
+install_helk
+get_jupyter_token
+sleep 45
 
 echo " "
 echo " "

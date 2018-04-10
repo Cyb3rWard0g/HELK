@@ -3,7 +3,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
-FROM phusion/baseimage
+FROM cyb3rward0g/helk-base:0.0.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for HELK Analytics."
 
@@ -16,20 +16,12 @@ RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Ubuntu base image.." \
   && echo "[HELK-DOCKER-INSTALLATION-INFO] Extracting templates from packages.." \
   && apt-get install -qqy \
   openjdk-8-jre-headless \
-  wget \
-  sudo \
-  nano \
   python3-pip \
   python-tk \
-  unzip \
-  zip \
-  locales
+  unzip
 
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen
 RUN apt-get -qy clean \
-  autoremove \
-  && rm -rf /var/lib/apt/lists/*
+  autoremove
 
 # *********** Upgrading PIP ***************
 RUN pip3 install --upgrade pip
@@ -55,7 +47,7 @@ RUN pip3 install scipy==1.0.0 \
   bokeh==0.12.14
 
 # *********** Creating the right directories ***************
-RUN bash -c 'mkdir -pv /opt/helk/{scripts,training,es-hadoop,spark}'
+RUN bash -c 'mkdir -pv /opt/helk/{training,es-hadoop,spark}'
 
 # *********** Adding HELK scripts and files to Container ***************
 ADD scripts/analytics-entrypoint.sh /opt/helk/scripts/

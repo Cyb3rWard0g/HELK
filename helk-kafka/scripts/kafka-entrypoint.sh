@@ -6,7 +6,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: BSD 3-Clause
 
-KAFKA_VERSION=2.11-1.0.1
+KAFKA_VERSION=1.1.0
 
 # Start graceful termination of HELK services that might be running before running the entrypoint script.
 _term() {
@@ -24,14 +24,20 @@ rm -f /var/run/kafka_zookeeper.pid \
 
    # *********** Start Kafka **************
 echo "[HELK-DOCKER-INSTALLATION-INFO] Setting current host IP to brokers server.properties files.."
-sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9092/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:9092/g" /opt/helk/kafka/kafka_${KAFKA_VERSION}/config/server.properties
-sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9093/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:9093/g" /opt/helk/kafka/kafka_${KAFKA_VERSION}/config/server-1.properties
-sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9094/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:9094/g" /opt/helk/kafka/kafka_${KAFKA_VERSION}/config/server-2.properties
+sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9092/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:9092/g" /opt/helk/kafka/kafka_2.11-${KAFKA_VERSION}/config/server.properties
+sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9093/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:9093/g" /opt/helk/kafka/kafka_2.11-${KAFKA_VERSION}/config/server-1.properties
+sed -i "s/advertised\.listeners\=PLAINTEXT:\/\/HELKIP\:9094/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:9094/g" /opt/helk/kafka/kafka_2.11-${KAFKA_VERSION}/config/server-2.properties
 echo "[HELK-DOCKER-INSTALLATION-INFO] Starting Kafka.."
 service kafka start
 sleep 30
 echo "[HELK-DOCKER-INSTALLATION-INFO] Creating Kafka winlogbeat Topic.."
-/opt/helk/kafka/kafka_${KAFKA_VERSION}/bin/kafka-topics.sh --create --zookeeper $ADVERTISED_LISTENER:2181 --replication-factor 3 --partitions 1 --topic winlogbeat
+/opt/helk/kafka/kafka_2.11-${KAFKA_VERSION}/bin/kafka-topics.sh --create --zookeeper $ADVERTISED_LISTENER:2181 --replication-factor 3 --partitions 1 --topic winlogbeat
+
+echo "[HELK-DOCKER-INSTALLATION-INFO] Creating Kafka winevent-sysmon-transformed Topic.."
+/opt/helk/kafka/kafka_2.11-${KAFKA_VERSION}/bin/kafka-topics.sh --create --zookeeper $ADVERTISED_LISTENER:2181 --replication-factor 3 --partitions 1 --topic sysmontransformed
+
+echo "[HELK-DOCKER-INSTALLATION-INFO] Creating Kafka winevent-security-transformed Topic.."
+/opt/helk/kafka/kafka_2.11-${KAFKA_VERSION}/bin/kafka-topics.sh --create --zookeeper $ADVERTISED_LISTENER:2181 --replication-factor 3 --partitions 1 --topic securitytransformed
 
 echo "[HELK-DOCKER-INSTALLATION-INFO] Pushing Spark Logs to console.."
 tail -f /var/log/kafka/helk-*.log

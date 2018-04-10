@@ -32,7 +32,7 @@ if [ -r /etc/default/rcS ]; then
   . /etc/default/rcS
 fi
 
-KAFKA_HOME=/opt/helk/kafka/kafka_2.11-1.0.1
+KAFKA_HOME=/opt/helk/kafka/kafka_2.11-1.1.0
 KAFKA_USER=root
 KAFKA_GROUP=root
 KAFKA_NICE=18

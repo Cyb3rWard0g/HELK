@@ -1,10 +1,9 @@
 version: '3'
 
 services:
-
-  helk-elk:
-    image: cyb3rward0g/helk-elk:6.2.3
-    container_name: helk-elk
+  helk-elasticsearch:
+    image: cyb3rward0g/helk-elasticsearch:6.2.3
+    container_name: helk-elasticsearch
     volumes:
       - esdata:/var/lib/elasticsearch
     environment:
@@ -14,18 +13,52 @@ services:
         soft: -1
         hard: -1
     ports:
-      - "80:80"
-      - "5044:5044"
       - "9000:9000"
-      - "8082:8082"
     restart: always
     networks:
       helk:
         ipv4_address: 172.18.0.2
         aliases:
-          - helk_elk.hunt.local
+          - helk_elasticsearch.hunt.local
+  helk-logstash:
+    image: cyb3rward0g/helk-logstash:6.2.3
+    container_name: helk-logstash
+    ports:
+      - "5044:5044"
+    restart: always
+    depends_on:
+      - helk-elasticsearch
+    networks:
+      helk:
+        ipv4_address: 172.18.0.5
+        aliases:
+          - helk_logstash.hunt.local
+  helk-kibana:
+    image: cyb3rward0g/helk-kibana:6.2.3
+    container_name: helk-kibana
+    restart: always
+    depends_on:
+      - helk-elasticsearch
+    networks:
+      helk:
+        ipv4_address: 172.18.0.6
+        aliases:
+          - helk_kibana.hunt.local
+  helk-nginx:
+    image: cyb3rward0g/helk-nginx:0.0.1
+    container_name: helk-nginx
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - helk-elasticsearch
+    networks:
+      helk:
+        ipv4_address: 172.18.0.7
+        aliases:
+          - helk_nginx.hunt.local
   helk-kafka:
-    image: cyb3rward0g/helk-kafka:1.0.1
+    image: cyb3rward0g/helk-kafka:0.0.1
     container_name: helk-kafka
     env_file: ./helk.env
     ports:
@@ -35,21 +68,21 @@ services:
       - "9094:9094"
     restart: always
     depends_on:
-      - helk-elk
+      - helk-elasticsearch
     networks:
       helk:
         ipv4_address: 172.18.0.3
         aliases:
           - helk_kafka.hunt.local
   helk-analytics:
-    image: cyb3rward0g/helk-analytics:0.0.2
+    image: cyb3rward0g/helk-analytics:0.0.3
     container_name: helk-analytics
     ports:
       - "8880:8880"
       - "4040:4040"
     restart: always
     depends_on:
-      - helk-elk
+      - helk-elasticsearch
     networks:
       helk:
         ipv4_address: 172.18.0.4

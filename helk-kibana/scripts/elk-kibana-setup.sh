@@ -13,7 +13,7 @@
 # https://github.com/elastic/kibana/issues/14872
 
 # *********** Setting Variables ***************
-KIBANA="http://localhost:5601"
+KIBANA="http://helk-kibana:5601"
 TIME_FIELD="@timestamp"
 DEFAULT_INDEX="logs-endpoint-winevent-sysmon-*"
 DIR=/opt/helk/dashboards
@@ -22,7 +22,7 @@ DIR=/opt/helk/dashboards
 declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*")
 
 # *********** Waiting for Kibana to be available ***************
-until curl -s localhost:5601 -o /dev/null; do
+until curl -s helk-kibana:5601 -o /dev/null; do
     sleep 1
 done
 
