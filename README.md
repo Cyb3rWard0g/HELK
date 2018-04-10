@@ -24,6 +24,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 * **Jupyter Notebook:** An open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
 
 # Resources
+* [Welcome to HELK! : Enabling Advanced Analytics Capabilities](https://cyberwardog.blogspot.com/2018/04/welcome-to-helk-enabling-advanced_9.html)
 * [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
 * [An Integrated API for Mixing Graph and Relational Queries](https://cs.stanford.edu/~matei/papers/2016/grades_graphframes.pdf)
 * [Graph queries in Spark SQL](https://www.slideshare.net/SparkSummit/graphframes-graph-queries-in-spark-sql)
@@ -69,14 +70,14 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Integrate Spark & Graphframes
 - [X] Add Jupyter Notebook on the top of Spark
 - [X] Kafka Integration
+- [ ] Kubernetes Deployment
 - [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
 - [ ] MITRE ATT&CK mapping to logs or dashboards
 - [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook) 
 - [ ] Somehow integrate neo4j spark connectors with build
-- [ ] Install Elastalert & Create Rules
 - [ ] Nxlog parsers (Logstash Filters)
 - [ ] Add more network data sources (i.e Bro)
 - [ ] Research & integrate spark structured direct streaming
-- [ ] Research & intgrate KSQL
+- [ ] Research & integrate KSQL
 
 More coming soon...
