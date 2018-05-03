@@ -1,5 +1,5 @@
 {
-  "template" : "logs-endpoint-winevent-sysmon-*",
+  "index_patterns" : "logs-endpoint-winevent-sysmon-*",
   "settings" : {
     "index.refresh_interval": "5s"
   },
@@ -22,7 +22,10 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "dst_port_number":{"type":"integer"},
+        "@date_creation":{"type":"date"},
+        "@date_creation_previous":{"type":"date"},
+        "port_dst_number":{"type":"integer"},
+        "port_src_number":{"type":"integer"},
         "event_id":{"type":"integer"},
         "geoip":{
           "properties":{
@@ -34,12 +37,12 @@
         },
         "network_initiated":{"type":"boolean"},
         "process_id":{"type":"integer"},
-        "thread_newthreadid":{"type":"integer"},
+        "thread_new_id":{"type":"integer"},
         "image_signed":{"type":"boolean"},
         "process_parent_id":{"type":"integer"},
         "process_target_id":{"type":"integer"},
-        "terminal_session_id":{"type":"integer"},
-        "src_port_number":{"type":"integer"},
+        "user_terminal_session_id":{"type":"integer"},
+        "port_number":{"type":"integer"},
         "thread_id":{"type":"integer"},
         "version":{"type":"integer"}
       }

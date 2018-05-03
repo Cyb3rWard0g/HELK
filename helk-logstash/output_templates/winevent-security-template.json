@@ -1,5 +1,5 @@
 {
-  "template" : "logs-endpoint-winevent-security-*",
+  "index_patterns" : "logs-endpoint-winevent-security-*",
   "settings" : {
     "index.refresh_interval": "5s"
   },
@@ -22,13 +22,13 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "system_new_time":{"type":"date"},
-        "system_previous_time":{"type":"date"},
+        "@date_new_time":{"type":"date"},
+        "@date_previous_time":{"type":"date"},
         "process_id":{"type":"integer"},
         "process_target_id":{"type":"integer"},
         "process_parent_id":{"type":"integer"},
-        "src_port_number":{"type":"integer"},
-        "dst_port_number":{"type":"integer"},
+        "port_src_number":{"type":"integer"},
+        "port_dst_number":{"type":"integer"},
         "version":{"type":"integer"}
       }
     }

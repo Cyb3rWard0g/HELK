@@ -1,5 +1,5 @@
 {
-  "template" : "logs-endpoint-winevent-system-*",
+  "index_patterns" : "logs-endpoint-winevent-system-*",
   "settings" : {
     "index.refresh_interval": "5s"
   },

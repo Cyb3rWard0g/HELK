@@ -23,8 +23,8 @@ RUN apt-get -qy clean \
   autoremove
 
 # *********** Adding HELK scripts and files to Container ***************
-ADD scripts/entrypoint.sh /opt/helk/scripts/
-RUN chmod +x /opt/helk/scripts/entrypoint.sh
+ADD scripts/nginx-entrypoint.sh /opt/helk/scripts/
+RUN chmod +x /opt/helk/scripts/nginx-entrypoint.sh
 
 # *********** Installing Nginx ***************
 RUN apt-get install -qqy nginx \
@@ -36,4 +36,4 @@ RUN apt-get update -qq
 # *********** RUN HELK ***************
 EXPOSE 80
 WORKDIR "/opt/helk/scripts/"
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["./nginx-entrypoint.sh"]

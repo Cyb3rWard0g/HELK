@@ -1,5 +1,5 @@
 {
-  "template" : "logs-endpoint-powershell-direct-*",
+  "index_patterns" : "logs-endpoint-powershell-direct-*",
   "settings" : {
     "index.refresh_interval": "5s"
   },

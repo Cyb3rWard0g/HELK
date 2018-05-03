@@ -5,7 +5,7 @@
 
 FROM phusion/baseimage:0.10.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
-LABEL description="Dockerfile base Image.."
+LABEL description="Dockerfile HELK Base Image.."
 
 ENV DEBIAN_FRONTEND noninteractive
 

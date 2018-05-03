@@ -22,7 +22,7 @@
 #
 # ------------ Data path ------------------
 #
-# Which directory should be used by logstash and its plugins
+# Which directory should be used by LS_SETTINGS_DIRstash and its plugins
 # for any persistent needs. Defaults to LOGSTASH_HOME/data
 #
 # path.data:
@@ -51,7 +51,7 @@ pipeline.batch.size: 300
 # pipeline.batch.delay: 5
 #
 # Force Logstash to exit during shutdown even if there are still inflight
-# events in memory. By default, logstash will refuse to quit until all
+# events in memory. By default, LS_SETTINGS_DIRstash will refuse to quit until all
 # received events have been pushed to the outputs.
 #
 # WARNING: enabling this can lead to data loss during shutdown
@@ -62,7 +62,7 @@ pipeline.batch.size: 300
 #
 # Where to fetch the pipeline configuration for the main pipeline
 #
-path.config: /etc/logstash/pipeline
+# path.config: /etc/LS_SETTINGS_DIRstash/pipeline
 #
 # Pipeline configuration string for the main pipeline
 #
@@ -81,8 +81,8 @@ path.config: /etc/logstash/pipeline
 #
 # config.reload.interval: 3s
 #
-# Show fully compiled configuration as debug log message
-# NOTE: --log.level must be 'debug'
+# Show fully compiled configuration as debug LS_SETTINGS_DIR message
+# NOTE: --LS_SETTINGS_DIR.level must be 'debug'
 #
 # config.debug: false
 #
@@ -191,13 +191,13 @@ path.config: /etc/logstash/pipeline
 # http.host: "127.0.0.1"
 #
 # Bind port for the metrics REST endpoint, this option also accept a range
-# (9600-9700) and logstash will pick up the first available ports.
+# (9600-9700) and LS_SETTINGS_DIRstash will pick up the first available ports.
 #
 # http.port: 9600-9700
 #
 # ------------ Debugging Settings --------------
 #
-# Options for log.level:
+# Options for LS_SETTINGS_DIR.level:
 #   * fatal
 #   * error
 #   * warn
@@ -205,10 +205,16 @@ path.config: /etc/logstash/pipeline
 #   * debug
 #   * trace
 #
-# log.level: info
-path.logs: /var/log/logstash
+# LS_SETTINGS_DIR.level: info
+# path.LS_SETTINGS_DIRs: /var/LS_SETTINGS_DIR/LS_SETTINGS_DIRstash
 #
 # ------------ Other Settings --------------
 #
 # Where to find custom plugins
 # path.plugins: []
+
+log.level: warn
+http.host: "0.0.0.0"
+xpack.monitoring.elasticsearch.url: http://helk-elasticsearch:9200
+xpack.monitoring.elasticsearch.username: logstash_system
+xpack.monitoring.elasticsearch.password: changeme

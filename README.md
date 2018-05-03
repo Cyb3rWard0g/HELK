@@ -25,11 +25,14 @@ The project is currently in an alpha stage, which means that the code and the fu
 
 # Resources
 * [Welcome to HELK! : Enabling Advanced Analytics Capabilities](https://cyberwardog.blogspot.com/2018/04/welcome-to-helk-enabling-advanced_9.html)
+* [Spark](https://spark.apache.org/docs/latest/index.html)
+* [Spark Standalone Mode](https://spark.apache.org/docs/latest/spark-standalone.html)
 * [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
 * [An Integrated API for Mixing Graph and Relational Queries](https://cs.stanford.edu/~matei/papers/2016/grades_graphframes.pdf)
 * [Graph queries in Spark SQL](https://www.slideshare.net/SparkSummit/graphframes-graph-queries-in-spark-sql)
 * [Graphframes Overview](http://graphframes.github.io/index.html)
 * [Elastic Producs](https://www.elastic.co/products)
+* [Elastic Subscriptions](https://www.elastic.co/subscriptions)
 * [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
 * [spujadas elk-docker](https://github.com/spujadas/elk-docker)
 * [deviantony docker-elk](https://github.com/deviantony/docker-elk)
@@ -46,10 +49,28 @@ The project is currently in an alpha stage, which means that the code and the fu
 * [Installation](https://github.com/Cyb3rWard0g/HELK/wiki/Installation)
 
 ## (Docker) Accessing the HELK's Images
-By default, the HELK's containers are run in the background (Detached). Therefore, you will have to access your docker images by running the following commands:
+By default, the HELK's containers are run in the background (Detached). You can see all your docker containers by running the following command:
+```
+sudo docker ps
+
+CONTAINER ID        IMAGE                                  COMMAND                  CREATED             STATUS              PORTS                                            NAMES
+a97bd895a2b3        cyb3rward0g/helk-spark-worker:2.3.0    "./spark-worker-entr…"   About an hour ago   Up About an hour    0.0.0.0:8082->8082/tcp                           helk-spark-worker2
+cbb31f688e0a        cyb3rward0g/helk-spark-worker:2.3.0    "./spark-worker-entr…"   About an hour ago   Up About an hour    0.0.0.0:8081->8081/tcp                           helk-spark-worker
+5d58068aa7e3        cyb3rward0g/helk-kafka-broker:1.1.0    "./kafka-entrypoint.…"   About an hour ago   Up About an hour    0.0.0.0:9092->9092/tcp                           helk-kafka-broker
+bdb303b09878        cyb3rward0g/helk-kafka-broker:1.1.0    "./kafka-entrypoint.…"   About an hour ago   Up About an hour    0.0.0.0:9093->9093/tcp                           helk-kafka-broker2
+7761d1e43d37        cyb3rward0g/helk-nginx:0.0.2           "./nginx-entrypoint.…"   About an hour ago   Up About an hour    0.0.0.0:80->80/tcp                               helk-nginx
+ede2a2503030        cyb3rward0g/helk-jupyter:0.32.1        "./jupyter-entrypoin…"   About an hour ago   Up About an hour    0.0.0.0:4040->4040/tcp, 0.0.0.0:8880->8880/tcp   helk-jupyter
+ede19510e959        cyb3rward0g/helk-logstash:6.2.4        "/usr/local/bin/dock…"   About an hour ago   Up About an hour    5044/tcp, 9600/tcp                               helk-logstash
+e92823b24b2d        cyb3rward0g/helk-spark-master:2.3.0    "./spark-master-entr…"   About an hour ago   Up About an hour    0.0.0.0:7077->7077/tcp, 0.0.0.0:8080->8080/tcp   helk-spark-master
+6125921b310d        cyb3rward0g/helk-kibana:6.2.4          "./kibana-entrypoint…"   About an hour ago   Up About an hour    5601/tcp                                         helk-kibana
+4321d609ae07        cyb3rward0g/helk-zookeeper:3.4.10      "./zookeeper-entrypo…"   About an hour ago   Up About an hour    2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp       helk-zookeeper
+9cbca145fb3e        cyb3rward0g/helk-elasticsearch:6.2.4   "/usr/local/bin/dock…"   About an hour ago   Up About an hour    9200/tcp, 9300/tcp                               helk-elasticsearch
+```
+
+Then, you will just have to pick which container you want to access and run the following following commands:
 ```
 sudo docker exec -ti <image-name> bash
-root@7a9d6443a4bf:/opt/helk/scripts#
+root@ede2a2503030:/opt/helk/scripts#
 ```
 
 # Author
@@ -70,14 +91,19 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Integrate Spark & Graphframes
 - [X] Add Jupyter Notebook on the top of Spark
 - [X] Kafka Integration
-- [ ] Kubernetes Deployment
+- [X] Default X-Pack Basic - Free License Build for ELKStack
+- [X] Spark Standalone Cluster Manager integration
+- [X] Apache Arrow Integration for Pandas Dataframes
+- [ ] Zepplin Notebook Docker option
+- [ ] KSQL Client & Server Deployment (Waiting for v5.0)
+- [ ] Kubernetes Cluster Migration
+- [ ] OSQuery Data Ingestion
 - [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
 - [ ] MITRE ATT&CK mapping to logs or dashboards
-- [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook) 
+- [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook)
 - [ ] Somehow integrate neo4j spark connectors with build
 - [ ] Nxlog parsers (Logstash Filters)
 - [ ] Add more network data sources (i.e Bro)
 - [ ] Research & integrate spark structured direct streaming
-- [ ] Research & integrate KSQL
 
 More coming soon...

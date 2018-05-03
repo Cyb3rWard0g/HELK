@@ -15,7 +15,7 @@ server.host: "helk-kibana"
 #server.maxPayloadBytes: 1048576
 
 # The Kibana server's name.  This is used for display purposes.
-#server.name: "your-hostname"
+server.name: "helk-kibana"
 
 # The URL of the Elasticsearch instance to use for all your queries.
 elasticsearch.url: "http://helk-elasticsearch:9200"
@@ -82,7 +82,7 @@ elasticsearch.requestTimeout: 60000
 #pid.file: /var/run/kibana.pid
 
 # Enables you specify a file where Kibana stores log output.
-#logging.dest: stdout
+logging.dest: /usr/share/kibana/config/kibana_logs.log
 
 # Set the value of this setting to true to suppress all logging output.
 #logging.silent: false
@@ -100,3 +100,8 @@ elasticsearch.requestTimeout: 60000
 
 # Experimental Visualizations:
 "vega": {"enableExternalUrls": true}
+
+# Default Kibana configuration from kibana-docker.
+elasticsearch.username: elastic
+elasticsearch.password: changeme
+xpack.monitoring.ui.container.elasticsearch.enabled: true

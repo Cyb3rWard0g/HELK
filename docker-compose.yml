@@ -2,98 +2,164 @@ version: '3'
 
 services:
   helk-elasticsearch:
-    image: cyb3rward0g/helk-elasticsearch:6.2.3
+    image: cyb3rward0g/helk-elasticsearch:6.2.4
     container_name: helk-elasticsearch
     volumes:
-      - esdata:/var/lib/elasticsearch
+      - esdata:/usr/share/elasticsearch/data
     environment:
-      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-XmsMEMg -XmxMEMg"
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    ports:
-      - "9000:9000"
     restart: always
     networks:
       helk:
-        ipv4_address: 172.18.0.2
         aliases:
           - helk_elasticsearch.hunt.local
   helk-logstash:
-    image: cyb3rward0g/helk-logstash:6.2.3
+    image: cyb3rward0g/helk-logstash:6.2.4
     container_name: helk-logstash
-    ports:
-      - "5044:5044"
+    environment:
+      - "LS_JAVA_OPTS=-Xms2g -Xmx2g"
     restart: always
     depends_on:
       - helk-elasticsearch
     networks:
       helk:
-        ipv4_address: 172.18.0.5
         aliases:
           - helk_logstash.hunt.local
   helk-kibana:
-    image: cyb3rward0g/helk-kibana:6.2.3
+    image: cyb3rward0g/helk-kibana:6.2.4
     container_name: helk-kibana
     restart: always
     depends_on:
       - helk-elasticsearch
     networks:
       helk:
-        ipv4_address: 172.18.0.6
         aliases:
           - helk_kibana.hunt.local
   helk-nginx:
-    image: cyb3rward0g/helk-nginx:0.0.1
+    image: cyb3rward0g/helk-nginx:0.0.2
     container_name: helk-nginx
     ports:
       - "80:80"
     restart: always
     depends_on:
-      - helk-elasticsearch
+      - helk-kibana
     networks:
       helk:
-        ipv4_address: 172.18.0.7
         aliases:
           - helk_nginx.hunt.local
-  helk-kafka:
-    image: cyb3rward0g/helk-kafka:0.0.1
-    container_name: helk-kafka
-    env_file: ./helk.env
+  helk-spark-master:
+    image: cyb3rward0g/helk-spark-master:2.3.0
+    container_name: helk-spark-master
     ports:
-      - "2181:2181"
-      - "9092:9092"
-      - "9093:9093"
-      - "9094:9094"
+      - "8080:8080"
+      - "7077:7077"
     restart: always
     depends_on:
       - helk-elasticsearch
     networks:
       helk:
-        ipv4_address: 172.18.0.3
         aliases:
-          - helk_kafka.hunt.local
-  helk-analytics:
-    image: cyb3rward0g/helk-analytics:0.0.3
-    container_name: helk-analytics
+          - helk_spark_master.hunt.local
+  helk-spark-worker:
+    image: cyb3rward0g/helk-spark-worker:2.3.0
+    container_name: helk-spark-worker
+    environment:
+      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_WEBUI_PORT=8081
+    ports:
+      - "8081:8081"
+    restart: always
+    depends_on:
+      - helk-spark-master
+    networks:
+      helk:
+        aliases:
+          - helk_spark_worker.hunt.local
+  helk-spark-worker2:
+    image: cyb3rward0g/helk-spark-worker:2.3.0
+    container_name: helk-spark-worker2
+    environment:
+      - SPARK_WORKER_MEMORY=1g
+      - SPARK_WORKER_WEBUI_PORT=8082
+    ports:
+      - "8082:8082"
+    restart: always
+    depends_on:
+      - helk-spark-master
+    networks:
+      helk:
+        aliases:
+          - helk_spark_worker2.hunt.local
+  helk-jupyter:
+    image: cyb3rward0g/helk-jupyter:0.32.1
+    container_name: helk-jupyter
     ports:
       - "8880:8880"
-      - "4040:4040"
+      - "4040-4050:4040"
+    restart: always
+    depends_on:
+      - helk-kibana
+    networks:
+      helk:
+        aliases:
+          - helk_jupyter.hunt.local
+  helk-zookeeper:
+    image: cyb3rward0g/helk-zookeeper:3.4.10
+    container_name: helk-zookeeper
+    ports:
+      - "2181:2181"
     restart: always
     depends_on:
       - helk-elasticsearch
     networks:
       helk:
-        ipv4_address: 172.18.0.4
         aliases:
-          - helk_analytics.hunt.local
+          - helk_zookeeper.hunt.local
+  helk-kafka-broker:
+    image: cyb3rward0g/helk-kafka-broker:1.1.0
+    container_name: helk-kafka-broker
+    restart: always
+    depends_on:
+      - helk-zookeeper
+    environment:
+      - KAFKA_BROKER_NAME=helk-kafka-broker
+      - KAFKA_BROKER_ID=1
+      - KAFKA_BROKER_PORT=9092
+      - REPLICATION_FACTOR=2
+      - ADVERTISED_LISTENER=HOSTIP
+      - ZOOKEEPER_NAME=helk-zookeeper
+    ports:
+      - "9092:9092"
+    networks:
+      helk:
+        aliases:
+          - helk_kafka_broker.hunt.local
+  helk-kafka-broker2:
+    image: cyb3rward0g/helk-kafka-broker:1.1.0
+    container_name: helk-kafka-broker2
+    restart: always
+    depends_on:
+      - helk-zookeeper
+    environment:
+      - KAFKA_BROKER_NAME=helk-kafka-broker2
+      - KAFKA_BROKER_ID=2
+      - KAFKA_BROKER_PORT=9093
+      - REPLICATION_FACTOR=2
+      - ADVERTISED_LISTENER=HOSTIP
+      - ZOOKEEPER_NAME=helk-zookeeper
+    ports:
+      - "9093:9093"
+    networks:
+      helk:
+        aliases:
+          - helk_kafka_broker.hunt.local 
 networks:
   helk:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.18.0.0/16
 
 volumes:
   esdata:

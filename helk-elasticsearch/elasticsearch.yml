@@ -30,11 +30,11 @@ node.name: helk-1
 #
 # Path to directory where to store the data (separate multiple locations by comma):
 #
-path.data: /var/lib/elasticsearch
+#path.data: /var/lib/elasticsearch
 #
 # Path to log files:
 #
-path.logs: /var/log/elasticsearch
+#path.logs: /var/log/elasticsearch
 #
 # ----------------------------------- Memory -----------------------------------
 #
@@ -53,7 +53,8 @@ bootstrap.memory_lock: true
 # Set the bind address to a specific IP (IPv4 or IPv6):
 #
 #network.host: localhost
-network.host: ["localhost", "172.18.0.2"]
+#network.host: ["localhost", "172.18.0.2"]
+network.host: 0.0.0.0
 #
 # Set a custom port for HTTP:
 #
@@ -70,7 +71,11 @@ network.host: ["localhost", "172.18.0.2"]
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):
 #
-#discovery.zen.minimum_master_nodes:
+# minimum_master_nodes need to be explicitly set when bound on a public IP
+# set to 1 to allow single node clusters
+# Details: https://github.com/elastic/elasticsearch/pull/17288
+discovery.zen.minimum_master_nodes: 1
+discovery.type: single-node
 #
 # For more information, consult the zen discovery module documentation.
 #
@@ -87,5 +92,11 @@ network.host: ["localhost", "172.18.0.2"]
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
-discovery.type: single-node
-discovery.zen.minimum_master_nodes: 1
+
+#https://www.elastic.co/subscriptions
+# The images are available in three different configurations or "flavors". 
+# The basic flavor, which is the default, ships with X-Pack Basic features pre-installed 
+# and automatically activated with a free licence. The platinum flavor features all X-Pack 
+# functionally under a 30-day trial licence. The oss flavor does not include X-Pack, 
+# and contains only open-source Elasticsearch.
+xpack.license.self_generated.type: basic

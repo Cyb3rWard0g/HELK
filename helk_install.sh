@@ -21,13 +21,39 @@ echoerror() {
 # *********** Check System Kernel Name ***************
 systemKernel="$(uname -s)"
 
+# ********** Check Minimum Requirements **************
+check_min_requirements(){
+    echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $systemKernel box"
+    if [ "$systemKernel" == "Linux" ]; then 
+        AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $4 }')
+        ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $4/2 }')
+        AVAILABLE_DISK=$(df -h | awk '$NF=="/"{printf "%.f\t\t", $4}')
+        
+        if [ "${AVAILABLE_MEMORY}" -ge "10" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
+            echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
+            echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
+        else
+            echo "[HELK-INSTALLATION-ERROR] YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY OR DISK SPACE"
+            echo "[HELK-INSTALLATION-ERROR] Available Memory: $AVAILABLE_MEMORY"
+            echo "[HELK-INSTALLATION-ERROR] Available Disk: $AVAILABLE_DISK"
+            echo "[HELK-INSTALLATION-ERROR] Check the requirements section in our installation Wiki"
+            echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+            exit 1
+        fi
+    else
+        echo "[HELK-INSTALLATION-INFO] Make sure you have at least 12GB of available memory!!!!!!"
+        echo "[HELK-INSTALLATION-INFO] Make sure you have at least 50GB of available disk space!!!!!"
+        echo "[HELK-INSTALLATION-INFO] I could not calculate available memory or disk space for $systemKernel!!!!!"
+    fi
+}
+
 # *********** Getting Jupyter Token ***************
 get_jupyter_token(){
     echo "[HELK-INSTALLATION-INFO] Waiting for HELK services and Jupyter Server to start.."
     until curl -s localhost:8880 -o /dev/null; do
         sleep 1
     done
-    jupyter_token="$(docker exec -ti helk-analytics jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
+    jupyter_token="$(docker exec -ti helk-jupyter jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
 }
 
 # ********** Install Curl ********************
@@ -50,7 +76,8 @@ install_curl(){
 # *********** Building and Running HELK Images ***************
 install_helk(){
     echo "[HELK-INSTALLATION-INFO] Building HELK via docker-compose"
-    echo "ADVERTISED_LISTENER=$host_ip" >> helk.env
+
+    # ****** Building HELK ***********
     docker-compose build >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
@@ -58,6 +85,8 @@ install_helk(){
         echo "get more details in /var/log/helk-install.log locally"
         exit 1
     fi
+    
+    # ****** Running HELK ***********
     echo "[HELK-INSTALLATION-INFO] Running HELK via docker-compose"
     docker-compose up -d >> $LOGFILE 2>&1
     ERROR=$?
@@ -67,8 +96,8 @@ install_helk(){
     fi
 }
 
+# ****** Installing via convenience script ***********
 install_docker(){
-    # ****** Installing via convenience script ***********
     echo "[HELK-INSTALLATION-INFO] Installing docker via convenience script.."
     curl -fsSL get.docker.com -o get-docker.sh >> $LOGFILE 2>&1
     chmod +x get-docker.sh >> $LOGFILE 2>&1
@@ -220,6 +249,14 @@ prepare_helk(){
             echoerror "Could not set vm.max_map_count to 262144 (Error Code: $ERROR)."
         fi
     fi
+
+    echo "[HELK-INSTALLATION-INFO] Setting KAFKA ADVERTISED_LISTENER value..."
+    # ****** Setting KAFKA ADVERTISED_LISTENER environment variable ***********
+    sed -i "s/ADVERTISED_LISTENER=HOSTIP/ADVERTISED_LISTENER=$host_ip/g" docker-compose.yml
+
+    echo "[HELK-INSTALLATION-INFO] Setting ES_JAVA_OPTS value..."
+    # ****** Setting ES JAVA OPTS environment variable ***********
+    sed -i "s/ES_JAVA_OPTS\=\-XmsMEMg \-XmxMEMg/ES_JAVA_OPTS\=\-Xms${ES_MEMORY}g \-Xmx${ES_MEMORY}g/g" docker-compose.yml
 }
 
 # *********** Showing HELK Docker menu options ***************
@@ -229,16 +266,17 @@ echo "**          HELK - THE HUNTING ELK          **"
 echo "**                                          **"
 echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
 echo "** HELK build version: 0.9 (Alpha)          **"
-echo "** HELK ELK version: 6.2.3                  **"
+echo "** HELK ELK version: 6.2.4                  **"
 echo "** License: BSD 3-Clause                    **"
 echo "**********************************************"
 echo " "
 
 # *********** Running selected option ***************
+check_min_requirements
 prepare_helk
 install_helk
 get_jupyter_token
-sleep 45
+sleep 180
 
 echo " "
 echo " "
