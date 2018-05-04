@@ -79,6 +79,18 @@ Helpful resources to learn a little bit more about the HELK and its components. 
 | [Spark SQL, DataFrames and Datasets Guide](https://spark.apache.org/docs/latest/sql-programming-guide.html) | Spark SQL, DataFrames and Datasets Guide. | [@ApacheSpark](https://twitter.com/ApacheSpark)|
 | [Spark Python API](https://spark.apache.org/docs/latest/api/python/index.html) | Spark Python API Docs. | [@ApacheSpark](https://twitter.com/ApacheSpark)|
 | [Apache Arrow in Spark](https://spark.apache.org/docs/latest/sql-programming-guide.html#pyspark-usage-guide-for-pandas-with-apache-arrow) | Spark Python API Docs. | [@ApacheSpark](https://twitter.com/ApacheSpark)|
+| [7 steps for a developer to learn apache spark](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/7-steps-for-a-developer-to-learn-apache-spark.pdf) | 7 steps for a developer to learn apache spark | Databricks |
+| [A Gentle Introduction to Apache Spark](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/A-Gentle-Introduction-to-Apache-Spark.pdf) | A Gentle Introduction to Apache Spark | Databricks |
+| [Building Continuous Applications with Apache Spark](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Building-Continuous-Applications-with-Apache-Spark.pdf) | Building Continuous Applications with Apache Spark | Databricks |
+| [Data Scientists Guide to Apache-Spark](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Data-Scientists-Guide-to-Apache-Spark.pdf) | Data Scientists Guide to Apache Spark | Databricks |
+| [Getting Started With Apache Spark On Azure Databricks](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Getting-Started-With-Apache-Spark-On-Azure-Databricks.pdf) | Getting Started With Apache Spark On Azure Databricks | Databricks |
+| [Guide to Data Science at Scale](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Guide-to-Data-Science-at-Scale.pdf) | Guide to Data Science at Scale | Databricks |
+
+## Papers
+
+| Name | Description | Author |
+|--------|---------|-------|
+| [Spark Cluster Computing with Working Sets](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Spark_Cluster_Computing_with_Working_Sets.pdf) | Spark Cluster Computing with Working Sets | Matei Zaharia, Mosharaf Chowdhury, Michael J. Franklin, Scott Shenker, Ion Stoica |
 
 # GraphFrames (Spark)
 
@@ -96,11 +108,4 @@ Helpful resources to learn a little bit more about the HELK and its components. 
 
 | Name | Description | Author |
 |--------|---------|-------|
-| [Spark Cluster Computing with Working Sets](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Spark_Cluster_Computing_with_Working_Sets.pdf) | Spark Cluster Computing with Working Sets | Matei Zaharia, Mosharaf Chowdhury, Michael J. Franklin, Scott Shenker, Ion Stoica |
 | [GraphFrames](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/GraphFrames_Introduction.pdf) | An Integrated API for Mixing Graph and Relational Queries | Ankur Dave, Alekh Jindal, Li Erran Li, Reynold Xin, Joseph Gonzalez, Matei Zaharia |
-| [7 steps for a developer to learn apache spark](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/7-steps-for-a-developer-to-learn-apache-spark.pdf) | 7 steps for a developer to learn apache spark | Databricks |
-| [A Gentle Introduction to Apache Spark](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/A-Gentle-Introduction-to-Apache-Spark.pdf) | A Gentle Introduction to Apache Spark | Databricks |
-| [Building Continuous Applications with Apache Spark](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Building-Continuous-Applications-with-Apache-Spark.pdf) | Building Continuous Applications with Apache Spark | Databricks |
-| [Data Scientists Guide to Apache-Spark](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Data-Scientists-Guide-to-Apache-Spark.pdf) | Data Scientists Guide to Apache Spark | Databricks |
-| [Getting Started With Apache Spark On Azure Databricks](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Getting-Started-With-Apache-Spark-On-Azure-Databricks.pdf) | Getting Started With Apache Spark On Azure Databricks | Databricks |
-| [Guide to Data Science at Scale](https://github.com/Cyb3rWard0g/HELK/blob/master/resources/papers/Guide-to-Data-Science-at-Scale.pdf) | Guide to Data Science at Scale | Databricks |
