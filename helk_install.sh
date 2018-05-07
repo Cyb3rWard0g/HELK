@@ -286,7 +286,6 @@ echo "** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH TH
 echo "***********************************************************************************"
 echo " "
 echo "HELK KIBANA URL: http://${host_ip}"
-echo "HELK ELASTICSEARCH EXTERNAL URL: http://${host_ip}:8082"
 echo "HELK KIBANA & ELASTICSEARCH USER: helk"
 echo "HELK KIBANA & ELASTICSEARCH PASSWORD: hunting"
 echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
