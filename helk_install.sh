@@ -28,7 +28,7 @@ check_min_requirements(){
         AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $4 }')
         ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $4/2 }')
         AVAILABLE_DISK=$(df -h | awk '$NF=="/"{printf "%.f\t\t", $4}')
-        
+
         if [ "${AVAILABLE_MEMORY}" -ge "10" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
@@ -105,11 +105,18 @@ install_docker(){
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
-        echo "[HELK-INSTALLATION-INFO] Trying to docker install via snap.."
-        snap install docker >> $LOGFILE 2>&1
-        ERROR=$?
-        if [ $ERROR -ne 0 ]; then
-            echoerror "Could not install docker via snap (Error Code: $ERROR)."
+        if [ -x "$(command -v snap)" ]; then
+            SNAP_VERSION=$(snap version | grep -w 'snap' | awk '{print $2}')
+            echo "[HELK-INSTALLATION-INFO] Snap v$SNAP_VERSION is available. Trying to install docker via snap.."
+            snap install docker >> $LOGFILE 2>&1
+            ERROR=$?
+            if [ $ERROR -ne 0 ]; then
+                echoerror "Could not install docker via snap (Error Code: $ERROR)."
+                exit 1
+            fi
+            echo "[HELK-INSTALLATION-INFO] Docker successfully installed via snap."            
+        else
+            echo "[HELK-INSTALLATION-INFO] Docker could not be installed. Check /var/log/helk-install.log for details."
             exit 1
         fi
     fi
