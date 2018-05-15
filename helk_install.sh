@@ -105,7 +105,13 @@ install_docker(){
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
-        exit 1
+        echo "[HELK-INSTALLATION-INFO] Trying to docker install via snap.."
+        snap install docker >> $LOGFILE 2>&1
+        ERROR=$?
+        if [ $ERROR -ne 0 ]; then
+            echoerror "Could not install docker via snap (Error Code: $ERROR)."
+            exit 1
+        fi
     fi
 }
 
