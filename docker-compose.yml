@@ -7,7 +7,7 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
     environment:
-      - "ES_JAVA_OPTS=-XmsMEMg -XmxMEMg"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
     ulimits:
       memlock:
         soft: -1
@@ -99,7 +99,7 @@ services:
     container_name: helk-jupyter
     ports:
       - "8880:8880"
-      - "4040-4050:4040"
+      - "4040:4040"
     restart: always
     depends_on:
       - helk-kibana
