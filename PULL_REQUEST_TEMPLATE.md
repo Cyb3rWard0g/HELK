@@ -7,6 +7,6 @@
 Specific steps, configs and images if available
 
 **Questions:**
-* Does the licenses files need update? No
-* Is there breaking changes for older versions? No
+* Do the licenses files need update? No
+* Are there breaking changes for older versions? No
 * Does this needs documentation? No
