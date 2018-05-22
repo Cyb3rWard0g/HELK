@@ -7,9 +7,9 @@
 # License: BSD 3-Clause
 
 # *********** Setting Variables ***************
-SIGMA_DIR=/opt/helk/sigma
+SIGMA_DIR=/opt/sigma/sigma
 
 cd $SIGMA_DIR
 git pull
-tools/sigmac -t kibana -c tools/config/helk.yml -Ooutput=curl -o import-sigma-to-kibana.sh -r rules/windows
+tools/sigmac -t kibana -c tools/config/helk.yml -Ooutput=curl -Oes=helk-elasticsearch:9200 -o import-sigma-to-kibana.sh -r rules/windows
 . import-sigma-to-kibana.sh

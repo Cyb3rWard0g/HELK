@@ -17,5 +17,11 @@ until curl -s $KIBANA -o /dev/null; do
     sleep 1
 done
 
+# *********** Waiting for Kibana Dashboards to be available ***************
+# This ensures that the index mappings required for import of the Kibana rules are available
+until curl -s $KIBANA/api/saved_objects/?type=dashboard | jq -e '.total > 0'; do
+    sleep 1
+done
+
 # *********** Loading Sigma searches ***************
-/opt/helk/scripts/update-sigma.sh
+/opt/sigma/scripts/update-sigma.sh

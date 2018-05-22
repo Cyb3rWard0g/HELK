@@ -14,7 +14,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Installing Prerequisites ***************
 # -qq : No output except for errors
-RUN apt-get install -qqy \
+RUN apt-get update -qq \
+  && apt-get install -qqy \
   python3-pip \
   unzip \
   git \
@@ -26,8 +27,12 @@ RUN pip3 install --upgrade pip
 # *********** Creating directories ***************
 RUN bash -c 'mkdir -pv /opt/sigma/{scripts,sigma}'
 
+# *********** Adding entrypoint script to Container ***************
+ADD scripts/sigma-entrypoint.sh /opt/sigma/scripts/
+RUN chmod +x /opt/sigma/scripts/sigma-entrypoint.sh
+
 # *********** Adding Sigma updater script to Container ***************
-ADD update-sigma.sh /opt/sigma/scripts/
+ADD scripts/update-sigma.sh /opt/sigma/scripts/
 RUN chmod +x /opt/sigma/scripts/update-sigma.sh
 
 # *********** Creating Cron Job to run Sigma script every monday at 8:00 AM and update the Sigma queries *************

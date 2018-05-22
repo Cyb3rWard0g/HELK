@@ -157,6 +157,15 @@ services:
       helk:
         aliases:
           - helk_kafka_broker.hunt.local 
+  helk-sigma:
+    image: thomaspatzke/helk-sigma
+    container_name: helk-sigma
+    depends_on:
+      - helk-kibana
+    networks:
+      helk:
+        aliases:
+          - helk_sigma.hunt.local
 networks:
   helk:
     driver: bridge
