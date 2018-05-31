@@ -20,6 +20,8 @@ services:
   helk-logstash:
     image: cyb3rward0g/helk-logstash:6.2.4
     container_name: helk-logstash
+    volumes:
+      - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
     environment:
       - "LS_JAVA_OPTS=-Xms2g -Xmx2g"
     restart: always

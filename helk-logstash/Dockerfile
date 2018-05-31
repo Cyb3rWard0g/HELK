@@ -16,5 +16,3 @@ LABEL description="Dockerfile base for the HELK Logstash."
 ADD logstash.yml /usr/share/logstash/config/logstash.yml
 ADD pipeline /usr/share/logstash/pipeline
 ADD output_templates /usr/share/logstash/output_templates
-
-EXPOSE 5044

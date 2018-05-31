@@ -28,8 +28,8 @@ check_min_requirements(){
         AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $4 }')
         ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $4/2 }')
         AVAILABLE_DISK=$(df -h | awk '$NF=="/"{printf "%.f\t\t", $4}')
-
-        if [ "${AVAILABLE_MEMORY}" -ge "10" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
+        
+        if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
