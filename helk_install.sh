@@ -154,16 +154,10 @@ set_helk_ip(){
     if [ $ip_choice != $host_ip ]; then
         host_ip=$ip_choice
     fi
-    if [ $read_input  = 142 ]; then
-       echo -e "\n[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}" 
-    else
-    echo "[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}"
-    fi
 }
 
 prepare_helk(){
-    get_host_ip
-    set_helk_ip
+    echo "[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}"
     if [ "$systemKernel" == "Linux" ]; then
         # Reference: https://get.docker.com/
         echo "[HELK-INSTALLATION-INFO] HELK identified Linux as the system kernel"
@@ -272,43 +266,122 @@ prepare_helk(){
     sed -i "s/ES_JAVA_OPTS\=\-XmsMEMg \-XmxMEMg/ES_JAVA_OPTS\=\-Xms${ES_MEMORY}g \-Xmx${ES_MEMORY}g/g" docker-compose.yml
 }
 
-# *********** Showing HELK Docker menu options ***************
-echo " "
-echo "**********************************************"	
-echo "**          HELK - THE HUNTING ELK          **"
-echo "**                                          **"
-echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-echo "** HELK build version: 0.9 (Alpha)          **"
-echo "** HELK ELK version: 6.2.4                  **"
-echo "** License: BSD 3-Clause                    **"
-echo "**********************************************"
-echo " "
+show_banner(){
+    # *********** Showing HELK Docker menu options ***************
+    echo " "
+    echo "**********************************************"	
+    echo "**          HELK - THE HUNTING ELK          **"
+    echo "**                                          **"
+    echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
+    echo "** HELK build version: 0.9 (Alpha)          **"
+    echo "** HELK ELK version: 6.2.4                  **"
+    echo "** License: BSD 3-Clause                    **"
+    echo "**********************************************"
+    echo " "
+}
 
-# *********** Running selected option ***************
-check_min_requirements
-prepare_helk
-install_helk
-get_jupyter_token
-sleep 180
+show_final_information(){
+    echo " "
+    echo " "
+    echo "***********************************************************************************"
+    echo "** [HELK-INSTALLATION-INFO] YOUR HELK IS READY                                   **"
+    echo "** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **"
+    echo "***********************************************************************************"
+    echo " "
+    echo "HELK KIBANA URL: http://${host_ip}"
+    echo "HELK KIBANA & ELASTICSEARCH USER: helk"
+    echo "HELK KIBANA & ELASTICSEARCH PASSWORD: hunting"
+    echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
+    echo "HELK JUPYTER LAB URL: http://${host_ip}:8880/lab"
+    echo "HELK SPARK Pyspark UI: http://${host_ip}:4040"
+    echo "HELK SPARK Cluster Master UI: http://${host_ip}:8080"
+    echo "HELK SPARK Cluster Worker1 UI: http://${host_ip}:8081"
+    echo "HELK SPARK Cluster Worker2 UI: http://${host_ip}:8082"
+    echo " "
+    echo "IT IS HUNTING SEASON!!!!!"
+    echo " "
+    echo " "
+    echo " "
+}
 
-echo " "
-echo " "
-echo "***********************************************************************************"
-echo "** [HELK-INSTALLATION-INFO] YOUR HELK IS READY                                   **"
-echo "** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **"
-echo "***********************************************************************************"
-echo " "
-echo "HELK KIBANA URL: http://${host_ip}"
-echo "HELK KIBANA & ELASTICSEARCH USER: helk"
-echo "HELK KIBANA & ELASTICSEARCH PASSWORD: hunting"
-echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
-echo "HELK JUPYTER LAB URL: http://${host_ip}:8880/lab"
-echo "HELK SPARK Pyspark UI: http://${host_ip}:4040"
-echo "HELK SPARK Cluster Master UI: http://${host_ip}:8080"
-echo "HELK SPARK Cluster Worker1 UI: http://${host_ip}:8081"
-echo "HELK SPARK Cluster Worker2 UI: http://${host_ip}:8082"
-echo " "
-echo "IT IS HUNTING SEASON!!!!!"
-echo " "
-echo " "
-echo " "
+manual_install(){
+    show_banner
+    check_min_requirements
+    get_host_ip
+    set_helk_ip
+    prepare_helk
+    install_helk
+    get_jupyter_token
+    sleep 180
+    show_final_information
+}
+
+ip_set_install(){
+    show_banner
+    check_min_requirements
+    prepare_helk
+    install_helk
+    get_jupyter_token
+    sleep 180
+    show_final_information
+}
+
+usage(){
+    echo "Usage: $0 [option...]" >&2
+    echo
+    echo "   -i         set HELKs IP address"
+    echo "   -q         quiet -> not output to the console"
+    echo
+    echo "Examples:"
+    echo " $0                           Install HELK manually"
+    echo " $0 -ip 192.168.64.131        Install HELK with an IP address set"
+    echo " $0 -ip 192.168.64.131 -q     Install HELK with an IP address set without sending output to the console"
+    exit 1
+}
+
+# ************ Command Options **********************
+while getopts ":i:q" opt; do
+    case ${opt} in
+        i )
+            host_ip=$OPTARG
+            ;;
+        q )
+            quiet="TRUE"
+            ;;
+        \? )
+            echo "Invalid option: $OPTARG" 1>&2
+            usage
+            ;;
+        : )
+            echo "Invalid option: $OPTARG requires an argument" 1>&2
+            usage
+        ;;
+    esac
+done
+shift $((OPTIND -1))
+
+if [ $# -gt 0 ]; then
+    echo "Invalid option"
+    usage
+fi
+
+if [ -z "$host_ip" ] &&  [ -z "$quiet" ]; then
+    manual_install
+else
+    if [[ "$host_ip" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]]; then
+        for i in 1 2 3 4; do
+            if [ $(echo "$host_ip" | cut -d. -f$i) -gt 255 ]; then
+                echo "$host_ip is not a valid IP Address"
+                usage
+            fi
+        done
+        if [ -z "$quiet" ]; then
+            ip_set_install
+        else
+            ip_set_install >> $LOGFILE 2>&1
+        fi
+    else
+        echo "Invalid option"
+        usage
+    fi
+fi
