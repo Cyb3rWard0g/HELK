@@ -47,7 +47,7 @@ if [ $REBUILD_NEEDED == 1 ]; then
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echo "Could not build HELK via docker-compose (Error Code: $ERROR)."
-        echo "get more details in /var/log/helk-install.log locally"
+        echo "Get more details in /var/log/helk-update.log"
         exit 1
     fi
 
@@ -62,7 +62,7 @@ if [ $REBUILD_NEEDED == 1 ]; then
     docker restart $(sudo docker ps -a -q --filter="name=helk-") >> $LOGFILE 2>&1
     get_jupyter_token
     sleep 180
-    echo -e "\n** [HELK-UPDATE-INFO] YOUR HELK HAS BEEN UPDATED."
+    echo -e "\n[HELK-UPDATE-INFO] YOUR HELK HAS BEEN UPDATED."
 else
-    echo -e "\n** [HELK-UPDATE-INFO] YOUR HELK IS ALREADY UP-TO-DATE."
+    echo -e "\n[HELK-UPDATE-INFO] YOUR HELK IS ALREADY UP-TO-DATE."
 fi
