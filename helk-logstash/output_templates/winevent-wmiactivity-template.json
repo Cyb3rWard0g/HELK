@@ -22,8 +22,7 @@
       }],
       "properties":{
         "@timestamp":{"type":"date"},
-        "process_id":{"type":"integer"},
-        "process_target_id":{"type":"integer"}
+        "process_id":{"type":"integer"}
       }
     }
   }

@@ -263,7 +263,7 @@ prepare_helk(){
 
     echo "[HELK-INSTALLATION-INFO] Setting ES_JAVA_OPTS value..."
     # ****** Setting ES JAVA OPTS environment variable ***********
-    sed -i "s/ES_JAVA_OPTS\=\-XmsMEMg \-XmxMEMg/ES_JAVA_OPTS\=\-Xms${ES_MEMORY}g \-Xmx${ES_MEMORY}g/g" docker-compose.yml
+    sed -i "s/ES_JAVA_OPTS\=\-Xms6g \-Xmx6g/ES_JAVA_OPTS\=\-Xms${ES_MEMORY}g \-Xmx${ES_MEMORY}g/g" docker-compose.yml
 }
 
 show_banner(){

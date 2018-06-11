@@ -24,8 +24,8 @@
         "@timestamp":{"type":"date"},
         "@date_creation":{"type":"date"},
         "@date_creation_previous":{"type":"date"},
-        "port_dst_number":{"type":"integer"},
-        "port_src_number":{"type":"integer"},
+        "dst_port":{"type":"integer"},
+        "src_port":{"type":"integer"},
         "event_id":{"type":"integer"},
         "geoip":{
           "properties":{
@@ -38,11 +38,10 @@
         "network_initiated":{"type":"boolean"},
         "process_id":{"type":"integer"},
         "thread_new_id":{"type":"integer"},
-        "image_signed":{"type":"boolean"},
+        "module_signed":{"type":"boolean"},
         "process_parent_id":{"type":"integer"},
-        "process_target_id":{"type":"integer"},
-        "user_terminal_session_id":{"type":"integer"},
-        "port_number":{"type":"integer"},
+        "target_process_id":{"type":"integer"},
+        "user_session_id":{"type":"integer"},
         "thread_id":{"type":"integer"},
         "version":{"type":"integer"}
       }

@@ -2,12 +2,13 @@ version: '3'
 
 services:
   helk-elasticsearch:
-    image: cyb3rward0g/helk-elasticsearch:6.2.4
+    build: helk-elasticsearch/
     container_name: helk-elasticsearch
     volumes:
       - esdata:/usr/share/elasticsearch/data
+      - ./helk-elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
-      - "ES_JAVA_OPTS=-XmsMEMg -XmxMEMg"
+      - "ES_JAVA_OPTS=-Xms6g -Xmx6g"
     ulimits:
       memlock:
         soft: -1
@@ -18,10 +19,12 @@ services:
         aliases:
           - helk_elasticsearch.hunt.local
   helk-logstash:
-    image: cyb3rward0g/helk-logstash:6.2.4
+    build: helk-logstash/
     container_name: helk-logstash
     volumes:
+      - ./helk-logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
+      - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
     environment:
       - "LS_JAVA_OPTS=-Xms2g -Xmx2g"
     restart: always
@@ -32,8 +35,11 @@ services:
         aliases:
           - helk_logstash.hunt.local
   helk-kibana:
-    image: cyb3rward0g/helk-kibana:6.2.4
+    build: helk-kibana/
     container_name: helk-kibana
+    volumes:
+      - ./helk-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./helk-kibana/dashboards:/usr/share/kibana/dashboards
     restart: always
     depends_on:
       - helk-elasticsearch

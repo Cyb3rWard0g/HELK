@@ -43,7 +43,7 @@
 # How many events to retrieve from inputs before sending to filters+workers
 #
 # pipeline.batch.size: 125
-pipeline.batch.size: 300
+pipeline.batch.size: 500
 #
 # How long to wait before dispatching an undersized batch to filters+workers
 # Value is in milliseconds.
