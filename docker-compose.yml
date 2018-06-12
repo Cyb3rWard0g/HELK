@@ -5,8 +5,8 @@ services:
     build: helk-elasticsearch/
     container_name: helk-elasticsearch
     volumes:
-      - esdata:/usr/share/elasticsearch/data
       - ./helk-elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - esdata:/usr/share/elasticsearch/data
     environment:
       - "ES_JAVA_OPTS=-Xms6g -Xmx6g"
     ulimits:
