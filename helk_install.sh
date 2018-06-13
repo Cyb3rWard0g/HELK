@@ -25,15 +25,9 @@ systemKernel="$(uname -s)"
 check_min_requirements(){
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $systemKernel box"
     if [ "$systemKernel" == "Linux" ]; then 
-<<<<<<< HEAD
-        AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $4 }')
-        ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $4/2 }')
-        AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
-=======
         AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $7 }')
         ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $7/2 }')
-        AVAILABLE_DISK=$(df -h | awk '$NF=="/"{printf "%.f\t\t", $4}')
->>>>>>> e7e455e... Modify helk_install.sh to read available memory rather than free memory
+        AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
         
         if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
