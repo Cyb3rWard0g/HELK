@@ -25,8 +25,8 @@ systemKernel="$(uname -s)"
 check_min_requirements(){
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $systemKernel box"
     if [ "$systemKernel" == "Linux" ]; then 
-        AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $4 }')
-        ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $4/2 }')
+        AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $7 }')
+        ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $7/2 }')
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
         
         if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
