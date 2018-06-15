@@ -20,7 +20,7 @@ DEFAULT_INDEX="logs-endpoint-winevent-sysmon-*"
 DIR=/usr/share/kibana/dashboards
 
 # *********** Setting Index Pattern Array ***************
-declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*")
+declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*" "mitre-attack-*")
 
 # *********** Waiting for Kibana to be available ***************
 echo "[++] Checking to see if kibana is up..."

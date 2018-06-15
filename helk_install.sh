@@ -27,7 +27,7 @@ check_min_requirements(){
     if [ "$systemKernel" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $4 }')
         ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $4/2 }')
-        AVAILABLE_DISK=$(df -h | awk '$NF=="/"{printf "%.f\t\t", $4}')
+        AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
         
         if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
@@ -75,20 +75,9 @@ install_curl(){
 
 # *********** Building and Running HELK Images ***************
 install_helk(){
-    echo "[HELK-INSTALLATION-INFO] Building HELK via docker-compose"
-
-    # ****** Building HELK ***********
-    docker-compose build >> $LOGFILE 2>&1
-    ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not build HELK via docker-compose (Error Code: $ERROR)."
-        echo "get more details in /var/log/helk-install.log locally"
-        exit 1
-    fi
-    
-    # ****** Running HELK ***********
-    echo "[HELK-INSTALLATION-INFO] Running HELK via docker-compose"
-    docker-compose up -d >> $LOGFILE 2>&1
+    # ****** Building & running HELK ***********
+    echo "[HELK-INSTALLATION-INFO] Building & running HELK via docker-compose"
+    docker-compose up --build -d >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not run HELK via docker-compose (Error Code: $ERROR)."
@@ -263,7 +252,7 @@ prepare_helk(){
 
     echo "[HELK-INSTALLATION-INFO] Setting ES_JAVA_OPTS value..."
     # ****** Setting ES JAVA OPTS environment variable ***********
-    sed -i "s/ES_JAVA_OPTS\=\-XmsMEMg \-XmxMEMg/ES_JAVA_OPTS\=\-Xms${ES_MEMORY}g \-Xmx${ES_MEMORY}g/g" docker-compose.yml
+    sed -i "s/ES_JAVA_OPTS\=\-Xms6g \-Xmx6g/ES_JAVA_OPTS\=\-Xms${ES_MEMORY}g \-Xmx${ES_MEMORY}g/g" docker-compose.yml
 }
 
 show_banner(){
@@ -274,7 +263,7 @@ show_banner(){
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
     echo "** HELK build version: 0.9 (Alpha)          **"
-    echo "** HELK ELK version: 6.2.4                  **"
+    echo "** HELK ELK version: 6.3.0                  **"
     echo "** License: BSD 3-Clause                    **"
     echo "**********************************************"
     echo " "

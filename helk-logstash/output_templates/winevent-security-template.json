@@ -25,10 +25,11 @@
         "@date_new_time":{"type":"date"},
         "@date_previous_time":{"type":"date"},
         "process_id":{"type":"integer"},
-        "process_target_id":{"type":"integer"},
+        "target_process_id":{"type":"integer"},
         "process_parent_id":{"type":"integer"},
-        "port_src_number":{"type":"integer"},
-        "port_dst_number":{"type":"integer"},
+        "user_session_id":{"type":"integer"},
+        "src_port":{"type":"integer"},
+        "dst_port":{"type":"integer"},
         "version":{"type":"integer"}
       }
     }
