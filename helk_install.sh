@@ -75,20 +75,9 @@ install_curl(){
 
 # *********** Building and Running HELK Images ***************
 install_helk(){
-    echo "[HELK-INSTALLATION-INFO] Building HELK via docker-compose"
-
-    # ****** Building HELK ***********
-    docker-compose build >> $LOGFILE 2>&1
-    ERROR=$?
-    if [ $ERROR -ne 0 ]; then
-        echoerror "Could not build HELK via docker-compose (Error Code: $ERROR)."
-        echo "get more details in /var/log/helk-install.log locally"
-        exit 1
-    fi
-    
-    # ****** Running HELK ***********
-    echo "[HELK-INSTALLATION-INFO] Running HELK via docker-compose"
-    docker-compose up -d >> $LOGFILE 2>&1
+    # ****** Building & running HELK ***********
+    echo "[HELK-INSTALLATION-INFO] Building & running HELK via docker-compose"
+    docker-compose up --build -d >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not run HELK via docker-compose (Error Code: $ERROR)."
@@ -274,7 +263,7 @@ show_banner(){
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
     echo "** HELK build version: 0.9 (Alpha)          **"
-    echo "** HELK ELK version: 6.2.4                  **"
+    echo "** HELK ELK version: 6.3.0                  **"
     echo "** License: BSD 3-Clause                    **"
     echo "**********************************************"
     echo " "
