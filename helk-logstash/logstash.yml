@@ -218,3 +218,5 @@ http.host: "0.0.0.0"
 xpack.monitoring.elasticsearch.url: http://helk-elasticsearch:9200
 xpack.monitoring.elasticsearch.username: logstash_system
 xpack.monitoring.elasticsearch.password: changeme
+
+xpack.monitoring.enabled: true

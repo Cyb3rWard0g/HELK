@@ -25,6 +25,7 @@ services:
       - ./helk-logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
+      - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
     environment:
       - "LS_JAVA_OPTS=-Xms2g -Xmx2g"
     restart: always
