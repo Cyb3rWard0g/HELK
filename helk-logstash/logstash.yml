@@ -43,7 +43,7 @@
 # How many events to retrieve from inputs before sending to filters+workers
 #
 # pipeline.batch.size: 125
-pipeline.batch.size: 300
+pipeline.batch.size: 500
 #
 # How long to wait before dispatching an undersized batch to filters+workers
 # Value is in milliseconds.
@@ -218,3 +218,5 @@ http.host: "0.0.0.0"
 xpack.monitoring.elasticsearch.url: http://helk-elasticsearch:9200
 xpack.monitoring.elasticsearch.username: logstash_system
 xpack.monitoring.elasticsearch.password: changeme
+
+xpack.monitoring.enabled: true

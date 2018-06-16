@@ -1,9 +1,11 @@
 # HELK [Alpha]
+
 A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilities.
 
 ![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
 
 # Goals
+
 * Provide a free hunting platform to the community and share the basics of Threat Hunting.
 * Make sense of a large amount of event logs and add more context to suspicious events during hunting.
 * Expedite the time it takes to deploy an ELK stack.
@@ -11,9 +13,11 @@ A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilit
 * Enable Data Science via Apache Spark, GraphFrames & Jupyter Notebooks.
 
 # Current Status: Alpha
+
 The project is currently in an alpha stage, which means that the code and the functionality are still changing. We haven't yet tested the system with large data sources and in many scenarios. We invite you to try it and welcome any feedback.
 
 # HELK Features
+
 * **Kafka:** A distributed publish-subscribe messaging system that is designed to be fast, scalable, fault-tolerant, and durable.
 * **Elasticsearch:** A highly scalable open-source full-text search and analytics engine.
 * **Logstash:** A data collection engine with real-time pipelining capabilities.
@@ -24,6 +28,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 * **Jupyter Notebook:** An open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
 
 # Resources
+
 * [Welcome to HELK! : Enabling Advanced Analytics Capabilities](https://cyberwardog.blogspot.com/2018/04/welcome-to-helk-enabling-advanced_9.html)
 * [Spark](https://spark.apache.org/docs/latest/index.html)
 * [Spark Standalone Mode](https://spark.apache.org/docs/latest/spark-standalone.html)
@@ -38,7 +43,9 @@ The project is currently in an alpha stage, which means that the code and the fu
 * [deviantony docker-elk](https://github.com/deviantony/docker-elk)
 
 # Getting Started
+
 ## WIKI
+
 * [Introduction](https://github.com/Cyb3rWard0g/HELK/wiki)
 * [Architecture Overview](https://github.com/Cyb3rWard0g/HELK/wiki/Architecture-Overview)
   * [Kafka](https://github.com/Cyb3rWard0g/HELK/wiki/Kafka)
@@ -49,6 +56,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 * [Installation](https://github.com/Cyb3rWard0g/HELK/wiki/Installation)
 
 ## (Docker) Accessing the HELK's Images
+
 By default, the HELK's containers are run in the background (Detached). You can see all your docker containers by running the following command:
 ```
 sudo docker ps
@@ -74,9 +82,12 @@ root@ede2a2503030:/opt/helk/scripts#
 ```
 
 # Author
+
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g) [@THE_HELK](https://twitter.com/THE_HELK)
 
 # Contributors
+
+* Jose Luis Rodriguez [@Cyb3rPandaH](https://twitter.com/Cyb3rPandaH)
 * Robby Winchester [@robwinchester3](https://twitter.com/robwinchester3)
 * Jared Atkinson [@jaredatkinson](https://twitter.com/jaredcatkinson)
 * Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
@@ -84,9 +95,11 @@ root@ede2a2503030:/opt/helk/scripts#
 * Lee Christensen [@tifkin_](https://twitter.com/tifkin_)
 
 # Contributing
+
 There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below. I would love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring
 
 # TO-Do
+
 - [X] Upload basic Kibana Dashboards
 - [X] Integrate Spark & Graphframes
 - [X] Add Jupyter Notebook on the top of Spark

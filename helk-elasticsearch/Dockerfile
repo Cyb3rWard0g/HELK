@@ -9,9 +9,6 @@
 
 # *********** ELK Version ***************
 
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.3.0
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Elasticsearch."
-
-RUN mv /usr/share/elasticsearch/config/elasticsearch.yml /usr/share/elasticsearch/config/backup_elasticsearch
-ADD elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
