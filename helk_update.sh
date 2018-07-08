@@ -113,7 +113,7 @@ check_github(){
 
     git checkout master >> $LOGFILE 2>&1
 
-    if PULL_NEEDED=$(git rev-list --left-right --count master...helk-repo/master | awk '{print $2}') && [ ! "$PULL_NEEDED" == "0" ]; then
+    if PULL_NEEDED=$(git rev-list --left-right --count origin/master...helk-repo/master | awk '{print $2}') && [ ! "$PULL_NEEDED" == "0" ]; then
         echo "New release available. Commit diff --> $PULL_NEEDED" >> $LOGFILE 2>&1
         echo "[HELK-UPDATE-INFO] New release available. Pulling new code."
         git pull helk-repo master >> $LOGFILE 2>&1
