@@ -24,10 +24,20 @@ RUN apt-get -qy clean \
 RUN bash -c 'mkdir -pv /opt/helk/spark'
 
 # *********** Install Spark ***************
-ENV SPARK_VERSION=2.3.0
+ENV SPARK_VERSION=2.3.1
 ENV APACHE_HADOOP_VERSION=2.7
-
-RUN wget -qO- http://download.nextag.com/apache/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${APACHE_HADOOP_VERSION}.tgz | sudo tar xvz -C /opt/helk/spark/
+RUN wget -qO- http://mirror.reverse.net/pub/apache/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${APACHE_HADOOP_VERSION}.tgz | sudo tar xvz -C /opt/helk/spark --strip-components=1
 
 # Adding SPARK environment variables
-ENV SPARK_HOME=/opt/helk/spark/spark-${SPARK_VERSION}-bin-hadoop${APACHE_HADOOP_VERSION}
+ENV SPARK_HOME=/opt/helk/spark
+ENV SPARK_LOGS=$SPARK_HOME/logs
+
+RUN mkdir -p $SPARK_LOGS
+
+# Adding SPARK User
+ENV SPARK_GID=710
+ENV SPARK_UID=710
+ENV SPARK_USER=sparkuser
+RUN groupadd -g ${SPARK_GID} ${SPARK_USER} \
+  && useradd -u ${SPARK_UID} -g ${SPARK_GID} -d ${SPARK_HOME} --no-create-home ${SPARK_USER} \
+  && chown -R ${SPARK_USER}:${SPARK_USER} ${SPARK_HOME}

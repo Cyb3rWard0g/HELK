@@ -25,8 +25,8 @@ systemKernel="$(uname -s)"
 check_min_requirements(){
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $systemKernel box"
     if [ "$systemKernel" == "Linux" ]; then 
-        AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $7 }')
-        ES_MEMORY=$(free -hm | awk 'NR==2{printf "%.f", $7/2 }')
+        AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
+        ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
         
         if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
@@ -262,8 +262,8 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: 0.9 (Alpha)          **"
-    echo "** HELK ELK version: 6.3.0                  **"
+    echo "** HELK build version: v0.1.1-alpha07062018 **"
+    echo "** HELK ELK version: 6.3.1                  **"
     echo "** License: BSD 3-Clause                    **"
     echo "**********************************************"
     echo " "

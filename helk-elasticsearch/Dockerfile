@@ -9,6 +9,6 @@
 
 # *********** ELK Version ***************
 
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.3.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Elasticsearch."

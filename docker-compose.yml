@@ -61,7 +61,7 @@ services:
         aliases:
           - helk_nginx.hunt.local
   helk-spark-master:
-    image: cyb3rward0g/helk-spark-master:2.3.0
+    image: cyb3rward0g/helk-spark-master:2.3.1
     container_name: helk-spark-master
     ports:
       - "8080:8080"
@@ -74,7 +74,7 @@ services:
         aliases:
           - helk_spark_master.hunt.local
   helk-spark-worker:
-    image: cyb3rward0g/helk-spark-worker:2.3.0
+    image: cyb3rward0g/helk-spark-worker:2.3.1
     container_name: helk-spark-worker
     environment:
       - SPARK_WORKER_MEMORY=1g
@@ -89,7 +89,7 @@ services:
         aliases:
           - helk_spark_worker.hunt.local
   helk-spark-worker2:
-    image: cyb3rward0g/helk-spark-worker:2.3.0
+    image: cyb3rward0g/helk-spark-worker:2.3.1
     container_name: helk-spark-worker2
     environment:
       - SPARK_WORKER_MEMORY=1g
@@ -104,7 +104,7 @@ services:
         aliases:
           - helk_spark_worker2.hunt.local
   helk-jupyter:
-    image: cyb3rward0g/helk-jupyter:0.32.1
+    build: helk-jupyter/
     container_name: helk-jupyter
     ports:
       - "8880:8880"
