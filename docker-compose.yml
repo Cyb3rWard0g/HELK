@@ -2,7 +2,7 @@ version: '3'
 
 services:
   helk-elasticsearch:
-    build: helk-elasticsearch/
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
     container_name: helk-elasticsearch
     volumes:
       - ./helk-elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
@@ -19,7 +19,7 @@ services:
         aliases:
           - helk_elasticsearch.hunt.local
   helk-logstash:
-    build: helk-logstash/
+    image: docker.elastic.co/logstash/logstash:6.3.1
     container_name: helk-logstash
     volumes:
       - ./helk-logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
@@ -36,11 +36,13 @@ services:
         aliases:
           - helk_logstash.hunt.local
   helk-kibana:
-    build: helk-kibana/
+    image: docker.elastic.co/kibana/kibana:6.3.1
     container_name: helk-kibana
     volumes:
       - ./helk-kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
       - ./helk-kibana/dashboards:/usr/share/kibana/dashboards
+      - ./helk-kibana/scripts:/usr/share/kibana/scripts
+    entrypoint: /usr/share/kibana/scripts/kibana-entrypoint.sh
     restart: always
     depends_on:
       - helk-elasticsearch
@@ -104,7 +106,7 @@ services:
         aliases:
           - helk_spark_worker2.hunt.local
   helk-jupyter:
-    build: helk-jupyter/
+    image: cyb3rward0g/helk-jupyter:0.0.1
     container_name: helk-jupyter
     ports:
       - "8880:8880"

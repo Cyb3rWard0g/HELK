@@ -17,6 +17,6 @@ exec /usr/local/bin/kibana-docker &
 
 # *********** Creating Kibana Dashboards, visualizations and index-patterns ***************
 echo "[HELK-DOCKER-INSTALLATION-INFO] Running helk_kibana_setup.sh script..."
-./kibana-setup.sh
+/usr/share/kibana/scripts/kibana-setup.sh
 
 tail -f /usr/share/kibana/config/kibana_logs.log
