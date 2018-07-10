@@ -26,8 +26,6 @@ check_min_requirements(){
             echo "[HELK-UPDATE-ERROR] Available Memory (GB): ${AVAILABLE_MEMORY}"
             echo "[HELK-UPDATE-ERROR] Check the requirements section in our installation Wiki"
             echo "[HELK-UPDATE-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
-            mv docker-compose.yml.bak docker-compose.yml >> $LOGFILE 2>&1
-            rm docker-compose.yml.bak >> $LOGFILE 2>&1
             exit 1
         fi
     else
@@ -102,9 +100,6 @@ if [ $REBUILD_NEEDED == 1 ]; then
     sleep 180
     get_jupyter_token
     echo -e "[HELK-UPDATE-INFO] YOUR HELK HAS BEEN UPDATED!"
-    rm docker-compose.yml.bak >> $LOGFILE 2>&1
 else
     echo -e "[HELK-UPDATE-INFO] YOUR HELK IS ALREADY UP-TO-DATE."
 fi
-
-chmod 666 docker-compose.yml  >> $LOGFILE 2>&1
