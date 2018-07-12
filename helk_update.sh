@@ -95,7 +95,7 @@ get_jupyter_token(){
         sleep 1
     done
     jupyter_token="$(docker exec -ti helk-jupyter jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
-    echo "[HELK-UPDATE-INFO] New Jupyter token: $jupyter_token"   
+    echo -e "\n[HELK-UPDATE-INFO] New Jupyter token: $jupyter_token"   
 }
 
 LOGFILE="/var/log/helk-update.log"
@@ -126,7 +126,7 @@ if [ $REBUILD_NEEDED == 1 ]; then
     
     secs=$((3 * 60))
     while [ $secs -gt 0 ]; do
-        echo -ne "\033[0K\r[HELK-UPDATE-INFO] Rebuild succeeded, waiting $secs seconds for services to start"
+        echo -ne "\033[0K\r[HELK-UPDATE-INFO] Rebuild succeeded, waiting $secs seconds for services to start..."
         sleep 1
         : $((secs--))
     done
