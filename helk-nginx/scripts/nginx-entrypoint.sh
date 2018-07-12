@@ -2,9 +2,9 @@
 
 # HELK script: nginx-entrypoint.sh
 # HELK script description: Restarts and runs Nginx service
-# HELK build version: 0.9 (Alpha)
+# HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # Start graceful termination of HELK services that might be running before running the entrypoint script.
 _term() {

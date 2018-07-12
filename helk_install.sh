@@ -2,10 +2,10 @@
 
 # HELK script: helk_install.sh
 # HELK script description: Start
-# HELK build version: 0.9 (Alpha)
-# HELK ELK version: 6.2.3
+# HELK build Stage: Alpha
+# HELK ELK version: 6.3.1
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
@@ -18,17 +18,15 @@ echoerror() {
     printf "${RC} * ERROR${EC}: $@\n" 1>&2;
 }
 
-# *********** Check System Kernel Name ***************
-systemKernel="$(uname -s)"
-
 # ********** Check Minimum Requirements **************
 check_min_requirements(){
+    # *********** Check System Kernel Name ***************
+    systemKernel="$(uname -s)"
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $systemKernel box"
     if [ "$systemKernel" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
-        AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
-        
+        AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')    
         if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
@@ -41,9 +39,9 @@ check_min_requirements(){
             exit 1
         fi
     else
+        echo "[HELK-INSTALLATION-INFO] I could not calculate available memory or disk space for $systemKernel!!!!!"
         echo "[HELK-INSTALLATION-INFO] Make sure you have at least 12GB of available memory!!!!!!"
         echo "[HELK-INSTALLATION-INFO] Make sure you have at least 50GB of available disk space!!!!!"
-        echo "[HELK-INSTALLATION-INFO] I could not calculate available memory or disk space for $systemKernel!!!!!"
     fi
 }
 
@@ -77,7 +75,8 @@ install_curl(){
 install_helk(){
     # ****** Building & running HELK ***********
     echo "[HELK-INSTALLATION-INFO] Building & running HELK via docker-compose"
-    docker-compose up --build -d >> $LOGFILE 2>&1
+    echo "[HELK-INSTALLATION-INFO] Using docker-compose-elk-${license_choice}.yml file"
+    docker-compose -f docker-compose-elk-${license_choice}.yml up --build -d >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not run HELK via docker-compose (Error Code: $ERROR)."
@@ -136,20 +135,33 @@ get_host_ip(){
 set_helk_ip(){    
     # *********** Accepting Defaults or Allowing user to set HELK IP ***************
     local ip_choice
-    local read_input
     read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: " -e -i ${host_ip} ip_choice
-    read_input=$?
-    ip_choice="${ip_choice:-$host_ip}"
-    if [ $ip_choice != $host_ip ]; then
-        host_ip=$ip_choice
-    fi
+    host_ip="${ip_choice:-$host_ip}"
+}
+
+set_helk_license(){    
+    # *********** Accepting Defaults or Allowing user to set HELK IP ***************
+    local license_input
+    read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK License. Default value is basic: " -e -i "basic" license_input
+    license_choice=${license_input:-"basic"}
+    # *********** Validating License Input ***************
+    case $license_choice in
+        basic)
+        ;;
+        trial)
+        ;;
+        *)
+            echo "[HELK-INSTALLATION-ERROR] Not a valid license. Valid Options: basic or trial"
+            exit 1
+        ;;
+    esac
 }
 
 prepare_helk(){
     echo "[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}"
+    echo "[HELK-INSTALLATION-INFO] HELK License set to ${license_choice}"
     if [ "$systemKernel" == "Linux" ]; then
         # Reference: https://get.docker.com/
-        echo "[HELK-INSTALLATION-INFO] HELK identified Linux as the system kernel"
         echo "[HELK-INSTALLATION-INFO] Checking distribution list and version"
         # *********** Check distribution list ***************
         lsb_dist="$(. /etc/os-release && echo "$ID")"
@@ -202,7 +214,6 @@ prepare_helk(){
         if [ $ERROR -ne 0 ]; then
             echoerror "Could not verify distribution or version of the OS (Error Code: $ERROR)."
         fi
-
         # *********** Check if docker is installed ***************
         if [ -x "$(command -v docker)" ]; then
             echo "[HELK-INSTALLATION-INFO] Docker already installed"
@@ -231,7 +242,7 @@ prepare_helk(){
         if [ -x "$(command -v docker)" ] && [ -x "$(command -v docker-compose)" ]; then
             echo "[HELK-INSTALLATION-INFO] Docker & Docker-compose already installed"
         else
-            echo "[HELK-INSTALLATION-INFO] Install Docker & Docker-compose for $systemKernel"
+            echo "[HELK-INSTALLATION-INFO] Please innstall Docker & Docker-compose for $systemKernel"
             exit 1
         fi
     fi
@@ -245,14 +256,13 @@ prepare_helk(){
             echoerror "Could not set vm.max_map_count to 262144 (Error Code: $ERROR)."
         fi
     fi
-
     echo "[HELK-INSTALLATION-INFO] Setting KAFKA ADVERTISED_LISTENER value..."
     # ****** Setting KAFKA ADVERTISED_LISTENER environment variable ***********
-    sed -i "s/ADVERTISED_LISTENER=HOSTIP/ADVERTISED_LISTENER=$host_ip/g" docker-compose.yml
+    sed -i "s/ADVERTISED_LISTENER=HOSTIP/ADVERTISED_LISTENER=$host_ip/g" docker-compose-elk-${license_choice}.yml
 
     echo "[HELK-INSTALLATION-INFO] Setting ES_JAVA_OPTS value..."
     # ****** Setting ES JAVA OPTS environment variable ***********
-    sed -i "s/ES_JAVA_OPTS\=\-Xms6g \-Xmx6g/ES_JAVA_OPTS\=\-Xms${ES_MEMORY}g \-Xmx${ES_MEMORY}g/g" docker-compose.yml
+    sed -i "s/ES_JAVA_OPTS\=\-Xms6g \-Xmx6g/ES_JAVA_OPTS\=\-Xms${ES_MEMORY}g \-Xmx${ES_MEMORY}g/g" docker-compose-elk-${license_choice}.yml
 }
 
 show_banner(){
@@ -264,7 +274,7 @@ show_banner(){
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
     echo "** HELK build version: v0.1.1-alpha07062018 **"
     echo "** HELK ELK version: 6.3.1                  **"
-    echo "** License: BSD 3-Clause                    **"
+    echo "** License: GPL-3.0                         **"
     echo "**********************************************"
     echo " "
 }
@@ -298,6 +308,7 @@ manual_install(){
     check_min_requirements
     get_host_ip
     set_helk_ip
+    set_helk_license
     prepare_helk
     install_helk
     get_jupyter_token
@@ -305,7 +316,7 @@ manual_install(){
     show_final_information
 }
 
-ip_set_install(){
+automatic_install(){
     show_banner
     check_min_requirements
     prepare_helk
@@ -316,20 +327,24 @@ ip_set_install(){
 }
 
 usage(){
+    echo
     echo "Usage: $0 [option...]" >&2
     echo
     echo "   -i         set HELKs IP address"
+    echo "   -l         set HELKs License (basic or trial)"
     echo "   -q         quiet -> not output to the console"
     echo
     echo "Examples:"
-    echo " $0                           Install HELK manually"
-    echo " $0 -ip 192.168.64.131        Install HELK with an IP address set"
-    echo " $0 -ip 192.168.64.131 -q     Install HELK with an IP address set without sending output to the console"
+    echo " $0                                   Install HELK manually"
+    echo " $0 -i 192.168.64.131 -l basic        Install HELK with an IP address set and basic License"
+    echo " $0 -i 192.168.64.131 -l trial -q     Install HELK with an IP address set and trial License without sending output to the console"
+    echo
     exit 1
 }
 
+# ************ Start HELK Install **********************
 # ************ Command Options **********************
-while getopts ":i:q" opt; do
+while getopts ":i:l:q" opt; do
     case ${opt} in
         i )
             host_ip=$OPTARG
@@ -337,40 +352,53 @@ while getopts ":i:q" opt; do
         q )
             quiet="TRUE"
             ;;
+        l )
+            license_choice=$OPTARG
+            ;;
         \? )
-            echo "Invalid option: $OPTARG" 1>&2
+            echo "[HELK-INSTALLATION-ERROR] Invalid option: $OPTARG" 1>&2
             usage
             ;;
         : )
-            echo "Invalid option: $OPTARG requires an argument" 1>&2
+            echo "[HELK-INSTALLATION-ERROR] Invalid option: $OPTARG requires an argument" 1>&2
             usage
         ;;
     esac
 done
 shift $((OPTIND -1))
-
 if [ $# -gt 0 ]; then
-    echo "Invalid option"
+    echo "[HELK-INSTALLATION-ERROR] Invalid option"
     usage
 fi
-
-if [ -z "$host_ip" ] &&  [ -z "$quiet" ]; then
+if [ -z "$host_ip" ] &&  [ -z "$quiet" ] && [ -z "$license_choice" ]; then
     manual_install
 else
     if [[ "$host_ip" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]]; then
         for i in 1 2 3 4; do
             if [ $(echo "$host_ip" | cut -d. -f$i) -gt 255 ]; then
-                echo "$host_ip is not a valid IP Address"
+                echo "[HELK-INSTALLATION-ERROR] $host_ip is not a valid IP Address"
                 usage
             fi
         done
+        # *********** Validating License Input ***************
+        case $license_choice in
+            basic)
+            ;;
+            trial)
+            ;;
+            *)
+                echo "[HELK-INSTALLATION-ERROR] Not a valid license. Valid Options: basic or trial"
+                usage
+            ;;
+        esac
+        # *********** Quiet or verbose ***************
         if [ -z "$quiet" ]; then
-            ip_set_install
+            automatic_install
         else
-            ip_set_install >> $LOGFILE 2>&1
+            automatic_install >> $LOGFILE 2>&1
         fi
     else
-        echo "Invalid option"
+        echo "[HELK-INSTALLATION-ERROR] Invalid option"
         usage
     fi
 fi

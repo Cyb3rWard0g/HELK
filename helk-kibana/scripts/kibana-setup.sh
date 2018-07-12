@@ -2,9 +2,9 @@
 
 # HELK script: kibana-setup.sh
 # HELK script description: Creates Kibana index patterns, dashboards and visualizations automatically.
-# HELK build version: 0.9 (Alpha)
+# HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # References: 
 # https://github.com/elastic/kibana/issues/3709 (https://github.com/hobti01)

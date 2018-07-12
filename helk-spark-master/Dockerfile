@@ -1,7 +1,7 @@
 # HELK script: HELK Spark Master Dockerfile
-# HELK build version: 0.9 (Alpha)
+# HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 FROM cyb3rward0g/helk-spark-base:2.3.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"

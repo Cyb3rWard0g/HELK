@@ -2,7 +2,7 @@
 
 # ATT&CK Client Main Script - Drill-down capabilities at the tactic / technique / platform / data source levels
 # Author: Jose Rodriguez (@Cyb3rPandaH)
-# License: BSD 3-Clause
+# License: GPL-3.0
 # Reference:
 # https://github.com/Cyb3rWard0g/ATTACK-Python-Client
 # https://stackoverflow.com/questions/27263805/pandas-when-cell-contents-are-lists-create-a-row-for-each-element-in-the-list/27266225?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa

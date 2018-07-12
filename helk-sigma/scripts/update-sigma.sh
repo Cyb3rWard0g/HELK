@@ -2,9 +2,9 @@
 
 # HELK script: update-sigma.sh
 # HELK script description: Pull current Sigma repository, compile rules to queries and import them to Kibana
-# HELK build version: 0.9 (Alpha)
+# HELK build Stage: Alpha
 # Author: Thomas Patzke (thomas@patzke.org)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # *********** Setting Variables ***************
 SIGMA_DIR=/opt/sigma/sigma

@@ -100,6 +100,6 @@ discovery.type: single-node
 # functionally under a 30-day trial licence. The oss flavor does not include X-Pack, 
 # and contains only open-source Elasticsearch.
 xpack.license.self_generated.type: basic
-
+xpack.security.enabled: false
 #https://www.elastic.co/guide/en/elasticsearch/reference/current/monitoring-settings.html
 xpack.monitoring.collection.enabled: true

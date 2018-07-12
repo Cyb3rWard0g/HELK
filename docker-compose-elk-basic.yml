@@ -51,8 +51,11 @@ services:
         aliases:
           - helk_kibana.hunt.local
   helk-nginx:
-    image: cyb3rward0g/helk-nginx:0.0.2
+    image: cyb3rward0g/helk-nginx:0.0.3
     container_name: helk-nginx
+    volumes:
+      - ./helk-nginx/htpasswd.users:/etc/nginx/htpasswd.users
+      - ./helk-nginx/default:/etc/nginx/sites-available/default
     ports:
       - "80:80"
     restart: always
@@ -106,7 +109,7 @@ services:
         aliases:
           - helk_spark_worker2.hunt.local
   helk-jupyter:
-    image: cyb3rward0g/helk-jupyter:0.0.1
+    image: cyb3rward0g/helk-jupyter:0.0.2
     container_name: helk-jupyter
     ports:
       - "8880:8880"
@@ -184,4 +187,3 @@ networks:
 volumes:
   esdata:
     driver: local
-  

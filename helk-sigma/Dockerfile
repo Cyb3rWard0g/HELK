@@ -1,7 +1,7 @@
 # HELK script: HELK Enrichments Dockerfile
-# HELK build version: 0.9 (ALPHA)
+# HELK build Stage: Alpha
 # Author: Thomas Patzke
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # References: 
 # https://github.com/Neo23x0/sigma
