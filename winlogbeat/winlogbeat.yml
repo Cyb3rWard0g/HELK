@@ -127,7 +127,7 @@ winlogbeat.event_logs:
 #----------------------------- Kafka output --------------------------------
 output.kafka:
   # initial brokers for reading cluster metadata
-  hosts: ["<HELK-IP>:9092","<HELK-IP>:9093","<HELK-IP>:9094"]
+  hosts: ["<HELK-IP>:9092","<HELK-IP>:9093"]
   topic: "winlogbeat"
   ############################# HELK Optimizing Latency ######################
   max_retries: 2

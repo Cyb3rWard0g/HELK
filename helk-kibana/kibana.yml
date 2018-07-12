@@ -102,6 +102,4 @@ logging.dest: /usr/share/kibana/config/kibana_logs.log
 "vega": {"enableExternalUrls": true}
 
 # Default Kibana configuration from kibana-docker.
-elasticsearch.username: elastic
-elasticsearch.password: changeme
 xpack.monitoring.ui.container.elasticsearch.enabled: true

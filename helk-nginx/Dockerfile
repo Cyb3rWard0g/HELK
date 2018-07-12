@@ -1,8 +1,7 @@
 # HELK script: HELK Nginx Dockerfile
-# HELK build version: 0.9 (ALPHA)
-# HELK ELK version: 6.2.3
+# HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # References: 
 # https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
@@ -27,10 +26,7 @@ ADD scripts/nginx-entrypoint.sh /opt/helk/scripts/
 RUN chmod +x /opt/helk/scripts/nginx-entrypoint.sh
 
 # *********** Installing Nginx ***************
-RUN apt-get install -qqy nginx \
-  && mv /etc/nginx/sites-available/default /etc/nginx/sites-available/backup_default
-ADD htpasswd.users /etc/nginx/ 
-ADD default /etc/nginx/sites-available/
+RUN apt-get install -qqy nginx
 RUN apt-get update -qq
 
 # *********** RUN HELK ***************

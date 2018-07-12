@@ -1,7 +1,7 @@
 # HELK script: HELK Base Image Dockerfile
 # HELK build version: 0.9 (Alpha)
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 FROM phusion/baseimage:0.10.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"

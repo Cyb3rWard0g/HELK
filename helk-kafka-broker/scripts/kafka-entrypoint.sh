@@ -2,9 +2,9 @@
 
 # HELK script: kafka-entrypoint.sh
 # HELK script description: Starts Kafka services
-# HELK build version: 0.9 (Alpha)
+# HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # *********** Configuring Kafka **************
 echo "[HELK-DOCKER-INSTALLATION-INFO] Setting current host IP to brokers server.properties files.."

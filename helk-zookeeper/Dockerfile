@@ -1,7 +1,7 @@
 # HELK script: HELK Kafka Zookeeper Dockerfile
-# HELK build version: 0.9 (Alpha)
+# HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 FROM cyb3rward0g/helk-kafka-base:1.1.0
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"

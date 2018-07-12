@@ -2,9 +2,9 @@
 
 # HELK script: zookeeper-entrypoint.sh
 # HELK script description: Starts Kafka Zookeeper services
-# HELK build version: 0.9 (Alpha)
+# HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # Generate the config only if it doesn't exist
 if [ ! -f $ZOO_CONF_DIR/zookeeper.properties ]; then

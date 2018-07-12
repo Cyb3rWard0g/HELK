@@ -2,9 +2,9 @@
 
 # HELK script: sigma-entrypoint.sh
 # HELK script description: Waits for Kibana to getting available and starts initial Sigma update
-# HELK build version: 0.9 (Alpha)
+# HELK build Stage: Alpha
 # Author: Thomas Patzke
-# License: BSD 3-Clause
+# License: GPL-3.0
 
 # References: 
 # https://github.com/Neo23x0/sigma
