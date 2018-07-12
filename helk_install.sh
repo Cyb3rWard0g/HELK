@@ -140,7 +140,7 @@ set_helk_ip(){
 }
 
 set_helk_license(){    
-    # *********** Accepting Defaults or Allowing user to set HELK IP ***************
+    # *********** Accepting Defaults or Allowing user to set HELK License ***************
     local license_input
     read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK License. Default value is basic: " -e -i "basic" license_input
     license_choice=${license_input:-"basic"}
