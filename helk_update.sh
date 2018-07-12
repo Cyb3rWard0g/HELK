@@ -16,7 +16,7 @@ check_min_requirements(){
     systemKernel="$(uname -s)"
     echo "[HELK-UPDATE-INFO] HELK being hosted on a $systemKernel box"
     if [ "$systemKernel" == "Linux" ]; then 
-        AVAILABLE_MEMORY=$(free -hm | awk 'NR==2{printf "%.f\t\t", $7 }')
+        AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         
         # Only checking Available Memory requirements and not Disk, as old images are deleted and replaced with updated ones.
         if [ "${AVAILABLE_MEMORY}" -ge "12" ] ; then
