@@ -12,7 +12,7 @@ server.host: "helk-kibana"
 #server.basePath: ""
 
 # The maximum payload size in bytes for incoming server requests.
-#server.maxPayloadBytes: 1048576
+server.maxPayloadBytes: 2048576
 
 # The Kibana server's name.  This is used for display purposes.
 server.name: "helk-kibana"
@@ -58,11 +58,11 @@ elasticsearch.url: "http://helk-elasticsearch:9200"
 
 # Time in milliseconds to wait for Elasticsearch to respond to pings. Defaults to the value of
 # the elasticsearch.requestTimeout setting.
-#elasticsearch.pingTimeout: 1500
+elasticsearch.pingTimeout: 7500
 
 # Time in milliseconds to wait for responses from the back end or Elasticsearch. This value
 # must be a positive integer.
-elasticsearch.requestTimeout: 60000
+elasticsearch.requestTimeout: 300000
 
 # List of Kibana client-side headers to send to Elasticsearch. To send *no* client-side
 # headers, set this value to [] (an empty list).
