@@ -1,0 +1,17 @@
+{
+  "display_name": "PySpark_Python3",
+  "language": "python",
+  "argv": [
+   "/usr/bin/python3",
+   "-m",
+   "ipykernel_launcher",
+   "-f",
+   "{connection_file}"
+  ],
+  "env": {
+   "SPARK_HOME": "/opt/helk/spark/",
+   "PYTHONPATH": "/opt/helk/spark/python/:/opt/helk/spark/python/lib/py4j-0.10.7-src.zip",
+   "PYTHONSTARTUP": "/opt/helk/spark/python/pyspark/shell.py",
+   "PYSPARK_PYTHON": "/usr/bin/python3"
+  }
+}

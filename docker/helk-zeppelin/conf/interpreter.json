@@ -1,0 +1,1658 @@
+{
+    "interpreterSettings": {
+      "ignite": {
+        "id": "ignite",
+        "name": "ignite",
+        "group": "ignite",
+        "properties": {
+          "ignite.config.url": {
+            "name": "ignite.config.url",
+            "value": "",
+            "type": "url"
+          },
+          "ignite.peerClassLoadingEnabled": {
+            "name": "ignite.peerClassLoadingEnabled",
+            "value": true,
+            "type": "checkbox"
+          },
+          "ignite.clientMode": {
+            "name": "ignite.clientMode",
+            "value": true,
+            "type": "checkbox"
+          },
+          "ignite.jdbc.url": {
+            "name": "ignite.jdbc.url",
+            "value": "jdbc:ignite:cfg://default-ignite-jdbc.xml",
+            "type": "string"
+          },
+          "ignite.addresses": {
+            "name": "ignite.addresses",
+            "value": "127.0.0.1:47500..47509",
+            "type": "textarea"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "ignite",
+            "class": "org.apache.zeppelin.ignite.IgniteInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          },
+          {
+            "name": "ignitesql",
+            "class": "org.apache.zeppelin.ignite.IgniteSqlInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "python": {
+        "id": "python",
+        "name": "python",
+        "group": "python",
+        "properties": {
+          "zeppelin.python": {
+            "name": "zeppelin.python",
+            "value": "python",
+            "type": "string"
+          },
+          "zeppelin.ipython.launch.timeout": {
+            "name": "zeppelin.ipython.launch.timeout",
+            "value": "30000",
+            "type": "number"
+          },
+          "zeppelin.python.useIPython": {
+            "name": "zeppelin.python.useIPython",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.ipython.grpc.message_size": {
+            "name": "zeppelin.ipython.grpc.message_size",
+            "value": "33554432",
+            "type": "number"
+          },
+          "zeppelin.python.maxResult": {
+            "name": "zeppelin.python.maxResult",
+            "value": "1000",
+            "type": "number"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "python",
+            "class": "org.apache.zeppelin.python.PythonInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "python",
+              "editOnDblClick": false,
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "ipython",
+            "class": "org.apache.zeppelin.python.IPythonInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "python",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "sql",
+            "class": "org.apache.zeppelin.python.PythonInterpreterPandasSql",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sql",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": false
+            }
+          },
+          {
+            "name": "conda",
+            "class": "org.apache.zeppelin.python.PythonCondaInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sh",
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          },
+          {
+            "name": "docker",
+            "class": "org.apache.zeppelin.python.PythonDockerInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sh",
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "sap": {
+        "id": "sap",
+        "name": "sap",
+        "group": "sap",
+        "properties": {
+          "universe.password": {
+            "name": "universe.password",
+            "value": "",
+            "type": "password"
+          },
+          "universe.api.url": {
+            "name": "universe.api.url",
+            "value": "http://localhost:6405/biprws",
+            "type": "url"
+          },
+          "universe.authType": {
+            "name": "universe.authType",
+            "value": "secEnterprise",
+            "type": "string"
+          },
+          "universe.user": {
+            "name": "universe.user",
+            "value": "",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "universe",
+            "class": "org.apache.zeppelin.sap.UniverseInterpreter",
+            "defaultInterpreter": true,
+            "editor": {
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "jdbc": {
+        "id": "jdbc",
+        "name": "jdbc",
+        "group": "jdbc",
+        "properties": {
+          "default.url": {
+            "name": "default.url",
+            "value": "jdbc:postgresql://localhost:5432/",
+            "type": "string"
+          },
+          "default.driver": {
+            "name": "default.driver",
+            "value": "org.postgresql.Driver",
+            "type": "string"
+          },
+          "zeppelin.jdbc.principal": {
+            "name": "zeppelin.jdbc.principal",
+            "value": "",
+            "type": "string"
+          },
+          "default.completer.ttlInSeconds": {
+            "name": "default.completer.ttlInSeconds",
+            "value": "120",
+            "type": "number"
+          },
+          "default.password": {
+            "name": "default.password",
+            "value": "",
+            "type": "password"
+          },
+          "default.completer.schemaFilters": {
+            "name": "default.completer.schemaFilters",
+            "value": "",
+            "type": "textarea"
+          },
+          "default.splitQueries": {
+            "name": "default.splitQueries",
+            "value": false,
+            "type": "checkbox"
+          },
+          "default.user": {
+            "name": "default.user",
+            "value": "gpadmin",
+            "type": "string"
+          },
+          "zeppelin.jdbc.concurrent.max_connection": {
+            "name": "zeppelin.jdbc.concurrent.max_connection",
+            "value": "10",
+            "type": "number"
+          },
+          "common.max_count": {
+            "name": "common.max_count",
+            "value": "1000",
+            "type": "number"
+          },
+          "default.precode": {
+            "name": "default.precode",
+            "value": "",
+            "type": "textarea"
+          },
+          "zeppelin.jdbc.auth.type": {
+            "name": "zeppelin.jdbc.auth.type",
+            "value": "",
+            "type": "string"
+          },
+          "default.statementPrecode": {
+            "name": "default.statementPrecode",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.jdbc.concurrent.use": {
+            "name": "zeppelin.jdbc.concurrent.use",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.jdbc.keytab.location": {
+            "name": "zeppelin.jdbc.keytab.location",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.jdbc.interpolation": {
+            "name": "zeppelin.jdbc.interpolation",
+            "value": false,
+            "type": "checkbox"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "sql",
+            "class": "org.apache.zeppelin.jdbc.JDBCInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sql",
+              "editOnDblClick": false,
+              "completionSupport": true
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "lens": {
+        "id": "lens",
+        "name": "lens",
+        "group": "lens",
+        "properties": {
+          "lens.server.base.url": {
+            "name": "lens.server.base.url",
+            "value": "http://\u003chostname\u003e:\u003cport\u003e/lensapi",
+            "type": "url"
+          },
+          "zeppelin.lens.maxThreads": {
+            "name": "zeppelin.lens.maxThreads",
+            "value": "10",
+            "type": "number"
+          },
+          "zeppelin.lens.maxResults": {
+            "name": "zeppelin.lens.maxResults",
+            "value": "1000",
+            "type": "number"
+          },
+          "lens.client.dbname": {
+            "name": "lens.client.dbname",
+            "value": "default",
+            "type": "string"
+          },
+          "lens.query.enable.persistent.resultset": {
+            "name": "lens.query.enable.persistent.resultset",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.lens.run.concurrent": {
+            "name": "zeppelin.lens.run.concurrent",
+            "value": true,
+            "type": "checkbox"
+          },
+          "lens.session.cluster.user": {
+            "name": "lens.session.cluster.user",
+            "value": "default",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "lens",
+            "class": "org.apache.zeppelin.lens.LensInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "pig": {
+        "id": "pig",
+        "name": "pig",
+        "group": "pig",
+        "properties": {
+          "zeppelin.pig.execType": {
+            "name": "zeppelin.pig.execType",
+            "value": "mapreduce",
+            "type": "string"
+          },
+          "SPARK_JAR": {
+            "name": "SPARK_JAR",
+            "value": "",
+            "type": "textarea"
+          },
+          "zeppelin.pig.includeJobStats": {
+            "name": "zeppelin.pig.includeJobStats",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.pig.maxResult": {
+            "name": "zeppelin.pig.maxResult",
+            "value": "1000",
+            "type": "number"
+          },
+          "SPARK_MASTER": {
+            "name": "SPARK_MASTER",
+            "value": "local",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "script",
+            "class": "org.apache.zeppelin.pig.PigInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "pig",
+              "editOnDblClick": false
+            }
+          },
+          {
+            "name": "query",
+            "class": "org.apache.zeppelin.pig.PigQueryInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "pig",
+              "editOnDblClick": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "flink": {
+        "id": "flink",
+        "name": "flink",
+        "group": "flink",
+        "properties": {
+          "port": {
+            "name": "port",
+            "value": "6123",
+            "type": "number"
+          },
+          "host": {
+            "name": "host",
+            "value": "local",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "flink",
+            "class": "org.apache.zeppelin.flink.FlinkInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "scala",
+              "editOnDblClick": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "angular": {
+        "id": "angular",
+        "name": "angular",
+        "group": "angular",
+        "properties": {},
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "angular",
+            "class": "org.apache.zeppelin.angular.AngularInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": true,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "livy": {
+        "id": "livy",
+        "name": "livy",
+        "group": "livy",
+        "properties": {
+          "livy.spark.executor.instances": {
+            "name": "livy.spark.executor.instances",
+            "value": "",
+            "type": "number"
+          },
+          "livy.spark.dynamicAllocation.cachedExecutorIdleTimeout": {
+            "name": "livy.spark.dynamicAllocation.cachedExecutorIdleTimeout",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.livy.concurrentSQL": {
+            "name": "zeppelin.livy.concurrentSQL",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.livy.url": {
+            "name": "zeppelin.livy.url",
+            "value": "http://localhost:8998",
+            "type": "url"
+          },
+          "zeppelin.livy.pull_status.interval.millis": {
+            "name": "zeppelin.livy.pull_status.interval.millis",
+            "value": "1000",
+            "type": "number"
+          },
+          "livy.spark.executor.memory": {
+            "name": "livy.spark.executor.memory",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.livy.restart_dead_session": {
+            "name": "zeppelin.livy.restart_dead_session",
+            "value": false,
+            "type": "checkbox"
+          },
+          "livy.spark.dynamicAllocation.enabled": {
+            "name": "livy.spark.dynamicAllocation.enabled",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.livy.maxLogLines": {
+            "name": "zeppelin.livy.maxLogLines",
+            "value": "1000",
+            "type": "number"
+          },
+          "livy.spark.dynamicAllocation.minExecutors": {
+            "name": "livy.spark.dynamicAllocation.minExecutors",
+            "value": "",
+            "type": "number"
+          },
+          "livy.spark.executor.cores": {
+            "name": "livy.spark.executor.cores",
+            "value": "",
+            "type": "number"
+          },
+          "zeppelin.livy.session.create_timeout": {
+            "name": "zeppelin.livy.session.create_timeout",
+            "value": "120",
+            "type": "number"
+          },
+          "zeppelin.livy.spark.sql.maxResult": {
+            "name": "zeppelin.livy.spark.sql.maxResult",
+            "value": "1000",
+            "type": "number"
+          },
+          "livy.spark.driver.cores": {
+            "name": "livy.spark.driver.cores",
+            "value": "",
+            "type": "number"
+          },
+          "livy.spark.jars.packages": {
+            "name": "livy.spark.jars.packages",
+            "value": "",
+            "type": "textarea"
+          },
+          "zeppelin.livy.spark.sql.field.truncate": {
+            "name": "zeppelin.livy.spark.sql.field.truncate",
+            "value": true,
+            "type": "checkbox"
+          },
+          "livy.spark.driver.memory": {
+            "name": "livy.spark.driver.memory",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.livy.displayAppInfo": {
+            "name": "zeppelin.livy.displayAppInfo",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.livy.principal": {
+            "name": "zeppelin.livy.principal",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.livy.keytab": {
+            "name": "zeppelin.livy.keytab",
+            "value": "",
+            "type": "textarea"
+          },
+          "livy.spark.dynamicAllocation.maxExecutors": {
+            "name": "livy.spark.dynamicAllocation.maxExecutors",
+            "value": "",
+            "type": "number"
+          },
+          "livy.spark.dynamicAllocation.initialExecutors": {
+            "name": "livy.spark.dynamicAllocation.initialExecutors",
+            "value": "",
+            "type": "number"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "spark",
+            "class": "org.apache.zeppelin.livy.LivySparkInterpreter",
+            "defaultInterpreter": true,
+            "editor": {
+              "language": "scala",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "sql",
+            "class": "org.apache.zeppelin.livy.LivySparkSQLInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sql",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "pyspark",
+            "class": "org.apache.zeppelin.livy.LivyPySparkInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "python",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "pyspark3",
+            "class": "org.apache.zeppelin.livy.LivyPySpark3Interpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "python",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "sparkr",
+            "class": "org.apache.zeppelin.livy.LivySparkRInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "r",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "shared",
+            "class": "org.apache.zeppelin.livy.LivySharedInterpreter",
+            "defaultInterpreter": false
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "perNote": "shared",
+          "perUser": "scoped",
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "groovy": {
+        "id": "groovy",
+        "name": "groovy",
+        "group": "groovy",
+        "properties": {
+          "GROOVY_CLASSES": {
+            "name": "GROOVY_CLASSES",
+            "value": "",
+            "type": "textarea"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "groovy",
+            "class": "org.apache.zeppelin.groovy.GroovyInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "neo4j": {
+        "id": "neo4j",
+        "name": "neo4j",
+        "group": "neo4j",
+        "properties": {
+          "neo4j.auth.user": {
+            "name": "neo4j.auth.user",
+            "value": "",
+            "type": "string"
+          },
+          "neo4j.auth.password": {
+            "name": "neo4j.auth.password",
+            "value": "",
+            "type": "string"
+          },
+          "neo4j.auth.type": {
+            "name": "neo4j.auth.type",
+            "value": "BASIC",
+            "type": "string"
+          },
+          "neo4j.max.concurrency": {
+            "name": "neo4j.max.concurrency",
+            "value": "50",
+            "type": "string"
+          },
+          "neo4j.url": {
+            "name": "neo4j.url",
+            "value": "bolt://localhost:7687",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "neo4j",
+            "class": "org.apache.zeppelin.graph.neo4j.Neo4jCypherInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "file": {
+        "id": "file",
+        "name": "file",
+        "group": "file",
+        "properties": {
+          "hdfs.url": {
+            "name": "hdfs.url",
+            "value": "http://localhost:50070/webhdfs/v1/",
+            "type": "url"
+          },
+          "hdfs.user": {
+            "name": "hdfs.user",
+            "value": "hdfs",
+            "type": "string"
+          },
+          "hdfs.maxlength": {
+            "name": "hdfs.maxlength",
+            "value": "1000",
+            "type": "number"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "hdfs",
+            "class": "org.apache.zeppelin.file.HDFSFileInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false,
+              "completionSupport": true
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "elasticsearch": {
+        "id": "elasticsearch",
+        "name": "elasticsearch",
+        "group": "elasticsearch",
+        "properties": {
+          "elasticsearch.cluster.name": {
+            "name": "elasticsearch.cluster.name",
+            "value": "elasticsearch",
+            "type": "string"
+          },
+          "elasticsearch.basicauth.username": {
+            "name": "elasticsearch.basicauth.username",
+            "value": "",
+            "type": "string"
+          },
+          "elasticsearch.client.type": {
+            "name": "elasticsearch.client.type",
+            "value": "transport",
+            "type": "string"
+          },
+          "elasticsearch.result.size": {
+            "name": "elasticsearch.result.size",
+            "value": "10",
+            "type": "number"
+          },
+          "elasticsearch.port": {
+            "name": "elasticsearch.port",
+            "value": "9300",
+            "type": "number"
+          },
+          "elasticsearch.host": {
+            "name": "elasticsearch.host",
+            "value": "localhost",
+            "type": "string"
+          },
+          "elasticsearch.basicauth.password": {
+            "name": "elasticsearch.basicauth.password",
+            "value": "",
+            "type": "password"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "elasticsearch",
+            "class": "org.apache.zeppelin.elasticsearch.ElasticsearchInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false,
+              "completionSupport": true
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "sh": {
+        "id": "sh",
+        "name": "sh",
+        "group": "sh",
+        "properties": {
+          "zeppelin.shell.interpolation": {
+            "name": "zeppelin.shell.interpolation",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.shell.principal": {
+            "name": "zeppelin.shell.principal",
+            "value": "",
+            "type": "string"
+          },
+          "shell.working.directory.user.home": {
+            "name": "shell.working.directory.user.home",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.shell.auth.type": {
+            "name": "zeppelin.shell.auth.type",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.shell.keytab.location": {
+            "name": "zeppelin.shell.keytab.location",
+            "value": "",
+            "type": "string"
+          },
+          "shell.command.timeout.millisecs": {
+            "name": "shell.command.timeout.millisecs",
+            "value": "60000",
+            "type": "number"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "sh",
+            "class": "org.apache.zeppelin.shell.ShellInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sh",
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "spark": {
+        "id": "spark",
+        "name": "spark",
+        "group": "spark",
+        "properties": {
+          "spark.executor.memory": {
+            "name": "spark.executor.memory",
+            "value": "1g",
+            "type": "string"
+          },
+          "zeppelin.spark.sql.interpolation": {
+            "name": "zeppelin.spark.sql.interpolation",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.spark.concurrentSQL": {
+            "name": "zeppelin.spark.concurrentSQL",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.R.knitr": {
+            "name": "zeppelin.R.knitr",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.R.cmd": {
+            "name": "zeppelin.R.cmd",
+            "value": "R",
+            "type": "string"
+          },
+          "spark.app.name": {
+            "name": "spark.app.name",
+            "value": "Zeppelin",
+            "type": "string"
+          },
+          "zeppelin.R.image.width": {
+            "name": "zeppelin.R.image.width",
+            "value": "100%",
+            "type": "number"
+          },
+          "zeppelin.spark.importImplicit": {
+            "name": "zeppelin.spark.importImplicit",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.dep.additionalRemoteRepository": {
+            "name": "zeppelin.dep.additionalRemoteRepository",
+            "value": "spark-packages,http://dl.bintray.com/spark-packages/maven,false;",
+            "type": "textarea"
+          },
+          "zeppelin.spark.maxResult": {
+            "name": "zeppelin.spark.maxResult",
+            "value": "1000",
+            "type": "number"
+          },
+          "master": {
+            "name": "master",
+            "value": "local[*]",
+            "type": "string"
+          },
+          "zeppelin.pyspark.python": {
+            "name": "zeppelin.pyspark.python",
+            "value": "/usr/bin/python3",
+            "type": "string"
+          },
+          "args": {
+            "name": "args",
+            "value": "",
+            "type": "textarea"
+          },
+          "zeppelin.spark.enableSupportedVersionCheck": {
+            "name": "zeppelin.spark.enableSupportedVersionCheck",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.spark.useNew": {
+            "name": "zeppelin.spark.useNew",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.dep.localrepo": {
+            "name": "zeppelin.dep.localrepo",
+            "value": "local-repo",
+            "type": "string"
+          },
+          "zeppelin.pyspark.useIPython": {
+            "name": "zeppelin.pyspark.useIPython",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.spark.sql.stacktrace": {
+            "name": "zeppelin.spark.sql.stacktrace",
+            "value": false,
+            "type": "checkbox"
+          },
+          "zeppelin.spark.useHiveContext": {
+            "name": "zeppelin.spark.useHiveContext",
+            "value": true,
+            "type": "checkbox"
+          },
+          "zeppelin.spark.uiWebUrl": {
+            "name": "zeppelin.spark.uiWebUrl",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.R.render.options": {
+            "name": "zeppelin.R.render.options",
+            "value": "out.format \u003d \u0027html\u0027, comment \u003d NA, echo \u003d FALSE, results \u003d \u0027asis\u0027, message \u003d F, warning \u003d F, fig.retina \u003d 2",
+            "type": "textarea"
+          },
+          "zeppelin.spark.printREPLOutput": {
+            "name": "zeppelin.spark.printREPLOutput",
+            "value": true,
+            "type": "checkbox"
+          },
+          "spark.cores.max": {
+            "name": "spark.cores.max",
+            "value": "1",
+            "type": "number"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "spark",
+            "class": "org.apache.zeppelin.spark.SparkInterpreter",
+            "defaultInterpreter": true,
+            "editor": {
+              "language": "scala",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "sql",
+            "class": "org.apache.zeppelin.spark.SparkSqlInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sql",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "dep",
+            "class": "org.apache.zeppelin.spark.DepInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "scala",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "pyspark",
+            "class": "org.apache.zeppelin.spark.PySparkInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "python",
+              "editOnDblClick": false,
+              "completionKey": "TAB",
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "ipyspark",
+            "class": "org.apache.zeppelin.spark.IPySparkInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "python",
+              "editOnDblClick": false,
+              "completionSupport": true
+            }
+          },
+          {
+            "name": "r",
+            "class": "org.apache.zeppelin.spark.SparkRInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "r",
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "cassandra": {
+        "id": "cassandra",
+        "name": "cassandra",
+        "group": "cassandra",
+        "properties": {
+          "cassandra.ssl.truststore.password": {
+            "name": "cassandra.ssl.truststore.password",
+            "value": "none",
+            "type": "password"
+          },
+          "cassandra.pooling.new.connection.threshold.remote": {
+            "name": "cassandra.pooling.new.connection.threshold.remote",
+            "value": "100",
+            "type": "number"
+          },
+          "cassandra.query.default.fetchSize": {
+            "name": "cassandra.query.default.fetchSize",
+            "value": "5000",
+            "type": "number"
+          },
+          "cassandra.socket.tcp.no_delay": {
+            "name": "cassandra.socket.tcp.no_delay",
+            "value": true,
+            "type": "checkbox"
+          },
+          "cassandra.ssl.enabled": {
+            "name": "cassandra.ssl.enabled",
+            "value": false,
+            "type": "checkbox"
+          },
+          "cassandra.hosts": {
+            "name": "cassandra.hosts",
+            "value": "localhost",
+            "type": "textarea"
+          },
+          "cassandra.credentials.username": {
+            "name": "cassandra.credentials.username",
+            "value": "none",
+            "type": "string"
+          },
+          "cassandra.pooling.new.connection.threshold.local": {
+            "name": "cassandra.pooling.new.connection.threshold.local",
+            "value": "100",
+            "type": "number"
+          },
+          "cassandra.socket.read.timeout.millisecs": {
+            "name": "cassandra.socket.read.timeout.millisecs",
+            "value": "12000",
+            "type": "number"
+          },
+          "cassandra.load.balancing.policy": {
+            "name": "cassandra.load.balancing.policy",
+            "value": "DEFAULT",
+            "type": "string"
+          },
+          "cassandra.pooling.max.request.per.connection.local": {
+            "name": "cassandra.pooling.max.request.per.connection.local",
+            "value": "1024",
+            "type": "number"
+          },
+          "cassandra.cluster": {
+            "name": "cassandra.cluster",
+            "value": "Test Cluster",
+            "type": "string"
+          },
+          "cassandra.pooling.heartbeat.interval.seconds": {
+            "name": "cassandra.pooling.heartbeat.interval.seconds",
+            "value": "30",
+            "type": "number"
+          },
+          "cassandra.query.default.serial.consistency": {
+            "name": "cassandra.query.default.serial.consistency",
+            "value": "SERIAL",
+            "type": "string"
+          },
+          "cassandra.retry.policy": {
+            "name": "cassandra.retry.policy",
+            "value": "DEFAULT",
+            "type": "string"
+          },
+          "cassandra.native.port": {
+            "name": "cassandra.native.port",
+            "value": "9042",
+            "type": "number"
+          },
+          "cassandra.interpreter.parallelism": {
+            "name": "cassandra.interpreter.parallelism",
+            "value": "10",
+            "type": "number"
+          },
+          "cassandra.pooling.pool.timeout.millisecs": {
+            "name": "cassandra.pooling.pool.timeout.millisecs",
+            "value": "5000",
+            "type": "number"
+          },
+          "cassandra.pooling.max.request.per.connection.remote": {
+            "name": "cassandra.pooling.max.request.per.connection.remote",
+            "value": "256",
+            "type": "number"
+          },
+          "cassandra.compression.protocol": {
+            "name": "cassandra.compression.protocol",
+            "value": "NONE",
+            "type": "string"
+          },
+          "cassandra.ssl.truststore.path": {
+            "name": "cassandra.ssl.truststore.path",
+            "value": "none",
+            "type": "string"
+          },
+          "cassandra.socket.connection.timeout.millisecs": {
+            "name": "cassandra.socket.connection.timeout.millisecs",
+            "value": "5000",
+            "type": "number"
+          },
+          "cassandra.query.default.consistency": {
+            "name": "cassandra.query.default.consistency",
+            "value": "ONE",
+            "type": "string"
+          },
+          "cassandra.keyspace": {
+            "name": "cassandra.keyspace",
+            "value": "system",
+            "type": "string"
+          },
+          "cassandra.reconnection.policy": {
+            "name": "cassandra.reconnection.policy",
+            "value": "DEFAULT",
+            "type": "string"
+          },
+          "cassandra.pooling.max.connection.per.host.local": {
+            "name": "cassandra.pooling.max.connection.per.host.local",
+            "value": "8",
+            "type": "number"
+          },
+          "cassandra.credentials.password": {
+            "name": "cassandra.credentials.password",
+            "value": "none",
+            "type": "password"
+          },
+          "cassandra.protocol.version": {
+            "name": "cassandra.protocol.version",
+            "value": "4",
+            "type": "string"
+          },
+          "cassandra.max.schema.agreement.wait.second": {
+            "name": "cassandra.max.schema.agreement.wait.second",
+            "value": "10",
+            "type": "number"
+          },
+          "cassandra.pooling.core.connection.per.host.remote": {
+            "name": "cassandra.pooling.core.connection.per.host.remote",
+            "value": "1",
+            "type": "number"
+          },
+          "cassandra.pooling.core.connection.per.host.local": {
+            "name": "cassandra.pooling.core.connection.per.host.local",
+            "value": "2",
+            "type": "number"
+          },
+          "cassandra.pooling.max.connection.per.host.remote": {
+            "name": "cassandra.pooling.max.connection.per.host.remote",
+            "value": "2",
+            "type": "number"
+          },
+          "cassandra.pooling.idle.timeout.seconds": {
+            "name": "cassandra.pooling.idle.timeout.seconds",
+            "value": "120",
+            "type": "number"
+          },
+          "cassandra.speculative.execution.policy": {
+            "name": "cassandra.speculative.execution.policy",
+            "value": "DEFAULT",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "cassandra",
+            "class": "org.apache.zeppelin.cassandra.CassandraInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "md": {
+        "id": "md",
+        "name": "md",
+        "group": "md",
+        "properties": {
+          "markdown.parser.type": {
+            "name": "markdown.parser.type",
+            "value": "pegdown",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "md",
+            "class": "org.apache.zeppelin.markdown.Markdown",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "markdown",
+              "editOnDblClick": true,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "alluxio": {
+        "id": "alluxio",
+        "name": "alluxio",
+        "group": "alluxio",
+        "properties": {
+          "alluxio.master.port": {
+            "name": "alluxio.master.port",
+            "value": "19998",
+            "type": "number"
+          },
+          "alluxio.master.hostname": {
+            "name": "alluxio.master.hostname",
+            "value": "localhost",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "alluxio",
+            "class": "org.apache.zeppelin.alluxio.AlluxioInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false,
+              "completionSupport": true
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "bigquery": {
+        "id": "bigquery",
+        "name": "bigquery",
+        "group": "bigquery",
+        "properties": {
+          "zeppelin.bigquery.project_id": {
+            "name": "zeppelin.bigquery.project_id",
+            "value": " ",
+            "type": "string"
+          },
+          "zeppelin.bigquery.sql_dialect": {
+            "name": "zeppelin.bigquery.sql_dialect",
+            "value": "",
+            "type": "string"
+          },
+          "zeppelin.bigquery.max_no_of_rows": {
+            "name": "zeppelin.bigquery.max_no_of_rows",
+            "value": "100000",
+            "type": "number"
+          },
+          "zeppelin.bigquery.wait_time": {
+            "name": "zeppelin.bigquery.wait_time",
+            "value": "5000",
+            "type": "number"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "sql",
+            "class": "org.apache.zeppelin.bigquery.BigQueryInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sql",
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "hbase": {
+        "id": "hbase",
+        "name": "hbase",
+        "group": "hbase",
+        "properties": {
+          "hbase.home": {
+            "name": "hbase.home",
+            "value": "/usr/lib/hbase/",
+            "type": "string"
+          },
+          "zeppelin.hbase.test.mode": {
+            "name": "zeppelin.hbase.test.mode",
+            "value": false,
+            "type": "checkbox"
+          },
+          "hbase.ruby.sources": {
+            "name": "hbase.ruby.sources",
+            "value": "lib/ruby",
+            "type": "string"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "hbase",
+            "class": "org.apache.zeppelin.hbase.HbaseInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "editOnDblClick": false,
+              "completionSupport": false
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      },
+      "kylin": {
+        "id": "kylin",
+        "name": "kylin",
+        "group": "kylin",
+        "properties": {
+          "kylin.query.project": {
+            "name": "kylin.query.project",
+            "value": "learn_kylin",
+            "type": "textarea"
+          },
+          "kylin.api.user": {
+            "name": "kylin.api.user",
+            "value": "ADMIN",
+            "type": "string"
+          },
+          "kylin.query.limit": {
+            "name": "kylin.query.limit",
+            "value": "5000",
+            "type": "number"
+          },
+          "kylin.api.url": {
+            "name": "kylin.api.url",
+            "value": "http://localhost:7070/kylin/api/query",
+            "type": "url"
+          },
+          "kylin.api.password": {
+            "name": "kylin.api.password",
+            "value": "KYLIN",
+            "type": "password"
+          },
+          "kylin.query.ispartial": {
+            "name": "kylin.query.ispartial",
+            "value": true,
+            "type": "checkbox"
+          },
+          "kylin.query.offset": {
+            "name": "kylin.query.offset",
+            "value": "0",
+            "type": "number"
+          }
+        },
+        "status": "READY",
+        "interpreterGroup": [
+          {
+            "name": "kylin",
+            "class": "org.apache.zeppelin.kylin.KylinInterpreter",
+            "defaultInterpreter": false,
+            "editor": {
+              "language": "sql",
+              "editOnDblClick": false,
+              "completionSupport": true
+            }
+          }
+        ],
+        "dependencies": [],
+        "option": {
+          "remote": true,
+          "port": -1,
+          "isExistingProcess": false,
+          "setPermission": false,
+          "owners": [],
+          "isUserImpersonate": false
+        }
+      }
+    },
+    "interpreterBindings": {
+      "2DKXYM99T": [
+        "spark",
+        "md",
+        "angular",
+        "sh",
+        "livy",
+        "alluxio",
+        "file",
+        "flink",
+        "python",
+        "ignite",
+        "lens",
+        "cassandra",
+        "kylin",
+        "elasticsearch",
+        "jdbc",
+        "hbase",
+        "bigquery",
+        "pig",
+        "groovy",
+        "neo4j",
+        "sap"
+      ],
+      "2C2AUG798": [
+        "spark",
+        "md",
+        "angular",
+        "sh",
+        "livy",
+        "alluxio",
+        "file",
+        "flink",
+        "python",
+        "ignite",
+        "lens",
+        "cassandra",
+        "kylin",
+        "elasticsearch",
+        "jdbc",
+        "hbase",
+        "bigquery",
+        "pig",
+        "groovy",
+        "neo4j",
+        "sap"
+      ]
+    },
+    "interpreterRepositories": [
+      {
+        "id": "central",
+        "type": "default",
+        "url": "http://repo1.maven.org/maven2/",
+        "releasePolicy": {
+          "enabled": true,
+          "updatePolicy": "daily",
+          "checksumPolicy": "warn"
+        },
+        "snapshotPolicy": {
+          "enabled": true,
+          "updatePolicy": "daily",
+          "checksumPolicy": "warn"
+        },
+        "mirroredRepositories": [],
+        "repositoryManager": false
+      },
+      {
+        "id": "local",
+        "type": "default",
+        "url": "file:///opt/helk/spark/.m2/repository",
+        "releasePolicy": {
+          "enabled": true,
+          "updatePolicy": "daily",
+          "checksumPolicy": "warn"
+        },
+        "snapshotPolicy": {
+          "enabled": true,
+          "updatePolicy": "daily",
+          "checksumPolicy": "warn"
+        },
+        "mirroredRepositories": [],
+        "repositoryManager": false
+      }
+    ]
+}
