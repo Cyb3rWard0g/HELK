@@ -3,7 +3,7 @@
   "index_patterns": [ "logs-endpoint-winevent-powershell-*" ],
   "version": 2018080201,
   "mappings":{
-    "_doc": {
+    "doc": {
       "properties": {
         "powershell": {
           "dynamic": "false",

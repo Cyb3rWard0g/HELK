@@ -34,7 +34,7 @@ services:
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     restart: always
     depends_on:
-      - helk-elasticsearch
+      - helk-kibana
     networks:
       helk:
         aliases:

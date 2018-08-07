@@ -13,7 +13,7 @@
     "refresh_interval": "30s"
   },
   "mappings": {
-    "_doc": {
+    "doc": {
       "dynamic": "true",
       "dynamic_templates": [
         {

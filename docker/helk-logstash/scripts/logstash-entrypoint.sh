@@ -32,7 +32,7 @@ do
 done
 
 # ********** Install Plugin *****************
-echo "[HELK-DOCKER-INSTALLATION-INFO] Installing Logstsh plugins.."
+echo "[HELK-DOCKER-INSTALLATION-INFO] Installing Logstash plugins.."
 logstash-plugin install logstash-filter-prune
 
 # ********** Starting Logstash *****************

@@ -3,7 +3,7 @@
   "index_patterns": "logs-endpoint-winevent-security-*",
   "version": 2018080101,
   "mappings":{
-    "_doc":{
+    "doc":{
       "properties":{
         "@date_new_time":{"type":"date"},
         "@date_previous_time":{"type":"date"},

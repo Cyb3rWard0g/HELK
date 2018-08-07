@@ -6,7 +6,7 @@
     "index.refresh_interval": "5s"
   },
   "mappings":{
-    "_doc":{
+    "doc":{
       "properties":{
         "@date_creation":{"type":"date"},
         "@date_creation_previous":{"type":"date"},

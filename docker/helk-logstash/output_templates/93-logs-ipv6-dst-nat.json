@@ -3,7 +3,7 @@
   "index_patterns": [ "logs-*" ],
   "version": 2018080101,
   "mappings": {
-    "_doc": {
+    "doc": {
       "properties": {
         "dst_nat_ipv6_addr": {
           "type": "ip",

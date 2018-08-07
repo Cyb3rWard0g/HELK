@@ -55,7 +55,7 @@
     "refresh_interval": "30s"
   },
   "mappings": {
-    "_doc":{
+    "doc":{
       "properties":{
         "process_id":{"type":"integer"},
         "event_id":{"type":"integer"},

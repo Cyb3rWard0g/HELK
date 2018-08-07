@@ -262,7 +262,7 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.2-alpha08032018 **"
+    echo "** HELK build version: v0.1.2-alpha08062018 **"
     echo "** HELK ELK version: 6.3.2                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"

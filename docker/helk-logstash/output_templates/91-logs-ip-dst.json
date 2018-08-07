@@ -3,7 +3,7 @@
   "index_patterns": [ "logs-*" ],
   "version": 2018052301,
   "mappings": {
-    "_doc": {
+    "doc": {
       "properties": {
         "dst_ip_addr": {
           "type": "ip",
