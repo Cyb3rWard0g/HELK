@@ -1,0 +1,12 @@
+{
+  "order": 60,
+  "index_patterns": [ "logs-endpoint-winevent-application-*" ],
+  "version": 2018080101,
+  "mappings":{
+    "doc":{
+      "properties":{
+        "spp_restart_scheduled":{"type":"date"}
+      }
+    }
+  }
+}

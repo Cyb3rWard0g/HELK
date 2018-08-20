@@ -1,0 +1,88 @@
+{
+  "order": 91,
+  "index_patterns": [ "logs-*" ],
+  "version": 2018080101,
+  "mappings": {
+    "doc": {
+      "properties": {
+        "dst_ipv6_addr": {
+          "type": "ip",
+          "copy_to": "any_ip_addr"
+        },
+        "dst_ipv6_public": {
+          "type": "boolean",
+          "doc_values": false
+        },
+        "dst_ipv6_type": {
+          "type": "keyword"
+        },
+        "meta_dst_ipv6_geo": {
+          "properties": {
+            "asn": {
+              "type": "integer",
+              "copy_to": "any_ip_geo.asn"
+            },
+            "as_org": {
+              "type": "text",
+              "norms": false,
+              "copy_to": "any_ip_geo.as_org",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "eager_global_ordinals": true
+                }
+              }
+            },
+            "country_code2": {
+              "type": "keyword"
+            },
+            "country_code3": {
+              "type": "keyword"
+            },
+            "country_name": {
+              "type": "keyword"
+            },
+            "continent_code": {
+              "type": "keyword"
+            },
+            "region_code": {
+              "type": "keyword"
+            },
+            "region_name": {
+              "type": "keyword"
+            },
+            "city_name": {
+              "type": "keyword"
+            },
+            "postal_code": {
+              "type": "keyword"
+            },
+            "latitude": {
+              "type": "keyword",
+              "index": false,
+              "doc_values": false
+            },
+            "longitude": {
+              "type": "keyword",
+              "index": false,
+              "doc_values": false
+            },
+            "dma_code": {
+              "type": "integer"
+            },
+            "area_code": {
+              "type": "integer"
+            },
+            "timezone": {
+              "type": "keyword",
+              "index": false
+            },
+            "location": {
+              "type": "geo_point"
+            }
+          }
+        }
+      }
+    }
+  }
+}

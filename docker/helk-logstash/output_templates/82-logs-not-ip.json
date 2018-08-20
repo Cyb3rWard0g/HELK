@@ -1,0 +1,26 @@
+{
+  "order": 82,
+  "index_patterns": [ "logs-*" ],
+  "version": 2018080101,
+  "mappings": {
+    "doc": {
+      "properties": {
+        "not_ip_dst": {
+          "type": "keyword"
+        },
+        "not_ip_dst_nat": {
+          "type": "keyword"
+        },
+        "not_ip_log": {
+          "type": "keyword"
+        },
+        "not_ip_src": {
+          "type": "keyword"
+        },
+        "not_ip_src_nat": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}

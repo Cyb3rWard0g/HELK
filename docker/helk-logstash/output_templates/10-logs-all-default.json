@@ -1,0 +1,57 @@
+{
+  "order": 10,
+  "index_patterns": [ "logs-*" ],
+  "version": 2018080201,
+  "settings": {
+    "index": {
+      "mapping": {
+        "ignore_malformed": true,
+        "total_fields.limit": "1000",
+        "coerce": true
+      }
+    },
+    "refresh_interval": "30s"
+  },
+  "mappings": {
+    "doc": {
+      "dynamic": "true",
+      "dynamic_templates": [
+        {
+          "strings": {
+            "match_mapping_type": "string",
+            "mapping": {
+              "type": "text",
+              "norms": false,
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 1024
+                }
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "@version": {
+          "type": "keyword"
+        },
+        "log_ingest_timestamp": {
+          "type": "date"
+        },
+        "z_logstash_type": {
+          "enabled": false
+        },
+        "z_original_message": {
+          "enabled": false
+        },
+        "z_logstash_pipeline": {
+          "enabled": false
+        }
+      }
+    }
+  }
+}

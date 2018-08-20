@@ -1,0 +1,7 @@
+{
+  "order": 60,
+  "index_patterns": [ "logs-endpoint-winevent-wmiactivity-*" ],
+  "version": 2018080101,
+  "mappings":{
+  }
+}
