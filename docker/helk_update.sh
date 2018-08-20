@@ -71,8 +71,11 @@ check_github(){
     else
         echo "HELK repo exists" >> $LOGFILE 2>&1
     fi
-
-    if COMMIT_DIFF=$(git rev-list --count master...helk-repo/master) && [ ! "$COMMIT_DIFF" == "0" ]; then
+    
+    git remote update >> $LOGFILE 2>&1
+    COMMIT_DIFF=$(git rev-list --count master...helk-repo/master)
+    
+    if  [ ! "$COMMIT_DIFF" == "0" ]; then
         echo "Possibly new release available. Commit diff --> $COMMIT_DIFF" >> $LOGFILE 2>&1
         IS_MASTER_BEHIND=$(git branch -v | grep master | grep behind)
         
