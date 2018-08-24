@@ -109,7 +109,7 @@ check_github(){
 update_helk() {
     set_helk_license
     echo -e "[HELK-UPDATE-INFO] Stopping HELK and starting update"
-    docker-compose -f docker-compose-elk-${license_choice}.yml down >> $LOGFILE 2>&1
+    docker-compose -f docker-compose-helk-elastic-${license_choice}.yml down >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echo -e "[!] Could not stop HELK via docker-compose (Error Code: $ERROR). You're possibly running a different HELK license than chosen - $license_choice"
@@ -119,7 +119,7 @@ update_helk() {
     check_min_requirements
 
     echo "[HELK-UPDATE-INFO] Rebuilding HELK via docker-compose"
-    docker-compose -f docker-compose-elk-${license_choice}.yml up --build -d -V --force-recreate --always-recreate-deps >> $LOGFILE 2>&1
+    docker-compose -f docker-compose-helk-elastic-${license_choice}.yml up --build -d -V --force-recreate --always-recreate-deps >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echo -e "[!] Could not run HELK via docker-compose (Error Code: $ERROR). Check $LOGFILE for details."
