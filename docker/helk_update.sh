@@ -36,19 +36,30 @@ check_min_requirements(){
     echo "[HELK-UPDATE-INFO] HELK being hosted on a $systemKernel box"
     if [ "$systemKernel" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
-        
-        # Only checking Available Memory requirements and not Disk, as old images are deleted and replaced with updated ones.
         if [ "${AVAILABLE_MEMORY}" -ge "12" ] ; then
             echo "[HELK-UPDATE-INFO] Available Memory (GB): ${AVAILABLE_MEMORY}"
         else
             echo "[HELK-UPDATE-ERROR] YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY"
             echo "[HELK-UPDATE-ERROR] Available Memory (GB): ${AVAILABLE_MEMORY}"
-            echo "[HELK-UPDATE-ERROR] Check the requirements section in our installation Wiki"
-            echo "[HELK-UPDATE-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+            echo "[HELK-UPDATE-ERROR] Check the requirements section in our UPDATE Wiki"
+            echo "[HELK-UPDATE-ERROR] UPDATE Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/UPDATE"
             exit 1
         fi
     else
         echo "[HELK-UPDATE-INFO] Error retrieving memory info for $systemKernel. Make sure you have at least 12GB of available memory!"
+    fi
+
+    # CHECK DOCKER DIRECTORY SPACE
+    echo "[HELK-UPDATE-INFO] Making sure you assigned enough disk space to the current Docker base directory"
+    AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')    
+    if [ "${AVAILABLE_DOCKER_DISK}" -ge "30" ]; then
+        echo "[HELK-UPDATE-INFO] Available Docker Disk: $AVAILABLE_DOCKER_DISK"
+    else
+        echo "[HELK-UPDATE-ERROR] YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
+        echo "[HELK-UPDATE-ERROR] Available Docker Disk: $AVAILABLE_DOCKER_DISK"
+        echo "[HELK-UPDATE-ERROR] Check the requirements section in our UPDATE Wiki"
+        echo "[HELK-UPDATE-ERROR] UPDATE Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/UPDATE"
+        exit 1
     fi
 }
 
@@ -87,27 +98,15 @@ check_github(){
             git checkout master >> $LOGFILE 2>&1
             git pull helk-repo master >> $LOGFILE 2>&1
             REBUILD_NEEDED=1
+            touch /tmp/helk-update
+            echo $REBUILD_NEEDED > /tmp/helk-update
         fi
     else
         echo "[HELK-UPDATE-INFO] No updates available."    
     fi
 }
 
-get_jupyter_token(){
-    until curl -s localhost:8880 -o /dev/null; do
-        sleep 1
-    done
-    jupyter_token="$(docker exec -ti helk-jupyter jupyter notebook list | grep -oP '(?<=token=).*(?= ::)' | awk '{$1=$1};1')" >> $LOGFILE 2>&1
-    echo -e "\n[HELK-UPDATE-INFO] New Jupyter token: $jupyter_token"   
-}
-
-LOGFILE="/var/log/helk-update.log"
-REBUILD_NEEDED=0
-
-echo "[HELK-UPDATE-INFO] Checking GitHub for updates..."   
-check_github
-
-if [ $REBUILD_NEEDED == 1 ]; then
+update_helk() {
     set_helk_license
     echo -e "[HELK-UPDATE-INFO] Stopping HELK and starting update"
     docker-compose -f docker-compose-elk-${license_choice}.yml down >> $LOGFILE 2>&1
@@ -133,9 +132,26 @@ if [ $REBUILD_NEEDED == 1 ]; then
         sleep 1
         : $((secs--))
     done
+    echo -e "\n[HELK-UPDATE-INFO] YOUR HELK HAS BEEN UPDATED!"
+    echo 0 > /tmp/helk-update
+    exit 1
+}
 
-    get_jupyter_token
-    echo -e "[HELK-UPDATE-INFO] YOUR HELK HAS BEEN UPDATED!"
+LOGFILE="/var/log/helk-update.log"
+REBUILD_NEEDED=0
+UPDATES_FETCHED=`cat /tmp/helk-update`
+
+if [ "$UPDATES_FETCHED" == "1" ]; then
+    echo -e "[HELK-UPDATE-INFO] Updates already downloaded. Starting update..."    
+    update_helk
+fi
+
+echo "[HELK-UPDATE-INFO] Checking GitHub for updates..."   
+check_github
+
+if [ $REBUILD_NEEDED == 1 ]; then
+    update_helk
 else
     echo -e "[HELK-UPDATE-INFO] YOUR HELK IS ALREADY UP-TO-DATE."
+    exit 1
 fi
