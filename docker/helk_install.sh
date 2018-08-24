@@ -29,7 +29,7 @@ check_min_requirements(){
     if [ "$systemKernel" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')    
-        if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
+        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
@@ -68,8 +68,8 @@ install_curl(){
 install_helk(){
     # ****** Building & running HELK ***********
     echo "[HELK-INSTALLATION-INFO] Building & running HELK via docker-compose"
-    echo "[HELK-INSTALLATION-INFO] Using docker-compose-elk-${license_choice}.yml file"
-    docker-compose -f docker-compose-elk-${license_choice}.yml up --build -d >> $LOGFILE 2>&1
+    echo "[HELK-INSTALLATION-INFO] Using docker-compose-helk-elastic-${subscription_choice}.yml file"
+    docker-compose -f docker-compose-helk-elastic-${subscription_choice}.yml up --build -d >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not run HELK via docker-compose (Error Code: $ERROR)."
@@ -132,19 +132,19 @@ set_helk_ip(){
     host_ip="${ip_choice:-$host_ip}"
 }
 
-set_helk_license(){    
-    # *********** Accepting Defaults or Allowing user to set HELK License ***************
-    local license_input
-    read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK License. Default value is basic: " -e -i "basic" license_input
-    license_choice=${license_input:-"basic"}
-    # *********** Validating License Input ***************
-    case $license_choice in
+set_helk_subscription(){    
+    # *********** Accepting Defaults or Allowing user to set HELK IP ***************
+    local subscription_input
+    read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK elastic subscription (basic or trial). Default value is basic: " -e -i "basic" subscription_input
+    subscription_choice=${subscription_input:-"basic"}
+    # *********** Validating subscription Input ***************
+    case $subscription_choice in
         basic)
         ;;
         trial)
         ;;
         *)
-            echo "[HELK-INSTALLATION-ERROR] Not a valid license. Valid Options: basic or trial"
+            echo "[HELK-INSTALLATION-ERROR] Not a valid subscription. Valid Options: basic or trial"
             exit 1
         ;;
     esac
@@ -152,7 +152,7 @@ set_helk_license(){
 
 prepare_helk(){
     echo "[HELK-INSTALLATION-INFO] HELK IP set to ${host_ip}"
-    echo "[HELK-INSTALLATION-INFO] HELK License set to ${license_choice}"
+    echo "[HELK-INSTALLATION-INFO] HELK elastic subscription set to ${subscription_choice}"
     if [ "$systemKernel" == "Linux" ]; then
         # Reference: https://get.docker.com/
         echo "[HELK-INSTALLATION-INFO] Checking distribution list and version"
@@ -210,7 +210,17 @@ prepare_helk(){
         # *********** Check if docker is installed ***************
         if [ -x "$(command -v docker)" ]; then
             echo "[HELK-INSTALLATION-INFO] Docker already installed"
-            
+            echo "[HELK-INSTALLATION-INFO] Making sure you assigned enough disk space to the current Docker base directory"
+            AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')    
+            if [ "${AVAILABLE_DOCKER_DISK}" -ge "30" ]; then
+                echo "[HELK-INSTALLATION-INFO] Available Docker Disk: $AVAILABLE_DOCKER_DISK"
+            else
+                echo "[HELK-INSTALLATION-ERROR] YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
+                echo "[HELK-INSTALLATION-ERROR] Available Docker Disk: $AVAILABLE_DOCKER_DISK"
+                echo "[HELK-INSTALLATION-ERROR] Check the requirements section in our installation Wiki"
+                echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+                exit 1
+            fi
         else
             echo "[HELK-INSTALLATION-INFO] Docker is not installed"
 
@@ -251,7 +261,7 @@ prepare_helk(){
     fi
     echo "[HELK-INSTALLATION-INFO] Setting KAFKA ADVERTISED_LISTENER value..."
     # ****** Setting KAFKA ADVERTISED_LISTENER environment variable ***********
-    sed -i "s/ADVERTISED_LISTENER=HOSTIP/ADVERTISED_LISTENER=$host_ip/g" docker-compose-elk-${license_choice}.yml
+    sed -i "s/ADVERTISED_LISTENER=HOSTIP/ADVERTISED_LISTENER=$host_ip/g" docker-compose-helk-elastic-${subscription_choice}.yml
 
 }
 
@@ -262,8 +272,8 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.2-alpha08062018 **"
-    echo "** HELK ELK version: 6.3.2                  **"
+    echo "** HELK build version: v0.1.3-alpha08242018 **"
+    echo "** HELK ELK version: 6.4.0                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
     echo " "
@@ -283,6 +293,7 @@ show_final_information(){
     echo "HELK JUPYTERHUB URL: http://${host_ip}/jupyter"
     echo "HELK JUPYTERHUB USER:PWD : hunter1:hunter1P@ssw0rd!"
     echo "HELK JUPYTERHUB USER:PWD : hunter2:hunter2P@ssw0rd!"
+    echo "HELK JUPYTERHUB USER:PWD : hunter3:hunter3P@ssw0rd!"
     echo "HELK SPARK MASTER UI: http://${host_ip}:8080"
     echo " "
     echo "IT IS HUNTING SEASON!!!!!"
@@ -296,7 +307,7 @@ manual_install(){
     check_min_requirements
     get_host_ip
     set_helk_ip
-    set_helk_license
+    set_helk_subscription
     prepare_helk
     install_helk
     sleep 180
@@ -317,13 +328,13 @@ usage(){
     echo "Usage: $0 [option...]" >&2
     echo
     echo "   -i         set HELKs IP address"
-    echo "   -l         set HELKs License (basic or trial)"
+    echo "   -l         set HELKs subscription (basic or trial)"
     echo "   -q         quiet -> not output to the console"
     echo
     echo "Examples:"
     echo " $0                                   Install HELK manually"
-    echo " $0 -i 192.168.64.131 -l basic        Install HELK with an IP address set and basic License"
-    echo " $0 -i 192.168.64.131 -l trial -q     Install HELK with an IP address set and trial License without sending output to the console"
+    echo " $0 -i 192.168.64.131 -l basic        Install HELK with an IP address set and basic subscription"
+    echo " $0 -i 192.168.64.131 -l trial -q     Install HELK with an IP address set and trial subscription without sending output to the console"
     echo
     exit 1
 }
@@ -339,7 +350,7 @@ while getopts ":i:l:q" opt; do
             quiet="TRUE"
             ;;
         l )
-            license_choice=$OPTARG
+            subscription_choice=$OPTARG
             ;;
         \? )
             echo "[HELK-INSTALLATION-ERROR] Invalid option: $OPTARG" 1>&2
@@ -356,7 +367,7 @@ if [ $# -gt 0 ]; then
     echo "[HELK-INSTALLATION-ERROR] Invalid option"
     usage
 fi
-if [ -z "$host_ip" ] &&  [ -z "$quiet" ] && [ -z "$license_choice" ]; then
+if [ -z "$host_ip" ] &&  [ -z "$quiet" ] && [ -z "$subscription_choice" ]; then
     manual_install
 else
     if [[ "$host_ip" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]]; then
@@ -366,14 +377,14 @@ else
                 usage
             fi
         done
-        # *********** Validating License Input ***************
-        case $license_choice in
+        # *********** Validating subscription Input ***************
+        case $subscription_choice in
             basic)
             ;;
             trial)
             ;;
             *)
-                echo "[HELK-INSTALLATION-ERROR] Not a valid license. Valid Options: basic or trial"
+                echo "[HELK-INSTALLATION-ERROR] Not a valid subscription. Valid Options: basic or trial"
                 usage
             ;;
         esac

@@ -25,10 +25,4 @@ if [ ! -f $ZOO_CONF_DIR/zookeeper.properties ]; then
     done
 fi
 
-ln -sf /dev/stdout $ZOO_LOGS_FILE
-
-echo "[HELK-DOCKER-INSTALLATION-INFO] Starting Zookeeper.."
-KAFKA_SCRIPT_ZOOKEEPER=$KAFKA_HOME/bin/zookeeper-server-start.sh
-KAFKA_CONFIG_ZOOKEEPER="$ZOO_CONF_DIR/zookeeper.properties"
-
-exec $KAFKA_SCRIPT_ZOOKEEPER $KAFKA_CONFIG_ZOOKEEPER >> $ZOO_LOGS_FILE 2>&1
+exec "$@"

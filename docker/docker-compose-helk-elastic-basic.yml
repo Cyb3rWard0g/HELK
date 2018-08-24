@@ -1,16 +1,23 @@
-version: '3'
+version: '3.5'
 
 services:
   helk-elasticsearch:
-    build: helk-elasticsearch/trial/
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.0
     container_name: helk-elasticsearch
+    secrets:
+      - source: elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
     volumes:
-      - ./helk-elasticsearch/trial/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - esdata:/usr/share/elasticsearch/data
       - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
     entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
     environment:
-      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
+      - cluster.name=helk-cluster
+      - node.name=helk-1
+      - bootstrap.memory_lock=true
+      - discovery.zen.minimum_master_nodes=1
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     ulimits:
       memlock:
         soft: -1
@@ -18,47 +25,50 @@ services:
     restart: always
     networks:
       helk:
-        aliases:
-          - helk_elasticsearch.hunt.local
   helk-logstash:
-    image: docker.elastic.co/logstash/logstash:6.3.2
+    image: docker.elastic.co/logstash/logstash:6.4.0
     container_name: helk-logstash
+    secrets:
+      - source: logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
     volumes:
-      - ./helk-logstash/trial/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - ./helk-logstash/trial/pipeline:/usr/share/logstash/pipeline
+      - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
-      - ./helk-logstash/trial/scripts:/usr/share/logstash/scripts
+      - ./helk-logstash/scripts:/usr/share/logstash/scripts
     environment:
       - "LS_JAVA_OPTS=-Xms1g -Xmx1g"
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
+    ports:
+      - "5044:5044"
     restart: always
     depends_on:
-      - helk-kibana
+      - helk-zookeeper
     networks:
       helk:
-        aliases:
-          - helk_logstash.hunt.local
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:6.3.2
+    image: docker.elastic.co/kibana/kibana:6.4.0
     container_name: helk-kibana
+    secrets:
+      - source: kibana.yml
+        target: /usr/share/kibana/config/kibana.yml
     volumes:
-      - ./helk-kibana/trial/kibana.yml:/usr/share/kibana/config/kibana.yml
       - ./helk-kibana/dashboards:/usr/share/kibana/dashboards
-      - ./helk-kibana/trial/scripts:/usr/share/kibana/scripts
+      - ./helk-kibana/scripts:/usr/share/kibana/scripts
     entrypoint: /usr/share/kibana/scripts/kibana-entrypoint.sh
     restart: always
     depends_on:
       - helk-elasticsearch
     networks:
       helk:
-        aliases:
-          - helk_kibana.hunt.local
   helk-nginx:
-    image: cyb3rward0g/helk-nginx:0.0.6
+    image: cyb3rward0g/helk-nginx:0.0.7
     container_name: helk-nginx
+    secrets:
+      - source: htpasswd.users
+        target: /etc/nginx/htpasswd.users
     volumes:
-      - ./helk-nginx/trial/default:/etc/nginx/sites-available/default
+      - ./helk-nginx/default:/etc/nginx/sites-available/default
       - ./helk-nginx/scripts/:/opt/helk/scripts/
     entrypoint: /opt/helk/scripts/nginx-entrypoint.sh
     ports:
@@ -67,22 +77,19 @@ services:
     restart: always
     depends_on:
       - helk-kibana
+      - helk-jupyter
     networks:
       helk:
-        aliases:
-          - helk_nginx.hunt.local
   helk-jupyter:
-    image: cyb3rward0g/helk-jupyter:0.0.4
+    image: cyb3rward0g/helk-jupyter:0.0.5
     container_name: helk-jupyter
     restart: always
     depends_on:
-      - helk-nginx
+      - helk-elasticsearch
     networks:
       helk:
-        aliases:
-          - helk_jupyter.hunt.local
   helk-spark-master:
-    image: cyb3rward0g/helk-spark-master:2.3.1-a
+    image: cyb3rward0g/helk-spark-master:2.3.1-b
     container_name: helk-spark-master
     environment:
       - SPARK_MASTER_PORT=7077
@@ -94,56 +101,44 @@ services:
       - helk-elasticsearch
     networks:
       helk:
-        aliases:
-          - helk_spark_master.hunt.local
   helk-spark-worker:
-    image: cyb3rward0g/helk-spark-worker:2.3.1-a
+    image: cyb3rward0g/helk-spark-worker:2.3.1-b
     container_name: helk-spark-worker
     environment:
       - SPARK_MASTER=spark://helk-spark-master:7077
       - SPARK_WORKER_MEMORY=512m
       - SPARK_WORKER_WEBUI_PORT=8081
       - SPARK_WORKER_PORT=42950
-    ports:
-      - "8081:8081"
     restart: always
     depends_on:
       - helk-spark-master
     networks:
       helk:
-        aliases:
-          - helk_spark_worker.hunt.local
   helk-spark-worker2:
-    image: cyb3rward0g/helk-spark-worker:2.3.1-a
+    image: cyb3rward0g/helk-spark-worker:2.3.1-b
     container_name: helk-spark-worker2
     environment:
       - SPARK_MASTER=spark://helk-spark-master:7077
       - SPARK_WORKER_MEMORY=512m
       - SPARK_WORKER_WEBUI_PORT=8082
       - SPARK_WORKER_PORT=42951
-    ports:
-      - "8082:8082"
     restart: always
     depends_on:
       - helk-spark-master
     networks:
       helk:
-        aliases:
-          - helk_spark_worker2.hunt.local
   helk-zookeeper:
-    image: cyb3rward0g/helk-zookeeper:1.1.1
+    image: cyb3rward0g/helk-zookeeper:2.0.0-a
     container_name: helk-zookeeper
     ports:
       - "2181:2181"
     restart: always
     depends_on:
-      - helk-elasticsearch
+      - helk-kibana
     networks:
       helk:
-        aliases:
-          - helk_zookeeper.hunt.local
   helk-kafka-broker:
-    image: cyb3rward0g/helk-kafka-broker:1.1.1
+    image: cyb3rward0g/helk-kafka-broker:2.0.0-b
     container_name: helk-kafka-broker
     restart: always
     depends_on:
@@ -155,14 +150,13 @@ services:
       - REPLICATION_FACTOR=2
       - ADVERTISED_LISTENER=HOSTIP
       - ZOOKEEPER_NAME=helk-zookeeper
+      - KAFKA_CREATE_TOPICS=True
     ports:
       - "9092:9092"
     networks:
       helk:
-        aliases:
-          - helk_kafka_broker.hunt.local
   helk-kafka-broker2:
-    image: cyb3rward0g/helk-kafka-broker:1.1.1
+    image: cyb3rward0g/helk-kafka-broker:2.0.0-b
     container_name: helk-kafka-broker2
     restart: always
     depends_on:
@@ -174,21 +168,12 @@ services:
       - REPLICATION_FACTOR=2
       - ADVERTISED_LISTENER=HOSTIP
       - ZOOKEEPER_NAME=helk-zookeeper
+      - KAFKA_CREATE_TOPICS=True
     ports:
       - "9093:9093"
     networks:
       helk:
-        aliases:
-          - helk_kafka_broker.hunt.local 
-  helk-sigma:
-    image: thomaspatzke/helk-sigma
-    container_name: helk-sigma
-    depends_on:
-      - helk-kibana
-    networks:
-      helk:
-        aliases:
-          - helk_sigma.hunt.local
+
 networks:
   helk:
     driver: bridge
@@ -196,4 +181,13 @@ networks:
 volumes:
   esdata:
     driver: local
-  
+
+secrets:
+  elasticsearch.yml:
+    file: ./helk-elasticsearch/elasticsearch.yml
+  logstash.yml:
+    file: ./helk-logstash/logstash.yml
+  kibana.yml:
+    file: ./helk-kibana/kibana.yml
+  htpasswd.users:
+    file: ./helk-nginx/htpasswd.users
