@@ -81,7 +81,7 @@ services:
     networks:
       helk:
   helk-jupyter:
-    image: cyb3rward0g/helk-jupyter:0.0.5
+    image: cyb3rward0g/helk-jupyter:0.0.6
     container_name: helk-jupyter
     restart: always
     depends_on:
@@ -89,7 +89,7 @@ services:
     networks:
       helk:
   helk-spark-master:
-    image: cyb3rward0g/helk-spark-master:2.3.1-b
+    image: cyb3rward0g/helk-spark-master:2.3.1-c
     container_name: helk-spark-master
     environment:
       - SPARK_MASTER_PORT=7077
@@ -102,11 +102,11 @@ services:
     networks:
       helk:
   helk-spark-worker:
-    image: cyb3rward0g/helk-spark-worker:2.3.1-b
+    image: cyb3rward0g/helk-spark-worker:2.3.1-c
     container_name: helk-spark-worker
     environment:
       - SPARK_MASTER=spark://helk-spark-master:7077
-      - SPARK_WORKER_MEMORY=512m
+      - SPARK_WORKER_MEMORY=1g
       - SPARK_WORKER_WEBUI_PORT=8081
       - SPARK_WORKER_PORT=42950
     restart: always
@@ -115,11 +115,11 @@ services:
     networks:
       helk:
   helk-spark-worker2:
-    image: cyb3rward0g/helk-spark-worker:2.3.1-b
+    image: cyb3rward0g/helk-spark-worker:2.3.1-c
     container_name: helk-spark-worker2
     environment:
       - SPARK_MASTER=spark://helk-spark-master:7077
-      - SPARK_WORKER_MEMORY=512m
+      - SPARK_WORKER_MEMORY=1g
       - SPARK_WORKER_WEBUI_PORT=8082
       - SPARK_WORKER_PORT=42951
     restart: always
