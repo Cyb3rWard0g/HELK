@@ -6,10 +6,14 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-ELASTICSEARCH_ACCESS=http://elastic:"elasticpassword"@helk-elasticsearch:9200
+# *********** Install Plugins *********************
+#echo "[HELK-DOCKER-INSTALLATION-INFO] Installing Kibana-Canvas.."
+#NODE_OPTIONS="--max-old-space-size=4096" 
+#kibana-plugin install https://download.elastic.co/kibana/canvas/kibana-canvas-0.1.2174.zip
 
 # *********** Check if Elasticsearch is up ***************
 echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
+ELASTICSEARCH_ACCESS=http://elastic:"elasticpassword"@helk-elasticsearch:9200
 until curl -s $ELASTICSEARCH_ACCESS -o /dev/null; do
     sleep 1
 done

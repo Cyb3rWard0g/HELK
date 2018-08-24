@@ -36,6 +36,9 @@ done
 # ********** Install Plugin *****************
 echo "[HELK-DOCKER-INSTALLATION-INFO] Installing Logstash plugins.."
 logstash-plugin install logstash-filter-prune
+# Current FIX to https://discuss.elastic.co/t/kafka-output-plugin-java-lang-long-error/145398
+logstash-plugin remove logstash-output-kafka
+logstash-plugin install --version 7.1.1 logstash-output-kafka
 
 # ********** Starting Logstash *****************
 echo "[HELK-DOCKER-INSTALLATION-INFO] Running docker-entrypoint script.."

@@ -14,13 +14,13 @@
 #
 # Use a descriptive name for your cluster:
 #
-cluster.name: helk-elk
+#cluster.name: helk-elk
 #
 # ------------------------------------ Node ------------------------------------
 #
 # Use a descriptive name for the node:
 #
-node.name: helk-1
+#node.name: helk-1
 #
 # Add custom attributes to the node:
 #
@@ -40,7 +40,7 @@ node.name: helk-1
 #
 # Lock the memory on startup:
 #
-bootstrap.memory_lock: true
+#bootstrap.memory_lock: true
 #
 # Make sure that the heap size is set to about half the memory available
 # on the system and that the owner of the process is allowed to use this
@@ -74,8 +74,8 @@ network.host: 0.0.0.0
 # minimum_master_nodes need to be explicitly set when bound on a public IP
 # set to 1 to allow single node clusters
 # Details: https://github.com/elastic/elasticsearch/pull/17288
-discovery.zen.minimum_master_nodes: 1
-discovery.type: single-node
+#discovery.zen.minimum_master_nodes: 1
+#discovery.type: single-node
 #
 # For more information, consult the zen discovery module documentation.
 #
