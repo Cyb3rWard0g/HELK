@@ -212,7 +212,7 @@ prepare_helk(){
             echo "[HELK-INSTALLATION-INFO] Docker already installed"
             echo "[HELK-INSTALLATION-INFO] Making sure you assigned enough disk space to the current Docker base directory"
             AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')    
-            if [ "${AVAILABLE_DOCKER_DISK}" -ge "30" ]; then
+            if [ "${AVAILABLE_DOCKER_DISK}" -ge "25" ]; then
                 echo "[HELK-INSTALLATION-INFO] Available Docker Disk: $AVAILABLE_DOCKER_DISK"
             else
                 echo "[HELK-INSTALLATION-ERROR] YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
