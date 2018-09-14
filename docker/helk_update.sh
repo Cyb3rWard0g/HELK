@@ -139,11 +139,14 @@ update_helk() {
 
 LOGFILE="/var/log/helk-update.log"
 REBUILD_NEEDED=0
-UPDATES_FETCHED=`cat /tmp/helk-update`
 
-if [ "$UPDATES_FETCHED" == "1" ]; then
-    echo -e "[HELK-UPDATE-INFO] Updates already downloaded. Starting update..."    
-    update_helk
+if [[ -e /tmp/helk-update ]]; then
+    UPDATES_FETCHED=`cat /tmp/helk-update`
+
+    if [ "$UPDATES_FETCHED" == "1" ]; then
+      echo -e "[HELK-UPDATE-INFO] Updates already downloaded. Starting update..."    
+      update_helk
+    fi
 fi
 
 echo "[HELK-UPDATE-INFO] Checking GitHub for updates..."   
