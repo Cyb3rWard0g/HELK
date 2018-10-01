@@ -1,10 +1,24 @@
 #!/bin/bash
 
 # HELK script: jupyter-entryppoint.sh
-# HELK script description: Creates JupyterHub Users
+# HELK script description: Installs postgresql and creates JupyterHub Users
 # HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
+
+echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Starting postgresql."
+service postgresql start
+
+echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Creating Postgres user and hive_metastore.."
+sudo -u postgres psql <<MYQUERY
+CREATE USER hive;
+ALTER ROLE hive WITH PASSWORD 'sparkpassword';
+CREATE DATABASE hive_metastore;
+GRANT ALL PRIVILEGES ON DATABASE hive_metastore TO hive;
+MYQUERY
+
+echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] restarting postgresql."
+service postgresql restart
 
 # ************* Creating JupyterHub Users ***************
 declare -a users_index=("hunter1" "hunter2" "hunter3")

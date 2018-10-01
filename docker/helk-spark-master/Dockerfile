@@ -9,11 +9,11 @@ LABEL description="Dockerfile base for HELK Spark Master."
 
 ENV DEBIAN_FRONTEND noninteractive
 
-USER sparkuser
-
 COPY scripts/spark-master-entrypoint.sh ${SPARK_HOME}/sbin/
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
 EXPOSE 8080 7077
 WORKDIR $SPARK_HOME/sbin
 ENTRYPOINT ["./spark-master-entrypoint.sh"]
+
+USER sparkuser

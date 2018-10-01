@@ -29,7 +29,7 @@ check_min_requirements(){
     if [ "$systemKernel" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')    
-        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "30" ]; then
+        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
@@ -212,7 +212,7 @@ prepare_helk(){
             echo "[HELK-INSTALLATION-INFO] Docker already installed"
             echo "[HELK-INSTALLATION-INFO] Making sure you assigned enough disk space to the current Docker base directory"
             AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')    
-            if [ "${AVAILABLE_DOCKER_DISK}" -ge "30" ]; then
+            if [ "${AVAILABLE_DOCKER_DISK}" -ge "25" ]; then
                 echo "[HELK-INSTALLATION-INFO] Available Docker Disk: $AVAILABLE_DOCKER_DISK"
             else
                 echo "[HELK-INSTALLATION-ERROR] YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"

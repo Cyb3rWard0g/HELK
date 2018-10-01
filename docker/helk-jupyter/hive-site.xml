@@ -1,0 +1,18 @@
+<configuration>
+<property>
+  <name>javax.jdo.option.ConnectionURL</name>
+  <value>jdbc:postgresql://localhost:5432/hive_metastore</value>
+</property>
+<property>
+  <name>javax.jdo.option.ConnectionDriverName</name>
+  <value>org.postgresql.Driver</value>
+</property>
+<property>
+<name>javax.jdo.option.ConnectionUserName</name>
+  <value>hive</value>
+</property>
+<property>
+  <name>javax.jdo.option.ConnectionPassword</name>
+  <value>sparkpassword</value>
+</property>
+</configuration>

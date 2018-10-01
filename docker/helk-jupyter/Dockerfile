@@ -19,6 +19,10 @@ RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Extracting templates from packages.." 
   libcurl4-openssl-dev build-essential libssl-dev libffi-dev \
   libxml2-dev libxslt1-dev zlib1g-dev
 
+# ********** Install Postgresql *********************
+RUN echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Installing Postgresql.." \
+  && apt-get install -y --no-install-recommends postgresql
+
 RUN apt-get -qy clean \
   autoremove
 
@@ -58,10 +62,17 @@ COPY kernels/pyspark_kernel.json /usr/local/share/jupyter/kernels/pyspark3/kerne
 COPY jupyterhub/jupyterhub_config.py /opt/helk/jupyter/
 
 # *********** Download ES-Hadoop ***************
-ENV ESHADOOP_VERSION=6.3.2
+ENV ESHADOOP_VERSION=6.4.0
 RUN wget https://artifacts.elastic.co/downloads/elasticsearch-hadoop/elasticsearch-hadoop-${ESHADOOP_VERSION}.zip -P /opt/helk/es-hadoop/ \
   && unzip -j /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ \
   && rm /opt/helk/es-hadoop/*.zip
+
+# ********** Download Postgresql JAR *****************
+ENV POSTGRESQL_VERSION=42.2.4
+RUN sudo wget https://jdbc.postgresql.org/download/postgresql-${POSTGRESQL_VERSION}.jar -P /opt/helk/spark/jars/
+
+# ********** Set hive.xml file ******************
+COPY hive-site.xml /opt/helk/spark/conf/hive-site.xml
 
 # *********** Download Graphframes ***************
 #ENV GRAPHFRAMES_VERSION=0.6.0
