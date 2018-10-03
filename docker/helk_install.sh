@@ -18,13 +18,15 @@ echoerror() {
     printf "${RC} * ERROR${EC}: $@\n" 1>&2;
 }
 
+# ********* Globals **********************
+systemKernel="$(uname -s)"
+
 # ********* Commention Out CDROM **********************
 sed -i "s/\(^deb cdrom.*$\)/\#/g" /etc/apt/sources.list
 
 # ********** Check Minimum Requirements **************
 check_min_requirements(){
     # *********** Check System Kernel Name ***************
-    systemKernel="$(uname -s)"
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $systemKernel box"
     if [ "$systemKernel" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
@@ -119,9 +121,9 @@ get_host_ip(){
     # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
     echo "[HELK-INSTALLATION-INFO] Obtaining current host IP.."
     case "${systemKernel}" in
-        Linux*)     host_ip=$(ip route get 1 | awk '{print $NF;exit}');;
+        Linux*)     host_ip=$(ip route get 1 | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b" | tail -1);;
         Darwin*)    host_ip=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
-        *)          host_ip="UNKNOWN:${unameOut}"
+        *)          host_ip="UNKNOWN:${systemKernel}"
     esac
 }
 
