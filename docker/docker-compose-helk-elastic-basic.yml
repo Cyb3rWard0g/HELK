@@ -17,11 +17,15 @@ services:
       - bootstrap.memory_lock=true
       - discovery.zen.minimum_master_nodes=1
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      #- "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     ulimits:
       memlock:
         soft: -1
         hard: -1
+      nproc: 20480
+      nofile:
+        soft: 160000
+        hard: 160000
     restart: always
     networks:
       helk:
@@ -36,8 +40,8 @@ services:
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
-    environment:
-      - "LS_JAVA_OPTS=-Xms1g -Xmx1g"
+    #environment:
+    #  - "LS_JAVA_OPTS=-Xms1g -Xmx1g"
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     ports:
       - "5044:5044"
