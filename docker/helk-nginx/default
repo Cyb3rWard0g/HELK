@@ -34,7 +34,7 @@ server {
     # BufferOverflow Hardening
     client_body_buffer_size  100K;
     client_header_buffer_size 1k;
-    client_max_body_size 150k;
+    client_max_body_size 7500k;
     # TLS/SSL
     ssl_ciphers "ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4:@STRENGTH";
     ssl_prefer_server_ciphers on;
@@ -64,9 +64,10 @@ server {
     gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
     ## End ##
 
+    # Kibana and certain applications like CyberChef generates really long URI's so need to set this
+    large_client_header_buffers 4 64k;
+
     ## Kibana Settings / Kibana Proxy ##
-    # Kibana generates really long URI's so need to set this
-    large_client_header_buffers 4 16k;
 
     # Cache static resources that are regularly requested
     location ~ \.(jpg|png|ico|svg|woff2)$ {
