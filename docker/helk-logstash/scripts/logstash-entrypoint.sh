@@ -11,9 +11,9 @@ if [[ ! -z "$LS_JAVA_OPTS" ]]; then
   echo "[HELK-DOCKER-INSTALLATION-INFO] Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
 else
   # ****** Setup heap size *****
-    LS_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Setting LS_HEAP_SIZE to ${LS_MEMORY}.."
-    export LS_JAVA_OPTS="-Xms${LS_MEMORY}g -Xmx${LS_MEMORY}g"
+    LS_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/4}' /proc/meminfo)
+    echo "[HELK-DOCKER-INSTALLATION-INFO] Setting LS_HEAP_SIZE to ${LS_MEMORY}MBs.."
+    export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m"
 fi
 
 # *********** Looking for ES ***************
