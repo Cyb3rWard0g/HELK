@@ -12,7 +12,10 @@ if [[ ! -z "$ES_JAVA_OPTS" ]]; then
 else
   # ****** Setup heap size and memory locking *****
     ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Setting ES_HEAP_SIZE to ${ES_MEMORY}.."
+    if [ $ES_MEMORY -gt 31 ]; then
+      ES_MEMORY=31
+    fi
+    echo "[HELK-DOCKER-INSTALLATION-INFO] Setting ES_HEAP_SIZE to ${ES_MEMORY}GBs.."
     export ES_JAVA_OPTS="-Xms${ES_MEMORY}g -Xmx${ES_MEMORY}g"
 fi
 
