@@ -247,7 +247,7 @@ prepare_helk(){
         if [ -x "$(command -v docker)" ] && [ -x "$(command -v docker-compose)" ]; then
             echo "[HELK-INSTALLATION-INFO] Docker & Docker-compose already installed"
         else
-            echo "[HELK-INSTALLATION-INFO] Please innstall Docker & Docker-compose for $systemKernel"
+            echo "[HELK-INSTALLATION-INFO] Please install Docker & Docker-compose for $systemKernel"
             exit 1
         fi
     fi
@@ -260,6 +260,7 @@ prepare_helk(){
         if [ $ERROR -ne 0 ]; then
             echoerror "Could not set vm.max_map_count to 262144 (Error Code: $ERROR)."
         fi
+        echo "vm.max_map_count = $MAX_MAP_COUNT" > /etc/sysctl.d/90-helk-overwritten-during-docker-install-sysctl-tuning.conf;
     fi
     echo "[HELK-INSTALLATION-INFO] Setting KAFKA ADVERTISED_LISTENER value..."
     # ****** Setting KAFKA ADVERTISED_LISTENER environment variable ***********
