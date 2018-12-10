@@ -85,6 +85,9 @@ check_github(){
     
     git remote update >> $LOGFILE 2>&1
     COMMIT_DIFF=$(git rev-list --count master...helk-repo/master)
+    CURRENT_COMMIT=$(git rev-parse HEAD)
+    REMOTE_LATEST_COMMIT=$(git rev-parse helk-repo/master)
+    echo "HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1
     
     if  [ ! "$COMMIT_DIFF" == "0" ]; then
         echo "Possibly new release available. Commit diff --> $COMMIT_DIFF" >> $LOGFILE 2>&1
@@ -93,7 +96,9 @@ check_github(){
         if [[ -z $IS_MASTER_BEHIND ]]; then
             echo "Current master branch ahead of remote branch. Exiting..." >> $LOGFILE 2>&1
             echo "[HELK-UPDATE-INFO] No updates available."
-        else            
+
+        elif [ ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]; then
+            echo "Difference in HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1   
             echo "[HELK-UPDATE-INFO] New release available. Pulling new code."
             git checkout master >> $LOGFILE 2>&1
             git pull helk-repo master >> $LOGFILE 2>&1
