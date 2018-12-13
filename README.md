@@ -1,5 +1,12 @@
 # HELK [Alpha]
 
+![version](https://img.shields.io/badge/version-0.1.4-blue.svg?maxAge=2592000)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![GitHub issues-closed](https://img.shields.io/github/issues-closed/Cyb3rward0g/HELK.svg)](https://GitHub.com/Cyb3rWard0g/HELK/issues?q=is%3Aissue+is%3Aclosed)
+[![Twitter](https://img.shields.io/twitter/follow/THE_HELK.svg?style=social&label=Follow)](https://twitter.com/THE_HELK)
+[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+
+
 A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilities.
 
 ![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
@@ -91,7 +98,6 @@ root@ede2a2503030:/opt/helk/scripts#
 * Robby Winchester [@robwinchester3](https://twitter.com/robwinchester3)
 * Jared Atkinson [@jaredatkinson](https://twitter.com/jaredcatkinson)
 * Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
-* Jordan Potti [@ok_bye_now](https://twitter.com/ok_bye_now)
 * Lee Christensen [@tifkin_](https://twitter.com/tifkin_)
 
 # Contributing
@@ -112,14 +118,14 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Spark Standalone Cluster Manager integration
 - [X] Apache Arrow Integration for Pandas Dataframes
 - [ ] Zepplin Notebook Docker option
-- [ ] KSQL Client & Server Deployment (Waiting for v5.0)
+- [X] KSQL Client & Server Deployment (Waiting for v5.0)
 - [ ] Kubernetes Cluster Migration
 - [ ] OSQuery Data Ingestion
-- [ ] Create Jupyter Notebooks showing how to use Spark & GraphFrames
+- [X] Create Jupyter Notebooks showing how to use Spark & GraphFrames
 - [ ] MITRE ATT&CK mapping to logs or dashboards
 - [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook)
 - [ ] Somehow integrate neo4j spark connectors with build
-- [ ] Nxlog parsers (Logstash Filters)
+- [X] Nxlog parsers (Logstash Filters)
 - [ ] Add more network data sources (i.e Bro)
 - [ ] Research & integrate spark structured direct streaming
 

@@ -6,7 +6,6 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-# Generate the config only if it doesn't exist
 if [ ! -f $ZOO_CONF_DIR/zookeeper.properties ]; then
     CONFIG=$ZOO_CONF_DIR/zookeeper.properties
 

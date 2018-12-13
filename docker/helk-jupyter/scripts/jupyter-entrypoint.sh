@@ -9,47 +9,84 @@
 echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Starting postgresql."
 service postgresql start
 
-echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Creating Postgres user and hive_metastore.."
-sudo -u postgres psql <<MYQUERY
-CREATE USER hive;
-ALTER ROLE hive WITH PASSWORD 'sparkpassword';
-CREATE DATABASE hive_metastore;
-GRANT ALL PRIVILEGES ON DATABASE hive_metastore TO hive;
+# ************ Checking if user hive exists ****************
+HIVE_USER_EXISTS=$(sudo -u postgres psql -tAc "SELECT 1 FROM pg_catalog.pg_user u WHERE u.usename='hive'")
+if [[ $HIVE_USER_EXISTS != "1" ]]; then
+    echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Creating Postgres user and hive_metastore.."
+    sudo -u postgres psql <<MYQUERY
+    CREATE USER hive;
+    ALTER ROLE hive WITH PASSWORD 'sparkpassword';
+    CREATE DATABASE hive_metastore;
+    GRANT ALL PRIVILEGES ON DATABASE hive_metastore TO hive;
 MYQUERY
+    echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] restarting postgresql."
+    service postgresql restart
+elif [[ $HIVE_USER_EXISTS == "1" ]]; then
+    echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] postgres hive user already exists.."
+fi
 
-echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] restarting postgresql."
-service postgresql restart
+# ************ Checking if user helk exists ****************
+HELK_USER_EXISTS=$(id -u helk > /dev/null 2>&1; echo $?)
+if [[ $HELK_USER_EXISTS == "1" ]]; then
+    JUPYTERHUB_GID=711
+    JUPYTERHUB_UID=711
+    JUPYTERHUB_HOME=/opt/helk/jupyterhub
+    JUPYTER_HOME=/opt/helk/jupyter
+    JUPYTER_NOTEBOOKS=${JUPYTER_HOME}/notebooks
 
-# ************* Creating JupyterHub Users ***************
-declare -a users_index=("hunter1" "hunter2" "hunter3")
+    echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Creating JupyterHub Group..."
+    groupadd -g ${JUPYTERHUB_GID} jupyterhub
 
-JUPYTERHUB_GID=711
-JUPYTERHUB_UID=711
-JUPYTERHUB_HOME=/opt/helk/jupyterhub
-JUPYTER_HOME=/opt/helk/jupyter
+    # ************* Create notebooks folder if it is not provided in comose file ******************
+    mkdir -p ${JUPYTER_NOTEBOOKS}
 
-echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Creating JupyterHub Group..."
-groupadd -g ${JUPYTERHUB_GID} jupyterhub
+    # ************* Creating JupyterHub Admin ***************
+    if [[ -z "$JUPYTER_HELK_PWD" ]]; then
+        JUPYTER_HELK_PWD='hunting'
+    fi
 
-for u in ${users_index[@]}; do 
-  echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Creating JupyterHub user ${u} .."
-  student_password="${u}P@ssw0rd!"
-  echo $student_password >> /opt/helk/user_credentials.txt
-  
-  JUPYTERHUB_USER_DIRECTORY=${JUPYTERHUB_HOME}/${u}
-  mkdir -v $JUPYTERHUB_USER_DIRECTORY
+    JUPYTER_ADMIN='helk'
+    JUPYTER_ADMIN_DIRECTORY=${JUPYTERHUB_HOME}/${JUPYTER_ADMIN}
+    echo "JUPYTER_CREDENTIALS:$JUPYTER_ADMIN:$JUPYTER_HELK_PWD" >> /opt/helk/user_credentials.txt
+    mkdir -v $JUPYTER_ADMIN_DIRECTORY
 
-  useradd -p $(openssl passwd -1 ${student_password}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTERHUB_USER_DIRECTORY --no-create-home -s /bin/bash ${u}
-  
-  echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] copying notebooks to ${JUPYTERHUB_USER_DIRECTORY} notebooks directory ..."
-  cp -R ${JUPYTER_HOME}/notebooks ${JUPYTERHUB_USER_DIRECTORY}/notebooks
-  chown -R ${u}:jupyterhub $JUPYTERHUB_USER_DIRECTORY
-  chmod 700 -R $JUPYTERHUB_USER_DIRECTORY
+    useradd -p $(openssl passwd -1 ${JUPYTER_HELK_PWD}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTER_ADMIN_DIRECTORY --no-create-home -s /bin/bash ${JUPYTER_ADMIN}
 
-  ((JUPYTERHUB_UID=$JUPYTERHUB_UID + 1))
-done
+    cp -R ${JUPYTER_NOTEBOOKS} ${JUPYTER_ADMIN_DIRECTORY}/notebooks
+    chown -R ${JUPYTER_ADMIN}:jupyterhub $JUPYTER_ADMIN_DIRECTORY
+    chmod 700 -R $JUPYTER_ADMIN_DIRECTORY
 
-chmod 777 -R /var/log/spark
-chmod 777 -R /opt/helk/spark
+    ((JUPYTERHUB_UID=$JUPYTERHUB_UID + 1))
 
+    # ************* Creating JupyterHub Users ***************
+    if [[ -z "$JUPYTER_USERS" ]]; then
+        JUPYTER_USERS=hunter1
+    fi
+
+    IFS=', ' read -r -a users_index <<< "$JUPYTER_USERS"
+
+    for u in ${users_index[@]}; do 
+        echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Creating JupyterHub user ${u} .."
+        student_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
+        echo "JUPYTER_CREDENTIALS:${u}:$student_password" >> /opt/helk/user_credentials.txt
+        
+        JUPYTERHUB_USER_DIRECTORY=${JUPYTERHUB_HOME}/${u}
+        mkdir -v $JUPYTERHUB_USER_DIRECTORY
+
+        useradd -p $(openssl passwd -1 ${student_password}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTERHUB_USER_DIRECTORY --no-create-home -s /bin/bash ${u}
+        
+        echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] copying notebooks to ${JUPYTERHUB_USER_DIRECTORY} notebooks directory ..."
+        cp -R ${JUPYTER_NOTEBOOKS} ${JUPYTERHUB_USER_DIRECTORY}/notebooks
+        chown -R ${u}:jupyterhub $JUPYTERHUB_USER_DIRECTORY
+        chmod 700 -R $JUPYTERHUB_USER_DIRECTORY
+
+        ((JUPYTERHUB_UID=$JUPYTERHUB_UID + 1))
+    done
+
+    chmod 777 -R /var/log/spark
+    chmod 777 -R /opt/helk/spark
+elif [[ $HELK_USER_EXISTS == "0" ]]; then
+    echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Admin helk user already exists.."
+fi
+echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Starting Jupyter.."
 exec "$@"

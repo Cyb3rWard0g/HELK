@@ -3,7 +3,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM cyb3rward0g/helk-kafka-base:2.0.0-a
+FROM cyb3rward0g/helk-kafka-base:2.1.0
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Kafka Broker."
 
@@ -15,13 +15,12 @@ ENV KAFKA_CONFIG=$KAFKA_HOME/config/server.properties
 
 RUN mv $KAFKA_CONFIG ${KAFKA_HOME}/config/backup_server.properties
 COPY server.properties ${KAFKA_HOME}/config/
-COPY scripts /opt/helk/kafka/scripts
-RUN chmod +x /opt/helk/kafka/scripts/kafka-entrypoint.sh
-RUN chmod +x /opt/helk/kafka/scripts/kafka-create-topics.sh
+COPY scripts ${KAFKA_HOME}/scripts
+RUN chmod +x ${KAFKA_HOME}/scripts/kafka-entrypoint.sh \
+    && chmod +x ${KAFKA_HOME}/scripts/kafka-create-topics.sh
 
 USER ${KAFKA_USER}
 
-EXPOSE $KAFKA_BROKER_PORT
 WORKDIR "/opt/helk/kafka/scripts/"
 ENTRYPOINT ["./kafka-entrypoint.sh"]
 CMD ["/bin/bash","-c","$KAFKA_SCRIPT $KAFKA_CONFIG"]

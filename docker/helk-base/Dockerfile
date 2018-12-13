@@ -11,19 +11,12 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Installing Prerequisites ***************
 # -qq : No output except for errors
-RUN echo "[HELK-DOCKER-BASE-INFO] Updating Ubuntu base image.." \
-  && apt-get update -qq \
-  && echo "[HELK-DOCKER-BASE-INFO] Extracting templates from packages.." \
-  && apt-get install -qqy \
+RUN apt-get update && apt-get install -qqy --no-install-recommends \
   wget \
   sudo \
-  nano
-
-RUN apt-get -qy clean \
+  nano \
+  && apt-get -qy clean \
   autoremove \
   && rm -rf /var/lib/apt/lists/*
-
-# *********** Creating the right directories ***************
-RUN bash -c 'mkdir -pv /opt/helk/scripts'
 
 CMD ["/sbin/my_init"]

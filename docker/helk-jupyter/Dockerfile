@@ -3,76 +3,57 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM cyb3rward0g/helk-spark-base:2.3.1-a
+FROM cyb3rward0g/helk-spark-base:2.4.0-a
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for HELK Jupyter."
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# *********** Setting Environment Variables ***************
+ENV JUPYTER_DIR=/opt/helk/jupyter
+ENV ESHADOOP_VERSION=6.5.3
+ENV POSTGRESQL_VERSION=42.2.5
+
 # *********** Installing Prerequisites ***************
 # -qq : No output except for errors
-RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Ubuntu base image.." \
-  && apt-get update -qq
-RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Extracting templates from packages.." \
+RUN apt-get update -qq \
   && apt-get install -qqy --no-install-recommends \
   curl python3-pip python3-dev python-tk unzip python3-setuptools \
   libcurl4-openssl-dev build-essential libssl-dev libffi-dev \
-  libxml2-dev libxslt1-dev zlib1g-dev
-
-# ********** Install Postgresql *********************
-RUN echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Installing Postgresql.." \
-  && apt-get install -y --no-install-recommends postgresql
-
-RUN apt-get -qy clean \
-  autoremove
-
-# *********** Upgrading PIP ***************
-RUN pip3 install --upgrade pip
-
-# *********** Installing Jupyter Hub Prerequisites
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-RUN apt-get install -y --no-install-recommends nodejs
-
-# *********** Installing HELK python packages ***************
-RUN pip3 install \
-  pandas==0.23.4 \
+  libxml2-dev libxslt1-dev zlib1g-dev postgresql \
+  # ********** Install PIP Packages ************
+  && sudo pip3 install --upgrade pip \
+  && pip3 install pandas==0.23.4 \
   altair==2.2.2 \
-  vega_datasets \
   jupyter==1.0.0 \
-  jupyterlab==0.34.1 \
-  jupyterhub==0.9.2
-
-# *********** Installing Jupyter Lab Extension - JupyterHub ***************
-RUN npm install -g configurable-http-proxy
-RUN jupyter labextension install @jupyterlab/hub-extension@0.11.0
-
-# *********** Creating the Jupyter directories ***************
-RUN bash -c 'mkdir -pv /opt/helk/{es-hadoop,jupyter,jupyterhub}'
-RUN mkdir -v /usr/local/share/jupyter/kernels/pyspark3
-RUN mkdir -v /var/log/spark
-
-# *********** Configure Jupyterhub ***************
-ENV JUPYTER_DIR=/opt/helk/jupyter
+  jupyterlab==0.35.4 \
+  jupyterhub==0.9.4 \
+  # *********** Setting Jupyter Hub & Jupyter **********************
+  && curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
+  && apt-get install -y --no-install-recommends nodejs \
+  && npm install --production -g configurable-http-proxy \
+  && jupyter labextension install @jupyterlab/hub-extension@0.12.0 \
+  && jupyter labextension install @jupyterlab/celltags@0.1.4 \
+  && jupyter labextension install @mflevine/jupyterlab_html@0.1.4 \
+  && bash -c 'mkdir -pv /opt/helk/{es-hadoop,jupyter,jupyterhub}' \
+  && mkdir -v /usr/local/share/jupyter/kernels/pyspark3 \
+  && mkdir -v /var/log/spark \
+  # *********** Download ES-Hadoop ***************
+  && wget https://artifacts.elastic.co/downloads/elasticsearch-hadoop/elasticsearch-hadoop-${ESHADOOP_VERSION}.zip -P /opt/helk/es-hadoop/ \
+  && unzip -j /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ \
+  && rm /opt/helk/es-hadoop/*.zip \
+  # ********** Download Postgresql JAR *****************
+  && wget https://jdbc.postgresql.org/download/postgresql-${POSTGRESQL_VERSION}.jar -P /opt/helk/spark/jars/ \
+  # ********** Clean ******************
+  && apt-get -qy clean \
+  autoremove \
+  && rm -rf /var/lib/apt/lists/*
 
 # *********** Adding HELK scripts and files to Container ***************
 COPY scripts/jupyter-entrypoint.sh ${JUPYTER_DIR}
-COPY notebooks ${JUPYTER_DIR}/notebooks
 COPY spark/* ${SPARK_HOME}/conf/
 COPY kernels/pyspark_kernel.json /usr/local/share/jupyter/kernels/pyspark3/kernel.json
-COPY jupyterhub/jupyterhub_config.py /opt/helk/jupyter/
-
-# *********** Download ES-Hadoop ***************
-ENV ESHADOOP_VERSION=6.4.0
-RUN wget https://artifacts.elastic.co/downloads/elasticsearch-hadoop/elasticsearch-hadoop-${ESHADOOP_VERSION}.zip -P /opt/helk/es-hadoop/ \
-  && unzip -j /opt/helk/es-hadoop/*.zip -d /opt/helk/es-hadoop/ \
-  && rm /opt/helk/es-hadoop/*.zip
-
-# ********** Download Postgresql JAR *****************
-ENV POSTGRESQL_VERSION=42.2.4
-RUN sudo wget https://jdbc.postgresql.org/download/postgresql-${POSTGRESQL_VERSION}.jar -P /opt/helk/spark/jars/
-
-# ********** Set hive.xml file ******************
-COPY hive-site.xml /opt/helk/spark/conf/hive-site.xml
+COPY jupyterhub/jupyterhub_config.py ${JUPYTER_DIR}/
 
 # *********** Download Graphframes ***************
 #ENV GRAPHFRAMES_VERSION=0.6.0

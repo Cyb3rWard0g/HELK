@@ -7,8 +7,7 @@
 
 c.JupyterHub.log_level = 10
 
-c.Authenticator.whitelist = {'hunter1','hunter2','hunter3'}
-c.Authenticator.admin_users = {'hunter1'}
+c.Authenticator.admin_users = {'helk'}
 c.Spawner.cmd = ['jupyter-labhub']
 c.Spawner.notebook_dir = '/opt/helk/jupyterhub'
 

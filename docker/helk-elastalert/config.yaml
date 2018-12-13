@@ -1,0 +1,23 @@
+# HELK script: HELK Elastalert Dockerfile
+# HELK build Stage: Alpha
+# HELK ELK version: 6.3.2
+# Author: Roberto Rodriguez (@Cyb3rWard0g)
+# License: GPL-3.0
+
+# References: 
+# https://github.com/Yelp/elastalert/blob/master/Dockerfile-test
+# https://jordanpotti.com/2017/12/22/using-elastalert-to-help-automate-threat-hunting/
+
+rules_folder: rules
+run_every:
+    seconds: 30
+buffer_time:
+    seconds: 45
+es_host: helk-elasticsearch
+es_port: 9200
+alert_time_limit:
+    days: 1
+writeback_index: elastalert_status
+alert_text: "Index: {0} \nEvent_Timestamp: {1} \nBeat_Name: {2} \nUser_Name: {3} \nHost_Name: {4} \nLog_Name: {5} \nOriginal_Message: \n\n{6}"
+alert_text_type: alert_text_only
+alert_text_args: ["_index","@timestamp","beat.name","user_name","host_name","log_name","z_original_message"]

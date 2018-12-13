@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential use of named pipes by Cobalt Strike agents
+filter:
+- query:
+    query_string:
+      query: pipe_name:msagent_*
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-Cobalt-Strike-Named-Pipes_0
+priority: 2
+realert:
+  minutes: 0
+type: any

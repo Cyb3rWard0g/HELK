@@ -3,14 +3,11 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM cyb3rward0g/helk-kafka-base:2.0.0-a
+FROM cyb3rward0g/helk-kafka-base:2.1.0
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Kafka Zookeeper."
 
 ENV DEBIAN_FRONTEND noninteractive
-
-# *********** Creating the right directories ***************
-RUN bash -c 'mkdir -pv /opt/helk/zookeeper'
 
 # *********** ConfigureZookeeper ***************
 ENV ZOO_HOME=/opt/helk/zookeeper \
@@ -26,15 +23,15 @@ ENV ZOO_HOME=/opt/helk/zookeeper \
     ZOO_LOGS_FILE=${ZOO_LOGS_PATH}/zookeeper.log
 
 # *********** Configure zookeeper ***************
-RUN mkdir -p "$ZOO_CONF_DIR" "$ZOO_DATA_LOG_DIR" "$ZOO_DATA_DIR" "$ZOO_LOGS_PATH"
+RUN bash -c 'mkdir -pv /opt/helk/zookeeper'
 COPY scripts /opt/helk/zookeeper/scripts
-RUN chmod +x /opt/helk/zookeeper/scripts/zookeeper-entrypoint.sh
-
-RUN chown -R ${KAFKA_USER}:${KAFKA_USER} ${ZOO_HOME} ${ZOO_LOGS_PATH}
+RUN mkdir -p "$ZOO_CONF_DIR" "$ZOO_DATA_LOG_DIR" "$ZOO_DATA_DIR" "$ZOO_LOGS_PATH" \
+    && chmod +x /opt/helk/zookeeper/scripts/zookeeper-entrypoint.sh \
+    && chown -R ${KAFKA_USER}:${KAFKA_USER} ${ZOO_HOME} ${ZOO_LOGS_PATH}
 
 USER ${KAFKA_USER}
 
-EXPOSE $ZOO_PORT 2888 3888
+EXPOSE 2181 2888 3888
 WORKDIR "/opt/helk/zookeeper/scripts/"
 ENTRYPOINT ["./zookeeper-entrypoint.sh"]
 CMD ["/bin/bash","-c","/opt/helk/kafka/bin/zookeeper-server-start.sh /opt/helk/zookeeper/conf/zookeeper.properties"]
