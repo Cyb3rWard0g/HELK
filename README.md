@@ -33,21 +33,8 @@ The project is currently in an alpha stage, which means that the code and the fu
 * **Spark:** A fast and general-purpose cluster computing system. It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general execution graphs.
 * **GraphFrames:** A package for Apache Spark which provides DataFrame-based Graphs.
 * **Jupyter Notebook:** An open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
-
-# Resources
-
-* [Welcome to HELK! : Enabling Advanced Analytics Capabilities](https://cyberwardog.blogspot.com/2018/04/welcome-to-helk-enabling-advanced_9.html)
-* [Spark](https://spark.apache.org/docs/latest/index.html)
-* [Spark Standalone Mode](https://spark.apache.org/docs/latest/spark-standalone.html)
-* [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
-* [An Integrated API for Mixing Graph and Relational Queries](https://cs.stanford.edu/~matei/papers/2016/grades_graphframes.pdf)
-* [Graph queries in Spark SQL](https://www.slideshare.net/SparkSummit/graphframes-graph-queries-in-spark-sql)
-* [Graphframes Overview](http://graphframes.github.io/index.html)
-* [Elastic Producs](https://www.elastic.co/products)
-* [Elastic Subscriptions](https://www.elastic.co/subscriptions)
-* [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
-* [spujadas elk-docker](https://github.com/spujadas/elk-docker)
-* [deviantony docker-elk](https://github.com/deviantony/docker-elk)
+* **Elastalert:** ElastAlert is a simple framework for alerting on anomalies, spikes, or other patterns of interest from data in Elasticsearch
+    * **Sigma:** Sigma is a generic and open signature format that allows you to describe relevant log events in a straightforward manner.
 
 # Getting Started
 
@@ -87,6 +74,20 @@ Then, you will just have to pick which container you want to access and run the 
 sudo docker exec -ti <image-name> bash
 root@ede2a2503030:/opt/helk/scripts#
 ```
+# Resources
+
+* [Welcome to HELK! : Enabling Advanced Analytics Capabilities](https://cyberwardog.blogspot.com/2018/04/welcome-to-helk-enabling-advanced_9.html)
+* [Spark](https://spark.apache.org/docs/latest/index.html)
+* [Spark Standalone Mode](https://spark.apache.org/docs/latest/spark-standalone.html)
+* [Setting up a Pentesting.. I mean, a Threat Hunting Lab - Part 5](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html)
+* [An Integrated API for Mixing Graph and Relational Queries](https://cs.stanford.edu/~matei/papers/2016/grades_graphframes.pdf)
+* [Graph queries in Spark SQL](https://www.slideshare.net/SparkSummit/graphframes-graph-queries-in-spark-sql)
+* [Graphframes Overview](http://graphframes.github.io/index.html)
+* [Elastic Producs](https://www.elastic.co/products)
+* [Elastic Subscriptions](https://www.elastic.co/subscriptions)
+* [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+* [spujadas elk-docker](https://github.com/spujadas/elk-docker)
+* [deviantony docker-elk](https://github.com/deviantony/docker-elk)
 
 # Author
 
