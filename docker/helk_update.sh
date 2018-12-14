@@ -3,7 +3,7 @@
 # HELK script: helk_update.sh
 # HELK script description: Update and Rebuild HELK
 # HELK build Stage: Alpha
-# HELK ELK version: 6.3.1
+# HELK ELK version: 6.5.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # Script Author: Dev Dua (@devdua)
 # License: GPL-3.0
@@ -13,22 +13,52 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-set_helk_license(){    
-    # *********** Accepting Defaults or Allowing user to set HELK License ***************
-    local license_input
-    read -t 30 -p "[HELK-UPDATE-INFO] Set HELK License. Default value is basic: " -e -i "basic" license_input
-    license_choice=${license_input:-"basic"}
-    # *********** Validating License Input ***************
-    case $license_choice in
-        basic)
-        ;;
-        trial)
-        ;;
-        *)
-            echo "[HELK-UPDATE-ERROR] Not a valid license. Valid Options: basic or trial"
-            exit 1
-        ;;
-    esac
+# *********** Asking user for Basic or Trial subscription of ELK ***************
+set_helk_subscription(){
+    if [[ -z "$SUBSCRIPTION_CHOICE" ]]; then
+        # *********** Accepting Defaults or Allowing user to set HELK subscription ***************
+        while true; do
+            local subscription_input
+            read -t 30 -p "[HELK-UPDATE-INFO] Set HELK elastic subscription (basic or trial). Default value is basic: " -e -i "basic" subscription_input
+            SUBSCRIPTION_CHOICE=${subscription_input:-"basic"}
+            # *********** Validating subscription Input ***************
+            case $SUBSCRIPTION_CHOICE in
+                basic) break;;
+                trial) break;;
+                *)
+                    echo -e "${RED}Error...${STD}"
+                    echo "[HELK-UPDATE-ERROR] Not a valid subscription. Valid Options: basic or trial"
+                ;;
+            esac
+        done
+    fi
+}
+
+# *********** Asking user for docker compose config ***************
+set_helk_build(){
+    if [[ -z "$HELK_BUILD" ]]; then
+        while true; do
+            echo " "
+            echo "*****************************************************"	
+            echo "*      HELK - Docker Compose Build Choices          *"
+            echo "*****************************************************"
+            echo " "
+            echo "1. KAFKA + KSQL + ELK + NGNIX + ELASTALERT                   "
+            echo "2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT + SPARK + JUPYTER "
+            echo " "
+
+            local CONFIG_CHOICE
+            read -p "Enter build choice [ 1 - 2] " CONFIG_CHOICE
+            case $CONFIG_CHOICE in
+                1) HELK_BUILD='helk-kibana-analysis';break ;;
+                2) HELK_BUILD='helk-kibana-notebook-analysis-';break;;
+                *) 
+                    echo -e "${RED}Error...${STD}"
+                    echo "[HELK-UPDATE-ERROR] Not a valid build"
+                ;;
+            esac
+        done
+    fi
 }
 
 check_min_requirements(){
@@ -36,7 +66,7 @@ check_min_requirements(){
     echo "[HELK-UPDATE-INFO] HELK being hosted on a $systemKernel box"
     if [ "$systemKernel" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
-        if [ "${AVAILABLE_MEMORY}" -ge "12" ] ; then
+        if [ "${AVAILABLE_MEMORY}" -ge "11" ] ; then
             echo "[HELK-UPDATE-INFO] Available Memory (GB): ${AVAILABLE_MEMORY}"
         else
             echo "[HELK-UPDATE-ERROR] YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY"
@@ -46,13 +76,13 @@ check_min_requirements(){
             exit 1
         fi
     else
-        echo "[HELK-UPDATE-INFO] Error retrieving memory info for $systemKernel. Make sure you have at least 12GB of available memory!"
+        echo "[HELK-UPDATE-INFO] Error retrieving memory info for $systemKernel. Make sure you have at least 11GB of available memory!"
     fi
 
     # CHECK DOCKER DIRECTORY SPACE
     echo "[HELK-UPDATE-INFO] Making sure you assigned enough disk space to the current Docker base directory"
     AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')    
-    if [ "${AVAILABLE_DOCKER_DISK}" -ge "30" ]; then
+    if [ "${AVAILABLE_DOCKER_DISK}" -ge "25" ]; then
         echo "[HELK-UPDATE-INFO] Available Docker Disk: $AVAILABLE_DOCKER_DISK"
     else
         echo "[HELK-UPDATE-ERROR] YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
@@ -112,9 +142,17 @@ check_github(){
 }
 
 update_helk() {
-    set_helk_license
+    
+    set_helk_build
+    set_helk_subscription
+
     echo -e "[HELK-UPDATE-INFO] Stopping HELK and starting update"
-    docker-compose -f docker-compose-helk-elastic-${license_choice}.yml down >> $LOGFILE 2>&1
+    COMPOSE_CONFIG="${HELK_BUILD}-${SUBSCRIPTION_CHOICE}.yml"
+    ## ****** Setting KAFKA ADVERTISED_LISTENER environment variable ***********
+    export ADVERTISED_LISTENER=$HOST_IP
+
+    echo "[HELK-UPDATE-INFO] Building & running HELK from $COMPOSE_CONFIG file.."
+    docker-compose -f $COMPOSE_CONFIG down >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echo -e "[!] Could not stop HELK via docker-compose (Error Code: $ERROR). You're possibly running a different HELK license than chosen - $license_choice"
@@ -124,7 +162,7 @@ update_helk() {
     check_min_requirements
 
     echo "[HELK-UPDATE-INFO] Rebuilding HELK via docker-compose"
-    docker-compose -f docker-compose-helk-elastic-${license_choice}.yml up --build -d -V --force-recreate --always-recreate-deps >> $LOGFILE 2>&1
+    docker-compose -f $COMPOSE_CONFIG up --build -d -V --force-recreate --always-recreate-deps >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echo -e "[!] Could not run HELK via docker-compose (Error Code: $ERROR). Check $LOGFILE for details."
