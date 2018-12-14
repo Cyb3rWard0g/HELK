@@ -320,7 +320,7 @@ set_helk_build(){
             read -p "Enter build choice [ 1 - 2] " CONFIG_CHOICE
             case $CONFIG_CHOICE in
                 1) HELK_BUILD='helk-kibana-analysis';break ;;
-                2) HELK_BUILD='helk-kibana-notebook-analysis-';break;;
+                2) HELK_BUILD='helk-kibana-notebook-analysis';break;;
                 *) 
                     echo -e "${RED}Error...${STD}"
                     echo "[HELK-INSTALLATION-ERROR] Not a valid build"
