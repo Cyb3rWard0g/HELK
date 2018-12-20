@@ -158,7 +158,7 @@ install_htpasswd(){
 # ****** Installing docker via convenience script ***********
 install_docker(){
     echo "[HELK-INSTALLATION-INFO] Installing docker via convenience script.."
-    curl -fsSL get.docker.com -o get-docker.sh >> $LOGFILE 2>&1
+    curl -fsSL https://get.docker.com -o get-docker.sh >> $LOGFILE 2>&1
     chmod +x get-docker.sh >> $LOGFILE 2>&1
     ./get-docker.sh >> $LOGFILE 2>&1
     ERROR=$?
