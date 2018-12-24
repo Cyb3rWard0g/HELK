@@ -14,8 +14,8 @@ echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Setting Elasticsearch URL to $ELASTICSE
 
 # ********* Setting LS_JAVA_OPTS ***************
 if [[ -z "$LS_JAVA_OPTS" ]]; then
-    LS_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
-    LS_JAVA_OPTS="-Xms${LS_MEMORY}g -Xmx${LS_MEMORY}g"
+    LS_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/4}' /proc/meminfo)
+    export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m"
 fi
 echo "[HELK-DOCKER-INSTALLATION-INFO] Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
 

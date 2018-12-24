@@ -100,7 +100,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat
+      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN
       KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
       LOG_RETENTION_HOURS: 4 
     ports:
@@ -108,7 +108,7 @@ services:
     networks:
       helk:
   helk-ksql-server:
-    image: confluentinc/cp-ksql-server:5.0.1
+    image: confluentinc/cp-ksql-server:5.1.0
     container_name: helk-ksql-server
     restart: always
     depends_on:
@@ -127,7 +127,7 @@ services:
     networks:
       helk:
   helk-ksql-cli:
-    image: confluentinc/cp-ksql-cli:5.0.1
+    image: confluentinc/cp-ksql-cli:5.1.0
     container_name: helk-ksql-cli
     depends_on:
       - helk-kafka-broker
