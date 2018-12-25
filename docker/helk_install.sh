@@ -422,7 +422,7 @@ prepare_helk(){
 get_jupyter_credentials(){
     if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]]; then
         echo "[HELK-INSTALLATION-INFO] The following credentials can be used for Jupyterhub:"
-        until  docker docker exec -ti helk-jupyter cat /opt/helk/user_credentials.txt ; do
+        until  docker exec -ti helk-jupyter cat /opt/helk/user_credentials.txt ; do
             sleep 10
         done
     fi
