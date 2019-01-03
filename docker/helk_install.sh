@@ -28,7 +28,12 @@ check_min_requirements(){
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')    
-        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
+	ARCHITECTURE=$(uname -m)
+        if [ "${ARCHITECTURE}" != "x86_64" ]; then
+            echo "[HELK-INSTALLATION-ERROR] HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
+            echo "[HELK-INSTALLATION-ERROR] Your Systems Architecture: ${ARCHITECTURE}"
+        fi
+        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "25"]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
