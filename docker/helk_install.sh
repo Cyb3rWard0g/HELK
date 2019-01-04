@@ -28,7 +28,15 @@ check_min_requirements(){
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')    
-        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
+	ARCHITECTURE=$(uname -m)
+        if [ "${ARCHITECTURE}" != "x86_64" ]; then
+            echo "[HELK-INSTALLATION-ERROR] HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
+            echo "[HELK-INSTALLATION-ERROR] Your Systems Architecture: ${ARCHITECTURE}"
+            echo "[HELK-INSTALLATION-ERROR] Check the requirements section in our installation Wiki"
+            echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+            exit 1
+        fi
+        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "25"]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
@@ -158,7 +166,7 @@ install_htpasswd(){
 # ****** Installing docker via convenience script ***********
 install_docker(){
     echo "[HELK-INSTALLATION-INFO] Installing docker via convenience script.."
-    curl -fsSL get.docker.com -o get-docker.sh >> $LOGFILE 2>&1
+    curl -fsSL https://get.docker.com -o get-docker.sh >> $LOGFILE 2>&1
     chmod +x get-docker.sh >> $LOGFILE 2>&1
     ./get-docker.sh >> $LOGFILE 2>&1
     ERROR=$?
@@ -197,14 +205,22 @@ install_docker_compose(){
 set_elasticsearch_password(){
     if [[ -z "$ELASTICSEARCH_PASSWORD_INPUT" ]] && [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
         while true; do
-            read -p "[HELK-INSTALLATION-INFO] Set HELK Elasticsearch Password: " ELASTICSEARCH_PASSWORD_INPUT
-            read -p "[HELK-INSTALLATION-INFO] Verify HELK Elasticsearch Password: " ELASTICSEARCH_PASSWORD_INPUT_VERIFIED
-            # *********** Validating Password Input ***************
-            if [[ "$ELASTICSEARCH_PASSWORD_INPUT" == "$ELASTICSEARCH_PASSWORD_INPUT_VERIFIED" ]]; then 
+            read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
+            READ_INPUT=$?
+            ELASTICSEARCH_PASSWORD_INPUT=${ELASTICSEARCH_PASSWORD_INPUT:-"elasticpassword"}
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n[HELK-INSTALLATION-INFO] HELK elasticsearch password set to ${ELASTICSEARCH_PASSWORD_INPUT}"
                 break
             else
-                echo -e "${RED}Error...${STD}"
-                echo "[HELK-INSTALLATION-INFO] Your password values do not match.."
+                read -p "[HELK-INSTALLATION-INFO] Verify HELK Elasticsearch Password: " ELASTICSEARCH_PASSWORD_INPUT_VERIFIED
+                echo -e "[HELK-INSTALLATION-INFO] HELK elasticsearch password set to ${ELASTICSEARCH_PASSWORD_INPUT}"
+                # *********** Validating Password Input ***************
+                if [[ "$ELASTICSEARCH_PASSWORD_INPUT" == "$ELASTICSEARCH_PASSWORD_INPUT_VERIFIED" ]]; then 
+                    break
+                else
+                    echo -e "${RED}Error...${STD}"
+                    echo "[HELK-INSTALLATION-INFO] Your password values do not match.."
+                fi
             fi
         done
         export ELASTIC_PASSWORD=$ELASTICSEARCH_PASSWORD_INPUT
@@ -217,14 +233,22 @@ set_elasticsearch_password(){
 set_kibana_ui_password(){
     if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
         while true; do
-            read -p "[HELK-INSTALLATION-INFO] Set HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT
-            read -p "[HELK-INSTALLATION-INFO] Verify HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT_VERIFIED
-            # *********** Validating Password Input ***************
-            if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then 
+            read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+            READ_INPUT=$?
+            KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n[HELK-INSTALLATION-INFO] HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
                 break
             else
-                echo -e "${RED}Error...${STD}"
-                echo "[HELK-INSTALLATION-INFO] Your password values do not match.."
+                read -p "[HELK-INSTALLATION-INFO] Verify HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT_VERIFIED
+                echo -e "[HELK-INSTALLATION-INFO] HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
+                # *********** Validating Password Input ***************
+                if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then 
+                    break
+                else
+                    echo -e "${RED}Error...${STD}"
+                    echo "[HELK-INSTALLATION-INFO] Your password values do not match.."
+                fi
             fi
         done
     fi
@@ -263,7 +287,13 @@ set_network(){
         # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
         local ip_choice
         read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
+        READ_INPUT=$?
         HOST_IP="${ip_choice:-$HOST_IP}"
+        if [ $READ_INPUT  = 142 ]; then
+            echo -e "\n[HELK-INSTALLATION-INFO] HELK IP set to ${HOST_IP}"
+        else
+            echo "[HELK-INSTALLATION-INFO] HELK IP set to ${HOST_IP}"
+        fi
     fi
 }
 
@@ -288,17 +318,24 @@ set_helk_subscription(){
         # *********** Accepting Defaults or Allowing user to set HELK subscription ***************
         while true; do
             local subscription_input
-            read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK elastic subscription (basic or trial). Default value is basic: " -e -i "basic" subscription_input
+            read -t 30 -p "[HELK-INSTALLATION-INFO] Set HELK elastic subscription (basic or trial): " -e -i "basic" subscription_input
+            READ_INPUT=$?
             SUBSCRIPTION_CHOICE=${subscription_input:-"basic"}
-            # *********** Validating subscription Input ***************
-            case $SUBSCRIPTION_CHOICE in
-                basic) break;;
-                trial) break;;
-                *)
-                    echo -e "${RED}Error...${STD}"
-                    echo "[HELK-INSTALLATION-ERROR] Not a valid subscription. Valid Options: basic or trial"
-                ;;
-            esac
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n[HELK-INSTALLATION-INFO] HELK elastic subscription set to ${SUBSCRIPTION_CHOICE}"
+                break
+            else
+                echo "[HELK-INSTALLATION-INFO] HELK elastic subscription set to ${SUBSCRIPTION_CHOICE}"
+                # *********** Validating subscription Input ***************
+                case $SUBSCRIPTION_CHOICE in
+                    basic) break;;
+                    trial) break;;
+                    *)
+                        echo -e "${RED}Error...${STD}"
+                        echo "[HELK-INSTALLATION-ERROR] Not a valid subscription. Valid Options: basic or trial"
+                    ;;
+                esac
+            fi
         done
     fi
 }
@@ -317,23 +354,29 @@ set_helk_build(){
             echo " "
 
             local CONFIG_CHOICE
-            read -p "Enter build choice [ 1 - 2] " CONFIG_CHOICE
-            case $CONFIG_CHOICE in
-                1) HELK_BUILD='helk-kibana-analysis';break ;;
-                2) HELK_BUILD='helk-kibana-notebook-analysis';break;;
-                *) 
-                    echo -e "${RED}Error...${STD}"
-                    echo "[HELK-INSTALLATION-ERROR] Not a valid build"
-                ;;
-            esac
+            read -t 30 -p "Enter build choice [ 1 - 2]: " -e -i "1" CONFIG_CHOICE
+            READ_INPUT=$?
+            HELK_BUILD=${CONFIG_CHOICE:-"helk-kibana-analysis"}
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n[HELK-INSTALLATION-INFO] HELK build set to ${HELK_BUILD}"
+                break
+            else
+                echo "[HELK-INSTALLATION-INFO] HELK build set to ${HELK_BUILD}"
+                case $CONFIG_CHOICE in
+                    1) HELK_BUILD='helk-kibana-analysis';break ;;
+                    2) HELK_BUILD='helk-kibana-notebook-analysis';break;;
+                    *) 
+                        echo -e "${RED}Error...${STD}"
+                        echo "[HELK-INSTALLATION-ERROR] Not a valid build"
+                    ;;
+                esac
+            fi
         done
     fi
 }
 
 # *********** Install and set up pre-requirements ***************
 prepare_helk(){
-    echo "[HELK-INSTALLATION-INFO] HELK IP set to ${HOST_IP}"
-    echo "[HELK-INSTALLATION-INFO] HELK elastic subscription set to ${SUBSCRIPTION_CHOICE}"
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then
         # *********** Check if curl is installed ***************
         if ! [ -x "$(command -v curl)" ]; then
@@ -387,7 +430,7 @@ prepare_helk(){
 get_jupyter_credentials(){
     if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]]; then
         echo "[HELK-INSTALLATION-INFO] The following credentials can be used for Jupyterhub:"
-        until  docker docker exec -ti helk-jupyter cat /opt/helk/user_credentials.txt ; do
+        until  docker exec -ti helk-jupyter cat /opt/helk/user_credentials.txt ; do
             sleep 10
         done
     fi

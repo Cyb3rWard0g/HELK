@@ -33,6 +33,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 * **Spark:** A fast and general-purpose cluster computing system. It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general execution graphs.
 * **GraphFrames:** A package for Apache Spark which provides DataFrame-based Graphs.
 * **Jupyter Notebook:** An open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
+* **KSQL:** Confluent KSQL is the open source, streaming SQL engine that enables real-time data processing against Apache Kafka®. It provides an easy-to-use, yet powerful interactive SQL interface for stream processing on Kafka, without the need to write code in a programming language such as Java or Python
 * **Elastalert:** ElastAlert is a simple framework for alerting on anomalies, spikes, or other patterns of interest from data in Elasticsearch
     * **Sigma:** Sigma is a generic and open signature format that allows you to describe relevant log events in a straightforward manner.
 
@@ -129,5 +130,6 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [X] Nxlog parsers (Logstash Filters)
 - [ ] Add more network data sources (i.e Bro)
 - [ ] Research & integrate spark structured direct streaming
+- [ ] Packer Images
 
 More coming soon...
