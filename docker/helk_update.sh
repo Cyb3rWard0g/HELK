@@ -122,12 +122,9 @@ check_github(){
     if  [ ! "$COMMIT_DIFF" == "0" ]; then
         echo "Possibly new release available. Commit diff --> $COMMIT_DIFF" >> $LOGFILE 2>&1
         IS_MASTER_BEHIND=$(git branch -v | grep master | grep behind)
-        
-        if [[ -z $IS_MASTER_BEHIND ]]; then
-            echo "Current master branch ahead of remote branch. Exiting..." >> $LOGFILE 2>&1
-            echo "[HELK-UPDATE-INFO] No updates available."
 
-        elif [ ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]; then
+        # IF HELK HAS BEEN CLONED FROM OFFICIAL REPO
+        if [ ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]; then
             echo "Difference in HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1   
             echo "[HELK-UPDATE-INFO] New release available. Pulling new code."
             git checkout master >> $LOGFILE 2>&1
@@ -135,6 +132,16 @@ check_github(){
             REBUILD_NEEDED=1
             touch /tmp/helk-update
             echo $REBUILD_NEEDED > /tmp/helk-update
+
+        # IF HELK HAS BEEN CLONED FROM THE OFFICIAL REPO & MODIFIED
+        elif [[ -z $IS_MASTER_BEHIND ]]; then
+            echo "Current master branch ahead of remote branch, possibly modified. Exiting..." >> $LOGFILE 2>&1
+            echo "[HELK-UPDATE-INFO] No updates available."
+
+        else
+            echo "Repository misconfigured. Exiting..." >> $LOGFILE 2>&1
+            echo "[HELK-UPDATE-INFO] No updates available."
+
         fi
     else
         echo "[HELK-UPDATE-INFO] No updates available."    
