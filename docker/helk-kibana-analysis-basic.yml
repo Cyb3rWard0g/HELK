@@ -100,7 +100,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN
+      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat
       KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
       LOG_RETENTION_HOURS: 4 
     ports:
