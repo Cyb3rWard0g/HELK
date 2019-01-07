@@ -36,7 +36,7 @@ check_min_requirements(){
             echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
             exit 1
         fi
-        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "25"]; then
+        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
