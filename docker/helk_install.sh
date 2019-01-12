@@ -549,7 +549,7 @@ else
             ;;
         esac
         # *********** Validating helk build***************
-        case $SUBSCRIPTION_CHOICE in
+        case $HELK_BUILD in
             helk-kibana-analysis);;
             helk-kibana-notebook-analysis);;
             *)
