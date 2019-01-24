@@ -27,6 +27,9 @@ filebeat.inputs:
   paths:
     - /var/log/osquery/osqueryd.results.log 
     #- c:\programdata\elasticsearch\logs\*
+  json.keys_under_root: true
+  fields_under_root: true
+
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
   # matching any regular expression from the list.
