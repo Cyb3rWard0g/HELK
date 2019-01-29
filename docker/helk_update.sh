@@ -24,16 +24,23 @@ set_helk_subscription(){
         # *********** Accepting Defaults or Allowing user to set HELK subscription ***************
         while true; do
             local subscription_input
-            read -t 30 -p "[HELK-UPDATE-INFO] Set HELK elastic subscription (basic or trial). Default value is basic: " -e -i "basic" subscription_input
+            read -t 30 -p ">> Set HELK elastic subscription (basic or trial): " -e -i "basic" subscription_input
+            READ_INPUT=$?
             SUBSCRIPTION_CHOICE=${subscription_input:-"basic"}
-            # *********** Validating subscription Input ***************
-            case $SUBSCRIPTION_CHOICE in
-                basic) break;;
-                trial) break;;
-                *)
-                    echo -e "${RED}[HELK-UPDATE-ERROR]${STD} Not a valid subscription. Valid Options: basic or trial"
-                ;;
-            esac
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n${CYAN}[HELK-UPDATE-INFO]${STD} HELK elastic subscription set to ${SUBSCRIPTION_CHOICE}"
+                break
+            else
+                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} HELK elastic subscription set to ${SUBSCRIPTION_CHOICE}"
+                # *********** Validating subscription Input ***************
+                case $SUBSCRIPTION_CHOICE in
+                    basic) break;;
+                    trial) break;;
+                    *)
+                        echo -e "${RED}[HELK-UPDATE-ERROR]${STD} Not a valid subscription. Valid Options: basic or trial"
+                    ;;
+                esac
+            fi
         done
     fi
 }
@@ -52,14 +59,22 @@ set_helk_build(){
             echo " "
 
             local CONFIG_CHOICE
-            read -p "Enter build choice [ 1 - 2] " CONFIG_CHOICE
-            case $CONFIG_CHOICE in
-                1) HELK_BUILD='helk-kibana-analysis';break ;;
-                2) HELK_BUILD='helk-kibana-notebook-analysis-';break;;
-                *) 
-                    echo -e "${RED}[HELK-UPDATE-ERROR]${STD} Not a valid build"
-                ;;
-            esac
+            read -t 30 -p ">> Enter build choice [ 1 - 2]: " -e -i "1" CONFIG_CHOICE
+            READ_INPUT=$?
+            HELK_BUILD=${CONFIG_CHOICE:-"helk-kibana-analysis"}
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n${CYAN}[HELK-UPDATE-INFO]${STD} HELK build set to ${HELK_BUILD}"
+                break
+            else
+                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} HELK build set to ${HELK_BUILD}"
+                case $CONFIG_CHOICE in
+                    1) HELK_BUILD='helk-kibana-analysis';break ;;
+                    2) HELK_BUILD='helk-kibana-notebook-analysis';break;;
+                    *) 
+                        echo -e "\n${RED}[HELK-UPDATE-ERROR]${STD} Not a valid build"
+                    ;;
+                esac
+            fi
         done
     fi
 }
@@ -102,7 +117,7 @@ check_git_status(){
     echo -e "Git status: $GIT_STATUS_FATAL, RetVal : $RETURN_CODE" >> $LOGFILE
     if [[ -z $GIT_STATUS_FATAL && $RETURN_CODE -gt 0 ]]; then 
         echo -e "${WAR}[HELK-UPDATE-WARNING]${STD} Git repository corrupted."
-        read -p "To fix this, all your local modifications to HELK will be overwritten. Do you wish to continue? (y/n) " -n 1 -r
+        read -p ">> To fix this, all your local modifications to HELK will be overwritten. Do you wish to continue? (y/n) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             GIT_REPO_CLEAN=0
@@ -233,7 +248,7 @@ if [[ -e /tmp/helk-update ]]; then
     UPDATES_FETCHED=`cat /tmp/helk-update`
 
     if [ "$UPDATES_FETCHED" == "1" ]; then
-      echo -e "[HELK-UPDATE-INFO] Updates already downloaded. Starting update..."    
+      echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates already downloaded. Starting update..."    
       update_helk
     fi
 fi
