@@ -3,7 +3,6 @@
 # HELK script: helk_update.sh
 # HELK script description: Update and Rebuild HELK
 # HELK build Stage: Alpha
-# HELK ELK version: 6.5.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # Script Author: Dev Dua (@devdua)
 # License: GPL-3.0

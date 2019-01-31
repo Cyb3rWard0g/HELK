@@ -27,8 +27,8 @@ check_min_requirements(){
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $SYSTEM_KERNEL box"
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then 
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
-        AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')    
-	ARCHITECTURE=$(uname -m)
+        AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
+        ARCHITECTURE=$(uname -m)
         if [ "${ARCHITECTURE}" != "x86_64" ]; then
             echo "[HELK-INSTALLATION-ERROR] HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
             echo "[HELK-INSTALLATION-ERROR] Your Systems Architecture: ${ARCHITECTURE}"
@@ -304,7 +304,7 @@ build_helk(){
     export ADVERTISED_LISTENER=$HOST_IP
 
     echo "[HELK-INSTALLATION-INFO] Building & running HELK from $COMPOSE_CONFIG file.."
-    sudo -E docker-compose -f $COMPOSE_CONFIG up --build -d >> $LOGFILE 2>&1
+    docker-compose -f $COMPOSE_CONFIG up --build -d >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not run HELK via docker-compose file $COMPOSE_CONFIG (Error Code: $ERROR)."
@@ -429,7 +429,6 @@ prepare_helk(){
 
 get_jupyter_credentials(){
     if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]]; then
-        echo "[HELK-INSTALLATION-INFO] The following credentials can be used for Jupyterhub:"
         until  docker exec -ti helk-jupyter cat /opt/helk/user_credentials.txt ; do
             sleep 10
         done
@@ -443,8 +442,8 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.6-alpha12132018 **"
-    echo "** HELK ELK version: 6.5.3                  **"
+    echo "** HELK build version: v0.1.6-alpha01312019 **"
+    echo "** HELK ELK version: 6.5.4                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
     echo " "
@@ -462,8 +461,8 @@ show_final_information(){
         echo "HELK KIBANA URL: https://${HOST_IP}"
         echo "HELK KIBANA USER: helk"
         echo "HELK KIBANA PASSWORD: ${KIBANA_UI_PASSWORD_INPUT}"
-        echo "HELK JUPYTERHUB URL: http://${HOST_IP}/jupyter"
         echo "HELK SPARK MASTER UI: http://${HOST_IP}:8080"
+        echo "HELK JUPYTERHUB URL: http://${HOST_IP}/jupyter"
         get_jupyter_credentials
     elif [[ ${HELK_BUILD} == "helk-kibana-analysis" ]]; then
         echo "HELK KIBANA URL: https://${HOST_IP}"

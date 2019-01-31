@@ -6,7 +6,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-# *********** Looking for ES ***************
+# *********** Setting ES_JAVA_OPTS ***************
 if [[ -z "$ES_JAVA_OPTS" ]]; then
     ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
     if [ $ES_MEMORY -gt 31 ]; then
@@ -16,11 +16,20 @@ if [[ -z "$ES_JAVA_OPTS" ]]; then
 fi
 echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Setting ES_JAVA_OPTS to $ES_JAVA_OPTS"
 
-# *********** HELK ES Password ***************
-if [[ -z "$ELASTIC_PASSWORD" ]]; then
-  export ELASTIC_PASSWORD=elasticpassword
+# ******** Checking License Type ***************
+ENVIRONMENT_VARIABLES=$(env)
+XPACK_LICENSE_TYPE="$(echo $ENVIRONMENT_VARIABLES | grep -oE 'xpack.license.self_generated.type=[^ ]*' | sed s/.*=//)"
+
+# ******** Set Trial License Variables ***************
+if [[ $XPACK_LICENSE_TYPE == "trial" ]]; then
+  # *********** HELK ES Password ***************
+  if [[ -z "$ELASTIC_PASSWORD" ]]; then
+    export ELASTIC_PASSWORD=elasticpassword
+  fi
+  echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Setting Elastic password to $ELASTIC_PASSWORD"
 fi
-echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Setting Elastic password to $ELASTIC_PASSWORD"
+
+echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Setting Elastic license to $XPACK_LICENSE_TYPE"
 
 # ********** Starting Elasticsearch *****************
 echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Running docker-entrypoint script.."

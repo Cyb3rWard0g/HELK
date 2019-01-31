@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Setting Environment Variables ***************
 ENV JUPYTER_DIR=/opt/helk/jupyter
-ENV ESHADOOP_VERSION=6.5.3
+ENV ESHADOOP_VERSION=6.5.4
 ENV POSTGRESQL_VERSION=42.2.5
 
 # *********** Installing Prerequisites ***************
@@ -23,11 +23,12 @@ RUN apt-get update -qq \
   libxml2-dev libxslt1-dev zlib1g-dev postgresql \
   # ********** Install PIP Packages ************
   && sudo pip3 install --upgrade pip \
-  && pip3 install pandas==0.23.4 \
-  altair==2.2.2 \
+  && pip3 install pandas==0.24.0 \
+  altair==2.3.0 \
   jupyter==1.0.0 \
   jupyterlab==0.35.4 \
   jupyterhub==0.9.4 \
+  ipywidgets==7.4.2 \
   # *********** Setting Jupyter Hub & Jupyter **********************
   && curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
   && apt-get install -y --no-install-recommends nodejs \
@@ -35,6 +36,7 @@ RUN apt-get update -qq \
   && jupyter labextension install @jupyterlab/hub-extension@0.12.0 \
   && jupyter labextension install @jupyterlab/celltags@0.1.4 \
   && jupyter labextension install @mflevine/jupyterlab_html@0.1.4 \
+  && jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.38.1 \
   && bash -c 'mkdir -pv /opt/helk/{es-hadoop,jupyter,jupyterhub}' \
   && mkdir -v /usr/local/share/jupyter/kernels/pyspark3 \
   && mkdir -v /var/log/spark \

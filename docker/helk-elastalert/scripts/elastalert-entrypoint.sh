@@ -12,35 +12,33 @@
 if [[ -z "$ES_HOST" ]]; then
   ES_HOST=helk-elasticsearch
 fi
-echo "[HELK-DOCKER-INSTALLATION-INFO] Setting Elasticsearch server name to $ES_HOST"
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Setting Elasticsearch server name to $ES_HOST"
 
 if [[ -z "$ES_PORT" ]]; then
   ES_PORT=9200
 fi
-echo "[HELK-DOCKER-INSTALLATION-INFO] Setting Elasticsearch server port to $ES_PORT"
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Setting Elasticsearch server port to $ES_PORT"
 
-if [[ "$ELASTIC_USERNAME" ]] && [[ "$ES_PASSWORD" ]]; then
+if [[ -n "$ELASTIC_PASSWORD" ]]; then
+    if [[ -z "$ELASTIC_USERNAME" ]]; then
+        ELASTIC_USERNAME=elastic
+    fi
     echo "es_username: $ELASTIC_USERNAME" >> $ESALERT_HOME/config.yaml
     echo "es_password: $ELASTIC_PASSWORD" >> $ESALERT_HOME/config.yaml
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Setting Elasticsearch username to $ELASTIC_USERNAME"
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Setting Elasticsearch password to $ELASTIC_PASSWORD"
+    echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Setting Elasticsearch username to $ELASTIC_USERNAME"
+    echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Setting Elasticsearch password to $ELASTIC_PASSWORD"
     ELASTICSEARCH_ACCESS=http://$ELASTIC_USERNAME:"$ELASTIC_PASSWORD"@$ES_HOST:$ES_PORT
-    if [[ "$KIBANA_HOST" ]] && [[ "$KIBANA_PORT" ]]; then
-        KIBANA=$KIBANA_HOST:$KIBANA_PORT
-    else
-        exit 1
-    fi
 else
     ELASTICSEARCH_ACCESS=http://$ES_HOST:$ES_PORT
 fi
 
 # *********** Update Elastalert Config ******************
-echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Elastalert main config.."
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Updating Elastalert main config.."
 sed -i "s/^es_host\:.*$/es_host\: ${ES_HOST}/g" $ESALERT_HOME/config.yaml
 sed -i "s/^es_port\:.*$/es_port\: ${ES_PORT}/g" $ESALERT_HOME/config.yaml
 
 # *********** Check if Elasticsearch is up ***************
-echo "[HELK-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
 until curl -s $ES_HOST:$ES_PORT -o /dev/null; do
     sleep 1
 done
@@ -48,29 +46,24 @@ done
 # *********** Creating Elastalert Status Index ***************
 response_code=$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS/elastalert_status)
 if [[ $response_code == 404 ]]; then
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Creating Elastalert index.."
-    if [[ "$ELASTIC_PASSWORD" ]]; then
-        # *********** Waiting for Kibana port to be up ***************
-        echo "[++] Checking to see if kibana port is up..."
-        until curl -s $KIBANA -o /dev/null; do
-            sleep 1
-        done
-        elastalert-create-index --host $ES_HOST --port $ES_PORT --username $ELASTIC_USERNAME--password $ELASTIC_PASSWORD --no-auth --no-ssl --url-prefix '' --old-index ''
+    echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Creating Elastalert index.."
+    if [[ -n "$ELASTIC_PASSWORD" ]]; then
+        elastalert-create-index --host $ES_HOST --port $ES_PORT --username $ELASTIC_USERNAME --password $ELASTIC_PASSWORD --no-auth --no-ssl --url-prefix '' --old-index ''
     else
         elastalert-create-index --host $ES_HOST --port $ES_PORT --no-auth --no-ssl --url-prefix '' --old-index ''
     fi
 else
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Elastalert index already exists"
+    echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Elastalert index already exists"
 fi
 
 # *********** Transform SIGMA Rules to Elastalert Signatures *************
-echo "[HELK-DOCKER-INSTALLATION-INFO] Executing pull-sigma.sh script.."
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Executing pull-sigma.sh script.."
 /etc/elastalert/pull-sigma.sh
 
 # *********** Setting Slack Integration *************
 rule_counter=0
 if [[ "$SLACK_WEBHOOK_URL" ]]; then
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Setting Slack webhook url to $SLACK_WEBHOOK_URL.."
+    echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Setting Slack webhook url to $SLACK_WEBHOOK_URL.."
     for er in $ESALERT_HOME/rules/*; do
         priority=$(sed -n -e 's/^priority: //p' $er)
         if [[ $priority = "1" ]]; then
@@ -96,5 +89,5 @@ if [[ "$SLACK_WEBHOOK_URL" ]]; then
     echo " "
 fi
 
-echo "[HELK-DOCKER-INSTALLATION-INFO] Starting Elastalert.."
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Starting Elastalert.."
 exec "$@"

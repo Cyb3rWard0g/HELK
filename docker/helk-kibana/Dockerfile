@@ -6,6 +6,6 @@
 # References: 
 # https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
 
-FROM docker.elastic.co/kibana/kibana:6.5.3
+FROM docker.elastic.co/kibana/kibana:6.5.4
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Kibana."

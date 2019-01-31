@@ -10,7 +10,7 @@
 cd $ESALERT_SIGMA_HOME
 
 # ******* Check if Elastalert rules folder has SIGMA rules ************
-echo "[+++] Checking if Elastalert rules folder has SIGMA rules.."
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Checking if Elastalert rules folder has SIGMA rules.."
 if ls $ESALERT_HOME/rules/ | grep -v '^helk_' >/dev/null 2>&1; then
     echo "[+++++] SIGMA rules available in rules folder.."
     SIGMA_RULES_AVAILABLE=YES
@@ -19,11 +19,11 @@ else
 fi
 
 # ******* Check if local SIGMA repo needs update *************
-echo "[+++] Fetch updates for SIGMA remote.."
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Fetch updates for SIGMA remote.."
 git remote update
 
 # Reference: https://stackoverflow.com/a/3278427
-echo "[+++] Checking to see if local SIGMA repo is up to date or not.."
+echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Checking to see if local SIGMA repo is up to date or not.."
 UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse "$UPSTREAM")
@@ -85,7 +85,7 @@ find $ESALERT_HOME/rules/ -type f -name 'sigma_sysmon_powershell_suspicious_para
 
 # ******** Deleting Empty Files ***********
 echo " "
-echo "\Removing empty files.."
+echo "Removing empty files.."
 echo "-------------------------"
 rule_counter=0
 for ef in $ESALERT_HOME/rules/* ; do 
