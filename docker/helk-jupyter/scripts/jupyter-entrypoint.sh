@@ -37,7 +37,7 @@ if [[ $HELK_USER_EXISTS == "1" ]]; then
     echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] Creating JupyterHub Group..."
     groupadd -g ${JUPYTERHUB_GID} jupyterhub
 
-    # ************* Create notebooks folder if it is not provided in comose file ******************
+    # ************* Create notebooks folder if it is not provided in compose file ******************
     mkdir -p ${JUPYTER_NOTEBOOKS}
 
     # ************* Creating JupyterHub Admin ***************

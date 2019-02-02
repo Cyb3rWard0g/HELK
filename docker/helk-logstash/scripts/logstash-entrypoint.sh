@@ -79,13 +79,6 @@ for file in ${DIR}/*.json; do
     done
 done
 
-# ********* Setting LS_JAVA_OPTS ***************
-if [[ -z "$LS_JAVA_OPTS" ]]; then
-    LS_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/4}' /proc/meminfo)
-    export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m"
-fi
-echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
-
 # ********** Install Plugin *****************
 echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Installing Logstash plugins.."
 if logstash-plugin list 'prune'; then
@@ -93,6 +86,21 @@ if logstash-plugin list 'prune'; then
 else
     logstash-plugin install logstash-filter-prune
 fi
+
+# ********* Setting LS_JAVA_OPTS ***************
+if [[ -z "$LS_JAVA_OPTS" ]]; then
+  while true; do
+    LS_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/4}' /proc/meminfo)
+    if [ $LS_MEMORY -gt 980 ]; then
+      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m"
+      break
+    else
+      echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] $LS_MEMORY MB is not enough memory for Logstash yet.."
+      sleep 1
+    fi
+  done
+fi
+echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
 
 # ********** Starting Logstash *****************
 echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Running docker-entrypoint script.."

@@ -8,9 +8,16 @@
 
 # *********** Setting ES_JAVA_OPTS ***************
 if [[ -z "$ES_JAVA_OPTS" ]]; then
-    ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
-    if [ $ES_MEMORY -gt 31 ]; then
-      ES_MEMORY=31
+    AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
+    if [ $AVAILABLE_MEMORY -ge 8 -a $AVAILABLE_MEMORY -le 12 ]; then
+      ES_MEMORY=2
+    elif [$AVAILABLE_MEMORY -ge 13 -a $AVAILABLE_MEMORY -le 16]; then
+      ES_MEMORY=4
+    else
+      ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
+      if [ $ES_MEMORY -gt 31 ]; then
+        ES_MEMORY=31
+      fi
     fi
     export ES_JAVA_OPTS="-Xms${ES_MEMORY}g -Xmx${ES_MEMORY}g"
 fi

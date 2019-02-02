@@ -19,12 +19,72 @@ echoerror() {
 }
 
 # ********* Globals **********************
-systemKernel="$(uname -s)"
+SYSTEM_KERNEL="$(uname -s)"
+
+echo "[HELK-DOCKER-INSTALLATION-INFO] Checking distribution list and product version"
+if [ "$SYSTEM_KERNEL" == "Linux" ]; then
+    # *********** Check distribution list ***************
+    LSB_DIST="$(. /etc/os-release && echo "$ID")"
+    LSB_DIST="$(echo "$LSB_DIST" | tr '[:upper:]' '[:lower:]')"
+    # *********** Check distribution version ***************
+    case "$LSB_DIST" in
+        ubuntu)
+            if [ -x "$(command -v lsb_release)" ]; then
+                DIST_VERSION="$(lsb_release --codename | cut -f2)"
+            fi
+            if [ -z "$DIST_VERSION" ] && [ -r /etc/lsb-release ]; then
+                DIST_VERSION="$(. /etc/lsb-release && echo "$DISTRIB_CODENAME")"
+            fi
+            # ********* Commenting Out CDROM **********************
+            sed -i "s/\(^deb cdrom.*$\)/\#/g" /etc/apt/sources.list
+        ;;
+        debian|raspbian)
+            DIST_VERSION="$(sed 's/\/.*//' /etc/debian_version | sed 's/\..*//')"
+            case "$DIST_VERSION" in
+                9) DIST_VERSION="stretch";;
+                8) DIST_VERSION="jessie";;
+                7) DIST_VERSION="wheezy";;
+            esac
+            # ********* Commenting Out CDROM **********************
+            sed -i "s/\(^deb cdrom.*$\)/\#/g" /etc/apt/sources.list
+        ;;
+        centos)
+            if [ -z "$DIST_VERSION" ] && [ -r /etc/os-release ]; then
+                DIST_VERSION="$(. /etc/os-release && echo "$VERSION_ID")"
+            fi
+        ;;
+        rhel|ol|sles)
+            ee_notice "$LSB_DIST"
+            exit 1
+            ;;
+        *)
+            if [ -x "$(command -v lsb_release)" ]; then
+                DIST_VERSION="$(lsb_release --release | cut -f2)"
+            fi
+            if [ -z "$DIST_VERSION" ] && [ -r /etc/os-release ]; then
+                DIST_VERSION="$(. /etc/os-release && echo "$VERSION_ID")"
+            fi
+        ;;
+    esac           
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not verify distribution or version of the OS (Error Code: $ERROR)."
+    fi
+    echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $LSB_DIST version $DIST_VERSION" 
+elif [ "$SYSTEM_KERNEL" == "Darwin" ]; then
+    PRODUCT_NAME="$(sw_vers -productName)"
+    PRODUCT_VERSION="$(sw_vers -productVersion)"
+    BUILD_VERSION="$(sw_vers -buildVersion)"
+    echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $PRODUCT_NAME version $PRODUCT_VERSION"
+else
+    echo "[HELK-DOCKER-INSTALLATION-INFO] We cannot figure out the SYSTEM_KERNEL, distribution or version of the OS"
+fi
+
 
 # ********** Install Curl ********************
 install_curl(){      
     echo "[HELK-DOCKER-INSTALLATION-INFO] Installing curl before installing docker.."
-    case "$lsb_dist" in
+    case "$LSB_DIST" in
         ubuntu|debian|raspbian)
             apt-get install -y curl >> $LOGFILE 2>&1
         ;;
@@ -32,7 +92,7 @@ install_curl(){
             yum install curl >> $LOGFILE 2>&1
         ;;
         *)
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Please install curl for $lsb_dist $dist_version.."
+            echo "[HELK-DOCKER-INSTALLATION-INFO] Please install curl for $LSB_DIST $DIST_VERSION .."
             exit 1
         ;;
     esac
@@ -81,8 +141,8 @@ install_docker_compose(){
     fi
 }
 
-# *********** Main steps
-if [ "$systemKernel" == "Linux" ]; then
+# *********** Main steps *********************
+if [ "$SYSTEM_KERNEL" == "Linux" ]; then
     # *********** Check if curl is installed ***************
     if [ -x "$(command -v curl)" ]; then
         echo "[HELK-DOCKER-INSTALLATION-INFO] curl is already installed"
@@ -110,7 +170,7 @@ else
     if [ -x "$(command -v docker)" ] && [ -x "$(command -v docker-compose)" ]; then
         echo "[HELK-DOCKER-INSTALLATION-INFO] Docker & Docker-compose already installed"
     else
-        echo "[HELK-DOCKER-INSTALLATION-INFO] Please innstall Docker & Docker-compose for $systemKernel"
+        echo "[HELK-DOCKER-INSTALLATION-INFO] Please innstall Docker & Docker-compose for $SYSTEM_KERNEL"
         exit 1
     fi
 fi

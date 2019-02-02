@@ -11,7 +11,6 @@
   "env": {
    "SPARK_HOME": "/opt/helk/spark/",
    "PYTHONPATH": "/opt/helk/spark/python/:/opt/helk/spark/python/lib/py4j-0.10.7-src.zip",
-   "PYTHONSTARTUP": "/opt/helk/spark/python/pyspark/shell.py",
    "PYSPARK_PYTHON": "/usr/bin/python3"
   }
 }

@@ -29,6 +29,11 @@ RUN apt-get update -qq \
   jupyterlab==0.35.4 \
   jupyterhub==0.9.4 \
   ipywidgets==7.4.2 \
+  matplotlib==3.0.2 \
+  scipy==1.2.0 \
+  scikit-learn==0.20.2 \
+  Keras==2.2.4 \
+  s3fs==0.2.0 \
   # *********** Setting Jupyter Hub & Jupyter **********************
   && curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - \
   && apt-get install -y --no-install-recommends nodejs \

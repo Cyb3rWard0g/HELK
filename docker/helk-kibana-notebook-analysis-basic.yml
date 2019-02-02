@@ -81,13 +81,13 @@ services:
     networks:
       helk:
   helk-jupyter:
-    image: cyb3rward0g/helk-jupyter:0.0.9
+    image: cyb3rward0g/helk-jupyter:0.1.0
     container_name: helk-jupyter
     volumes:
       - ./helk-jupyter/notebooks:/opt/helk/jupyter/notebooks
     environment:
       JUPYTER_HELK_PWD: hunting
-      JUPYTER_USERS: hunter1, hunter2
+      JUPYTER_USERS: hunter1
     restart: always
     depends_on:
       - helk-logstash
@@ -161,7 +161,7 @@ services:
       KSQL_KSQL_COMMIT_INTERVAL_MS: 2000
       KSQL_KSQL_CACHE_MAX_BYTES_BUFFERING: 10000000
       KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: earliest
-      KSQL_HEAP_OPTS: -Xmx1g
+      KSQL_HEAP_OPTS: -Xmx500m
     ports:
       - 8088:8088
     networks:
@@ -172,7 +172,7 @@ services:
     depends_on:
       - helk-ksql-server
     environment:
-        KSQL_HEAP_OPTS: -Xmx550m
+        KSQL_HEAP_OPTS: -Xmx500m
     entrypoint: /bin/sh
     tty: true
     networks:

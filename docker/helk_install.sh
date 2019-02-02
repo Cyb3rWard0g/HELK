@@ -36,7 +36,7 @@ check_min_requirements(){
             echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
             exit 1
         fi
-        if [ "${AVAILABLE_MEMORY}" -ge "11" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
+        if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
@@ -442,7 +442,7 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.6-alpha01312019 **"
+    echo "** HELK build version: v0.1.6-alpha02022019 **"
     echo "** HELK ELK version: 6.5.4                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
@@ -483,9 +483,9 @@ install_helk(){
     check_system_info
     set_helk_build
     set_helk_subscription
+    set_network
     set_kibana_ui_password
     set_elasticsearch_password
-    set_network
     prepare_helk
     build_helk
     sleep 180
