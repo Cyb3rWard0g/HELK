@@ -429,7 +429,7 @@ prepare_helk(){
 
 persist_conf(){
     if [ ! -d "/usrl/local/helk" ]; then
-        mkdir -p /usr/local/helk
+        mkdir -p /usr/local/helk >> $LOGFILE 2>&1
     fi
 
     if [[ -e $CONF_FILE ]]; then
@@ -437,16 +437,16 @@ persist_conf(){
         HI=$(cat $CONF_FILE | grep HOST_IP | cut -d'=' -f2)
         HB=$(cat $CONF_FILE | grep HELK_BUILD | cut -d'=' -f2)
         SC=$(cat $CONF_FILE | grep SUBSCRIPTION_CHOICE | cut -d'=' -f2)
-        sed -i -e "s/$MMC/262144/g" $CONF_FILE
-        sed -i -e "s/$HI/$HOST_IP/g" $CONF_FILE
-        sed -i -e "s/$HB/$HELK_BUILD/g" $CONF_FILE
-        sed -i -e "s/$SC/$SUBSCRIPTION_CHOICE/g" $CONF_FILE
+        sed -i -e "s/$MMC/262144/g" $CONF_FILE >> $LOGFILE 2>&1
+        sed -i -e "s/$HI/$HOST_IP/g" $CONF_FILE >> $LOGFILE 2>&1
+        sed -i -e "s/$HB/$HELK_BUILD/g" $CONF_FILE >> $LOGFILE 2>&1
+        sed -i -e "s/$SC/$SUBSCRIPTION_CHOICE/g" $CONF_FILE >> $LOGFILE 2>&1
     else
-        touch $CONF_FILE    
-        echo "MAX_MAP_COUNT=262144" >> $CONF_FILE
-        echo "HOST_IP=$HOST_IP" >> $CONF_FILE
-        echo "HELK_BUILD=$HELK_BUILD" >> $CONF_FILE
-        echo "SUBSCRIPTION_CHOICE=$SUBSCRIPTION_CHOICE" >> $CONF_FILE  
+        touch $CONF_FILE >> $LOGFILE 2>&1
+        echo "MAX_MAP_COUNT=262144" >> $CONF_FILE >> $LOGFILE 2>&1
+        echo "HOST_IP=$HOST_IP" >> $CONF_FILE >> $LOGFILE 2>&1
+        echo "HELK_BUILD=$HELK_BUILD" >> $CONF_FILE >> $LOGFILE 2>&1
+        echo "SUBSCRIPTION_CHOICE=$SUBSCRIPTION_CHOICE" >> $CONF_FILE >> $LOGFILE 2>&1
     fi
 }
 
