@@ -20,7 +20,7 @@ echoerror() {
 
 # ********* Globals **********************
 SYSTEM_KERNEL="$(uname -s)"
-
+CONF_FILE="/usr/local/helk/helk.conf"
 # ********** Check Minimum Requirements **************
 check_min_requirements(){
     # *********** Check System Kernel Name ***************
@@ -29,7 +29,7 @@ check_min_requirements(){
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
         ARCHITECTURE=$(uname -m)
-        if [ "${ARCHITECTURE}" != "x86_64" ]; then
+    if [ "${ARCHITECTURE}" != "x86_64" ]; then
             echo "[HELK-INSTALLATION-ERROR] HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
             echo "[HELK-INSTALLATION-ERROR] Your Systems Architecture: ${ARCHITECTURE}"
             echo "[HELK-INSTALLATION-ERROR] Check the requirements section in our installation Wiki"
@@ -427,6 +427,29 @@ prepare_helk(){
     fi
 }
 
+persist_conf(){
+    if [ ! -d "/usrl/local/helk" ]; then
+        mkdir -p /usr/local/helk
+    fi
+
+    if [[ -e $CONF_FILE ]]; then
+        MMC=$(cat $CONF_FILE | grep MAX_MAP_COUNT | cut -d'=' -f2)
+        HI=$(cat $CONF_FILE | grep HOST_IP | cut -d'=' -f2)
+        HB=$(cat $CONF_FILE | grep HELK_BUILD | cut -d'=' -f2)
+        SC=$(cat $CONF_FILE | grep SUBSCRIPTION_CHOICE | cut -d'=' -f2)
+        sed -i -e "s/$MMC/262144/g" $CONF_FILE
+        sed -i -e "s/$HI/$HOST_IP/g" $CONF_FILE
+        sed -i -e "s/$HB/$HELK_BUILD/g" $CONF_FILE
+        sed -i -e "s/$SC/$SUBSCRIPTION_CHOICE/g" $CONF_FILE
+    else
+        touch $CONF_FILE    
+        echo "MAX_MAP_COUNT=262144" >> $CONF_FILE
+        echo "HOST_IP=$HOST_IP" >> $CONF_FILE
+        echo "HELK_BUILD=$HELK_BUILD" >> $CONF_FILE
+        echo "SUBSCRIPTION_CHOICE=$SUBSCRIPTION_CHOICE" >> $CONF_FILE  
+    fi
+}
+
 get_jupyter_credentials(){
     if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]]; then
         until  docker exec -ti helk-jupyter cat /opt/helk/user_credentials.txt ; do
@@ -487,6 +510,7 @@ install_helk(){
     set_kibana_ui_password
     set_elasticsearch_password
     prepare_helk
+    persist_conf
     build_helk
     sleep 180
     show_final_information

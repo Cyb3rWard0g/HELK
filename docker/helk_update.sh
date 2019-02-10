@@ -221,6 +221,9 @@ update_helk() {
     check_min_requirements
 
     echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Rebuilding HELK via docker-compose"
+
+    export ADVERTISED_LISTENER=$(cat $CONF_FILE | grep HOST_IP | cut -d'=' -f2)
+
     docker-compose -f $COMPOSE_CONFIG up --build -d -V --force-recreate --always-recreate-deps >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
@@ -240,6 +243,7 @@ update_helk() {
 }
 
 LOGFILE="/var/log/helk-update.log"
+CONF_FILE="/usr/local/helk/helk.conf"
 REBUILD_NEEDED=0
 GIT_REPO_CLEAN=1
 
