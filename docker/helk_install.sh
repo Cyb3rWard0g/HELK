@@ -8,7 +8,7 @@
 
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
-   echo "[HELK-INSTALLATION-INFO] YOU MUST BE ROOT TO RUN THIS SCRIPT!!!" 
+   echo "[HELK-INSTALLATION-INFO] YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
    exit 1
 fi
 
@@ -25,7 +25,7 @@ SYSTEM_KERNEL="$(uname -s)"
 check_min_requirements(){
     # *********** Check System Kernel Name ***************
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $SYSTEM_KERNEL box"
-    if [ "$SYSTEM_KERNEL" == "Linux" ]; then 
+    if [ "$SYSTEM_KERNEL" == "Linux" ]; then
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
         ARCHITECTURE=$(uname -m)
@@ -99,12 +99,12 @@ check_system_info(){
                     DIST_VERSION="$(. /etc/os-release && echo "$VERSION_ID")"
                 fi
             ;;
-        esac           
+        esac
         ERROR=$?
         if [ $ERROR -ne 0 ]; then
             echoerror "Could not verify distribution or version of the OS (Error Code: $ERROR)."
         fi
-        echo "[HELK-INSTALLATION-INFO] You're using $LSB_DIST version $DIST_VERSION" 
+        echo "[HELK-INSTALLATION-INFO] You're using $LSB_DIST version $DIST_VERSION"
     elif [ "$SYSTEM_KERNEL" == "Darwin" ]; then
         PRODUCT_NAME="$(sw_vers -productName)"
         PRODUCT_VERSION="$(sw_vers -productVersion)"
@@ -116,7 +116,7 @@ check_system_info(){
 }
 
 # ********** Install Curl ********************
-install_curl(){      
+install_curl(){
     echo "[HELK-INSTALLATION-INFO] Installing curl before installing docker.."
     case "$LSB_DIST" in
         ubuntu|debian|raspbian)
@@ -181,7 +181,7 @@ install_docker(){
                 echoerror "Could not install docker via snap (Error Code: $ERROR)."
                 exit 1
             fi
-            echo "[HELK-INSTALLATION-INFO] Docker successfully installed via snap."            
+            echo "[HELK-INSTALLATION-INFO] Docker successfully installed via snap."
         else
             echo "[HELK-INSTALLATION-INFO] Docker could not be installed. Check /var/log/helk-install.log for details."
             exit 1
@@ -192,7 +192,7 @@ install_docker(){
 # ****** Installing docker compose from github.com/docker/compose ***********
 install_docker_compose(){
     echo "[HELK-INSTALLATION-INFO] Installing docker-compose.."
-    curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
+    curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
     chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
@@ -215,7 +215,7 @@ set_elasticsearch_password(){
                 read -p "[HELK-INSTALLATION-INFO] Verify HELK Elasticsearch Password: " ELASTICSEARCH_PASSWORD_INPUT_VERIFIED
                 echo -e "[HELK-INSTALLATION-INFO] HELK elasticsearch password set to ${ELASTICSEARCH_PASSWORD_INPUT}"
                 # *********** Validating Password Input ***************
-                if [[ "$ELASTICSEARCH_PASSWORD_INPUT" == "$ELASTICSEARCH_PASSWORD_INPUT_VERIFIED" ]]; then 
+                if [[ "$ELASTICSEARCH_PASSWORD_INPUT" == "$ELASTICSEARCH_PASSWORD_INPUT_VERIFIED" ]]; then
                     break
                 else
                     echo -e "${RED}Error...${STD}"
@@ -243,7 +243,7 @@ set_kibana_ui_password(){
                 read -p "[HELK-INSTALLATION-INFO] Verify HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT_VERIFIED
                 echo -e "[HELK-INSTALLATION-INFO] HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
                 # *********** Validating Password Input ***************
-                if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then 
+                if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then
                     break
                 else
                     echo -e "${RED}Error...${STD}"
@@ -345,7 +345,7 @@ set_helk_build(){
     if [[ -z "$HELK_BUILD" ]]; then
         while true; do
             echo " "
-            echo "*****************************************************"	
+            echo "*****************************************************"
             echo "*      HELK - Docker Compose Build Choices          *"
             echo "*****************************************************"
             echo " "
@@ -365,7 +365,7 @@ set_helk_build(){
                 case $CONFIG_CHOICE in
                     1) HELK_BUILD='helk-kibana-analysis';break ;;
                     2) HELK_BUILD='helk-kibana-notebook-analysis';break;;
-                    *) 
+                    *)
                         echo -e "${RED}Error...${STD}"
                         echo "[HELK-INSTALLATION-ERROR] Not a valid build"
                     ;;
@@ -387,7 +387,7 @@ prepare_helk(){
         if [ -x "$(command -v docker)" ]; then
             echo "[HELK-INSTALLATION-INFO] Docker already installed"
             echo "[HELK-INSTALLATION-INFO] Making sure you assigned enough disk space to the current Docker base directory"
-            AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')    
+            AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')
             if [ "${AVAILABLE_DOCKER_DISK}" -ge "25" ]; then
                 echo "[HELK-INSTALLATION-INFO] Available Docker Disk: $AVAILABLE_DOCKER_DISK"
             else
@@ -438,7 +438,7 @@ get_jupyter_credentials(){
 show_banner(){
     # *********** Showing HELK Docker menu options ***************
     echo " "
-    echo "**********************************************"	
+    echo "**********************************************"
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
