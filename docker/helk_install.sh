@@ -443,10 +443,10 @@ persist_conf(){
         sed -i -e "s/$SC/$SUBSCRIPTION_CHOICE/g" $CONF_FILE >> $LOGFILE 2>&1
     else
         touch $CONF_FILE >> $LOGFILE 2>&1
-        echo "MAX_MAP_COUNT=262144" >> $CONF_FILE >> $LOGFILE 2>&1
-        echo "HOST_IP=$HOST_IP" >> $CONF_FILE >> $LOGFILE 2>&1
-        echo "HELK_BUILD=$HELK_BUILD" >> $CONF_FILE >> $LOGFILE 2>&1
-        echo "SUBSCRIPTION_CHOICE=$SUBSCRIPTION_CHOICE" >> $CONF_FILE >> $LOGFILE 2>&1
+        echo "MAX_MAP_COUNT=262144" >> $CONF_FILE
+        echo "HOST_IP=$HOST_IP" >> $CONF_FILE
+        echo "HELK_BUILD=$HELK_BUILD" >> $CONF_FILE
+        echo "SUBSCRIPTION_CHOICE=$SUBSCRIPTION_CHOICE" >> $CONF_FILE
     fi
 }
 
