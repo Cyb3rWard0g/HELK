@@ -6,7 +6,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-# References: 
+# References:
 # https://github.com/elastic/kibana/issues/3709 (https://github.com/hobti01)
 # https://explainshell.com/explain?cmd=set+-euxo%20pipefail
 # https://github.com/elastic/beats-dashboards/blob/master/load.sh
@@ -28,7 +28,7 @@ done
 
 # *********** Waiting for Kibana server to be running ***************
 echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Checking to see if kibana server is running..."
-while [[ -z $(grep "Server running at http://$KIBANA" /usr/share/kibana/config/kibana_logs.log) ]]; do 
+while [[ -z $(grep "Server running at http://$KIBANA" /usr/share/kibana/config/kibana_logs.log) ]]; do
     sleep 1
 done
 
@@ -56,11 +56,21 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; the
     sleep 1
   done
 
+  # *********** Set URL session store *********************
+  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting URL session store"
+  curl -u $KIBANA_USER:$KIBANA_PASSWORD -X POST "$KIBANA_URL/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
+  {
+    \"changes\":{
+        \"state:storeInSessionStorage\": true
+      }
+  }
+  "
+
   # *********** Loading dashboards ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Loading Dashboards..."
   for file in ${DIR}/*.json
   do
-      echo "[++++++] Loading dashboard file ${file}"  
+      echo "[++++++] Loading dashboard file ${file}"
       until curl -u $KIBANA_USER:$KIBANA_PASSWORD -X POST "$KIBANA_URL/api/kibana/dashboards/import" -H 'kbn-xsrf: true' \
       -H 'Content-type:application/json' -d @${file}
       do
@@ -69,7 +79,7 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; the
   done
 
   # *********** Creating HELK User *********************
-  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting HELK's user password to $KIBANA_UI_PASSWORD"  
+  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting HELK's user password to $KIBANA_UI_PASSWORD"
   curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST "$ELASTICSEARCH_URL/_xpack/security/user/helk" -H 'Content-Type: application/json' -d"
   {
     \"password\" : \"$KIBANA_UI_PASSWORD\",
@@ -78,7 +88,7 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; the
     \"email\" : \"helk@example.com\"
   }
   "
-  
+
   # *********** Create Roles *******************
   curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST "$ELASTICSEARCH_URL/_xpack/security/role/hunters" -H 'Content-Type: application/json' -d'
   {
@@ -119,6 +129,16 @@ else
       done
   done
 
+  # *********** Set URL session store *********************
+  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting URL session store"
+  curl -X POST "$KIBANA_URL/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
+  {
+    \"changes\":{
+        \"state:storeInSessionStorage\": true
+      }
+  }
+  "
+
   # *********** Making Sysmon the default index ***************
   echo "[++] Making Sysmon the default index..."
   until curl -X POST -H "Content-Type: application/json" -H "kbn-xsrf: true" \
@@ -131,7 +151,7 @@ else
   # *********** Loading dashboards ***************
   echo "[+++] Loading Dashboards..."
   for file in ${DIR}/*.json
-  do  
+  do
       echo "[++++++] Loading dashboard file ${file}"
       until curl -X POST "$KIBANA_URL/api/kibana/dashboards/import" -H 'kbn-xsrf: true' \
       -H 'Content-type:application/json' -d @${file}
