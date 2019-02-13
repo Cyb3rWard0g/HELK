@@ -79,13 +79,11 @@ for file in ${DIR}/*.json; do
     done
 done
 
-# ********** Install Plugin *****************
+# ********** Install Plugins *****************
 echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Installing Logstash plugins.."
-if logstash-plugin list 'prune'; then
-    echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Plugin Prune is already installed"
-else
-    logstash-plugin install logstash-filter-prune
-fi
+logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-dns && logstash-plugin install logstash-filter-cidr && logstash-plugin install logstash-input-lumberjack && logstash-plugin install logstash-output-lumberjack && logstash-plugin install logstash-output-zabbix && logstash-plugin install logstash-filter-geoip && logstash-plugin install logstash-codec-cef && logstash-plugin install logstash-output-syslog && logstash-plugin update logstash-filter-dissect && logstash-plugin install logstash-output-kafka && logstash-plugin install logstash-input-kafka && logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-alter && logstash-plugin install logstash-filter-fingerprint && logstash-plugin install logstash-output-stdout && logstash-plugin install logstash-filter-prune && logstash-plugin install logstash-codec-gzip_lines && logstash-plugin install logstash-codec-avro && logstash-plugin install logstash-codec-netflow && logstash-plugin install logstash-filter-i18n && logstash-plugin install logstash-filter-environment && logstash-plugin install logstash-filter-de_dot && logstash-plugin install logstash-input-snmptrap && logstash-plugin install logstash-input-snmp && logstash-plugin install logstash-input-jdbc && logstash-plugin install logstash-input-wmi && logstash-plugin install logstash-filter-clone
+echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Updating Logstash plugins.."
+logstash-plugin update
 
 # ********* Setting LS_JAVA_OPTS ***************
 if [[ -z "$LS_JAVA_OPTS" ]]; then
