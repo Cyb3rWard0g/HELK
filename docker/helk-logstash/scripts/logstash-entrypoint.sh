@@ -89,9 +89,11 @@ logstash-plugin update
 if [[ -z "$LS_JAVA_OPTS" ]]; then
   while true; do
     LS_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/4}' /proc/meminfo)
-    if [ $LS_MEMORY -gt 980 ]; then
+    if [ $LS_MEMORY -gt 916 -a $AVAILABLE_MEMORY -le 2000 ]; then
+      LS_MEMORY="1000"
       export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
-      break
+    elif [ $LS_MEMORY -gt 2000 ]; then
+     export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
     else
       echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] $LS_MEMORY MB is not enough memory for Logstash yet.."
       sleep 1
