@@ -26,7 +26,7 @@ check_min_requirements(){
     # *********** Check System Kernel Name ***************
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $SYSTEM_KERNEL box"
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then
-        AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
+        AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
         AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
         ARCHITECTURE=$(uname -m)
         if [ "${ARCHITECTURE}" != "x86_64" ]; then
@@ -36,7 +36,7 @@ check_min_requirements(){
             echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
             exit 1
         fi
-        if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
+        if [ "${AVAILABLE_MEMORY}" -ge "6000" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
