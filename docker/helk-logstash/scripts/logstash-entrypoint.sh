@@ -81,30 +81,37 @@ done
 
 # ********** Install Plugins *****************
 echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Installing Logstash plugins.."
-logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-dns && logstash-plugin install logstash-filter-cidr && logstash-plugin install logstash-input-lumberjack && logstash-plugin install logstash-output-lumberjack && logstash-plugin install logstash-output-zabbix && logstash-plugin install logstash-filter-geoip && logstash-plugin install logstash-codec-cef && logstash-plugin install logstash-output-syslog && logstash-plugin update logstash-filter-dissect && logstash-plugin install logstash-output-kafka && logstash-plugin install logstash-input-kafka && logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-alter && logstash-plugin install logstash-filter-fingerprint && logstash-plugin install logstash-output-stdout && logstash-plugin install logstash-filter-prune && logstash-plugin install logstash-codec-gzip_lines && logstash-plugin install logstash-codec-avro && logstash-plugin install logstash-codec-netflow && logstash-plugin install logstash-filter-i18n && logstash-plugin install logstash-filter-environment && logstash-plugin install logstash-filter-de_dot && logstash-plugin install logstash-input-snmptrap && logstash-plugin install logstash-input-snmp && logstash-plugin install logstash-input-jdbc && logstash-plugin install logstash-input-wmi && logstash-plugin install logstash-filter-clone
+# Test a few to determine if probably all already installed
+if ( logstash-plugin list 'prune' ) && ( logstash-plugin list 'i18n' ) && ( logstash-plugin list 'wmi' ); then
+    echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Plugins are already installed"
+else
+	logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-dns && logstash-plugin install logstash-filter-cidr && logstash-plugin install logstash-input-lumberjack && logstash-plugin install logstash-output-lumberjack && logstash-plugin install logstash-output-zabbix && logstash-plugin install logstash-filter-geoip && logstash-plugin install logstash-codec-cef && logstash-plugin install logstash-output-syslog && logstash-plugin update logstash-filter-dissect && logstash-plugin install logstash-output-kafka && logstash-plugin install logstash-input-kafka && logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-alter && logstash-plugin install logstash-filter-fingerprint && logstash-plugin install logstash-output-stdout && logstash-plugin install logstash-filter-prune && logstash-plugin install logstash-codec-gzip_lines && logstash-plugin install logstash-codec-avro && logstash-plugin install logstash-codec-netflow && logstash-plugin install logstash-filter-i18n && logstash-plugin install logstash-filter-environment && logstash-plugin install logstash-filter-de_dot && logstash-plugin install logstash-input-snmptrap && logstash-plugin install logstash-input-snmp && logstash-plugin install logstash-input-jdbc && logstash-plugin install logstash-input-wmi && logstash-plugin install logstash-filter-clone
 echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Updating Logstash plugins.."
-logstash-plugin update
+	logstash-plugin update
+fi
 
 # ********* Setting LS_JAVA_OPTS ***************
 if [[ -z "$LS_JAVA_OPTS" ]]; then
   while true; do
     # Check using more accurate MB
     AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
-    if [ AVAILABLE_MEMORY -ge 900 -a AVAILABLE_MEMORY -le 1000 ]; then
+    if [ $AVAILABLE_MEMORY -ge 900 -a $AVAILABLE_MEMORY -le 1000 ]; then
       LS_MEMORY=900
-      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
+      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m"
       break
-    elif [ AVAILABLE_MEMORY -ge 1001 -a AVAILABLE_MEMORY -le 2000 ]; then
+    elif [ $AVAILABLE_MEMORY -ge 1001 -a $AVAILABLE_MEMORY -le 3000 ]; then
      LS_MEMORY=1000
-      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
+      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m"
       break
-    elif [ AVAILABLE_MEMORY -gt 2000 ]; then
-      # Using divide by 2 here, to use GB instead of MB -- because plenty of RAM now
-      LS_MEMORY='$(${AVAILABLE_MEMORY}/2}'
-      if [ LS -gt 31000 ]; then
-        LS_MEMORY=31
+    elif [ $AVAILABLE_MEMORY -gt 3000 ]; then
+      # Set high & low, so logstash doesn't use everything unnecessarily, it will usually flux up and down in usage -- and doesn't "severely" despite what everyone seems to believe
+      LS_MEMORY=$(( AVAILABLE_MEMORY / 4 ))
+      LS_MEMORY_HIGH=$(( AVAILABLE_MEMORY / 2 ))
+      if [ $AVAILABLE_MEMORY -gt 31000 ]; then
+        LS_MEMORY=8000
+        LS_MEMORY_HIGH=31000
       fi
-      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
+      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY_HIGH}m"
       break
     else
       echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] $LS_MEMORY MB is not enough memory for Logstash yet.."
