@@ -416,7 +416,7 @@ prepare_helk(){
     fi
 
     # *********** Checking internal set up ***************
-    echo "[HELK-INSTALLATION-INFO] Checking local vm.max_map_count variable and setting it to 262144"
+    echo "[HELK-INSTALLATION-INFO] Checking local vm.max_map_count variable and setting it to 4120294"
     MAX_MAP_COUNT=4120294
     if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
         sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT >> $LOGFILE 2>&1
