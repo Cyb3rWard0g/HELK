@@ -438,7 +438,7 @@ show_banner(){
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
     echo "** HELK build version: v0.1.6-alpha02022019 **"
-    echo "** HELK ELK version: 6.5.4                  **"
+    echo "** HELK ELK version: 6.6.1                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
     echo " "

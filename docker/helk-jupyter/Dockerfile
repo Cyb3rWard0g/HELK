@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Setting Environment Variables ***************
 ENV JUPYTER_DIR=/opt/helk/jupyter
-ENV ESHADOOP_VERSION=6.5.4
+ENV ESHADOOP_VERSION=6.6.1
 ENV POSTGRESQL_VERSION=42.2.5
 
 # *********** Installing Prerequisites ***************
