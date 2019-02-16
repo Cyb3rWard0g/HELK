@@ -37,11 +37,12 @@ check_min_requirements(){
             exit 1
         fi
         if [ "${AVAILABLE_MEMORY}" -ge "6000" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
+            MEM_FLAG="true"
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
-            echo "[HELK-INSTALLATION-ERROR] YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY OR DISK SPACE"
-            echo "[HELK-INSTALLATION-ERROR] Available Memory: $AVAILABLE_MEMORY"
+            echo "[HELK-INSTALLATION-INFO] You do not have enough memory to run HELK in notebook mode, only analyst mode.
+            echo "[HELK-INSTALLATION-ERROR] Available Memory: $AVAILABLE_MEMORY"#TODO:finish
             echo "[HELK-INSTALLATION-ERROR] Available Disk: $AVAILABLE_DISK"
             echo "[HELK-INSTALLATION-ERROR] Check the requirements section in our installation Wiki"
             echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
@@ -416,12 +417,12 @@ prepare_helk(){
 
     # *********** Checking internal set up ***************
     echo "[HELK-INSTALLATION-INFO] Checking local vm.max_map_count variable and setting it to 262144"
-    MAX_MAP_COUNT=262144
+    MAX_MAP_COUNT=4120294
     if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
         sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT >> $LOGFILE 2>&1
         ERROR=$?
         if [ $ERROR -ne 0 ]; then
-            echoerror "Could not set vm.max_map_count to 262144 (Error Code: $ERROR)."
+            echoerror "Could not set vm.max_map_count to $MAX_MAP_COUNT (Error Code: $ERROR)."
         fi
         echo "vm.max_map_count = $MAX_MAP_COUNT" > /etc/sysctl.d/90-helk-overwritten-during-docker-install-sysctl-tuning.conf;
     fi
