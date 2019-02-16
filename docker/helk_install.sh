@@ -27,7 +27,6 @@ check_min_requirements(){
     echo "[HELK-INSTALLATION-INFO] HELK being hosted on a $SYSTEM_KERNEL box"
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
-        AVAILABLE_DISK=$(df -m | awk '$NF=="/"{printf "%.f\t\t", $4 / 1024}')
         ARCHITECTURE=$(uname -m)
         if [ "${ARCHITECTURE}" != "x86_64" ]; then
             echo "[HELK-INSTALLATION-ERROR] HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
@@ -36,14 +35,11 @@ check_min_requirements(){
             echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
             exit 1
         fi
-        if [ "${AVAILABLE_MEMORY}" -ge "6000" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
-            MEM_FLAG="true"
+        if [ "${AVAILABLE_MEMORY}" -ge "5000" ]; then
             echo "[HELK-INSTALLATION-INFO] Available Memory: $AVAILABLE_MEMORY"
-            echo "[HELK-INSTALLATION-INFO] Available Disk: $AVAILABLE_DISK"
         else
             echo "[HELK-INSTALLATION-INFO] You do not have enough memory to run HELK in notebook mode, only analyst mode.
-            echo "[HELK-INSTALLATION-ERROR] Available Memory: $AVAILABLE_MEMORY"#TODO:finish
-            echo "[HELK-INSTALLATION-ERROR] Available Disk: $AVAILABLE_DISK"
+            echo "[HELK-INSTALLATION-ERROR] Available Memory: $AVAILABLE_MEMORY"
             echo "[HELK-INSTALLATION-ERROR] Check the requirements section in our installation Wiki"
             echo "[HELK-INSTALLATION-ERROR] Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
             exit 1
@@ -51,7 +47,6 @@ check_min_requirements(){
     else
         echo "[HELK-INSTALLATION-INFO] I could not calculate available memory or disk space for $SYSTEM_KERNEL!!!!!"
         echo "[HELK-INSTALLATION-INFO] Make sure you have at least 10GB of available memory!!!!!!"
-        echo "[HELK-INSTALLATION-INFO] Make sure you have at least 25GB of available disk space!!!!!"
     fi
 }
 
@@ -420,7 +415,6 @@ prepare_helk(){
     MAX_MAP_COUNT=4120294
     if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
         sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT >> $LOGFILE 2>&1
-        ERROR=$?
         if [ $ERROR -ne 0 ]; then
             echoerror "Could not set vm.max_map_count to $MAX_MAP_COUNT (Error Code: $ERROR)."
         fi
