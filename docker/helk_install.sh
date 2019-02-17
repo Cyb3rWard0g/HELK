@@ -6,6 +6,12 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
+# Helk log tagging for easier script editing, and also if/when we switch to different install script language
+HELK_INFO_TAG="[HELK-INSTALLATION-INFO]"
+HELK_ERROR_TAG="[HELK-INSTALLATION-ERROR]"
+INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in our installation Wiki\
+\n$HELK_ERROR_TAG Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
    echo "$HELK_INFO_TAG YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
@@ -20,11 +26,6 @@ echoerror() {
 
 # ********* Globals **********************
 SYSTEM_KERNEL="$(uname -s)"
-# Helk log tagging for easier script editing, and also if/when we switch to different install script language
-HELK_INFO_TAG="[HELK-INSTALLATION-INFO]"
-HELK_ERROR_TAG="[HELK-INSTALLATION-ERROR]"
-INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in our installation Wiki\
-\n$HELK_ERROR_TAG Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
 
 # ********** Check Minimum Requirements **************
 check_min_requirements(){
@@ -268,7 +269,7 @@ set_kibana_ui_password(){
     elif [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
         export KIBANA_UI_PASSWORD=$KIBANA_UI_PASSWORD_INPUT
     else
-        echo "$HELK_INFO_TAG Subscription Choise MUST be provided first.."
+        echo "$HELK_INFO_TAG Subscription Choice MUST be provided first.."
         exit 1
     fi
 }
@@ -408,7 +409,7 @@ prepare_helk(){
     else
         # *********** Check if docker is installed ***************
         if ! [ -x "$(command -v docker)" ] && ! [ -x "$(command -v docker-compose)" ]; then
-            echo "$HELK_INFO_TAG Please innstall Docker & Docker-compose for $SYSTEM_KERNEL"
+            echo "$HELK_INFO_TAG Please install Docker & Docker-compose for $SYSTEM_KERNEL"
             exit 1
         fi
     fi
