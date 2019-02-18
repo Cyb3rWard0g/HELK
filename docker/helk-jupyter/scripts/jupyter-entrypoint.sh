@@ -46,15 +46,15 @@ if [[ $HELK_USER_EXISTS == "1" ]]; then
     fi
 
     JUPYTER_ADMIN='helk'
-    JUPYTER_ADMIN_DIRECTORY=${JUPYTERHUB_HOME}/${JUPYTER_ADMIN}
+    JUPYTER_ADMIN_DIRECTORY=/home/${JUPYTER_ADMIN}
     echo "JUPYTER_CREDENTIALS:$JUPYTER_ADMIN:$JUPYTER_HELK_PWD" >> /opt/helk/user_credentials.txt
     mkdir -v $JUPYTER_ADMIN_DIRECTORY
 
-    useradd -p $(openssl passwd -1 ${JUPYTER_HELK_PWD}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTER_ADMIN_DIRECTORY --no-create-home -s /bin/bash ${JUPYTER_ADMIN}
+    useradd -p $(openssl passwd -1 ${JUPYTER_HELK_PWD}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTER_ADMIN_DIRECTORY -s /bin/bash ${JUPYTER_ADMIN}
 
     cp -R ${JUPYTER_NOTEBOOKS} ${JUPYTER_ADMIN_DIRECTORY}/notebooks
     chown -R ${JUPYTER_ADMIN}:jupyterhub $JUPYTER_ADMIN_DIRECTORY
-    chmod 700 -R $JUPYTER_ADMIN_DIRECTORY
+    chmod 770 -R $JUPYTER_ADMIN_DIRECTORY
 
     ((JUPYTERHUB_UID=$JUPYTERHUB_UID + 1))
 
@@ -71,6 +71,7 @@ if [[ $HELK_USER_EXISTS == "1" ]]; then
         echo "JUPYTER_CREDENTIALS:${u}:$student_password" >> /opt/helk/user_credentials.txt
         
         JUPYTERHUB_USER_DIRECTORY=/home/${u}
+        mkdir -v ${JUPYTERHUB_USER_DIRECTORY}
 
         useradd -p $(openssl passwd -1 ${student_password}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTERHUB_USER_DIRECTORY -s /bin/bash ${u}
         
