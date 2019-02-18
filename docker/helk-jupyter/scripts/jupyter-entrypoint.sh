@@ -70,15 +70,14 @@ if [[ $HELK_USER_EXISTS == "1" ]]; then
         student_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
         echo "JUPYTER_CREDENTIALS:${u}:$student_password" >> /opt/helk/user_credentials.txt
         
-        JUPYTERHUB_USER_DIRECTORY=${JUPYTERHUB_HOME}/${u}
-        mkdir -v $JUPYTERHUB_USER_DIRECTORY
+        JUPYTERHUB_USER_DIRECTORY=/home/${u}
 
-        useradd -p $(openssl passwd -1 ${student_password}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTERHUB_USER_DIRECTORY --no-create-home -s /bin/bash ${u}
+        useradd -p $(openssl passwd -1 ${student_password}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTERHUB_USER_DIRECTORY -s /bin/bash ${u}
         
         echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] copying notebooks to ${JUPYTERHUB_USER_DIRECTORY} notebooks directory ..."
         cp -R ${JUPYTER_NOTEBOOKS} ${JUPYTERHUB_USER_DIRECTORY}/notebooks
         chown -R ${u}:jupyterhub $JUPYTERHUB_USER_DIRECTORY
-        chmod 700 -R $JUPYTERHUB_USER_DIRECTORY
+        chmod 770 -R $JUPYTERHUB_USER_DIRECTORY
 
         ((JUPYTERHUB_UID=$JUPYTERHUB_UID + 1))
     done
