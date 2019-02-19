@@ -1,0 +1,14 @@
+{
+  "order": 89,
+  "index_patterns": [ "logs-endpoint-*" ],
+  "version": 2019021801,
+  "mappings": {
+    "doc": {
+      "properties": {
+        "fingerprint_process_command_line_mm3": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
