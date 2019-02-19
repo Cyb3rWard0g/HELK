@@ -88,24 +88,15 @@ logstash-plugin update
 # ********* Setting LS_JAVA_OPTS ***************
 if [[ -z "$LS_JAVA_OPTS" ]]; then
   while true; do
-    # Check using more accurate MB
-    AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
-    if [ AVAILABLE_MEMORY -ge 900 -a AVAILABLE_MEMORY -le 1000 ]; then
-      LS_MEMORY=900
+    LS_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
+    if [ $LS_MEMORY -ge 900 -a $AVAILABLE_MEMORY -le 1000 ]; then
+      LS_MEMORY="900"
       export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
-      break
-    elif [ AVAILABLE_MEMORY -ge 1001 -a AVAILABLE_MEMORY -le 2000 ]; then
-     LS_MEMORY=1000
-      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
-      break
-    elif [ AVAILABLE_MEMORY -gt 2000 ]; then
-      # Using divide by 2 here, to use GB instead of MB -- because plenty of RAM now
-      LS_MEMORY='$(${AVAILABLE_MEMORY}/2}'
-      if [ LS -gt 31000 ]; then
-        LS_MEMORY=31
-      fi
-      export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
-      break
+    elif [ $LS_MEMORY -ge 1001 -a $AVAILABLE_MEMORY -le 2000 ]; then
+     LS_MEMORY="1000"
+     export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
+    elif [ $LS_MEMORY -gt 2000 ]; then
+     export LS_JAVA_OPTS="-Xms${LS_MEMORY}m -Xmx${LS_MEMORY}m -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
     else
       echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] $LS_MEMORY MB is not enough memory for Logstash yet.."
       sleep 1
