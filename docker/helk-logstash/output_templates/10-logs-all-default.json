@@ -47,6 +47,15 @@
         "log_ingest_timestamp": {
           "type": "date"
         },
+        "meta_log_tags": {
+          "type": "text",
+          "norms": false,
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
         "z_logstash_type": {
           "enabled": false
         },
