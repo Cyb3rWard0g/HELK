@@ -6,22 +6,11 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-# *********** Helk log tagging variables ***************
-# For more efficient script editing/reading, and also if/when we switch to different install script language
+# Helk log tagging for easier script editing, and also if/when we switch to different install script language
 HELK_INFO_TAG="[HELK-INSTALLATION-INFO]"
 HELK_ERROR_TAG="[HELK-INSTALLATION-ERROR]"
-# Make sure to use "echo -e" with this variable
 INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in our installation Wiki\
 \n$HELK_ERROR_TAG Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
-
-# *********** Variables for user modification ***************
-# Careful editing unless you know what you are doing :)
-## In MBs
-INSTALL_MINIMUM_MEMORY=5000
-## In MBs
-INSTALL_MINIMUM_MEMORY_NOTEBOOK=8000
-## In GBs
-INSTALL_MINIMUM_DISK=25
 
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
@@ -37,14 +26,13 @@ echoerror() {
 
 # ********* Globals **********************
 SYSTEM_KERNEL="$(uname -s)"
-# Will output in MBs
-AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
 
 # ********** Check Minimum Requirements **************
 check_min_requirements(){
     # *********** Check System Kernel Name ***************
     echo "$HELK_INFO_TAG HELK being hosted on a $SYSTEM_KERNEL box"
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then
+        AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
         ARCHITECTURE=$(uname -m)
         if [ "${ARCHITECTURE}" != "x86_64" ]; then
             echo "$HELK_ERROR_TAG HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
@@ -52,17 +40,17 @@ check_min_requirements(){
             echo -e $INSTALL_ERROR_CHECK_WIKI
             exit 1
         fi
-        if [[ "${AVAILABLE_MEMORY}" -ge $INSTALL_MINIMUM_MEMORY ]]; then
-            echo "$HELK_INFO_TAG Available Memory: $AVAILABLE_MEMORY MBs"
+        if [ "${AVAILABLE_MEMORY}" -ge "5" ]; then
+            echo "$HELK_INFO_TAG Available Memory: $AVAILABLE_MEMORY"
         else
             echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY"
-            echo "$HELK_ERROR_TAG Available Memory: $AVAILABLE_MEMORY MBs"
+            echo "$HELK_ERROR_TAG Available Memory: $AVAILABLE_MEMORY"
             echo -e $INSTALL_ERROR_CHECK_WIKI
             exit 1
         fi
     else
         echo "$HELK_INFO_TAG I could not calculate available memory for $SYSTEM_KERNEL!!!!!"
-        echo "$HELK_INFO_TAG Make sure you have at least $INSTALL_MINIMUM_MEMORY MBs of available memory!!!!!!"
+        echo "$HELK_INFO_TAG Make sure you have at least 10GB of available memory!!!!!!"
     fi
 }
 
@@ -361,8 +349,8 @@ set_helk_build(){
             echo "*      HELK - Docker Compose Build Choices          *"
             echo "*****************************************************"
             echo " "
-            echo "1. KAFKA + KSQL + ELK + NGNIX + ELASTALERT"
-            echo "2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT + SPARK + JUPYTER"
+            echo "1. KAFKA + KSQL + ELK + NGNIX + ELASTALERT                   "
+            echo "2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT + SPARK + JUPYTER "
             echo " "
 
             local CONFIG_CHOICE
@@ -375,18 +363,8 @@ set_helk_build(){
             else
                 echo "$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
                 case $CONFIG_CHOICE in
-                    1) HELK_BUILD='helk-kibana-analysis';break;;
-                    2)
-                      if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
-                        echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
-                        echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
-                        echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
-                        sleep 4
-                      else
-                        HELK_BUILD='helk-kibana-analysis'
-                        break;
-                      fi
-                    ;;
+                    1) HELK_BUILD='helk-kibana-analysis';break ;;
+                    2) HELK_BUILD='helk-kibana-notebook-analysis';break;;
                     *)
                         echo -e "${RED}Error...${STD}"
                         echo "$HELK_ERROR_TAG Not a valid build"
@@ -410,11 +388,11 @@ prepare_helk(){
             echo "$HELK_INFO_TAG Docker already installed"
             echo "$HELK_INFO_TAG Making sure you assigned enough disk space to the current Docker base directory"
             AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')
-            if [[ "${AVAILABLE_DOCKER_DISK}" -ge $INSTALL_MINIMUM_DISK ]]; then
-                echo "$HELK_INFO_TAG Available Docker Disk: $AVAILABLE_DOCKER_DISK GBs"
+            if [ "${AVAILABLE_DOCKER_DISK}" -ge "25" ]; then
+                echo "$HELK_INFO_TAG Available Docker Disk: $AVAILABLE_DOCKER_DISK"
             else
                 echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
-                echo "$HELK_ERROR_TAG Available Docker Disk: $AVAILABLE_DOCKER_DISK GBs"
+                echo "$HELK_ERROR_TAG Available Docker Disk: $AVAILABLE_DOCKER_DISK"
                 echo -e $INSTALL_ERROR_CHECK_WIKI
                 exit 1
             fi
