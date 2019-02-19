@@ -1,5 +1,5 @@
 {
-  "order": 90,
+  "order": 82,
   "index_patterns": [ "logs-*" ],
   "version": 2018080101,
   "mappings": {
