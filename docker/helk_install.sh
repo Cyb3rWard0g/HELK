@@ -40,8 +40,9 @@ check_min_requirements(){
             echo -e $INSTALL_ERROR_CHECK_WIKI
             exit 1
         fi
-        if [ "${AVAILABLE_MEMORY}" -ge "5" ]; then
+        if [ "${AVAILABLE_MEMORY}" -ge "12" ] && [ "${AVAILABLE_DISK}" -ge "25" ]; then
             echo "$HELK_INFO_TAG Available Memory: $AVAILABLE_MEMORY"
+            echo "$HELK_INFO_TAG Available Disk: $AVAILABLE_DISK"
         else
             echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY OR DISK SPACE"
             echo "$HELK_ERROR_TAG Available Memory: $AVAILABLE_MEMORY"
