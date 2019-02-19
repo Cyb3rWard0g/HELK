@@ -3,9 +3,9 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-# References:
+# References: 
 # https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
 
-FROM docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+FROM docker.elastic.co/elasticsearch/elasticsearch:6.5.4
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Elasticsearch."
