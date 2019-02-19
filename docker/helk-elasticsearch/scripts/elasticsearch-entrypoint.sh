@@ -10,15 +10,16 @@
 if [[ -z "$ES_JAVA_OPTS" ]]; then
     AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
     if [ $AVAILABLE_MEMORY -ge 1000 -a $AVAILABLE_MEMORY -le 7999 ]; then
-      ES_MEMORY=1
-    elif [ $AVAILABLE_MEMORY -ge 8000 -a $AVAILABLE_MEMORY -le 12999 ]; then
       ES_MEMORY=2
-    elif [ $AVAILABLE_MEMORY -ge 13000 -a $AVAILABLE_MEMORY -le 16000 ]; then
+    if [ $AVAILABLE_MEMORY -ge 8000 -a $AVAILABLE_MEMORY -le 12999 ]; then
+      ES_MEMORY=2
+    elif [ $AVAILABLE_MEMORY -ge 13000 -a $AVAILABLE_MEMORY -le 16 ]; then
       ES_MEMORY=4
     else
-      ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
-      if [ ES_MEMORY -gt 31000 ]; then
+      if [ $AVAILABLE_MEMORY -gt 31000 ]; then
         ES_MEMORY=31
+      else
+        ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
       fi
     fi
     export ES_JAVA_OPTS="-Xms${ES_MEMORY}g -Xmx${ES_MEMORY}g -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=75"
