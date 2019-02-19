@@ -7,12 +7,6 @@
       "properties": {
         "meta_powershell_param_value_has_non_ascii": {
           "type": "boolean"
-        },
-        "meta_powershell_scriptblock_text_has_non_ascii": {
-          "type": "boolean"
-        },
-        "powershell_scriptblock_text_length": {
-          "type": "integer"
         }
       }
     }

@@ -5,10 +5,7 @@
   "mappings": {
     "doc": {
       "properties": {
-        "fingerprint_powershell_param_value_mm3": {
-          "type": "keyword"
-        },
-        "fingerprint_powershell_scriptblock_text_sha1": {
+        "fingerprint_powershell_param_value_sha1": {
           "type": "keyword"
         }
       }
