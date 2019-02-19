@@ -8,7 +8,7 @@
 
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
-   echo "[HELK-DOCKER-INSTALLATION-INFO] YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
+   echo "[HELK-DOCKER-INSTALLATION-INFO] YOU MUST BE ROOT TO RUN THIS SCRIPT!!!" 
    exit 1
 fi
 
@@ -65,12 +65,12 @@ if [ "$SYSTEM_KERNEL" == "Linux" ]; then
                 DIST_VERSION="$(. /etc/os-release && echo "$VERSION_ID")"
             fi
         ;;
-    esac
+    esac           
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not verify distribution or version of the OS (Error Code: $ERROR)."
     fi
-    echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $LSB_DIST version $DIST_VERSION"
+    echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $LSB_DIST version $DIST_VERSION" 
 elif [ "$SYSTEM_KERNEL" == "Darwin" ]; then
     PRODUCT_NAME="$(sw_vers -productName)"
     PRODUCT_VERSION="$(sw_vers -productVersion)"
@@ -82,7 +82,7 @@ fi
 
 
 # ********** Install Curl ********************
-install_curl(){
+install_curl(){      
     echo "[HELK-DOCKER-INSTALLATION-INFO] Installing curl before installing docker.."
     case "$LSB_DIST" in
         ubuntu|debian|raspbian)
@@ -121,7 +121,7 @@ install_docker(){
                 echoerror "Could not install docker via snap (Error Code: $ERROR)."
                 exit 1
             fi
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Docker successfully installed via snap."
+            echo "[HELK-DOCKER-INSTALLATION-INFO] Docker successfully installed via snap."            
         else
             echo "[HELK-DOCKER-INSTALLATION-INFO] Docker could not be installed. Check /var/log/helk-install.log for details."
             exit 1
@@ -132,7 +132,7 @@ install_docker(){
 # ****** Installing docker compose from github.com/docker/compose ***********
 install_docker_compose(){
     echo "[HELK-DOCKER-INSTALLATION-INFO] Installing docker-compose.."
-    curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
+    curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
     chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
