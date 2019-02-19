@@ -11,7 +11,7 @@ if [[ -z "$ES_JAVA_OPTS" ]]; then
     AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
     if [ $AVAILABLE_MEMORY -ge 8 -a $AVAILABLE_MEMORY -le 12 ]; then
       ES_MEMORY=2
-    elif [ $AVAILABLE_MEMORY -ge 13 -a $AVAILABLE_MEMORY -le 16 ]; then
+    elif [$AVAILABLE_MEMORY -ge 13 -a $AVAILABLE_MEMORY -le 16]; then
       ES_MEMORY=4
     else
       ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
