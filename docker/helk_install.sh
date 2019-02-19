@@ -43,13 +43,13 @@ check_min_requirements(){
         if [ "${AVAILABLE_MEMORY}" -ge "5" ]; then
             echo "$HELK_INFO_TAG Available Memory: $AVAILABLE_MEMORY"
         else
-            echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY"
+            echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY OR DISK SPACE"
             echo "$HELK_ERROR_TAG Available Memory: $AVAILABLE_MEMORY"
             echo -e $INSTALL_ERROR_CHECK_WIKI
             exit 1
         fi
     else
-        echo "$HELK_INFO_TAG I could not calculate available memory for $SYSTEM_KERNEL!!!!!"
+        echo "$HELK_INFO_TAG I could not calculate available memory or disk space for $SYSTEM_KERNEL!!!!!"
         echo "$HELK_INFO_TAG Make sure you have at least 10GB of available memory!!!!!!"
     fi
 }
