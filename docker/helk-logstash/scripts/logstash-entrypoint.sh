@@ -80,7 +80,7 @@ for file in ${DIR}/*.json; do
 done
 
 # ********** Install Plugins *****************
-echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Installing Logstash plugins.."
+echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Checking Logstash plugins.."
 # Test a few to determine if probably all already installed
 if ( logstash-plugin list 'prune' ) && ( logstash-plugin list 'i18n' ) && ( logstash-plugin list 'wmi' ); then
     echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Plugins are already installed"
