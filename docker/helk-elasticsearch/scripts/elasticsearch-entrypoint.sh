@@ -17,7 +17,7 @@ if [[ -z "$ES_JAVA_OPTS" ]]; then
     elif [ $AVAILABLE_MEMORY -ge 13000 -a $AVAILABLE_MEMORY -le 16000 ]; then
       ES_MEMORY=4
     else
-      # Using divide by 2 here, to use GB instead of MB -- because plenty of RAM now
+      # Using divide by 2 here, to use GB instead of MB -- because plenty of RAM ow
       ES_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024/2}' /proc/meminfo)
       if [ ES_MEMORY -gt 31000 ]; then
         ES_MEMORY=31
