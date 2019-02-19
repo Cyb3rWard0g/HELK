@@ -411,10 +411,10 @@ prepare_helk(){
             echo "$HELK_INFO_TAG Making sure you assigned enough disk space to the current Docker base directory"
             AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')
             if [[ "${AVAILABLE_DOCKER_DISK}" -ge $INSTALL_MINIMUM_DISK ]]; then
-                echo "$HELK_INFO_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
+                echo "$HELK_INFO_TAG Available Docker Disk: $AVAILABLE_DOCKER_DISK GBs"
             else
                 echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
-                echo "$HELK_ERROR_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
+                echo "$HELK_ERROR_TAG Available Docker Disk: $AVAILABLE_DOCKER_DISK GBs"
                 echo -e $INSTALL_ERROR_CHECK_WIKI
                 exit 1
             fi
