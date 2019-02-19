@@ -409,7 +409,7 @@ prepare_helk(){
         if [ -x "$(command -v docker)" ]; then
             echo "$HELK_INFO_TAG Docker already installed"
             echo "$HELK_INFO_TAG Making sure you assigned enough disk space to the current Docker base directory"
-            AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f", $4 / 1024}')
+            AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')
             if [[ "${AVAILABLE_DOCKER_DISK}" -ge $INSTALL_MINIMUM_DISK ]]; then
                 echo "$HELK_INFO_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
             else
