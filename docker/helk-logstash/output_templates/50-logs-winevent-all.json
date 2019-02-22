@@ -59,6 +59,16 @@
       "properties":{
         "process_id":{"type":"integer"},
         "event_id":{"type":"integer"},
+        "record_number":{"type":"long"},
+        "keywords": {
+          "type": "text",
+          "norms": false,
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
         "file_name": {
           "type": "text",
           "norms": false,

@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
     container_name: helk-elasticsearch
     secrets:
       - source: elasticsearch.yml
@@ -43,13 +43,14 @@ services:
       - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
     ports:
       - "5044:5044"
+      - "8531:8531"
     restart: always
     depends_on:
       - helk-kibana
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:6.5.4
+    image: docker.elastic.co/kibana/kibana:6.6.1
     container_name: helk-kibana
     secrets:
       - source: kibana.yml
@@ -144,7 +145,7 @@ services:
       ZOOKEEPER_NAME: helk-zookeeper
       KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, winsysmon, winsecurity
       KAFKA_HEAP_OPTS: -Xmx1g -Xms1g
-      LOG_RETENTION_HOURS: 4 
+      LOG_RETENTION_HOURS: 4
     ports:
       - "9092:9092"
     networks:
@@ -205,4 +206,4 @@ secrets:
     file: ./helk-elasticsearch/config/elasticsearch.yml
   kibana.yml:
     file: ./helk-kibana/config/kibana.yml
-  
+

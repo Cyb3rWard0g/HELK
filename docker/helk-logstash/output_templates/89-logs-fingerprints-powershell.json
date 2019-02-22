@@ -1,0 +1,17 @@
+{
+  "order": 89,
+  "index_patterns": [ "logs-endpoint-winevent-powershell-*" ],
+  "version": 2019021801,
+  "mappings": {
+    "doc": {
+      "properties": {
+        "fingerprint_powershell_param_value_mm3": {
+          "type": "keyword"
+        },
+        "fingerprint_powershell_scriptblock_text_sha1": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
