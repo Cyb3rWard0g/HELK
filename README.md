@@ -112,24 +112,15 @@ There are a few things that I would like to accomplish with the HELK as shown in
 
 # TO-Do
 
-- [X] Upload basic Kibana Dashboards
-- [X] Integrate Spark & Graphframes
-- [X] Add Jupyter Notebook on the top of Spark
-- [X] Kafka Integration
-- [X] Default X-Pack Basic - Free License Build for ELKStack
-- [X] Spark Standalone Cluster Manager integration
-- [X] Apache Arrow Integration for Pandas Dataframes
-- [ ] Zepplin Notebook Docker option
-- [X] KSQL Client & Server Deployment (Waiting for v5.0)
 - [ ] Kubernetes Cluster Migration
 - [ ] OSQuery Data Ingestion
-- [X] Create Jupyter Notebooks showing how to use Spark & GraphFrames
 - [ ] MITRE ATT&CK mapping to logs or dashboards
-- [ ] Cypher for Apache Spark Integration (Might have to switch from Jupyter to Zeppelin Notebook)
-- [ ] Somehow integrate neo4j spark connectors with build
-- [X] Nxlog parsers (Logstash Filters)
+- [ ] Cypher for Apache Spark Integration (Adding option for Zeppelin Notebook)
+- [ ] Test and integrate neo4j spark connectors with build
 - [ ] Add more network data sources (i.e Bro)
 - [ ] Research & integrate spark structured direct streaming
 - [ ] Packer Images
+- [ ] Terraform integration (AWS, Azure, GC)
+- [ ] Add more Jupyter Notebooks to teach the basics
 
 More coming soon...

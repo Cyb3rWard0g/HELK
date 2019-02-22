@@ -41,7 +41,7 @@ server {
     add_header Strict-Transport-Security "max-age=31536000; includeSubdomains;";
     # HTTP Methods
     # DELETE is required for some index management
-    if ($request_method !~ ^(GET|PUT|POST|DELETE)$ ) {
+    if ($request_method !~ ^(GET|PUT|POST|DELETE|PATCH)$ ) {
         return 444;
     }
     ## End ##
@@ -68,18 +68,6 @@ server {
     # Kibana generates really long URI's so need to set this
     large_client_header_buffers 4 64k;
 
-    # Cache static resources that are regularly requested
-    location ~ \.(jpg|png|ico|svg|woff2)$ {
-        proxy_pass http://helk-kibana:5601;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-        #proxy_cache kibana_cache;
-        add_header        Cache-Control "public";
-        expires 12h;
-    }
     # Proxy forward to elasticsearch
     location / {
         proxy_pass http://helk-kibana:5601;
