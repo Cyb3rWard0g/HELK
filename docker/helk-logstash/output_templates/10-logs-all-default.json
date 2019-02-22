@@ -8,9 +8,14 @@
         "ignore_malformed": true,
         "total_fields.limit": "1000",
         "coerce": true
+      },
+      "store": {
+        "type": "niofs"
       }
     },
-    "refresh_interval": "30s"
+    "refresh_interval": "30s",
+    "number_of_replicas": 0,
+    "number_of_shards": 1
   },
   "mappings": {
     "doc": {
@@ -41,6 +46,15 @@
         },
         "log_ingest_timestamp": {
           "type": "date"
+        },
+        "meta_log_tags": {
+          "type": "text",
+          "norms": false,
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
         },
         "z_logstash_type": {
           "enabled": false
