@@ -46,15 +46,15 @@ if [[ $HELK_USER_EXISTS == "1" ]]; then
     fi
 
     JUPYTER_ADMIN='helk'
-    JUPYTER_ADMIN_DIRECTORY=${JUPYTERHUB_HOME}/${JUPYTER_ADMIN}
+    JUPYTER_ADMIN_DIRECTORY=/home/${JUPYTER_ADMIN}
     echo "JUPYTER_CREDENTIALS:$JUPYTER_ADMIN:$JUPYTER_HELK_PWD" >> /opt/helk/user_credentials.txt
     mkdir -v $JUPYTER_ADMIN_DIRECTORY
 
-    useradd -p $(openssl passwd -1 ${JUPYTER_HELK_PWD}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTER_ADMIN_DIRECTORY --no-create-home -s /bin/bash ${JUPYTER_ADMIN}
+    useradd -p $(openssl passwd -1 ${JUPYTER_HELK_PWD}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTER_ADMIN_DIRECTORY -s /bin/bash ${JUPYTER_ADMIN}
 
     cp -R ${JUPYTER_NOTEBOOKS} ${JUPYTER_ADMIN_DIRECTORY}/notebooks
     chown -R ${JUPYTER_ADMIN}:jupyterhub $JUPYTER_ADMIN_DIRECTORY
-    chmod 700 -R $JUPYTER_ADMIN_DIRECTORY
+    chmod 770 -R $JUPYTER_ADMIN_DIRECTORY
 
     ((JUPYTERHUB_UID=$JUPYTERHUB_UID + 1))
 
@@ -70,15 +70,15 @@ if [[ $HELK_USER_EXISTS == "1" ]]; then
         student_password=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1)
         echo "JUPYTER_CREDENTIALS:${u}:$student_password" >> /opt/helk/user_credentials.txt
         
-        JUPYTERHUB_USER_DIRECTORY=${JUPYTERHUB_HOME}/${u}
-        mkdir -v $JUPYTERHUB_USER_DIRECTORY
+        JUPYTERHUB_USER_DIRECTORY=/home/${u}
+        mkdir -v ${JUPYTERHUB_USER_DIRECTORY}
 
-        useradd -p $(openssl passwd -1 ${student_password}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTERHUB_USER_DIRECTORY --no-create-home -s /bin/bash ${u}
+        useradd -p $(openssl passwd -1 ${student_password}) -u ${JUPYTERHUB_UID} -g ${JUPYTERHUB_GID} -d $JUPYTERHUB_USER_DIRECTORY -s /bin/bash ${u}
         
         echo "[HELK-JUPYTER-DOCKER-INSTALLATION-INFO] copying notebooks to ${JUPYTERHUB_USER_DIRECTORY} notebooks directory ..."
         cp -R ${JUPYTER_NOTEBOOKS} ${JUPYTERHUB_USER_DIRECTORY}/notebooks
         chown -R ${u}:jupyterhub $JUPYTERHUB_USER_DIRECTORY
-        chmod 700 -R $JUPYTERHUB_USER_DIRECTORY
+        chmod 770 -R $JUPYTERHUB_USER_DIRECTORY
 
         ((JUPYTERHUB_UID=$JUPYTERHUB_UID + 1))
     done
