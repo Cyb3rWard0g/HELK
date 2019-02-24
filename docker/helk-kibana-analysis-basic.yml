@@ -109,7 +109,7 @@ services:
     networks:
       helk:
   helk-ksql-server:
-    image: confluentinc/cp-ksql-server:5.1.0
+    image: confluentinc/cp-ksql-server:5.1.2
     container_name: helk-ksql-server
     restart: always
     depends_on:
@@ -128,7 +128,7 @@ services:
     networks:
       helk:
   helk-ksql-cli:
-    image: confluentinc/cp-ksql-cli:5.1.0
+    image: confluentinc/cp-ksql-cli:5.1.2
     container_name: helk-ksql-cli
     depends_on:
       - helk-ksql-server
