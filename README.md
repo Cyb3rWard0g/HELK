@@ -122,5 +122,6 @@ There are a few things that I would like to accomplish with the HELK as shown in
 - [ ] Packer Images
 - [ ] Terraform integration (AWS, Azure, GC)
 - [ ] Add more Jupyter Notebooks to teach the basics
+- [ ] Auditd beat intergation
 
 More coming soon...

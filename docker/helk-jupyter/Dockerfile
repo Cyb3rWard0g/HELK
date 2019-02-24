@@ -23,8 +23,8 @@ RUN apt-get update -qq \
   libxml2-dev libxslt1-dev zlib1g-dev postgresql \
   # ********** Install PIP Packages ************
   && sudo pip3 install --upgrade pip \
-  && pip3 install pandas==0.24.0 \
-  altair==2.3.0 \
+  && pip3 install pandas==0.24.1 \
+  altair==2.4.1 \
   jupyter==1.0.0 \
   jupyterlab==0.35.4 \
   jupyterhub==0.9.4 \

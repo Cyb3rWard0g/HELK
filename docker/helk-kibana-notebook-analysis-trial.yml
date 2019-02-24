@@ -84,7 +84,7 @@ services:
     networks:
       helk:
   helk-jupyter:
-    image: cyb3rward0g/helk-jupyter:0.1.0
+    image: cyb3rward0g/helk-jupyter:0.1.1
     container_name: helk-jupyter
     volumes:
       - ./helk-jupyter/notebooks:/opt/helk/jupyter/notebooks
