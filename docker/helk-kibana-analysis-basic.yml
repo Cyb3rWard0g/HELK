@@ -9,7 +9,7 @@ services:
         target: /usr/share/elasticsearch/config/elasticsearch.yml
     volumes:
       - esdata:/usr/share/elasticsearch/data
-      - ./helk-elasticsearch//scripts:/usr/share/elasticsearch/scripts
+      - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
     entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
     environment:
       - cluster.name=helk-cluster

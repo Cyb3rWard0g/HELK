@@ -18,7 +18,7 @@ if [[ -z "$ES_JAVA_OPTS" ]]; then
       ES_MEMORY="4g"
     else
       # Using GB instead of MB -- because plenty of RAM now
-      ES_MEMORY=$(( AVAILABLE_MEMORY / 1024 ))
+      ES_MEMORY=$(( AVAILABLE_MEMORY / 1024 / 2 ))
       if [ $ES_MEMORY -gt 31 ]; then
         ES_MEMORY="31g"
       else
