@@ -2,7 +2,7 @@
   "display_name": "PySpark_Python3",
   "language": "python",
   "argv": [
-   "/usr/bin/python3",
+   "/opt/conda/bin/python3",
    "-m",
    "ipykernel_launcher",
    "-f",
@@ -10,7 +10,7 @@
   ],
   "env": {
    "SPARK_HOME": "/opt/helk/spark/",
-   "PYTHONPATH": "/opt/helk/spark/python/:/opt/helk/spark/python/lib/py4j-0.10.7-src.zip",
-   "PYSPARK_PYTHON": "/usr/bin/python3"
+   "PYTHONPATH": "/opt/helk/spark/python/:/opt/helk/spark/python/lib/py4j-0.10.7-src.zip:/opt/helk/spark/graphframes.zip",
+   "PYSPARK_PYTHON": "/usr/bin/python3.7"
   }
 }

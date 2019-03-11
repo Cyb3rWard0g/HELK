@@ -20,10 +20,9 @@ ENV SPARK_VERSION=2.4.0 \
 
 # *********** Installing Prerequisites ***************
 # -qq : No output except for errors
-RUN apt-get update -qq && apt-get install -qqy \
-  openjdk-8-jre-headless \
-  && apt-get -qy clean \
-  autoremove \
+RUN apt-get update -qq \
+  && apt-get install -qqy openjdk-8-jre-headless python3.7 \
+  && apt-get -qy clean autoremove \
   && rm -rf /var/lib/apt/lists/* \
   # *********** Installing Spark and creating user ***************
   && bash -c 'mkdir -pv /opt/helk/spark' \

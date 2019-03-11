@@ -48,7 +48,7 @@ check_min_requirements(){
         ARCHITECTURE=$(uname -m)
         if [ "${ARCHITECTURE}" != "x86_64" ]; then
             echo "$HELK_ERROR_TAG HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
-            echo " Your Systems Architecture: ${ARCHITECTURE}"
+            echo "Your Systems Architecture: ${ARCHITECTURE}"
             echo -e $INSTALL_ERROR_CHECK_WIKI
             exit 1
         fi
@@ -67,7 +67,6 @@ check_min_requirements(){
 }
 
 check_system_info(){
-    echo "$HELK_INFO_TAG Checking distribution list and product version"
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then
         # *********** Check distribution list ***************
         LSB_DIST="$(. /etc/os-release && echo "$ID")"
@@ -152,7 +151,7 @@ install_curl(){
 # ********* Install htpasswd ********************
 install_htpasswd(){
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then
-        echo "$HELK_INFO_TAG Installing htpasswd .."
+        echo "$HELK_INFO_TAG Installing htpasswd.."
         case "$LSB_DIST" in
             ubuntu|debian|raspbian)
                 apt install -y apache2-utils>> $LOGFILE 2>&1
@@ -253,7 +252,7 @@ set_kibana_ui_password(){
                 break
             else
                 read -p "$HELK_INFO_TAG Verify HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT_VERIFIED
-                echo -e "$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
+                #echo -e "$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
                 # *********** Validating Password Input ***************
                 if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then
                     break
@@ -267,7 +266,6 @@ set_kibana_ui_password(){
     if [[ $SUBSCRIPTION_CHOICE == "basic" ]]; then
         # *********** Check if htpasswd is installed ***************
         if ! [ -x "$(command -v htpasswd)" ]; then
-            echo "$HELK_INFO_TAG htpasswd is not installed"
             install_htpasswd
         fi
         mv helk-nginx/htpasswd.users helk-nginx/htpasswd.users_backup >> $LOGFILE 2>&1
@@ -290,7 +288,7 @@ set_network(){
     if [[ -z "$HOST_IP" ]]; then
         # *********** Getting Host IP ***************
         # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
-        echo "$HELK_INFO_TAG Obtaining current host IP.."
+        #echo "$HELK_INFO_TAG Obtaining current host IP.."
         case "${SYSTEM_KERNEL}" in
             Linux*)     HOST_IP=$(ip route get 1 | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b" | tail -1);;
             Darwin*)    HOST_IP=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
@@ -299,13 +297,14 @@ set_network(){
         # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
         local ip_choice
         read -t 30 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
-        READ_INPUT=$?
-        HOST_IP="${ip_choice:-$HOST_IP}"
-        if [ $READ_INPUT  = 142 ]; then
-            echo -e "\n$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
-        else
-            echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
-        fi
+        # ******* Validation ************
+        #READ_INPUT=$?
+        #HOST_IP="${ip_choice:-$HOST_IP}"
+        #if [ $READ_INPUT  = 142 ]; then
+        #    echo -e "\n$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+        #else
+        #    echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+        #fi
     fi
 }
 
@@ -334,10 +333,8 @@ set_helk_subscription(){
             READ_INPUT=$?
             SUBSCRIPTION_CHOICE=${subscription_input:-"basic"}
             if [ $READ_INPUT = 142 ]; then
-                echo -e "\n$HELK_INFO_TAG HELK elastic subscription set to ${SUBSCRIPTION_CHOICE}"
                 break
             else
-                echo "$HELK_INFO_TAG HELK elastic subscription set to ${SUBSCRIPTION_CHOICE}"
                 # *********** Validating subscription Input ***************
                 case $SUBSCRIPTION_CHOICE in
                     basic) break;;
@@ -402,7 +399,6 @@ prepare_helk(){
     if [ "$SYSTEM_KERNEL" == "Linux" ]; then
         # *********** Check if curl is installed ***************
         if ! [ -x "$(command -v curl)" ]; then
-            echo "$HELK_INFO_TAG curl is not installed"
             install_curl
         fi
         # *********** Check if docker is installed ***************
@@ -419,12 +415,10 @@ prepare_helk(){
                 exit 1
             fi
         else
-            echo "$HELK_INFO_TAG Docker is not installed"
             install_docker
         fi
         # ********** Check if docker-compose is installed *******
         if ! [ -x "$(command -v docker-compose)" ]; then
-            echo "$HELK_INFO_TAG Docker-compose is not installed"
             install_docker_compose
         fi
     else
@@ -449,10 +443,15 @@ prepare_helk(){
 
 get_jupyter_credentials(){
     if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]]; then
-        until  docker exec -ti helk-jupyter cat /opt/helk/user_credentials.txt ; do
-            sleep 10
-        done
+        until (docker logs helk-jupyter 2>&1 | grep -q "The Jupyter Notebook is running at"); do sleep 5; done
+        jupyter_token="$(docker exec -ti helk-jupyter jupyter notebook list | grep "token" | sed 's/.*token=\([^ ]*\).*/\1/')" >> $LOGFILE 2>&1
+        echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
     fi
+}
+
+check_logstash_connected(){
+    echo "$HELK_INFO_TAG Waiting for some services to be up ....."
+    until (docker logs helk-logstash 2>&1 | grep -q "Restored connection to ES instance" ); do sleep 5; done
 }
 
 show_banner(){
@@ -482,7 +481,7 @@ show_final_information(){
         echo "HELK KIBANA USER: helk"
         echo "HELK KIBANA PASSWORD: ${KIBANA_UI_PASSWORD_INPUT}"
         echo "HELK SPARK MASTER UI: http://${HOST_IP}:8080"
-        echo "HELK JUPYTERHUB URL: http://${HOST_IP}/jupyter"
+        echo "HELK JUPYTER SERVER URL: http://${HOST_IP}/jupyter"
         get_jupyter_credentials
     elif [[ ${HELK_BUILD} == "helk-kibana-analysis" ]]; then
         echo "HELK KIBANA URL: https://${HOST_IP}"
@@ -508,7 +507,7 @@ install_helk(){
     set_elasticsearch_password
     prepare_helk
     build_helk
-    sleep 180
+    check_logstash_connected
     show_final_information
 }
 

@@ -34,6 +34,7 @@ services:
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
+      - ./helk-logstash/plugins:/usr/share/logstash/plugins
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
@@ -84,20 +85,18 @@ services:
     networks:
       helk:
   helk-jupyter:
-    image: cyb3rward0g/helk-jupyter:0.1.1
+    image: cyb3rward0g/helk-jupyter:0.1.2
     container_name: helk-jupyter
-    volumes:
-      - ./helk-jupyter/notebooks:/opt/helk/jupyter/notebooks
     environment:
-      JUPYTER_HELK_PWD: hunting
-      JUPYTER_USERS: hunter1
+      JUPYTER_TYPE: lab
+      JUPYTER_BASE_URL: /jupyter
     restart: always
     depends_on:
       - helk-logstash
     networks:
       helk:
   helk-spark-master:
-    image: cyb3rward0g/helk-spark-master:2.4.0
+    image: cyb3rward0g/helk-spark-master:2.4.0-a
     container_name: helk-spark-master
     environment:
       SPARK_MASTER_PORT: 7077
@@ -110,7 +109,7 @@ services:
     networks:
       helk:
   helk-spark-worker:
-    image: cyb3rward0g/helk-spark-worker:2.4.0
+    image: cyb3rward0g/helk-spark-worker:2.4.0-a
     container_name: helk-spark-worker
     environment:
       SPARK_MASTER: spark://helk-spark-master:7077

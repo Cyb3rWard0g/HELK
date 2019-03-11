@@ -12,4 +12,3 @@ LABEL description="Dockerfile base for the HELK Logstash."
 
 RUN mv /usr/share/logstash/config/logstash.yml /usr/share/logstash/config/logstash.yml.backup
 COPY --chown=logstash:logstash config/logstash.yml /usr/share/logstash/config/logstash.yml
-COPY --chown=logstash:logstash plugins/logstash-offline-plugins-6.6.1.zip /usr/share/logstash/logstash-offline-plugins-6.6.1.zip
