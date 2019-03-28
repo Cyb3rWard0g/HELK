@@ -1,0 +1,514 @@
+[
+  {
+    "_id": "c0d3f7c0-483e-11e9-8770-35c0f1a2cce0",
+    "_type": "visualization",
+    "_source": {
+      "title": "Sysmon-Timelion-NetworkEvents_byUser",
+      "visState": "{\"title\":\"Sysmon-Timelion-NetworkEvents_byUser\",\"type\":\"timelion\",\"params\":{\"expression\":\".es(q=event_id:3, index=logs-endpoint-winevent-sysmon*, split=user_account.keyword:40).label(\\\"$1\\\", \\\"^.* > user_account.keyword:(\\\\S+) > .*\\\").title(\\\"Network Events by User\\\")\",\"interval\":\"15m\"},\"aggs\":[]}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "cdd1ed10-483e-11e9-8770-35c0f1a2cce0",
+    "_type": "visualization",
+    "_source": {
+      "title": "Sysmon-Timelion-ProcessEvents_byUser",
+      "visState": "{\"title\":\"Sysmon-Timelion-ProcessEvents_byUser\",\"type\":\"timelion\",\"params\":{\"expression\":\".es(q=event_id:1, index=logs-endpoint-winevent-sysmon*, split=user_account.keyword:40).label(\\\"$1\\\", \\\"^.* > user_account.keyword:(\\\\S+) > .*\\\").title(\\\"Process Execution by User\\\")\",\"interval\":\"15m\"},\"aggs\":[]}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "4d391470-48f3-11e9-b62f-8f6921045c4c",
+    "_type": "visualization",
+    "_source": {
+      "title": "Sysmon-Timelion-ProcessEvents_byProcessGuid",
+      "visState": "{\"title\":\"Sysmon-Timelion-ProcessEvents_byProcessGuid\",\"type\":\"timelion\",\"params\":{\"expression\":\".es(q=*, index=logs-endpoint-winevent-sysmon*, split=process_guid.keyword:500 ).label(\\\"$1\\\", \\\"^.* > process_guid.keyword:(\\\\S+) > .*\\\").title(\\\"Events by ProcessGuid\\\")\",\"interval\":\"15m\"},\"aggs\":[]}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "cc5bb4b0-4826-11e9-a85d-d748de0cd831",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-Named Pipes-EventId 17,18",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_hostname",
+        "process_guid",
+        "pipe_name",
+        "process_path",
+        "task"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-winevent-sysmon-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:17 OR event_id:18\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "db661470-4347-11e9-a4c5-1717ba697d0d",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-Registry Events",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_name",
+        "process_path",
+        "event_id",
+        "process_guid",
+        "event_type",
+        "registry_key_path",
+        "registry_key_value"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"language\":\"lucene\",\"query\":\"event_id:12 OR event_id:13 OR event_id:14\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "ffb5aa00-4349-11e9-a4c5-1717ba697d0d",
+    "_type": "search",
+    "_source": {
+      "title": "windows-login-events",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_name",
+        "event_id",
+        "keywords",
+        "user_name",
+        "logon_type",
+        "user_reporter_domain"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"source_name: \\\"Microsoft-Windows-Security-Auditing\\\" AND event_id:4624 OR event_id:4625 OR event_id:4634\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "5a792770-4343-11e9-a4c5-1717ba697d0d",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-Network Connections - EventId 3",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_name",
+        "event_id",
+        "process_guid",
+        "process_path",
+        "src_ip_addr",
+        "src_port",
+        "dst_ip_addr",
+        "dst_port",
+        "meta_dst_ip_geo.city_name",
+        "ipv6_src_addr",
+        "ipv6_dst_addr"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:3 NOT dst_ip_addr: \\\"127.0.0.1\\\" NOT scr_ip_addr:\\\"239.255.255.250\\\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "1821dba0-4344-11e9-a4c5-1717ba697d0d",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-File Creation - EventId 11",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_name",
+        "event_id",
+        "process_guid",
+        "process_path",
+        "file_name"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:11\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "a3878f20-4829-11e9-a85d-d748de0cd831",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-ExecutedCommands",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_name",
+        "event_id",
+        "user_account",
+        "process_guid",
+        "process_parent_command_line",
+        "process_command_line",
+        "file_description",
+        "file_product",
+        "file_company"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-winevent-sysmon-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:1 AND (process_parent_name:\\\"CmD.exe\\\" OR process_parent_name:\\\"powershell.exe\\\" OR process_parent_name:\\\"wscript.exe\\\")\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "689ef060-4342-11e9-a4c5-1717ba697d0d",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-Process Creation - EventId1",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_name",
+        "user_account",
+        "process_parent_guid",
+        "process_guid",
+        "process_parent_command_line",
+        "process_command_line",
+        "file_description",
+        "file_product",
+        "file_company"
+      ],
+      "sort": [
+        "@timestamp",
+        "asc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-winevent-sysmon-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:1\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "bcafaac0-48f4-11e9-b62f-8f6921045c4c",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-All-events",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "action",
+        "beat_name",
+        "process_guid",
+        "process_parent_guid",
+        "user_account",
+        "process_path"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-winevent-sysmon-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "c91f0df0-48ef-11e9-b62f-8f6921045c4c",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-elastalert-alerts",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "rule_name",
+        "match_body.beat_hostname",
+        "match_body.num_hits",
+        "match_body.process_guid",
+        "match_body.user_account"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"elastalert_status\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "1a68e8a0-4348-11e9-a4c5-1717ba697d0d",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-Downloads-EventId 15",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_name",
+        "process_path",
+        "event_id",
+        "process_guid",
+        "file_name"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"source_name: \\\"Microsoft-Windows-Sysmon\\\" AND event_id:15\",\"language\":\"lucene\"},\"filter\":[{\"meta\":{\"negate\":false,\"index\":\"logs-endpoint-*\",\"type\":\"phrase\",\"key\":\"source_name\",\"value\":\"Microsoft-Windows-Sysmon\",\"params\":{\"query\":\"Microsoft-Windows-Sysmon\",\"type\":\"phrase\"},\"disabled\":false,\"alias\":null},\"query\":{\"match\":{\"source_name\":{\"query\":\"Microsoft-Windows-Sysmon\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}}]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "4bb63750-4348-11e9-a4c5-1717ba697d0d",
+    "_type": "search",
+    "_source": {
+      "title": "Sysmon-WMI Subscription Events",
+      "description": "",
+      "hits": 0,
+      "columns": [
+        "beat_name",
+        "event_id",
+        "process_path",
+        "pipe_name",
+        "process_guid"
+      ],
+      "sort": [
+        "@timestamp",
+        "desc"
+      ],
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"source_name: \\\"Microsoft-Windows-Sysmon\\\" AND (event_id:19 OR event_id:20 OR event_id:21)\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "bebd3140-4352-11e9-a4c5-1717ba697d0d",
+    "_type": "visualization",
+    "_source": {
+      "title": "Sysmon-LoggedIn_users",
+      "visState": "{\"title\":\"Sysmon-LoggedIn_users\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMetricsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"user_account.keyword\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}]}",
+      "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
+      "description": "",
+      "savedSearchId": "689ef060-4342-11e9-a4c5-1717ba697d0d",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "47b5abb0-48f0-11e9-b62f-8f6921045c4c",
+    "_type": "visualization",
+    "_source": {
+      "title": "Sysmon-Elastalert-count",
+      "visState": "{\"title\":\"Sysmon-Elastalert-count\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMetricsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"rule_name\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}]}",
+      "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
+      "description": "",
+      "savedSearchId": "c91f0df0-48ef-11e9-b62f-8f6921045c4c",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "37a5adc0-4827-11e9-a85d-d748de0cd831",
+    "_type": "visualization",
+    "_source": {
+      "title": "Sysmon-NamedPipe-count",
+      "visState": "{\"title\":\"Sysmon-NamedPipe-count\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMetricsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"pipe_name.keyword\",\"size\":500,\"order\":\"desc\",\"orderBy\":\"1\",\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}]}",
+      "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
+      "description": "",
+      "savedSearchId": "cc5bb4b0-4826-11e9-a85d-d748de0cd831",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "3c414620-48fc-11e9-b62f-8f6921045c4c",
+    "_type": "visualization",
+    "_source": {
+      "title": "Sysmon - Eventcount-per-host",
+      "visState": "{\"title\":\"Sysmon - Eventcount-per-host\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMetricsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"beat_hostname.keyword\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}]}",
+      "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
+      "description": "",
+      "savedSearchId": "bcafaac0-48f4-11e9-b62f-8f6921045c4c",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "ccec7dc0-48fc-11e9-b62f-8f6921045c4c",
+    "_type": "visualization",
+    "_source": {
+      "title": "Sysmon-Timelion_bySystem",
+      "visState": "{\"title\":\"Sysmon-Timelion_bySystem\",\"type\":\"timelion\",\"params\":{\"expression\":\".es(q=*, index=logs-endpoint-winevent-sysmon*, split=beat_hostname.keyword:40).label(\\\"$1\\\", \\\"^.* > beat_hostname.keyword:(\\\\S+) > .*\\\").title(\\\"Events per system timeline\\\")\",\"interval\":\"15m\"},\"aggs\":[]}",
+      "uiStateJSON": "{}",
+      "description": "",
+      "version": 1,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "cf46c5b0-434f-11e9-a4c5-1717ba697d0d",
+    "_type": "dashboard",
+    "_source": {
+      "title": "User Investigation Dashboard",
+      "hits": 0,
+      "description": "Enter a username in the search bar to investigate activity on that host.",
+      "panelsJSON": "[{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":17,\"w\":48,\"h\":17,\"i\":\"1\"},\"id\":\"689ef060-4342-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"1\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":34,\"w\":48,\"h\":15,\"i\":\"2\"},\"id\":\"5a792770-4343-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"2\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":49,\"w\":48,\"h\":15,\"i\":\"3\"},\"id\":\"1821dba0-4344-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"3\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":79,\"w\":48,\"h\":15,\"i\":\"4\"},\"id\":\"db661470-4347-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"4\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":64,\"w\":48,\"h\":15,\"i\":\"5\"},\"id\":\"1a68e8a0-4348-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"5\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":94,\"w\":48,\"h\":15,\"i\":\"7\"},\"id\":\"ffb5aa00-4349-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"7\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"gridData\":{\"x\":0,\"y\":10,\"w\":48,\"h\":7,\"i\":\"8\"},\"version\":\"6.6.1\",\"panelIndex\":\"8\",\"type\":\"visualization\",\"id\":\"3c414620-48fc-11e9-b62f-8f6921045c4c\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":0,\"w\":48,\"h\":10,\"i\":\"9\"},\"version\":\"6.6.1\",\"panelIndex\":\"9\",\"type\":\"visualization\",\"id\":\"ccec7dc0-48fc-11e9-b62f-8f6921045c4c\",\"embeddableConfig\":{}}]",
+      "optionsJSON": "{\"darkTheme\":true,\"hidePanelTitles\":false,\"useMargins\":true}",
+      "version": 1,
+      "timeRestore": false,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\\\"Enter a username here\\\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "41449550-48f2-11e9-b62f-8f6921045c4c",
+    "_type": "dashboard",
+    "_source": {
+      "title": "Sysmon-ProcessInvestigation",
+      "hits": 0,
+      "description": "Dashboard for investigating individual processes",
+      "panelsJSON": "[{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":35,\"w\":48,\"h\":19,\"i\":\"1\"},\"id\":\"5a792770-4343-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"1\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":71,\"w\":48,\"h\":20,\"i\":\"2\"},\"id\":\"db661470-4347-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"2\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":91,\"w\":48,\"h\":19,\"i\":\"3\"},\"id\":\"1821dba0-4344-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"3\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":54,\"w\":48,\"h\":17,\"i\":\"4\"},\"id\":\"1a68e8a0-4348-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"4\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":110,\"w\":48,\"h\":17,\"i\":\"5\"},\"id\":\"cc5bb4b0-4826-11e9-a85d-d748de0cd831\",\"panelIndex\":\"5\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"embeddableConfig\":{},\"gridData\":{\"x\":0,\"y\":15,\"w\":48,\"h\":20,\"i\":\"6\"},\"id\":\"689ef060-4342-11e9-a4c5-1717ba697d0d\",\"panelIndex\":\"6\",\"type\":\"search\",\"version\":\"6.6.1\"},{\"gridData\":{\"x\":0,\"y\":0,\"w\":48,\"h\":15,\"i\":\"7\"},\"version\":\"6.6.1\",\"panelIndex\":\"7\",\"type\":\"visualization\",\"id\":\"4d391470-48f3-11e9-b62f-8f6921045c4c\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":127,\"w\":48,\"h\":32,\"i\":\"8\"},\"version\":\"6.6.1\",\"panelIndex\":\"8\",\"type\":\"search\",\"id\":\"bcafaac0-48f4-11e9-b62f-8f6921045c4c\",\"embeddableConfig\":{\"sort\":[\"@timestamp\",\"desc\"]}}]",
+      "optionsJSON": "{\"darkTheme\":true,\"hidePanelTitles\":false,\"useMargins\":true}",
+      "version": 1,
+      "timeRestore": false,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\\\"Enter the process guid here\\\"\",\"language\":\"kuery\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  },
+  {
+    "_id": "624865e0-434f-11e9-a4c5-1717ba697d0d",
+    "_type": "dashboard",
+    "_source": {
+      "title": "Host Investigation Dashboard",
+      "hits": 0,
+      "description": "Enter a hostname in the search bar to investigate activity on that host.",
+      "panelsJSON": "[{\"gridData\":{\"x\":0,\"y\":47,\"w\":48,\"h\":17,\"i\":\"1\"},\"version\":\"6.6.1\",\"panelIndex\":\"1\",\"type\":\"search\",\"id\":\"689ef060-4342-11e9-a4c5-1717ba697d0d\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":64,\"w\":48,\"h\":15,\"i\":\"2\"},\"version\":\"6.6.1\",\"panelIndex\":\"2\",\"type\":\"search\",\"id\":\"5a792770-4343-11e9-a4c5-1717ba697d0d\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":79,\"w\":48,\"h\":15,\"i\":\"3\"},\"version\":\"6.6.1\",\"panelIndex\":\"3\",\"type\":\"search\",\"id\":\"1821dba0-4344-11e9-a4c5-1717ba697d0d\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":109,\"w\":48,\"h\":15,\"i\":\"4\"},\"version\":\"6.6.1\",\"panelIndex\":\"4\",\"type\":\"search\",\"id\":\"db661470-4347-11e9-a4c5-1717ba697d0d\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":94,\"w\":48,\"h\":15,\"i\":\"5\"},\"version\":\"6.6.1\",\"panelIndex\":\"5\",\"type\":\"search\",\"id\":\"1a68e8a0-4348-11e9-a4c5-1717ba697d0d\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":124,\"w\":48,\"h\":15,\"i\":\"6\"},\"version\":\"6.6.1\",\"panelIndex\":\"6\",\"type\":\"search\",\"id\":\"4bb63750-4348-11e9-a4c5-1717ba697d0d\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":139,\"w\":48,\"h\":15,\"i\":\"7\"},\"version\":\"6.6.1\",\"panelIndex\":\"7\",\"type\":\"search\",\"id\":\"ffb5aa00-4349-11e9-a4c5-1717ba697d0d\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":0,\"w\":24,\"h\":15,\"i\":\"8\"},\"version\":\"6.6.1\",\"panelIndex\":\"8\",\"type\":\"visualization\",\"id\":\"c0d3f7c0-483e-11e9-8770-35c0f1a2cce0\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":24,\"y\":0,\"w\":24,\"h\":15,\"i\":\"9\"},\"version\":\"6.6.1\",\"panelIndex\":\"9\",\"type\":\"visualization\",\"id\":\"cdd1ed10-483e-11e9-8770-35c0f1a2cce0\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":30,\"w\":48,\"h\":17,\"i\":\"10\"},\"version\":\"6.6.1\",\"panelIndex\":\"10\",\"type\":\"search\",\"id\":\"a3878f20-4829-11e9-a85d-d748de0cd831\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":0,\"y\":15,\"w\":24,\"h\":15,\"i\":\"11\"},\"version\":\"6.6.1\",\"panelIndex\":\"11\",\"type\":\"visualization\",\"id\":\"47b5abb0-48f0-11e9-b62f-8f6921045c4c\",\"embeddableConfig\":{}},{\"gridData\":{\"x\":24,\"y\":15,\"w\":24,\"h\":15,\"i\":\"12\"},\"version\":\"6.6.1\",\"panelIndex\":\"12\",\"type\":\"search\",\"id\":\"c91f0df0-48ef-11e9-b62f-8f6921045c4c\",\"embeddableConfig\":{}}]",
+      "optionsJSON": "{\"darkTheme\":true,\"useMargins\":true,\"hidePanelTitles\":false}",
+      "version": 1,
+      "timeRestore": false,
+      "kibanaSavedObjectMeta": {
+        "searchSourceJSON": "{\"query\":{\"query\":\"\\\"Enter the hostname here\\\"\",\"language\":\"lucene\"},\"filter\":[]}"
+      }
+    },
+    "_meta": {
+      "savedObjectVersion": 2
+    }
+  }
+]
