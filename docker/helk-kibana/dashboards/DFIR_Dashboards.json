@@ -1,4 +1,6 @@
-[
+{
+  "version":"6.5.3",
+  "objects": [
   {
     "_id": "c0d3f7c0-483e-11e9-8770-35c0f1a2cce0",
     "_type": "visualization",
@@ -512,3 +514,4 @@
     }
   }
 ]
+}
