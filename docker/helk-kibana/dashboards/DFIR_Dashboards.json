@@ -2,9 +2,9 @@
   "version":"6.5.3",
   "objects": [
   {
-    "_id": "c0d3f7c0-483e-11e9-8770-35c0f1a2cce0",
-    "_type": "visualization",
-    "_source": {
+    "id": "c0d3f7c0-483e-11e9-8770-35c0f1a2cce0",
+    "type": "visualization",
+    "attributes": {
       "title": "Sysmon-Timelion-NetworkEvents_byUser",
       "visState": "{\"title\":\"Sysmon-Timelion-NetworkEvents_byUser\",\"type\":\"timelion\",\"params\":{\"expression\":\".es(q=event_id:3, index=logs-endpoint-winevent-sysmon*, split=user_account.keyword:40).label(\\\"$1\\\", \\\"^.* > user_account.keyword:(\\\\S+) > .*\\\").title(\\\"Network Events by User\\\")\",\"interval\":\"15m\"},\"aggs\":[]}",
       "uiStateJSON": "{}",
@@ -14,14 +14,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "cdd1ed10-483e-11e9-8770-35c0f1a2cce0",
-    "_type": "visualization",
-    "_source": {
+    "id": "cdd1ed10-483e-11e9-8770-35c0f1a2cce0",
+    "type": "visualization",
+    "attributes": {
       "title": "Sysmon-Timelion-ProcessEvents_byUser",
       "visState": "{\"title\":\"Sysmon-Timelion-ProcessEvents_byUser\",\"type\":\"timelion\",\"params\":{\"expression\":\".es(q=event_id:1, index=logs-endpoint-winevent-sysmon*, split=user_account.keyword:40).label(\\\"$1\\\", \\\"^.* > user_account.keyword:(\\\\S+) > .*\\\").title(\\\"Process Execution by User\\\")\",\"interval\":\"15m\"},\"aggs\":[]}",
       "uiStateJSON": "{}",
@@ -31,14 +29,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "4d391470-48f3-11e9-b62f-8f6921045c4c",
-    "_type": "visualization",
-    "_source": {
+    "id": "4d391470-48f3-11e9-b62f-8f6921045c4c",
+    "type": "visualization",
+    "attributes": {
       "title": "Sysmon-Timelion-ProcessEvents_byProcessGuid",
       "visState": "{\"title\":\"Sysmon-Timelion-ProcessEvents_byProcessGuid\",\"type\":\"timelion\",\"params\":{\"expression\":\".es(q=*, index=logs-endpoint-winevent-sysmon*, split=process_guid.keyword:500 ).label(\\\"$1\\\", \\\"^.* > process_guid.keyword:(\\\\S+) > .*\\\").title(\\\"Events by ProcessGuid\\\")\",\"interval\":\"15m\"},\"aggs\":[]}",
       "uiStateJSON": "{}",
@@ -48,14 +44,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "cc5bb4b0-4826-11e9-a85d-d748de0cd831",
-    "_type": "search",
-    "_source": {
+    "id": "cc5bb4b0-4826-11e9-a85d-d748de0cd831",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-Named Pipes-EventId 17,18",
       "description": "",
       "hits": 0,
@@ -75,14 +69,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-winevent-sysmon-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:17 OR event_id:18\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "db661470-4347-11e9-a4c5-1717ba697d0d",
-    "_type": "search",
-    "_source": {
+    "id": "db661470-4347-11e9-a4c5-1717ba697d0d",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-Registry Events",
       "description": "",
       "hits": 0,
@@ -104,14 +96,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"language\":\"lucene\",\"query\":\"event_id:12 OR event_id:13 OR event_id:14\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "ffb5aa00-4349-11e9-a4c5-1717ba697d0d",
-    "_type": "search",
-    "_source": {
+    "id": "ffb5aa00-4349-11e9-a4c5-1717ba697d0d",
+    "type": "search",
+    "attributes": {
       "title": "windows-login-events",
       "description": "",
       "hits": 0,
@@ -132,14 +122,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"source_name: \\\"Microsoft-Windows-Security-Auditing\\\" AND event_id:4624 OR event_id:4625 OR event_id:4634\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "5a792770-4343-11e9-a4c5-1717ba697d0d",
-    "_type": "search",
-    "_source": {
+    "id": "5a792770-4343-11e9-a4c5-1717ba697d0d",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-Network Connections - EventId 3",
       "description": "",
       "hits": 0,
@@ -165,14 +153,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:3 NOT dst_ip_addr: \\\"127.0.0.1\\\" NOT scr_ip_addr:\\\"239.255.255.250\\\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "1821dba0-4344-11e9-a4c5-1717ba697d0d",
-    "_type": "search",
-    "_source": {
+    "id": "1821dba0-4344-11e9-a4c5-1717ba697d0d",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-File Creation - EventId 11",
       "description": "",
       "hits": 0,
@@ -192,14 +178,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:11\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "a3878f20-4829-11e9-a85d-d748de0cd831",
-    "_type": "search",
-    "_source": {
+    "id": "a3878f20-4829-11e9-a85d-d748de0cd831",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-ExecutedCommands",
       "description": "",
       "hits": 0,
@@ -223,14 +207,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-winevent-sysmon-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:1 AND (process_parent_name:\\\"CmD.exe\\\" OR process_parent_name:\\\"powershell.exe\\\" OR process_parent_name:\\\"wscript.exe\\\")\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "689ef060-4342-11e9-a4c5-1717ba697d0d",
-    "_type": "search",
-    "_source": {
+    "id": "689ef060-4342-11e9-a4c5-1717ba697d0d",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-Process Creation - EventId1",
       "description": "",
       "hits": 0,
@@ -254,14 +236,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-winevent-sysmon-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"event_id:1\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "bcafaac0-48f4-11e9-b62f-8f6921045c4c",
-    "_type": "search",
-    "_source": {
+    "id": "bcafaac0-48f4-11e9-b62f-8f6921045c4c",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-All-events",
       "description": "",
       "hits": 0,
@@ -282,14 +262,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-winevent-sysmon-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "c91f0df0-48ef-11e9-b62f-8f6921045c4c",
-    "_type": "search",
-    "_source": {
+    "id": "c91f0df0-48ef-11e9-b62f-8f6921045c4c",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-elastalert-alerts",
       "description": "",
       "hits": 0,
@@ -309,14 +287,12 @@
         "searchSourceJSON": "{\"index\":\"elastalert_status\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "1a68e8a0-4348-11e9-a4c5-1717ba697d0d",
-    "_type": "search",
-    "_source": {
+    "id": "1a68e8a0-4348-11e9-a4c5-1717ba697d0d",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-Downloads-EventId 15",
       "description": "",
       "hits": 0,
@@ -336,14 +312,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"source_name: \\\"Microsoft-Windows-Sysmon\\\" AND event_id:15\",\"language\":\"lucene\"},\"filter\":[{\"meta\":{\"negate\":false,\"index\":\"logs-endpoint-*\",\"type\":\"phrase\",\"key\":\"source_name\",\"value\":\"Microsoft-Windows-Sysmon\",\"params\":{\"query\":\"Microsoft-Windows-Sysmon\",\"type\":\"phrase\"},\"disabled\":false,\"alias\":null},\"query\":{\"match\":{\"source_name\":{\"query\":\"Microsoft-Windows-Sysmon\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}}]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "4bb63750-4348-11e9-a4c5-1717ba697d0d",
-    "_type": "search",
-    "_source": {
+    "id": "4bb63750-4348-11e9-a4c5-1717ba697d0d",
+    "type": "search",
+    "attributes": {
       "title": "Sysmon-WMI Subscription Events",
       "description": "",
       "hits": 0,
@@ -363,14 +337,12 @@
         "searchSourceJSON": "{\"index\":\"logs-endpoint-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query\":\"source_name: \\\"Microsoft-Windows-Sysmon\\\" AND (event_id:19 OR event_id:20 OR event_id:21)\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "bebd3140-4352-11e9-a4c5-1717ba697d0d",
-    "_type": "visualization",
-    "_source": {
+    "id": "bebd3140-4352-11e9-a4c5-1717ba697d0d",
+    "type": "visualization",
+    "attributes": {
       "title": "Sysmon-LoggedIn_users",
       "visState": "{\"title\":\"Sysmon-LoggedIn_users\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMetricsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"user_account.keyword\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}]}",
       "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
@@ -381,14 +353,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "47b5abb0-48f0-11e9-b62f-8f6921045c4c",
-    "_type": "visualization",
-    "_source": {
+    "id": "47b5abb0-48f0-11e9-b62f-8f6921045c4c",
+    "type": "visualization",
+    "attributes": {
       "title": "Sysmon-Elastalert-count",
       "visState": "{\"title\":\"Sysmon-Elastalert-count\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMetricsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"rule_name\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}]}",
       "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
@@ -399,14 +369,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "37a5adc0-4827-11e9-a85d-d748de0cd831",
-    "_type": "visualization",
-    "_source": {
+    "id": "37a5adc0-4827-11e9-a85d-d748de0cd831",
+    "type": "visualization",
+    "attributes": {
       "title": "Sysmon-NamedPipe-count",
       "visState": "{\"title\":\"Sysmon-NamedPipe-count\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMetricsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"pipe_name.keyword\",\"size\":500,\"order\":\"desc\",\"orderBy\":\"1\",\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}]}",
       "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
@@ -417,14 +385,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "3c414620-48fc-11e9-b62f-8f6921045c4c",
-    "_type": "visualization",
-    "_source": {
+    "id": "3c414620-48fc-11e9-b62f-8f6921045c4c",
+    "type": "visualization",
+    "attributes": {
       "title": "Sysmon - Eventcount-per-host",
       "visState": "{\"title\":\"Sysmon - Eventcount-per-host\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMetricsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"beat_hostname.keyword\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"otherBucket\":false,\"otherBucketLabel\":\"Other\",\"missingBucket\":false,\"missingBucketLabel\":\"Missing\"}}]}",
       "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
@@ -435,14 +401,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"kuery\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "ccec7dc0-48fc-11e9-b62f-8f6921045c4c",
-    "_type": "visualization",
-    "_source": {
+    "id": "ccec7dc0-48fc-11e9-b62f-8f6921045c4c",
+    "type": "visualization",
+    "attributes": {
       "title": "Sysmon-Timelion_bySystem",
       "visState": "{\"title\":\"Sysmon-Timelion_bySystem\",\"type\":\"timelion\",\"params\":{\"expression\":\".es(q=*, index=logs-endpoint-winevent-sysmon*, split=beat_hostname.keyword:40).label(\\\"$1\\\", \\\"^.* > beat_hostname.keyword:(\\\\S+) > .*\\\").title(\\\"Events per system timeline\\\")\",\"interval\":\"15m\"},\"aggs\":[]}",
       "uiStateJSON": "{}",
@@ -452,14 +416,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "cf46c5b0-434f-11e9-a4c5-1717ba697d0d",
-    "_type": "dashboard",
-    "_source": {
+    "id": "cf46c5b0-434f-11e9-a4c5-1717ba697d0d",
+    "type": "dashboard",
+    "attributes": {
       "title": "User Investigation Dashboard",
       "hits": 0,
       "description": "Enter a username in the search bar to investigate activity on that host.",
@@ -471,14 +433,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\\\"Enter a username here\\\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "41449550-48f2-11e9-b62f-8f6921045c4c",
-    "_type": "dashboard",
-    "_source": {
+    "id": "41449550-48f2-11e9-b62f-8f6921045c4c",
+    "type": "dashboard",
+    "attributes": {
       "title": "Sysmon-ProcessInvestigation",
       "hits": 0,
       "description": "Dashboard for investigating individual processes",
@@ -490,14 +450,12 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\\\"Enter the process guid here\\\"\",\"language\":\"kuery\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   },
   {
-    "_id": "624865e0-434f-11e9-a4c5-1717ba697d0d",
-    "_type": "dashboard",
-    "_source": {
+    "id": "624865e0-434f-11e9-a4c5-1717ba697d0d",
+    "type": "dashboard",
+    "attributes": {
       "title": "Host Investigation Dashboard",
       "hits": 0,
       "description": "Enter a hostname in the search bar to investigate activity on that host.",
@@ -509,9 +467,7 @@
         "searchSourceJSON": "{\"query\":{\"query\":\"\\\"Enter the hostname here\\\"\",\"language\":\"lucene\"},\"filter\":[]}"
       }
     },
-    "_meta": {
-      "savedObjectVersion": 2
-    }
+
   }
 ]
 }
