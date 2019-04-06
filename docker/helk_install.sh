@@ -134,7 +134,7 @@ install_curl(){
             apt install -y curl >> $LOGFILE 2>&1
         ;;
         centos|rhel)
-            yum install curl >> $LOGFILE 2>&1
+            yum install -y curl >> $LOGFILE 2>&1
         ;;
         *)
             echo "$HELK_INFO_TAG Please install curl for $LSB_DIST $DIST_VERSION.."
@@ -157,7 +157,7 @@ install_htpasswd(){
                 apt install -y apache2-utils>> $LOGFILE 2>&1
             ;;
             centos|rhel)
-                yum install httpd-tools >> $LOGFILE 2>&1
+                yum install -y httpd-tools >> $LOGFILE 2>&1
             ;;
             *)
                 echo "$HELK_INFO_TAG Please install htpasswd for $LSB_DIST $DIST_VERSION.."
@@ -461,7 +461,7 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.7-alpha02262019 **"
+    echo "** HELK build version: v0.1.7-alpha04062019 **"
     echo "** HELK ELK version: 6.6.1                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
