@@ -27,9 +27,9 @@ until curl -s $KIBANA_URL -o /dev/null; do
 done
 
 # *********** Waiting for Kibana server to be running ***************
-echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Checking to see if kibana server is running..."
-while [[ -z $(grep "Server running at http://$KIBANA" /usr/share/kibana/config/kibana_logs.log) ]]; do
-    sleep 1
+until $(curl --output /dev/null --silent --head --fail "$KIBANA_URL"); do
+  echo "waitinng for kibana server.."
+  sleep 1
 done
 
 # ******** Set Trial License Variables ***************
