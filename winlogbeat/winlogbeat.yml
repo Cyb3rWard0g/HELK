@@ -24,6 +24,9 @@ winlogbeat.event_logs:
     ignore_older: 30m
   - name: Microsoft-Windows-WMI-Activity/Operational
     event_id: 5857,5858,5859,5860,5861
+  - name: Microsoft-Windows-Windows Defender/Operational
+    event_id: 1116,1117,5000,5001,5007
+    ignore_older: 30m
 
 #----------------------------- Kafka output --------------------------------
 output.kafka:

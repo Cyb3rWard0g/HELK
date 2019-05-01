@@ -1,0 +1,51 @@
+{
+  "order": 60,
+  "index_patterns": [ "logs-endpoint-winevent-defender-*" ],
+  "version": 2019050101,
+  "mappings":{
+    "doc":{
+      "properties":{
+        "defender_action_id":{"type":"keyword"},
+        "defender_action_name":{"type":"keyword"},
+        "defender_additional_actions":{"type":"keyword"},
+        "defender_additional_actions_id":{"type":"keyword"},
+        "defender_additional_actions_string": { "type": "text", "norms": false, "analyzer": "standard", "fields": { "keyword": { "type": "keyword" } } },
+        "defender_category_description":{"type":"keyword"},
+        "defender_category_id":{"type":"keyword"},
+        "defender_category_name":{"type":"keyword"},
+        "defender_configuration":{"type":"keyword"},
+        "defender_detection_id":{"type":"keyword"},
+        "defender_detection_time":{"type":"date"},
+        "defender_engine_version":{"type":"keyword"},
+        "defender_error_code":{"type":"keyword"},
+        "defender_error_description": { "type": "text", "norms": false, "analyzer": "standard", "fields": { "keyword": { "type": "keyword" } } },
+        "defender_execution_id":{"type":"keyword"},
+        "defender_execution_name":{"type":"keyword"},
+        "defender_feature_id":{"type":"keyword"},
+        "defender_feature_name":{"type":"keyword"},
+        "defender_fwlink":{"type":"keyword"},
+        "defender_origin_id":{"type":"keyword"},
+        "defender_origin_name":{"type":"keyword"},
+        "defender_platform_version":{"type":"keyword"},
+        "defender_post_clean_status":{"type":"keyword"},
+        "defender_pre_execution_status":{"type":"keyword"},
+        "defender_product_name":{"type":"keyword"},
+        "defender_product_version":{"type":"keyword"},
+        "defender_remediation_user":{"type":"keyword"},
+        "defender_severity_id":{"type":"keyword"},
+        "defender_severity_name":{"type":"keyword"},
+        "defender_signature_version":{"type":"keyword"},
+        "defender_source_id":{"type":"keyword"},
+        "defender_source_name":{"type":"keyword"},
+        "defender_state":{"type":"keyword"},
+        "defender_status_code":{"type":"keyword"},
+        "defender_status_description":{"type":"keyword"},
+        "defender_threat_id":{"type":"keyword"},
+        "defender_threat_name": { "type": "text", "norms": false, "analyzer": "standard", "fields": { "keyword": { "type": "keyword" } } },
+        "defender_threat_name_trojan": { "type": "text", "norms": false, "analyzer": "standard", "fields": { "keyword": { "type": "keyword" } } },
+        "defender_type_id":{"type":"keyword"},
+        "defender_type_name":{"type":"keyword"}
+      }
+    }
+  }
+}
