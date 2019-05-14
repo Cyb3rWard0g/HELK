@@ -3,17 +3,15 @@
   "index_patterns": [ "logs-endpoint-*" ],
   "version": 2019021801,
   "mappings": {
-    "doc": {
-      "properties": {
-        "meta_process_command_line_has_non_ascii": {
-          "type": "boolean"
-        },
-        "meta_process_command_line_has_net": {
-          "type": "boolean"
-        },
-        "meta_process_command_line_length": {
-          "type": "integer"
-        }
+    "properties": {
+      "meta_process_command_line_has_non_ascii": {
+        "type": "boolean"
+      },
+      "meta_process_command_line_has_net": {
+        "type": "boolean"
+      },
+      "meta_process_command_line_length": {
+        "type": "integer"
       }
     }
   }

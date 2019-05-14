@@ -3,10 +3,8 @@
   "index_patterns" : "logs-endpoint-powershell-direct-*",
   "version": 2018080101,
   "mappings":{
-    "doc":{
-      "properties":{
-        "process_id":{"type":"integer"}
-      }
+    "properties":{
+      "process_id":{"type":"integer"}
     }
   }
 }

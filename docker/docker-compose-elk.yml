@@ -1,0 +1,130 @@
+version: '3.5'
+
+services:
+  helk-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+    container_name: helk-elasticsearch
+    secrets:
+      - source: elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
+    entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
+    environment:
+      - cluster.name=helk-cluster
+      - node.name=helk-1
+      - xpack.license.self_generated.type=basic
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nproc: 20480
+      nofile:
+        soft: 160000
+        hard: 160000
+    restart: always
+    networks:
+      helk:
+  helk-logstash:
+    image: docker.elastic.co/logstash/logstash:7.0.1
+    container_name: helk-logstash
+    secrets:
+      - source: logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+    volumes:
+      - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
+      - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
+      - ./helk-logstash/plugins:/usr/share/logstash/plugins
+      - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
+      - ./helk-logstash/scripts:/usr/share/logstash/scripts
+    entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
+    ports:
+      - "5044:5044"
+      - "8531:8531"
+    restart: always
+    depends_on:
+      - helk-kibana
+    networks:
+      helk:
+  helk-kibana:
+    image: docker.elastic.co/kibana/kibana:7.0.1
+    container_name: helk-kibana
+    secrets:
+      - source: kibana.yml
+        target: /usr/share/kibana/config/kibana.yml
+    volumes:
+      - ./helk-kibana/dashboards:/usr/share/kibana/dashboards
+      - ./helk-kibana/scripts:/usr/share/kibana/scripts
+      - ./helk-kibana/custom:/usr/share/kibana/custom
+    entrypoint: /usr/share/kibana/scripts/kibana-entrypoint.sh
+    restart: always
+    depends_on:
+      - helk-elasticsearch
+    networks:
+      helk:
+  helk-nginx:
+    image: cyb3rward0g/helk-nginx:0.0.7
+    container_name: helk-nginx
+    secrets:
+      - source: htpasswd.users
+        target: /etc/nginx/htpasswd.users
+    volumes:
+      - ./helk-nginx/config/basic-elk:/etc/nginx/sites-available/default
+      - ./helk-nginx/scripts/:/opt/helk/scripts/
+    entrypoint: /opt/helk/scripts/nginx-entrypoint.sh
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    depends_on:
+      - helk-kibana
+    networks:
+      helk:
+  helk-zookeeper:
+    image: cyb3rward0g/helk-zookeeper:2.2.0
+    container_name: helk-zookeeper
+    restart: always
+    depends_on:
+      - helk-logstash
+    networks:
+      helk:
+  helk-kafka-broker:
+    image: cyb3rward0g/helk-kafka-broker:2.2.0
+    container_name: helk-kafka-broker
+    restart: always
+    depends_on:
+      - helk-zookeeper
+    environment:
+      KAFKA_BROKER_NAME: helk-kafka-broker
+      KAFKA_BROKER_ID: 1
+      KAFKA_BROKER_PORT: 9092
+      REPLICATION_FACTOR: 1
+      ADVERTISED_LISTENER: 192.168.64.138
+      ZOOKEEPER_NAME: helk-zookeeper
+      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, winsysmon, winsecurity
+      KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
+      LOG_RETENTION_HOURS: 4
+    ports:
+      - "9092:9092"
+    networks:
+      helk:
+
+networks:
+  helk:
+    driver: bridge
+
+volumes:
+  esdata:
+    driver: local
+
+secrets:
+  elasticsearch.yml:
+    file: ./helk-elasticsearch/config/elasticsearch.yml
+  logstash.yml:
+    file: ./helk-logstash/config/logstash.yml
+  kibana.yml:
+    file: ./helk-kibana/config/kibana.yml
+  htpasswd.users:
+    file: ./helk-nginx/htpasswd.users

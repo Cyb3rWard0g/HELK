@@ -10,7 +10,7 @@ LABEL description="Dockerfile base for HELK Spark."
 ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Spark Env Variables ***************
-ENV SPARK_VERSION=2.4.0 \
+ENV SPARK_VERSION=2.4.3 \
   APACHE_HADOOP_VERSION=2.7 \
   SPARK_HOME=/opt/helk/spark \
   SPARK_LOGS=$SPARK_HOME/logs \
@@ -21,7 +21,7 @@ ENV SPARK_VERSION=2.4.0 \
 # *********** Installing Prerequisites ***************
 # -qq : No output except for errors
 RUN apt-get update -qq \
-  && apt-get install -qqy openjdk-8-jre-headless python3.7 \
+  && apt-get install -qqy openjdk-8-jre-headless ca-certificates-java python3.7 \
   && apt-get -qy clean autoremove \
   && rm -rf /var/lib/apt/lists/* \
   # *********** Installing Spark and creating user ***************

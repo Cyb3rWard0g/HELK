@@ -10,7 +10,8 @@ LABEL description="Dockerfile base for the HELK Kafka."
 ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Kafka Variables ***************
-ENV KAFKA_VERSION=2.1.0
+ENV KAFKA_VERSION=2.2.0
+ENV SCALA_VERSION=2.12
 ENV KAFKA_LOGS_PATH=/var/log/kafka
 ENV KAFKA_CONSOLE_LOG=/var/log/kafka/helk-kafka.log
 ENV KAFKA_HOME=/opt/helk/kafka
@@ -31,7 +32,7 @@ RUN echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Ubuntu base image.." \
   # *********** Creating the right directories ***************
   && bash -c 'mkdir -pv /opt/helk/kafka' \
   # ********* Downloading Kafka *************
-  && wget -qO- http://mirrors.ocf.berkeley.edu/apache/kafka/${KAFKA_VERSION}/kafka_2.11-${KAFKA_VERSION}.tgz | sudo tar xvz -C /opt/helk/kafka/ --strip-components=1 \
+  && wget -qO- http://mirrors.ocf.berkeley.edu/apache/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz | sudo tar xvz -C /opt/helk/kafka/ --strip-components=1 \
   && mkdir -v $KAFKA_LOGS_PATH \
   # ********* Adding Kafka User *************
   && groupadd -g ${KAFKA_GID} ${KAFKA_USER} \

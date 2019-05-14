@@ -6,22 +6,25 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
+DOCKER_INFO_TAG="[DOCKER-INSTALLATION-INFO]"
+DOCKER_ERROR_TAG="[DOCKER-INSTALLATION-ERROR]"
+
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
-   echo "[HELK-DOCKER-INSTALLATION-INFO] YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
+   echo "$DOCKER_INFO_TAG YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
    exit 1
 fi
 
 # *********** Set Log File ***************
 LOGFILE="/var/log/helk-install.log"
 echoerror() {
-    printf "${RC} * ERROR${EC}: $@\n" 1>&2;
+    printf "$DOCKER_ERROR_TAG ${RC} * ERROR${EC}: $@\n" 1>&2;
 }
 
 # ********* Globals **********************
 SYSTEM_KERNEL="$(uname -s)"
 
-echo "[HELK-DOCKER-INSTALLATION-INFO] Checking distribution list and product version"
+echo "$DOCKER_INFO_TAG Checking distribution list and product version"
 if [ "$SYSTEM_KERNEL" == "Linux" ]; then
     # *********** Check distribution list ***************
     LSB_DIST="$(. /etc/os-release && echo "$ID")"
@@ -70,20 +73,20 @@ if [ "$SYSTEM_KERNEL" == "Linux" ]; then
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not verify distribution or version of the OS (Error Code: $ERROR)."
     fi
-    echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $LSB_DIST version $DIST_VERSION"
+    echo "$DOCKER_INFO_TAG You're using $LSB_DIST version $DIST_VERSION"
 elif [ "$SYSTEM_KERNEL" == "Darwin" ]; then
     PRODUCT_NAME="$(sw_vers -productName)"
     PRODUCT_VERSION="$(sw_vers -productVersion)"
     BUILD_VERSION="$(sw_vers -buildVersion)"
-    echo "[HELK-DOCKER-INSTALLATION-INFO] You're using $PRODUCT_NAME version $PRODUCT_VERSION"
+    echo "$DOCKER_INFO_TAG You're using $PRODUCT_NAME version $PRODUCT_VERSION"
 else
-    echo "[HELK-DOCKER-INSTALLATION-INFO] We cannot figure out the SYSTEM_KERNEL, distribution or version of the OS"
+    echo "$DOCKER_INFO_TAG We cannot figure out the SYSTEM_KERNEL, distribution or version of the OS"
 fi
 
 
 # ********** Install Curl ********************
 install_curl(){
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Installing curl before installing docker.."
+    echo "$DOCKER_INFO_TAG Installing curl before installing docker.."
     case "$LSB_DIST" in
         ubuntu|debian|raspbian)
             apt-get install -y curl >> $LOGFILE 2>&1
@@ -92,7 +95,7 @@ install_curl(){
             yum install curl >> $LOGFILE 2>&1
         ;;
         *)
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Please install curl for $LSB_DIST $DIST_VERSION .."
+            echo "$DOCKER_INFO_TAG Please install curl for $LSB_DIST $DIST_VERSION .."
             exit 1
         ;;
     esac
@@ -105,7 +108,7 @@ install_curl(){
 
 # ****** Installing docker via convenience script ***********
 install_docker(){
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Installing docker via convenience script.."
+    echo "$DOCKER_INFO_TAG Installing docker via convenience script.."
     curl -fsSL get.docker.com -o get-docker.sh >> $LOGFILE 2>&1
     chmod +x get-docker.sh >> $LOGFILE 2>&1
     ./get-docker.sh >> $LOGFILE 2>&1
@@ -114,16 +117,16 @@ install_docker(){
         echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
         if [ -x "$(command -v snap)" ]; then
             SNAP_VERSION=$(snap version | grep -w 'snap' | awk '{print $2}')
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Snap v$SNAP_VERSION is available. Trying to install docker via snap.."
+            echo "DOCKER_INFO_TAG Snap v$SNAP_VERSION is available. Trying to install docker via snap.."
             snap install docker >> $LOGFILE 2>&1
             ERROR=$?
             if [ $ERROR -ne 0 ]; then
                 echoerror "Could not install docker via snap (Error Code: $ERROR)."
                 exit 1
             fi
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Docker successfully installed via snap."
+            echo "$DOCKER_INFO_TAG Docker successfully installed via snap."
         else
-            echo "[HELK-DOCKER-INSTALLATION-INFO] Docker could not be installed. Check /var/log/helk-install.log for details."
+            echo "$DOCKER_INFO_TAG Docker could not be installed. Check /var/log/helk-install.log for details."
             exit 1
         fi
     fi
@@ -131,7 +134,7 @@ install_docker(){
 
 # ****** Installing docker compose from github.com/docker/compose ***********
 install_docker_compose(){
-    echo "[HELK-DOCKER-INSTALLATION-INFO] Installing docker-compose.."
+    echo "$DOCKER_INFO_TAG Installing docker-compose.."
     curl -L https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
     chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
     ERROR=$?
@@ -145,32 +148,32 @@ install_docker_compose(){
 if [ "$SYSTEM_KERNEL" == "Linux" ]; then
     # *********** Check if curl is installed ***************
     if [ -x "$(command -v curl)" ]; then
-        echo "[HELK-DOCKER-INSTALLATION-INFO] curl is already installed"
+        echo "$DOCKER_INFO_TAG curl is already installed"
     else
-        echo "[HELK-DOCKER-INSTALLATION-INFO] curl is not installed"
+        echo "$DOCKER_INFO_TAG curl is not installed"
         install_curl
     fi
 
     # *********** Check if docker is installed ***************
     if [ -x "$(command -v docker)" ]; then
-        echo "[HELK-DOCKER-INSTALLATION-INFO] Docker already installed"
+        echo "$DOCKER_INFO_TAG Docker already installed"
     else
-        echo "[HELK-DOCKER-INSTALLATION-INFO] Docker is not installed"
+        echo "$DOCKER_INFO_TAG Docker is not installed"
         install_docker
     fi
     # ********** Check if docker-compose is installed *******
     if [ -x "$(command -v docker-compose)" ]; then
-        echo "[HELK-DOCKER-INSTALLATION-INFO] Docker-compose already installed"
+        echo "$DOCKER_INFO_TAG Docker-compose already installed"
     else
-        echo "[HELK-DOCKER-INSTALLATION-INFO] Docker-compose is not installed"
+        echo "$DOCKER_INFO_TAG Docker-compose is not installed"
         install_docker_compose
     fi
 else
     # *********** Check if docker is installed ***************
     if [ -x "$(command -v docker)" ] && [ -x "$(command -v docker-compose)" ]; then
-        echo "[HELK-DOCKER-INSTALLATION-INFO] Docker & Docker-compose already installed"
+        echo "$DOCKER_INFO_TAG Docker & Docker-compose already installed"
     else
-        echo "[HELK-DOCKER-INSTALLATION-INFO] Please innstall Docker & Docker-compose for $SYSTEM_KERNEL"
+        echo "$DOCKER_INFO_TAG Please innstall Docker & Docker-compose for $SYSTEM_KERNEL"
         exit 1
     fi
 fi
