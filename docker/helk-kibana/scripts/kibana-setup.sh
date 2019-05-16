@@ -160,3 +160,9 @@ else
       done
   done
 fi
+
+# ******** Modifiying Kibana Interface - HELK Logo **********
+#echo "[+++] Updating Kibana Logo..."
+#cp -i /usr/share/kibana/custom/HELK.png /usr/share/kibana/optimize/bundles/HELK.png
+#cp -i /usr/share/kibana/optimize/bundles/commons.style.css /usr/share/kibana/optimize/bundles/commons.style.css_backup
+#cp -i /usr/share/kibana/custom/commons.style.css /usr/share/kibana/optimize/bundles/commons.style.css

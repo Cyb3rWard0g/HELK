@@ -9,10 +9,10 @@
 # *********** Install Plugins *********************
 
 # *********** Environment Variables ***************
-if [[ -z "$ELASTICSEARCH_URL" ]]; then
-  export ELASTICSEARCH_URL=http://helk-elasticsearch:9200
+if [[ -z "$ELASTICSEARCH_HOSTS" ]]; then
+  export ELASTICSEARCH_HOSTS=http://helk-elasticsearch:9200
 fi
-echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting Elasticsearch URL to $ELASTICSEARCH_URL"
+echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting Elasticsearch URL to $ELASTICSEARCH_HOSTS"
 
 if [[ -z "$SERVER_HOST" ]]; then
   export SERVER_HOST=helk-kibana
@@ -48,18 +48,18 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
 
   # *********** Check if Elasticsearch is up ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-  until curl -s -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_URL -o /dev/null; do
+  until curl -s -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_HOSTS -o /dev/null; do
     sleep 1
   done
 
   # *********** Change Kibana and Logstash password ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Submitting a request to change the password of a Kibana and Logstash users .."
-  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_URL/_xpack/security/user/kibana/_password -d "{\"password\": \"$KIBANA_PASSWORD\"}"
+  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_HOSTS/_xpack/security/user/kibana/_password -d "{\"password\": \"$KIBANA_PASSWORD\"}"
   do
     sleep 1
   done
 
-  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_URL/_xpack/security/user/logstash_system/_password -d "{\"password\": \"logstashpassword\"}"
+  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_HOSTS/_xpack/security/user/logstash_system/_password -d "{\"password\": \"logstashpassword\"}"
   do
     sleep 1
   done
@@ -67,7 +67,7 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
 else
   # *********** Check if Elasticsearch is up ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-  until curl -s $ELASTICSEARCH_URL -o /dev/null; do
+  until curl -s $ELASTICSEARCH_HOSTS -o /dev/null; do
     sleep 1
   done
 fi
