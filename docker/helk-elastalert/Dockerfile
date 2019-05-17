@@ -38,6 +38,7 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   && bash -c 'mkdir -pv /etc/elastalert/rules' \
   && cd ${ESALERT_HOME} \
   && sudo pip install --upgrade pip \
+  && pip install urllib3==1.24.3 \
   && pip install -r requirements.txt \
   && python setup.py install \
   # ********* Clean ****************************
@@ -46,7 +47,6 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
   # ********* Download SIGMA *******************
   && git clone https://github.com/Cyb3rWard0g/sigma.git ${ESALERT_SIGMA_HOME} \
-  && bash -c 'mkdir -pv /opt/sigma/scripts' \
   && sudo pip3 install --upgrade pip \
   && pip3 install -r ${ESALERT_SIGMA_HOME}/tools/requirements.txt
 

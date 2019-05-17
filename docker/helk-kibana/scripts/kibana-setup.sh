@@ -28,7 +28,7 @@ done
 
 # *********** Waiting for Kibana server to be running ***************
 until $(curl --output /dev/null --silent --head --fail "$KIBANA_URL"); do
-  echo "waitinng for kibana server.."
+  echo "waiting for kibana server.."
   sleep 1
 done
 

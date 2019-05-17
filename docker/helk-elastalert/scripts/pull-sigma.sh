@@ -78,7 +78,7 @@ echo "--------------------------------------------------------------------------
 find $ESALERT_HOME/rules/ -type f -name 'sigma_sysmon_powershell_suspicious_parameter_variation.yml' -delete
 
 
-# Pathing one issues in SIGMA Integration
+# Patching one issue in SIGMA Integration
 # References:
 # Unsupported feature 'near' aggregation operator not yet implemented https://github.com/Neo23x0/sigma/issues/209
 # ONE SIGMA Rule & TWO log sources: https://github.com/Neo23x0/sigma/issues/205

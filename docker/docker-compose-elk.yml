@@ -8,7 +8,6 @@ services:
       - source: elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
     volumes:
-      - esdata:/usr/share/elasticsearch/data
       - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
     entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
     environment:
@@ -108,6 +107,17 @@ services:
       LOG_RETENTION_HOURS: 4
     ports:
       - "9092:9092"
+    networks:
+      helk:
+  helk-elastalert:
+    build: helk-elastalert/
+    container_name: helk-elastalert
+    restart: always
+    depends_on:
+      - helk-logstash
+    environment:
+      ES_HOST: helk-elasticsearch
+      ES_PORT: 9200
     networks:
       helk:
 
