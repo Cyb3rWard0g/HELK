@@ -1,7 +1,7 @@
 {
   "order": 50,
   "index_patterns": [ "logs-endpoint-winevent-*" ],
-  "version": 2018080101,
+  "version": 2019052001,
   "settings": {
     "analysis": {
       "analyzer": {
@@ -75,7 +75,8 @@
         "fields": {
           "keyword": {
             "ignore_above": 7500,
-            "type": "keyword"
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
         }
       },
@@ -86,7 +87,8 @@
         "fields": {
           "keyword": {
             "ignore_above": 7500,
-            "type": "keyword"
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
         }
       },
@@ -108,7 +110,8 @@
         "fields": {
           "keyword": {
             "ignore_above": 7500,
-            "type": "keyword"
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
         }
       },
@@ -130,7 +133,8 @@
         "fields": {
           "keyword": {
             "ignore_above": 7500,
-            "type": "keyword"
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
         }
       },
@@ -141,7 +145,8 @@
         "fields": {
           "keyword": {
             "ignore_above": 7500,
-            "type": "keyword"
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
         }
       },
@@ -152,7 +157,8 @@
         "fields": {
           "keyword": {
             "ignore_above": 7500,
-            "type": "keyword"
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
         }
       }
