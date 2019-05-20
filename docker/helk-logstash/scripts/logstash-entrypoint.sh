@@ -79,6 +79,48 @@ for file in ${DIR}/*.json; do
     done
 done
 
+# ******** Cluster Settings ***************
+echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Configuring elasticsearch cluster settings.."
+while true; do
+  if [[ -n "$ELASTIC_PASSWORD" ]]; then
+    STATUS=$(curl -s -o /dev/null -w '%{http_code}' -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD $ELASTICSEARCH_URL)
+    if [ $STATUS -eq 200 ]; then
+      curl -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD -XPUT $ELASTICSEARCH_URL/_cluster/settings -H 'Content-Type: application/json' -d'
+        {
+          "persistent": {
+            "search.max_open_scroll_context": 15000,
+            "indices.breaker.request.limit" : "70%"
+          },
+          "transient": {
+            "search.max_open_scroll_context": 15000,
+            "indices.breaker.request.limit" : "70%"
+          }
+        }'
+      break
+    else
+      sleep 1
+    fi
+  else
+    STATUS=$(curl -s -o /dev/null -w '%{http_code}' $ELASTICSEARCH_URL)
+    if [ $STATUS -eq 200 ]; then
+      curl -XPUT $ELASTICSEARCH_URL/_cluster/settings -H 'Content-Type: application/json' -d'
+        {
+          "persistent": {
+            "search.max_open_scroll_context": 15000,
+            "indices.breaker.request.limit" : "70%"
+          },
+          "transient": {
+            "search.max_open_scroll_context": 15000,
+            "indices.breaker.request.limit" : "70%"
+          }
+        }'
+      break
+    else
+      sleep 1
+    fi
+  fi
+done
+
 # ********** Install Plugins *****************
 echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Checking Logstash plugins.."
 # Test a few to determine if probably all already installed
