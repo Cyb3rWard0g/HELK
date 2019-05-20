@@ -11,9 +11,9 @@ if [[ -z "$ES_JAVA_OPTS" ]]; then
 		# Check using more accurate MB
     AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
     if [ $AVAILABLE_MEMORY -ge 1000 -a $AVAILABLE_MEMORY -le 7999 ]; then
-      ES_MEMORY="1200m"
+      ES_MEMORY="1400m"
     elif [ $AVAILABLE_MEMORY -ge 8000 -a $AVAILABLE_MEMORY -le 12999 ]; then
-      ES_MEMORY="2g"
+      ES_MEMORY="2750m"
     elif [ $AVAILABLE_MEMORY -ge 13000 -a $AVAILABLE_MEMORY -le 16000 ]; then
       ES_MEMORY="4g"
     else
