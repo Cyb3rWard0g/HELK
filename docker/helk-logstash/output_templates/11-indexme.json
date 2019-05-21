@@ -1,12 +1,12 @@
 {
   "order": 11,
   "index_patterns": [ "indexme-*" ],
-  "version": 2019021901,
+  "version": 2019052001,
   "settings": {
     "index": {
       "mapping": {
         "ignore_malformed": true,
-        "total_fields.limit": "1000",
+        "total_fields.limit": "5000",
         "coerce": true
       },
       "store": {
