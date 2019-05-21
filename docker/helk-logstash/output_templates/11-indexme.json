@@ -10,7 +10,7 @@
         "coerce": true
       },
       "store": {
-        "type": "niofs"
+        "type": "hybridfs"
       }
     },
     "refresh_interval": "30s",
