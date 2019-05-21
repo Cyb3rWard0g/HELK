@@ -61,11 +61,22 @@ for  rule_category in rules/windows/* ; do
     echo " "
     echo "Working on Folder: $rule_category:"
     echo "-------------------------------------------------------------"
-    for rule in $rule_category/* ; do
-        echo "[+++] Processing Windows rule: $rule .."
-        tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
-        rule_counter=$[$rule_counter +1]
-    done
+    if [ "$rule_category" == rules/windows/process_creation ]; then
+        for rule in $rule_category/* ; do
+            if [ $rule != rules/windows/process_creation/win_mal_adwind.yml ]; then
+                echo "[+++] Processing Windows rule: $rule .."
+                tools/sigmac -t elastalert -c sigmac-config.yml -c tools/config/generic/sysmon.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule)_sysmon_gene$
+                tools/sigmac -t elastalert -c sigmac-config.yml -c tools/config/generic/windows-audit.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule)_wind$
+                rule_counter=$[$rule_counter +1]
+            fi
+        done
+    else    
+        for rule in $rule_category/* ; do
+            echo "[+++] Processing Windows rule: $rule .."
+            tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
+            rule_counter=$[$rule_counter +1]
+        done
+    fi
 done
 echo "-------------------------------------------------------"
 echo "[+++] Finished processing $rule_counter SIGMA rules"

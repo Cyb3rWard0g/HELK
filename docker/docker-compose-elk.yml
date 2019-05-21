@@ -15,6 +15,7 @@ services:
       - node.name=helk-1
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xmx4G -Xms4G
     ulimits:
       memlock:
         soft: -1
