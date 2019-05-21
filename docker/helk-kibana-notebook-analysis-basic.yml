@@ -101,9 +101,9 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_BROKER_PORT: 9092
       REPLICATION_FACTOR: 1
-      ADVERTISED_LISTENER: 192.168.64.138
+      ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, winsysmon, winsecurity
+      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat
       KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
       LOG_RETENTION_HOURS: 4
     ports:
