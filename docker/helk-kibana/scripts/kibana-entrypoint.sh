@@ -48,9 +48,18 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
 
   # *********** Check if Elasticsearch is up ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-  until curl -s -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_HOSTS -o /dev/null; do
-    sleep 1
+  number_of_attempts_to_try=7
+  number_of_attempts=0
+  until [[ "$(curl -s -o /dev/null -w "%{http_code}" -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_HOSTS)" == "200" ]]; do
+    if [[ ${number_of_attempts} -eq ${number_of_attempts_to_try} ]];then
+        echo "[HELK-KIBANA-DOCKER-INSTALLATION-ERROR] Max attempts reached waiting for elasticsearch accessible.."
+        sleep 10
+        exit 1
+    fi
+    number_of_attempts=$(($number_of_attempts+1))
+    sleep 3
   done
+  sleep 5
 
   # *********** Change Kibana and Logstash password ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Submitting a request to change the password of a Kibana and Logstash users .."
@@ -66,10 +75,19 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
 
 else
   # *********** Check if Elasticsearch is up ***************
+  number_of_attempts_to_try=7
+  number_of_attempts=0
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-  until curl -s $ELASTICSEARCH_HOSTS -o /dev/null; do
-    sleep 1
+  until [[ "$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_HOSTS)" == "200" ]]; do
+    if [[ ${number_of_attempts} -eq ${number_of_attempts_to_try} ]];then
+        echo "[HELK-KIBANA-DOCKER-INSTALLATION-ERROR] Max attempts reached waiting for elasticsearch accessible.."
+        sleep 10
+        exit 1
+    fi
+    number_of_attempts=$(($number_of_attempts+1))
+    sleep 3
   done
+  sleep 5
 fi
 
 echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Starting Kibana service.."
