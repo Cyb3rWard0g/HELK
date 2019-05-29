@@ -107,11 +107,13 @@ while true; do
         {
           "persistent": {
             "search.max_open_scroll_context": 15000,
-            "indices.breaker.request.limit" : "70%"
+            "indices.breaker.request.limit" : "70%",
+            "cluster.max_shards_per_node": 3000
           },
           "transient": {
             "search.max_open_scroll_context": 15000,
-            "indices.breaker.request.limit" : "70%"
+            "indices.breaker.request.limit" : "70%",
+            "cluster.max_shards_per_node": 3000
           }
         }'
       break
