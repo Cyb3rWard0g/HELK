@@ -141,18 +141,6 @@ services:
     tty: true
     networks:
       helk:
-  helk-elastalert:
-    image: cyb3rward0g/helk-elastalert:0.2.3
-    container_name: helk-elastalert
-    restart: always
-    depends_on:
-      - helk-logstash
-    environment:
-      ES_HOST: helk-elasticsearch
-      ES_PORT: 9200
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-    networks:
-      helk:
 
 networks:
   helk:

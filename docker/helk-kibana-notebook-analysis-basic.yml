@@ -140,23 +140,14 @@ services:
     tty: true
     networks:
       helk:
-  helk-elastalert:
-    image: cyb3rward0g/helk-elastalert:0.2.3
-    container_name: helk-elastalert
-    restart: always
-    depends_on:
-      - helk-logstash
-    environment:
-      ES_HOST: helk-elasticsearch
-      ES_PORT: 9200
-    networks:
-      helk:
   helk-jupyter:
     build: helk-jupyter/
     container_name: helk-jupyter
     environment:
       JUPYTER_TYPE: lab
       JUPYTER_BASE_URL: /jupyter
+    volumes:
+      - notebooks:/opt/helk/jupyter/notebooks
     restart: always
     depends_on:
       - helk-logstash
@@ -195,6 +186,10 @@ networks:
 
 volumes:
   esdata:
+    driver: local
+
+volumes:
+  notebooks:
     driver: local
 
 secrets:
