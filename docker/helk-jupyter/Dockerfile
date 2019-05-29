@@ -5,7 +5,7 @@
 
 FROM cyb3rward0g/jupyter-hunt:0.0.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
-LABEL description="Dockerfile HuntingGrounds Jupyter Project."
+LABEL description="Dockerfile Notebooks-Forge Jupyter-Hunt Project."
 
 # ********** Adding HELK Jupyter notebooks
 RUN mkdir /opt/helk/jupyter/datasets

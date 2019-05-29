@@ -71,7 +71,7 @@ services:
       - source: htpasswd.users
         target: /etc/nginx/htpasswd.users
     volumes:
-      - ./helk-nginx/config/basic-elk:/etc/nginx/sites-available/default
+      - ./helk-nginx/config/basic-helk:/etc/nginx/sites-available/default
       - ./helk-nginx/scripts/:/opt/helk/scripts/
     entrypoint: /opt/helk/scripts/nginx-entrypoint.sh
     ports:
