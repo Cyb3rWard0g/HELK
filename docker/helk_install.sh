@@ -358,12 +358,14 @@ set_helk_build(){
             echo "*      HELK - Docker Compose Build Choices          *"
             echo "*****************************************************"
             echo " "
-            echo "1. KAFKA + KSQL + ELK + NGNIX + ELASTALERT"
-            echo "2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT + SPARK + JUPYTER"
+            echo "1. KAFKA + KSQL + ELK + NGNIX"
+            echo "2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT"
+            echo "3. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER"
+            echo "4. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT"
             echo " "
 
             local CONFIG_CHOICE
-            read -t 30 -p "Enter build choice [ 1 - 2]: " -e -i "1" CONFIG_CHOICE
+            read -t 30 -p "Enter build choice [ 1 - 4]: " -e -i "1" CONFIG_CHOICE
             READ_INPUT=$?
             HELK_BUILD=${CONFIG_CHOICE:-"helk-kibana-analysis"}
             if [ $READ_INPUT = 142 ]; then
@@ -373,7 +375,8 @@ set_helk_build(){
                 echo "$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
                 case $CONFIG_CHOICE in
                     1) HELK_BUILD='helk-kibana-analysis';break;;
-                    2)
+                    2) HELK_BUILD='helk-kibana-analysis-alert';break;;
+                    3)
                       if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
                         echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
                         echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
@@ -381,6 +384,17 @@ set_helk_build(){
                         sleep 4
                       else
                         HELK_BUILD='helk-kibana-notebook-analysis'
+                        break;
+                      fi
+                    ;;
+                    4)
+                      if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
+                        echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
+                        echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
+                        echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
+                        sleep 4
+                      else
+                        HELK_BUILD='helk-kibana-notebook-analysis-alert'
                         break;
                       fi
                     ;;
@@ -442,7 +456,7 @@ prepare_helk(){
 }
 
 get_jupyter_credentials(){
-    if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]]; then
+    if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis-alert" ]]; then
         until (docker logs helk-jupyter 2>&1 | grep -q "The Jupyter Notebook is running at"); do sleep 5; done
         jupyter_token="$(docker exec -ti helk-jupyter jupyter notebook list | grep "token" | sed 's/.*token=\([^ ]*\).*/\1/')" >> $LOGFILE 2>&1
         echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
@@ -461,8 +475,8 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.7-alpha04062019 **"
-    echo "** HELK ELK version: 6.6.1                  **"
+    echo "** HELK build version: v0.1.8-alpha05292019 **"
+    echo "** HELK ELK version: 7.1.0                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
     echo " "
@@ -476,14 +490,14 @@ show_final_information(){
     echo "** $HELK_INFO_TAG USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **"
     echo "***********************************************************************************"
     echo " "
-    if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]]; then
+    if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis-alert" ]]; then
         echo "HELK KIBANA URL: https://${HOST_IP}"
         echo "HELK KIBANA USER: helk"
         echo "HELK KIBANA PASSWORD: ${KIBANA_UI_PASSWORD_INPUT}"
         echo "HELK SPARK MASTER UI: http://${HOST_IP}:8080"
         echo "HELK JUPYTER SERVER URL: http://${HOST_IP}/jupyter"
         get_jupyter_credentials
-    elif [[ ${HELK_BUILD} == "helk-kibana-analysis" ]]; then
+    elif [[ ${HELK_BUILD} == "helk-kibana-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-analysis-alert" ]]; then
         echo "HELK KIBANA URL: https://${HOST_IP}"
         echo "HELK KIBANA USER: helk"
         echo "HELK KIBANA PASSWORD: ${KIBANA_UI_PASSWORD_INPUT}"
@@ -569,7 +583,9 @@ else
         # *********** Validating helk build***************
         case $HELK_BUILD in
             helk-kibana-analysis);;
+            helk-kibana-analysis-alert);;
             helk-kibana-notebook-analysis);;
+            helk-kibana-notebook-analysis-alert);;
             *)
                 echo "$HELK_ERROR_TAG Not a valid build. Valid Options: kafka, helk-kibana-analysis OR helk-kibana-notebook-analysis "
                 usage

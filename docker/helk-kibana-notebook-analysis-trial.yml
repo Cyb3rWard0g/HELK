@@ -84,43 +84,6 @@ services:
       - helk-jupyter
     networks:
       helk:
-  helk-jupyter:
-    build: helk-jupyter/
-    container_name: helk-jupyter
-    environment:
-      JUPYTER_TYPE: lab
-      JUPYTER_BASE_URL: /jupyter
-    restart: always
-    depends_on:
-      - helk-logstash
-    networks:
-      helk:
-  helk-spark-master:
-    image: cyb3rward0g/helk-spark-master:2.4.3
-    container_name: helk-spark-master
-    environment:
-      SPARK_MASTER_PORT: 7077
-      SPARK_MASTER_WEBUI_PORT: 8080
-    ports:
-      - "8080:8080"
-    restart: always
-    depends_on:
-      - helk-logstash
-    networks:
-      helk:
-  helk-spark-worker:
-    image: cyb3rward0g/helk-spark-worker:2.4.3
-    container_name: helk-spark-worker
-    environment:
-      SPARK_MASTER: spark://helk-spark-master:7077
-      SPARK_WORKER_MEMORY: 1g
-      SPARK_WORKER_WEBUI_PORT: 8081
-      SPARK_WORKER_PORT: 42950
-    restart: always
-    depends_on:
-      - helk-spark-master
-    networks:
-      helk:
   helk-zookeeper:
     image: cyb3rward0g/helk-zookeeper:2.2.0
     container_name: helk-zookeeper
@@ -179,16 +142,43 @@ services:
     tty: true
     networks:
       helk:
-  helk-elastalert:
-    image: cyb3rward0g/helk-elastalert:0.2.3
-    container_name: helk-elastalert
+  helk-jupyter:
+    build: helk-jupyter/
+    container_name: helk-jupyter
+    environment:
+      JUPYTER_TYPE: lab
+      JUPYTER_BASE_URL: /jupyter
+    volumes:
+      - notebooks:/opt/helk/jupyter/notebooks
     restart: always
     depends_on:
       - helk-logstash
+    networks:
+      helk:
+  helk-spark-master:
+    image: cyb3rward0g/helk-spark-master:2.4.3
+    container_name: helk-spark-master
     environment:
-      ES_HOST: helk-elasticsearch
-      ES_PORT: 9200
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      SPARK_MASTER_PORT: 7077
+      SPARK_MASTER_WEBUI_PORT: 8080
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - helk-logstash
+    networks:
+      helk:
+  helk-spark-worker:
+    image: cyb3rward0g/helk-spark-worker:2.4.3
+    container_name: helk-spark-worker
+    environment:
+      SPARK_MASTER: spark://helk-spark-master:7077
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_WORKER_PORT: 42950
+    restart: always
+    depends_on:
+      - helk-spark-master
     networks:
       helk:
 
@@ -198,6 +188,8 @@ networks:
 
 volumes:
   esdata:
+    driver: local
+  notebooks:
     driver: local
 
 secrets:
