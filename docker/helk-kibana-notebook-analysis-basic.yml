@@ -187,8 +187,6 @@ networks:
 volumes:
   esdata:
     driver: local
-
-volumes:
   notebooks:
     driver: local
 
