@@ -63,12 +63,12 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
 
   # *********** Change Kibana and Logstash password ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Submitting a request to change the password of a Kibana and Logstash users .."
-  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_HOSTS/_xpack/security/user/kibana/_password -d "{\"password\": \"$KIBANA_PASSWORD\"}"
+  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_HOSTS/_security/user/kibana/_password -d "{\"password\": \"$KIBANA_PASSWORD\"}"
   do
     sleep 1
   done
 
-  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_HOSTS/_xpack/security/user/logstash_system/_password -d "{\"password\": \"logstashpassword\"}"
+  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_HOSTS/_security/user/logstash_system/_password -d "{\"password\": \"logstashpassword\"}"
   do
     sleep 1
   done
