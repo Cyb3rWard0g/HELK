@@ -61,11 +61,22 @@ for  rule_category in rules/windows/* ; do
     echo " "
     echo "Working on Folder: $rule_category:"
     echo "-------------------------------------------------------------"
-    for rule in $rule_category/* ; do
-        echo "[+++] Processing Windows rule: $rule .."
-        tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
-        rule_counter=$[$rule_counter +1]
-    done
+    if [ "$rule_category" == rules/windows/process_creation ]; then
+        for rule in $rule_category/* ; do
+            if [ $rule != rules/windows/process_creation/win_mal_adwind.yml ]; then
+                echo "[+++] Processing Windows rule: $rule .."
+                tools/sigmac -t elastalert -c sigmac-config.yml -c tools/config/generic/sysmon.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule)_sysmon_gene$
+                tools/sigmac -t elastalert -c sigmac-config.yml -c tools/config/generic/windows-audit.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule)_wind$
+                rule_counter=$[$rule_counter +1]
+            fi
+        done
+    else    
+        for rule in $rule_category/* ; do
+            echo "[+++] Processing Windows rule: $rule .."
+            tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
+            rule_counter=$[$rule_counter +1]
+        done
+    fi
 done
 echo "-------------------------------------------------------"
 echo "[+++] Finished processing $rule_counter SIGMA rules"
@@ -78,7 +89,7 @@ echo "--------------------------------------------------------------------------
 find $ESALERT_HOME/rules/ -type f -name 'sigma_sysmon_powershell_suspicious_parameter_variation.yml' -delete
 
 
-# Pathing one issues in SIGMA Integration
+# Patching one issue in SIGMA Integration
 # References:
 # Unsupported feature 'near' aggregation operator not yet implemented https://github.com/Neo23x0/sigma/issues/209
 # ONE SIGMA Rule & TWO log sources: https://github.com/Neo23x0/sigma/issues/205

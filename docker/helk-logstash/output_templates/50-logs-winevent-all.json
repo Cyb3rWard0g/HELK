@@ -1,7 +1,7 @@
 {
   "order": 50,
   "index_patterns": [ "logs-endpoint-winevent-*" ],
-  "version": 2018080101,
+  "version": 2019052001,
   "settings": {
     "analysis": {
       "analyzer": {
@@ -55,106 +55,110 @@
     "refresh_interval": "30s"
   },
   "mappings": {
-    "doc":{
-      "properties":{
-        "process_id":{"type":"integer"},
-        "event_id":{"type":"integer"},
-        "record_number":{"type":"long"},
-        "keywords": {
-          "type": "text",
-          "norms": false,
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-            }
+    "properties":{
+      "process_id":{"type":"integer"},
+      "event_id":{"type":"integer"},
+      "record_number":{"type":"long"},
+      "keywords": {
+        "type": "text",
+        "norms": false,
+        "fields": {
+          "keyword": {
+            "type": "keyword"
           }
-        },
-        "file_name": {
-          "type": "text",
-          "norms": false,
-          "analyzer": "cli_n_file_analyzer",
-          "fields": {
-            "keyword": {
-              "ignore_above": 7500,
-              "type": "keyword"
-            }
+        }
+      },
+      "file_name": {
+        "type": "text",
+        "norms": false,
+        "analyzer": "cli_n_file_analyzer",
+        "fields": {
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
-        },
-        "logon_process_name": {
-          "type": "text",
-          "norms": false,
-          "analyzer": "cli_n_file_analyzer",
-          "fields": {
-            "keyword": {
-              "ignore_above": 7500,
-              "type": "keyword"
-            }
+        }
+      },
+      "logon_process_name": {
+        "type": "text",
+        "norms": false,
+        "analyzer": "cli_n_file_analyzer",
+        "fields": {
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
-        },
-        "object_name": {
-          "type": "text",
-          "norms": false,
-          "analyzer": "cli_n_file_analyzer",
-          "fields": {
-            "keyword": {
-              "ignore_above": 7500,
-              "type": "keyword"
-            }
+        }
+      },
+      "object_name": {
+        "type": "text",
+        "norms": false,
+        "analyzer": "cli_n_file_analyzer",
+        "fields": {
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword"
           }
-        },
-        "process_command_line": {
-          "type": "text",
-          "norms": false,
-          "analyzer": "cli_n_file_analyzer",
-          "fields": {
-            "keyword": {
-              "ignore_above": 7500,
-              "type": "keyword"
-            }
+        }
+      },
+      "process_command_line": {
+        "type": "text",
+        "norms": false,
+        "analyzer": "cli_n_file_analyzer",
+        "fields": {
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
-        },
-        "process_current_directory": {
-          "type": "text",
-          "norms": false,
-          "analyzer": "cli_n_file_analyzer",
-          "fields": {
-            "keyword": {
-              "ignore_above": 7500,
-              "type": "keyword"
-            }
+        }
+      },
+      "process_current_directory": {
+        "type": "text",
+        "norms": false,
+        "analyzer": "cli_n_file_analyzer",
+        "fields": {
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword"
           }
-        },
-        "process_parent_path": {
-          "type": "text",
-          "norms": false,
-          "analyzer": "cli_n_file_analyzer",
-          "fields": {
-            "keyword": {
-              "ignore_above": 7500,
-              "type": "keyword"
-            }
+        }
+      },
+      "process_parent_path": {
+        "type": "text",
+        "norms": false,
+        "analyzer": "cli_n_file_analyzer",
+        "fields": {
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
-        },
-        "process_parent_command_line": {
-          "type": "text",
-          "norms": false,
-          "analyzer": "cli_n_file_analyzer",
-          "fields": {
-            "keyword": {
-              "ignore_above": 7500,
-              "type": "keyword"
-            }
+        }
+      },
+      "process_parent_command_line": {
+        "type": "text",
+        "norms": false,
+        "analyzer": "cli_n_file_analyzer",
+        "fields": {
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
-        },
-        "process_path": {
-          "type": "text",
-          "norms": false,
-          "analyzer": "cli_n_file_analyzer",
-          "fields": {
-            "keyword": {
-              "ignore_above": 7500,
-              "type": "keyword"
-            }
+        }
+      },
+      "process_path": {
+        "type": "text",
+        "norms": false,
+        "analyzer": "cli_n_file_analyzer",
+        "fields": {
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword",
+            "eager_global_ordinals": true
           }
         }
       }

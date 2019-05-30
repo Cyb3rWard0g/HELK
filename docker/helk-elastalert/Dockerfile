@@ -26,27 +26,25 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   python2.7 \
   python2.7-dev \
   python-pip \
-  libssl-dev \
   git \
-  tox \
-  jq \
   python3-pip \
   python3-dev \
   python3-setuptools \
-  # ********* Download Elastalert & Install **************
-  && git clone https://github.com/Yelp/elastalert.git ${ESALERT_HOME} \
-  && bash -c 'mkdir -pv /etc/elastalert/rules' \
-  && cd ${ESALERT_HOME} \
-  && sudo pip install --upgrade pip \
-  && pip install -r requirements.txt \
-  && python setup.py install \
+  tzdata \
   # ********* Clean ****************************
   && apt-get -qy clean \
   autoremove \
   && rm -rf /var/lib/apt/lists/* \
+  # ********* Install Elastalert **************
+  && git clone https://github.com/Yelp/elastalert.git ${ESALERT_HOME} \
+  && bash -c 'mkdir -pv /etc/elastalert/rules' \
+  && cd ${ESALERT_HOME} \
+  && python -m pip install --upgrade pip \
+  && pip install urllib3==1.24.3 \
+  && pip install -r requirements.txt \
+  && python setup.py install \
   # ********* Download SIGMA *******************
   && git clone https://github.com/Cyb3rWard0g/sigma.git ${ESALERT_SIGMA_HOME} \
-  && bash -c 'mkdir -pv /opt/sigma/scripts' \
   && sudo pip3 install --upgrade pip \
   && pip3 install -r ${ESALERT_SIGMA_HOME}/tools/requirements.txt
 

@@ -215,5 +215,5 @@ config.reload.interval: 60s
 
 log.level: warn
 http.host: "0.0.0.0"
-xpack.monitoring.elasticsearch.url: http://helk-elasticsearch:9200
+xpack.monitoring.elasticsearch.hosts: http://helk-elasticsearch:9200
 xpack.monitoring.enabled: true

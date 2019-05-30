@@ -9,10 +9,10 @@
 # *********** Install Plugins *********************
 
 # *********** Environment Variables ***************
-if [[ -z "$ELASTICSEARCH_URL" ]]; then
-  export ELASTICSEARCH_URL=http://helk-elasticsearch:9200
+if [[ -z "$ELASTICSEARCH_HOSTS" ]]; then
+  export ELASTICSEARCH_HOSTS=http://helk-elasticsearch:9200
 fi
-echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting Elasticsearch URL to $ELASTICSEARCH_URL"
+echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting Elasticsearch URL to $ELASTICSEARCH_HOSTS"
 
 if [[ -z "$SERVER_HOST" ]]; then
   export SERVER_HOST=helk-kibana
@@ -48,28 +48,46 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
 
   # *********** Check if Elasticsearch is up ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-  until curl -s -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_URL -o /dev/null; do
-    sleep 1
+  number_of_attempts_to_try=7
+  number_of_attempts=0
+  until [[ "$(curl -s -o /dev/null -w "%{http_code}" -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_HOSTS)" == "200" ]]; do
+    if [[ ${number_of_attempts} -eq ${number_of_attempts_to_try} ]];then
+        echo "[HELK-KIBANA-DOCKER-INSTALLATION-ERROR] Max attempts reached waiting for elasticsearch accessible.."
+        sleep 10
+        exit 1
+    fi
+    number_of_attempts=$(($number_of_attempts+1))
+    sleep 3
   done
+  sleep 5
 
   # *********** Change Kibana and Logstash password ***************
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Submitting a request to change the password of a Kibana and Logstash users .."
-  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_URL/_xpack/security/user/kibana/_password -d "{\"password\": \"$KIBANA_PASSWORD\"}"
+  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_HOSTS/_security/user/kibana/_password -d "{\"password\": \"$KIBANA_PASSWORD\"}"
   do
     sleep 1
   done
 
-  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_URL/_xpack/security/user/logstash_system/_password -d "{\"password\": \"logstashpassword\"}"
+  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -H 'Content-Type:application/json' -XPUT $ELASTICSEARCH_HOSTS/_security/user/logstash_system/_password -d "{\"password\": \"logstashpassword\"}"
   do
     sleep 1
   done
 
 else
   # *********** Check if Elasticsearch is up ***************
+  number_of_attempts_to_try=7
+  number_of_attempts=0
   echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-  until curl -s $ELASTICSEARCH_URL -o /dev/null; do
-    sleep 1
+  until [[ "$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_HOSTS)" == "200" ]]; do
+    if [[ ${number_of_attempts} -eq ${number_of_attempts_to_try} ]];then
+        echo "[HELK-KIBANA-DOCKER-INSTALLATION-ERROR] Max attempts reached waiting for elasticsearch accessible.."
+        sleep 10
+        exit 1
+    fi
+    number_of_attempts=$(($number_of_attempts+1))
+    sleep 3
   done
+  sleep 5
 fi
 
 echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Starting Kibana service.."

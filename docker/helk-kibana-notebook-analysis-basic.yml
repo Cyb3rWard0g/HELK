@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.0
     container_name: helk-elasticsearch
     secrets:
       - source: elasticsearch.yml
@@ -28,7 +28,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    image: docker.elastic.co/logstash/logstash:6.6.1
+    image: docker.elastic.co/logstash/logstash:7.1.0
     container_name: helk-logstash
     secrets:
       - source: logstash.yml
@@ -49,7 +49,7 @@ services:
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:6.6.1
+    image: docker.elastic.co/kibana/kibana:7.1.0
     container_name: helk-kibana
     secrets:
       - source: kibana.yml
@@ -57,6 +57,7 @@ services:
     volumes:
       - ./helk-kibana/dashboards:/usr/share/kibana/dashboards
       - ./helk-kibana/scripts:/usr/share/kibana/scripts
+      - ./helk-kibana/custom:/usr/share/kibana/custom
     entrypoint: /usr/share/kibana/scripts/kibana-entrypoint.sh
     restart: always
     depends_on:
@@ -79,48 +80,10 @@ services:
     restart: always
     depends_on:
       - helk-kibana
-      - helk-jupyter
-    networks:
-      helk:
-  helk-jupyter:
-    image: cyb3rward0g/helk-jupyter:0.1.2
-    container_name: helk-jupyter
-    environment:
-      JUPYTER_TYPE: lab
-      JUPYTER_BASE_URL: /jupyter
-    restart: always
-    depends_on:
-      - helk-logstash
-    networks:
-      helk:
-  helk-spark-master:
-    image: cyb3rward0g/helk-spark-master:2.4.0-a
-    container_name: helk-spark-master
-    environment:
-      SPARK_MASTER_PORT: 7077
-      SPARK_MASTER_WEBUI_PORT: 8080
-    ports:
-      - "8080:8080"
-    restart: always
-    depends_on:
-      - helk-logstash
-    networks:
-      helk:
-  helk-spark-worker:
-    image: cyb3rward0g/helk-spark-worker:2.4.0-a
-    container_name: helk-spark-worker
-    environment:
-      SPARK_MASTER: spark://helk-spark-master:7077
-      SPARK_WORKER_MEMORY: 1g
-      SPARK_WORKER_WEBUI_PORT: 8081
-      SPARK_WORKER_PORT: 42950
-    restart: always
-    depends_on:
-      - helk-spark-master
     networks:
       helk:
   helk-zookeeper:
-    image: cyb3rward0g/helk-zookeeper:2.1.0
+    image: cyb3rward0g/helk-zookeeper:2.2.0
     container_name: helk-zookeeper
     restart: always
     depends_on:
@@ -128,7 +91,7 @@ services:
     networks:
       helk:
   helk-kafka-broker:
-    image: cyb3rward0g/helk-kafka-broker:2.1.0
+    image: cyb3rward0g/helk-kafka-broker:2.2.0
     container_name: helk-kafka-broker
     restart: always
     depends_on:
@@ -140,7 +103,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, winsysmon, winsecurity
+      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat
       KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
       LOG_RETENTION_HOURS: 4
     ports:
@@ -148,7 +111,7 @@ services:
     networks:
       helk:
   helk-ksql-server:
-    image: confluentinc/cp-ksql-server:5.1.2
+    image: confluentinc/cp-ksql-server:5.1.3
     container_name: helk-ksql-server
     restart: always
     depends_on:
@@ -161,31 +124,59 @@ services:
       KSQL_KSQL_COMMIT_INTERVAL_MS: 2000
       KSQL_KSQL_CACHE_MAX_BYTES_BUFFERING: 10000000
       KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: earliest
-      KSQL_HEAP_OPTS: -Xmx500m
+      KSQL_HEAP_OPTS: -Xmx1g
     ports:
       - 8088:8088
     networks:
       helk:
   helk-ksql-cli:
-    image: confluentinc/cp-ksql-cli:5.1.2
+    image: confluentinc/cp-ksql-cli:5.1.3
     container_name: helk-ksql-cli
     depends_on:
       - helk-ksql-server
     environment:
-        KSQL_HEAP_OPTS: -Xmx500m
+        KSQL_HEAP_OPTS: -Xmx1g
     entrypoint: /bin/sh
     tty: true
     networks:
       helk:
-  helk-elastalert:
-    image: cyb3rward0g/helk-elastalert:0.2.1
-    container_name: helk-elastalert
+  helk-jupyter:
+    build: helk-jupyter/
+    container_name: helk-jupyter
+    environment:
+      JUPYTER_TYPE: lab
+      JUPYTER_BASE_URL: /jupyter
+    volumes:
+      - notebooks:/opt/helk/jupyter/notebooks
     restart: always
     depends_on:
       - helk-logstash
+    networks:
+      helk:
+  helk-spark-master:
+    image: cyb3rward0g/helk-spark-master:2.4.3
+    container_name: helk-spark-master
     environment:
-      ES_HOST: helk-elasticsearch
-      ES_PORT: 9200
+      SPARK_MASTER_PORT: 7077
+      SPARK_MASTER_WEBUI_PORT: 8080
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - helk-logstash
+    networks:
+      helk:
+  helk-spark-worker:
+    image: cyb3rward0g/helk-spark-worker:2.4.3
+    container_name: helk-spark-worker
+    environment:
+      SPARK_MASTER: spark://helk-spark-master:7077
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_WORKER_PORT: 42950
+    restart: always
+    depends_on:
+      - helk-spark-master
     networks:
       helk:
 
@@ -195,6 +186,8 @@ networks:
 
 volumes:
   esdata:
+    driver: local
+  notebooks:
     driver: local
 
 secrets:

@@ -79,6 +79,50 @@ for file in ${DIR}/*.json; do
     done
 done
 
+# ******** Cluster Settings ***************
+echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Configuring elasticsearch cluster settings.."
+while true; do
+  if [[ -n "$ELASTIC_PASSWORD" ]]; then
+    STATUS=$(curl -s -o /dev/null -w '%{http_code}' -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD $ELASTICSEARCH_URL)
+    if [ $STATUS -eq 200 ]; then
+      curl -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD -XPUT $ELASTICSEARCH_URL/_cluster/settings -H 'Content-Type: application/json' -d'
+        {
+          "persistent": {
+            "search.max_open_scroll_context": 15000,
+            "indices.breaker.request.limit" : "70%"
+          },
+          "transient": {
+            "search.max_open_scroll_context": 15000,
+            "indices.breaker.request.limit" : "70%"
+          }
+        }'
+      break
+    else
+      sleep 1
+    fi
+  else
+    STATUS=$(curl -s -o /dev/null -w '%{http_code}' $ELASTICSEARCH_URL)
+    if [ $STATUS -eq 200 ]; then
+      curl -XPUT $ELASTICSEARCH_URL/_cluster/settings -H 'Content-Type: application/json' -d'
+        {
+          "persistent": {
+            "search.max_open_scroll_context": 15000,
+            "indices.breaker.request.limit" : "70%",
+            "cluster.max_shards_per_node": 3000
+          },
+          "transient": {
+            "search.max_open_scroll_context": 15000,
+            "indices.breaker.request.limit" : "70%",
+            "cluster.max_shards_per_node": 3000
+          }
+        }'
+      break
+    else
+      sleep 1
+    fi
+  fi
+done
+
 # ********** Install Plugins *****************
 echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Checking Logstash plugins.."
 # Test a few to determine if probably all already installed
@@ -86,7 +130,7 @@ if ( logstash-plugin list 'prune' ) && ( logstash-plugin list 'i18n' ) && ( logs
     echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Plugins are already installed"
 else
 # logstash-plugin install logstash-filter-dns && logstash-plugin install logstash-filter-cidr && logstash-plugin install logstash-input-lumberjack && logstash-plugin install logstash-output-lumberjack && logstash-plugin install logstash-output-zabbix && logstash-plugin install logstash-filter-geoip && logstash-plugin install logstash-codec-cef && logstash-plugin install logstash-output-syslog && logstash-plugin update logstash-filter-dissect && logstash-plugin install logstash-output-kafka && logstash-plugin install logstash-input-kafka && logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-alter && logstash-plugin install logstash-filter-fingerprint && logstash-plugin install logstash-output-stdout && logstash-plugin install logstash-filter-prune && logstash-plugin install logstash-codec-gzip_lines && logstash-plugin install logstash-codec-avro && logstash-plugin install logstash-codec-netflow && logstash-plugin install logstash-filter-i18n && logstash-plugin install logstash-filter-environment && logstash-plugin install logstash-filter-de_dot && logstash-plugin install logstash-input-snmptrap && logstash-plugin install logstash-input-snmp && logstash-plugin install logstash-input-jdbc && logstash-plugin install logstash-input-wmi && logstash-plugin install logstash-filter-clone
-	if (logstash-plugin install file:///usr/share/logstash/plugins/logstash-offline-plugins-6.6.1.zip); then
+	if (logstash-plugin install file:///usr/share/logstash/plugins/logstash-offline-plugins-7.0.1.zip); then
     echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Logstash plugins installed via offline package.."
   else
     echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Trying to install logstash plugins over the Internet.."
