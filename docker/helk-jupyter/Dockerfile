@@ -8,6 +8,6 @@ LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile Notebooks-Forge Jupyter-Hunt Project."
 
 # ********** Adding HELK Jupyter notebooks
-RUN mkdir /opt/helk/jupyter/datasets
+RUN mkdir /opt/helk/jupyter/notebooks/datasets
 COPY --chown=jupyter:810 notebooks/* /opt/helk/jupyter/notebooks/
-COPY --chown=jupyter:810 datasets/* /opt/helk/jupyter/datasets/
+COPY --chown=jupyter:810 datasets/* /opt/helk/jupyter/notebooks/datasets/
