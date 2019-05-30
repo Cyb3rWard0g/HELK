@@ -197,10 +197,6 @@ volumes:
   notebooks:
     driver: local
 
-volumes:
-  notebooks:
-    driver: local
-
 secrets:
   elasticsearch.yml:
     file: ./helk-elasticsearch/config/elasticsearch.yml
