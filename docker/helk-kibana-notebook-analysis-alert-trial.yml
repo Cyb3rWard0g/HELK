@@ -194,6 +194,10 @@ services:
     networks:
       helk:
 
+networks:
+  helk:
+    driver: bridge
+    
 volumes:
   esdata:
     driver: local
