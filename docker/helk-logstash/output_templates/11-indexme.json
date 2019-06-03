@@ -8,9 +8,6 @@
         "ignore_malformed": true,
         "total_fields.limit": "5000",
         "coerce": true
-      },
-      "store": {
-        "type": "hybridfs"
       }
     },
     "refresh_interval": "30s",
