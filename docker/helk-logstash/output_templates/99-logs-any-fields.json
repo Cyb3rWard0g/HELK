@@ -18,6 +18,14 @@
             "norms": false
           }
         }
+      },
+      "related": {
+        "properties": {
+          "ip": {
+            "type": "alias",
+            "path": "any_ip_addr"
+          }
+        }
       }
     }
   }

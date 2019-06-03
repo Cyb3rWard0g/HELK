@@ -1,7 +1,7 @@
 {
   "order": 91,
   "index_patterns": [ "logs-*" ],
-  "version": 2018052301,
+  "version": 20190603,
   "mappings": {
     "properties": {
       "dst_nat_ip_addr": {
@@ -9,10 +9,15 @@
         "copy_to": "any_ip_addr"
       },
       "dst_nat_ip_public": {
-        "type": "boolean",
-        "doc_values": false
+        "type": "boolean"
+      },
+      "dst_nat_ip_rfc": {
+        "type": "keyword"
       },
       "dst_nat_ip_type": {
+        "type": "keyword"
+      },
+      "dst_nat_ip_version": {
         "type": "keyword"
       },
       "meta_dst_nat_ip_geo": {
