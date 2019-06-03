@@ -1,16 +1,13 @@
 {
   "order": 10,
   "index_patterns": [ "logs-*" ],
-  "version": 2019052001,
+  "version": 2019060301,
   "settings": {
     "index": {
       "mapping": {
         "ignore_malformed": true,
-        "total_fields.limit": "1000",
+        "total_fields.limit": "3750",
         "coerce": true
-      },
-      "store": {
-        "type": "hybridfs"
       }
     },
     "refresh_interval": "30s",
