@@ -137,7 +137,7 @@ def filter(event)
     dport = dst[2,2]
   end
 
-  if !(is_one_way || ((sip <=> dip) == -1) || ((sip == dip) && ((sport <=> dport) < 1))
+  if !( is_one_way || ((sip <=> dip) == -1) || ((sip == dip) && ((sport <=> dport) < 1)) )
     mip = sip
     mport = sport
     sip = dip
