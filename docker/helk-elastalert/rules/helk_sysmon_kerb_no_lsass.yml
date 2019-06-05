@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential calls to DCs via Kerberos port from non lsass
+filter:
+- query:
+    query_string:
+      query: (event_id:3 AND NOT process_name:"lsass.exe" AND dst_port:88)
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-Kerberos-call-DC-no-lsass_0
+priority: 2
+realert:
+  minutes: 0
+type: any

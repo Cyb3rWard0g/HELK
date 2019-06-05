@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential recon for admininstrators via net samrp
+filter:
+- query:
+    query_string:
+      query: (event_id:1 AND process_name:("net.exe" OR "net1.exe") AND process_command_line:*administrator*)
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-net-administrators_0
+priority: 2
+realert:
+  minutes: 0
+type: any
