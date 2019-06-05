@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects suspicious use the common chrome named pipe
+filter:
+- query:
+    query_string:
+      query: (event_id:5145 AND _exists_:src_ip_addr AND share_relative_target_name:mojo)
+index: logs-endpoint-winevent-security-*
+name: Windows-_0
+priority: 2
+realert:
+  minutes: 0
+type: any

@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential internal monologue
+filter:
+- query:
+    query_string:
+      query: (event_id:13 AND registry_key_path:"\\SYSTEM\\CurrentControlSet\\Control\\Lsa" AND registry_key_value:(*LMCompatibilityLevel* OR *NtlmMinClientSec* OR *RestrictSendingNTLMTraffic*))
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-internal-monologue_0
+priority: 2
+realert:
+  minutes: 0
+type: any
