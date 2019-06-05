@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects cmdline files being created on victim
+filter:
+- query:
+    query_string:
+      query: (event_id:11 AND file_name:*.cmdline)
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-cmdline-file-creation_0
+priority: 2
+realert:
+  minutes: 0
+type: any

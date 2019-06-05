@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential psexec via powershell module
+filter:
+- query:
+    query_string:
+      query: (event_id:7045 AND service_image_path:(comspec OR powershell))
+index: logs-endpoint-winevent-system-*
+name: Windows-System-Psexec-Powershell-Module_0
+priority: 2
+realert:
+  minutes: 0
+type: any

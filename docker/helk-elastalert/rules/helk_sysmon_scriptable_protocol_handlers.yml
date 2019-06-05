@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential scriptable handlers
+filter:
+- query:
+    query_string:
+      query: ((process_name:"mshta.exe" OR process_name:"rundll32.exe") AND (process_command_line:*vbscript* OR process_command_line:*javascript*))
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-scriptable-handlers_0
+priority: 2
+realert:
+  minutes: 0
+type: any

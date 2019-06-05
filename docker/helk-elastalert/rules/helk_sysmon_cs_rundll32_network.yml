@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential use of CS with rundll32 calling out
+filter:
+- query:
+    query_string:
+      query: (event_id:3 AND process_name:"rundll32.exe")
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-Cobalt-Strike-Rundll32_network_0
+priority: 2
+realert:
+  minutes: 0
+type: any

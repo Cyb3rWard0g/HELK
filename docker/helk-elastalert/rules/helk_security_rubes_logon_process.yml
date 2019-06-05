@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential use of rubeus via the trusted logon process
+filter:
+- query:
+    query_string:
+      query: (event_id:4611 AND logon_process_name:user32logonprocesss)
+index: logs-endpoint-winevent-security-*
+name: Windows-Rubeus-logon-process_0
+priority: 2
+realert:
+  minutes: 0
+type: any

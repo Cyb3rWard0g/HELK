@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects potential Csharp compiling
+filter:
+- query:
+    query_string:
+      query: (event_id:1 AND process_parent_command_line:"csc.exe" AND process_command_line:"cvtres")
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-csharp-compile_0
+priority: 2
+realert:
+  minutes: 0
+type: any

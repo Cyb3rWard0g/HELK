@@ -1,0 +1,13 @@
+alert:
+- debug
+description: Detects suspicious bits activity
+filter:
+- query:
+    query_string:
+      query: (process_name:"bitsadmin.exe" AND (process_command_line:*addfile* OR process_command_line:*create* OR process_command_line:*transfer* OR process_command_line:*upload* OR process_command_line:*download* OR process_command_line:*setnotifyflags* OR process_command_line:*setnotifycmdline* OR process_command_line:*setminretrydelay* OR process_command_line:*setcustomheaders* OR process_command_line:*resume*))
+index: logs-endpoint-winevent-sysmon-*
+name: Windows-bits-execution_0
+priority: 2
+realert:
+  minutes: 0
+type: any
