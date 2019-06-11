@@ -15,7 +15,7 @@ if [[ -z "$ES_JAVA_OPTS" ]]; then
     elif [ $AVAILABLE_MEMORY -ge 6000 -a $AVAILABLE_MEMORY -le 12999 ]; then
       ES_MEMORY="3200m"
     elif [ $AVAILABLE_MEMORY -ge 13000 -a $AVAILABLE_MEMORY -le 16000 ]; then
-      ES_MEMORY="6.5g"
+      ES_MEMORY="6g"
     else
       # Using GB instead of MB -- because plenty of RAM now
       ES_MEMORY=$(( AVAILABLE_MEMORY / 1024 / 2 ))
