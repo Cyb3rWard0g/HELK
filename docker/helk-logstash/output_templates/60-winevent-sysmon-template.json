@@ -7,8 +7,9 @@
   },
   "mappings":{
     "properties":{
-      "@date_creation":{"type":"date"},
-      "@date_creation_previous":{"type":"date"},
+      "@event_date_creation":{"type":"date"},
+      "@file_date_creation":{"type":"date"},
+      "@file_previous_date_creation":{"type":"date"},
       "dst_port":{"type":"integer"},
       "src_port":{"type":"integer"},
       "network_initiated":{"type":"boolean"},
