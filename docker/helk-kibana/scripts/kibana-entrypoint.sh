@@ -29,10 +29,6 @@ if [[ -z "$SERVER_PORT" ]]; then
 fi
 echo "$HELK_INFO_TAG Setting Kibana server port to $SERVER_PORT"
 
-# ******** ES Calls Attempts ********
-number_of_attempts_to_try=30
-number_of_attempts=0
-
 # ******** Set Trial License Variables ***************
 if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
   if [[ -z "$ELASTICSEARCH_USERNAME" ]]; then
@@ -58,14 +54,8 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
   # *********** Check if Elasticsearch is up ***************
   #echo "$HELK_INFO_TAG Waiting for elasticsearch URI to be accessible.."
   until [[ "$(curl -s -o /dev/null -w "%{http_code}" -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD $ELASTICSEARCH_HOSTS)" == "200" ]]; do
-    if [[ ${number_of_attempts} -eq ${number_of_attempts_to_try} ]];then
-        echo "$HELK_ERROR_TAG Max attempts reached waiting for elasticsearch accessible.."
-        #sleep 10
-        exit 1
-    fi
-    number_of_attempts=$(($number_of_attempts+1))
     echo "$HELK_INFO_TAG Waiting for elasticsearch URI to be accessible.."
-    sleep 10
+    sleep 5
   done
   sleep 5
 
@@ -85,14 +75,8 @@ else
   # *********** Check if Elasticsearch is up ***************
   #echo "$HELK_INFO_TAG Waiting for elasticsearch URI to be accessible.."
   until [[ "$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_HOSTS)" == "200" ]]; do
-    if [[ ${number_of_attempts} -eq ${number_of_attempts_to_try} ]];then
-        echo "$HELK_ERROR_TAG Max attempts reached waiting for elasticsearch accessible.."
-    #    sleep 10
-        exit 1
-    fi
-    number_of_attempts=$(($number_of_attempts+1))
     echo "$HELK_INFO_TAG Waiting for elasticsearch URI to be accessible.."
-    sleep 10
+    sleep 5
   done
   sleep 5
 fi
