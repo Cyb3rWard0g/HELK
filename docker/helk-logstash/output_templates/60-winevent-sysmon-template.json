@@ -1,7 +1,7 @@
 {
   "order": 60,
   "index_patterns": [ "logs-endpoint-winevent-sysmon-*" ],
-  "version": 2018080101,
+  "version": 2019062301,
   "settings": {
     "index.refresh_interval": "5s"
   },
@@ -16,6 +16,14 @@
       "thread_new_id":{"type":"integer"},
       "module_signed":{"type":"boolean"},
       "process_parent_id":{"type":"integer"},
+      "sysmon_version": {
+        "type": "float",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
       "target_process_id":{"type":"integer"},
       "user_session_id":{"type":"integer"},
       "thread_id":{"type":"integer"},

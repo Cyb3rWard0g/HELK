@@ -1,7 +1,7 @@
 {
   "order": 50,
   "index_patterns": [ "logs-endpoint-winevent-*" ],
-  "version": 2019052001,
+  "version": 2019062301,
   "settings": {
     "analysis": {
       "analyzer": {
@@ -159,6 +159,14 @@
             "ignore_above": 7500,
             "type": "keyword",
             "eager_global_ordinals": true
+          }
+        }
+      },
+      "process_target_id": {
+        "type": "long",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
           }
         }
       }
