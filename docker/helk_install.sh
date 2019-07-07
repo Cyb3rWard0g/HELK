@@ -458,7 +458,7 @@ prepare_helk(){
 get_jupyter_credentials(){
     if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis-alert" ]]; then
         until (docker logs helk-jupyter 2>&1 | grep -q "The Jupyter Notebook is running at"); do sleep 5; done
-        jupyter_token="$(docker exec -ti helk-jupyter jupyter notebook list | grep "token" | sed 's/.*token=\([^ ]*\).*/\1/')" >> $LOGFILE 2>&1
+        jupyter_token="$(docker exec -i helk-jupyter jupyter notebook list | grep "token" | sed 's/.*token=\([^ ]*\).*/\1/')" >> $LOGFILE 2>&1
         echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
     fi
 }
