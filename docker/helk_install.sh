@@ -23,6 +23,10 @@ INSTALL_MINIMUM_MEMORY_NOTEBOOK=8000
 ## In GBs
 INSTALL_MINIMUM_DISK=25
 
+export DOCKER_CLIENT_TIMEOUT=300
+export COMPOSE_HTTP_TIMEOUT=300
+
+
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
    echo "$HELK_INFO_TAG YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
