@@ -1,3 +1,8 @@
+# Reference
+
+@HeirhabarovT
+https://speakerdeck.com/heirhabarov/phdays-2018-threat-hunting-hands-on-lab
+
 ## Suspicious processes spawned from MS Office applications 
 
 ```
@@ -14,7 +19,7 @@ process_command_line:(*powershell* *pwsh* *SyncAppvPublishingServer*) AND proces
 
 ## Privilege escalation - Run whoami as System
 ```
-process_name:"*\\whoami.exe" and user_account: "NT AUTHORITY\\SYSTEM"
+process_name:"*\\whoami.exe" AND (reporter_logon_id: 0x3e7 OR SubjectLogonId: 0x3e7 OR user_account:"NT AUTHORITY\\SYSTEM")
 
 ```
 
@@ -23,3 +28,13 @@ process_name:"*\\whoami.exe" and user_account: "NT AUTHORITY\\SYSTEM"
 ```
 process_command_line:(*certutil*) AND process_command_line:(*urlcach* *url* *ping*) AND process_command_line:(*http* *ftp*)
 ```
+
+## Possible logon session hijacking
+
+```
+process_name:"*\\tscon.exe" AND (reporter_logon_id:0x3e7 OR SubjectLogonId:0x3e7 OR user_account:"NT AUTHORITY\\SYSTEM")
+
+```
+
+### .... Coming Soon
+
