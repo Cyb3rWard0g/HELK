@@ -21,6 +21,8 @@ Replace ` 1531-winevent-sysmon-filter.conf ` in ` /HELK/docker/helk-logstash/pip
 After replacing ` 1531-winevent-sysmon-filter.conf ` file restart the helk-logstash with ` docker restart helk-logstash `. 
 Then refresh the index fields in Kibana ` (Management -> Index pattern -> refresh)` . 
 
+Then browse some ips or domains which is included in ` otx_domain_.csv and otx_ipv4_.csv  ` file. After that you can search using `  ti.DestinationIP.otx:* or  ti.Domain.otx:* ` . 
+
 ## Configuration Details
 
 
