@@ -1,6 +1,6 @@
 # Download and configuration file for integrating OTX Data with HELK
 
-## Installing OTX python module and Download TI feeds
+## Install OTX python module and Download TI feeds
 Install OTX python module with ` pip install OTXv2 ` (in your local server, not in docker). For more information please go, https://github.com/AlienVault-OTX/OTX-Python-SDK.
 
 Place helkOTX.py to /HELK/docker/helk-logstash/enrichments/cti/ folder.(in your local server, not in docker). Since HELK already mounted with your local system on helk-logstash/enrichments/cti folder.
@@ -13,6 +13,10 @@ After running the python script, you will find these CSV files.
 * otx_md5_.csv  
 * otx_sha1_.csv  
 * otx_sha256_.csv
+
+## Install pandas
+
+` pip install pandas `
 
 ## Configuring SYSMON logstash file 
 
