@@ -3,7 +3,7 @@
 ## Installing OTX python module and Download TI feeds
 Install OTX python module with ` pip install OTXv2 ` (in your local server, not in docker). For more information please go, https://github.com/AlienVault-OTX/OTX-Python-SDK.
 
-Place helkOTX.py to /HELK/docker/helk-logstash/enrichments/cti/ folder.(in your local server, not in docker)
+Place helkOTX.py to /HELK/docker/helk-logstash/enrichments/cti/ folder.(in your local server, not in docker). Since HELK already mounted with your local system on helk-logstash/enrichments/cti folder.
 
 Run helkOTX.py with ` python helkOTX.py `.
 
