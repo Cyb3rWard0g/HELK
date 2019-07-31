@@ -108,7 +108,8 @@ Then change your logstash config file that is ` 1531-winevent-sysmon-filter.conf
     }
     }
 
-``` . 
+``` 
+
 
 After that restart your logstash. You will see ` enrich.whois.DNS ` field in Kibana. Don't forget to refresh your index.
 
