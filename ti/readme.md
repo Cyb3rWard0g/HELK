@@ -1,4 +1,4 @@
-# Integrate OTX TI feeds and  Domain egistration date with HELK
+# Integrate OTX TI feeds and  Domain registration date with HELK
 
 ## Configuration file for integrating OTX Data with HELK 
 
