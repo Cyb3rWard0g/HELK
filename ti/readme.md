@@ -1,7 +1,8 @@
+# Integrate OTX TI feeds and  Domain egistration date with HELK
 
-# Configuration file for integrating OTX Data with HELK 
+##Configuration file for integrating OTX Data with HELK 
 
-## Install OTX python module and Download TI feeds
+### Install OTX python module and Download TI feeds
 Install OTX python module with ` pip install OTXv2 ` (in your local server, not in docker). For more information please go, https://github.com/AlienVault-OTX/OTX-Python-SDK.
 
 Place helkOTX.py to /HELK/docker/helk-logstash/enrichments/cti/ folder.(in your local server, not in docker). Since HELK already mounted with your local system on helk-logstash/enrichments/cti folder.
@@ -15,11 +16,11 @@ After running the python script, you will find these CSV files.
 * otx_sha1_.csv  
 * otx_sha256_.csv
 
-## Install pandas
+### Install pandas
 
 ` pip install pandas `
 
-## Configuring SYSMON logstash file 
+### Configuring SYSMON logstash file 
 
 Replace ` 1531-winevent-sysmon-filter.conf ` in ` /HELK/docker/helk-logstash/pipeline/ ` folder.
 
@@ -28,7 +29,7 @@ Then refresh the index fields in Kibana ` (Management -> Index pattern -> refres
 
 Then browse some ips or domains which is included in ` otx_domain_.csv and otx_ipv4_.csv  ` file. After that you can search using `  ti.DestinationIP.otx:* or  ti.Domain.otx:* ` . 
 
-## Configuration Details
+### Configuration Details
 
 
 To fetch destination IP that is event id 3 with Alienvault OTX, TI feeds. 
@@ -79,7 +80,7 @@ translate {
 
 ```
 
-# Get domain registration (Event id 22) for more detection 
+## Get domain registration (Event id 22) for more detection 
 
 Python script credit to @markbaggett.
 
