@@ -31,7 +31,6 @@ Then browse some ips or domains which is included in ` otx_domain_.csv and otx_i
 
 ### Configuration Details
 
-
 To fetch destination IP that is event id 3 with Alienvault OTX, TI feeds. 
 ```
       translate {
@@ -79,6 +78,8 @@ translate {
 }
 
 ```
+
+![GitHub Logo](image/otx.png)
 
 ## Get domain registration (Event id 22) for more detection 
 
