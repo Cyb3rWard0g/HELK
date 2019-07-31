@@ -1,4 +1,5 @@
-# Download and configuration file for integrating OTX Data with HELK
+
+# Configuration file for integrating OTX Data with HELK 
 
 ## Install OTX python module and Download TI feeds
 Install OTX python module with ` pip install OTXv2 ` (in your local server, not in docker). For more information please go, https://github.com/AlienVault-OTX/OTX-Python-SDK.
@@ -77,3 +78,36 @@ translate {
 }
 
 ```
+
+# Get domain registration (Event id 22) for more detection 
+
+Python script credit to @markbaggett.
+
+Clone domain status script from ` https://github.com/MarkBaggett/domain_stats `. Then run the server with `  python domain_stats.py -ip localip port `. Note: You need to keep it running.
+
+Then change your logstash config file that is ` 1531-winevent-sysmon-filter.conf `. 
+
+```
+    if [event_id] == 22 {
+      mutate {
+        add_field => { "action" => "dnsquery" }
+        rename => {
+          "QueryName" => "dns_query_name"
+          "QueryStatus" => "dns_query_status"
+          "QueryResults" => "dns_query_results"
+        }
+      }
+          rest {
+      request => {
+        url => "http://serverhost:port/domain/creation_date/%{[dns_query_name]}"
+        method => "get"
+      }
+      #sprintf => true
+      json => false
+      target => "[enrich][whois][DNS]"
+    }
+    }
+
+``` . 
+
+After that restart your logstash. You will see ` enrich.whois.DNS ` field in Kibana. Don't forget to refresh your index.
