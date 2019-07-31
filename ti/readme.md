@@ -88,6 +88,7 @@ Python script credit to @markbaggett.
 
 Clone domain status script from ` https://github.com/MarkBaggett/domain_stats `. Then run the server with `  python domain_stats.py -ip localip port `. Note: You need to keep it running.
 
+Then install rest plugin in logstash.` https://github.com/lucashenning/logstash-filter-rest` 
 Then change your logstash config file that is ` 1531-winevent-sysmon-filter.conf `. 
 
 ```
