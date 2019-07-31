@@ -1,6 +1,6 @@
 # Integrate OTX TI feeds and  Domain egistration date with HELK
 
-##Configuration file for integrating OTX Data with HELK 
+## Configuration file for integrating OTX Data with HELK 
 
 ### Install OTX python module and Download TI feeds
 Install OTX python module with ` pip install OTXv2 ` (in your local server, not in docker). For more information please go, https://github.com/AlienVault-OTX/OTX-Python-SDK.
