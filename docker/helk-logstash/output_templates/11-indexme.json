@@ -1,7 +1,7 @@
 {
   "order": 11,
   "index_patterns": [ "indexme-*" ],
-  "version": 2019052001,
+  "version": 2019073001,
   "settings": {
     "index": {
       "mapping": {
@@ -15,6 +15,23 @@
     "number_of_shards": 1
   },
   "mappings": {
-    "dynamic": "true"
+    "dynamic": "true",
+    "dynamic_templates": [
+      {
+        "strings": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "ignore_above": 2048,
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "type": "text",
+                "norms": false
+              }
+            }
+          }
+        }
+      }
+    ]
   }
 }
