@@ -23,6 +23,10 @@ INSTALL_MINIMUM_MEMORY_NOTEBOOK=8000
 ## In GBs
 INSTALL_MINIMUM_DISK=25
 
+export DOCKER_CLIENT_TIMEOUT=300
+export COMPOSE_HTTP_TIMEOUT=300
+
+
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
    echo "$HELK_INFO_TAG YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
@@ -459,7 +463,7 @@ prepare_helk(){
 get_jupyter_credentials(){
     if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis-alert" ]]; then
         until (docker logs helk-jupyter 2>&1 | grep -q "The Jupyter Notebook is running at"); do sleep 5; done
-        jupyter_token="$(docker exec -ti helk-jupyter jupyter notebook list | grep "token" | sed 's/.*token=\([^ ]*\).*/\1/')" >> $LOGFILE 2>&1
+        jupyter_token="$(docker exec -i helk-jupyter jupyter notebook list | grep "token" | sed 's/.*token=\([^ ]*\).*/\1/')" >> $LOGFILE 2>&1
         echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
     fi
 }

@@ -7,17 +7,16 @@
 [![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 
-A Hunting ELK (Elasticsearch, Logstash, Kibana) with advanced analytic capabilities.
+The Hunting ELK or simply the HELK is one of the first open source hunt platforms with  advanced analytics capabilities such as SQL declarative language, graphing, structured streaming, and even machine learning via Jupyter notebooks and Apache Spark over an ELK stack. This project was developed primarily for research, but due to its flexible design and core components, it can be deployed in larger environments with the right configurations and scalable infrastructure.
 
 ![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
 
 # Goals
 
-* Provide a free hunting platform to the community and share the basics of Threat Hunting.
-* Make sense of a large amount of event logs and add more context to suspicious events during hunting.
-* Expedite the time it takes to deploy an ELK stack.
-* Improve the testing of hunting use cases in an easier and more affordable way.
-* Enable Data Science via Apache Spark, GraphFrames & Jupyter Notebooks.
+* Provide an open source hunting platform to the community and share the basics of Threat Hunting.
+* Expedite the time it takes to deploy a hunt platform.
+* Improve the testing and development of hunting use cases in an easier and more affordable way.
+* Enable Data Science capabilities while analyzing data via Apache Spark, GraphFrames & Jupyter Notebooks.
 
 # Current Status: Alpha
 
