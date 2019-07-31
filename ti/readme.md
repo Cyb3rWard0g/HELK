@@ -83,6 +83,7 @@ translate {
 
 ## Get domain registration (Event id 22) for more detection 
 
+The idea behind is if incoming or destination domain registered date is lower than six months, the client is most likely be phished or compromised. 
 Python script credit to @markbaggett.
 
 Clone domain status script from ` https://github.com/MarkBaggett/domain_stats `. Then run the server with `  python domain_stats.py -ip localip port `. Note: You need to keep it running.
