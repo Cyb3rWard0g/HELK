@@ -16,6 +16,7 @@ services:
       - node.name=helk-1
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=false
+      - "HELK_ELASTICSEARCH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ulimits:
       memlock:
         soft: -1
@@ -40,6 +41,8 @@ services:
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
+    environment:
+      - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
       - "5044:5044"
       - "8531:8531"
