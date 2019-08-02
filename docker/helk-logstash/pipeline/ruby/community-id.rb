@@ -1,3 +1,4 @@
+# Author: Derek Ditch (@dcode), Nate Guagenti (@neu5ron)
 require 'socket'
 require 'digest'
 require 'base64'

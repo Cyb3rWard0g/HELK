@@ -1,3 +1,4 @@
+# Author: Nate Guagenti (@neu5ron)
 require "set"
 require "ipaddr"
 IPv6Privatecidr = [ "fc00::/7", "fe80::/10", "ff00::/8", "2001:db8::/32", "2001:20::/28", "::1/128", "::/128", "100::/64", "64:ff9b::/96" ]
