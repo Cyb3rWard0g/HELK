@@ -12,6 +12,12 @@ https://speakerdeck.com/heirhabarov/phdays-2018-threat-hunting-hands-on-lab
 ## WMI Squid By Two Attack
 ` process_command_line:"wmic" AND process_command_line:"format" and process_command_line: ("http" or "https" or "ftp" or "xsl") `
 
+## CMSTP Execution 
+` process_command_line: cmstp  AND process_command_line: inf `
+
+## Control Panel Items
+` process_command_line: "cpl" and not process_path: "\\\\system32\\\\" `
+
 ## Regsvr32 squiblydoo attack
 ` process_command_line: regsvr32  AND process_command_line: scrobj  `
 
