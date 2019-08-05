@@ -57,22 +57,22 @@ https://speakerdeck.com/heirhabarov/phdays-2018-threat-hunting-hands-on-lab
 ## Using Net tool for connection to  share
 ` process_command_line:"*net*" AND process_command_line:"*use*" ` 
 
-## privileged_network_logon_from_non_admin_host
+## Privileged network logon
 ` event_id:4672 AND logon_type:3 AND (src_ip_addr:* OR user_domain:*) `
 
 ## Suspicious dll load by lsass
 ` event_id:7 AND process_path:"*\\\\lsass.exe" AND not signature:"*Microsoft*" `
 
-## replaced_accessability_features_binary_execution
+## Replaced accessability features binary execution
 ` event_id:1 AND process_name:("*sethc*" or "*utilman*" or "*osk*" or "*narrator*" or "*magnify*" or "*displayswitch*") AND not file_description:("Display Switch" or "Accessibility shortcut keys" or "Screen Reader" or "*Magnifier*" or "*Keyboard*" or "Utility Manager")	`
 
 ## Accessibility features binary replacement
 ` log_name:"*Sysmon" AND event_id:"11" AND file_name:("*\\\\displayswitch.exe" or "*\\\\sethc.exe" or "*\\\\magnify.exe" or "*\\\\narrator.exe" or "*\\\\osk.exe" or "*utilman.exe") `
 
-## suspicious_lsass_password_filter_was_loaded
+## Suspicious lsass password filter was loaded
 ` event_id:4614 AND not NotificationPackageName:("scecli" or "rassfm" or "WDIGEST" or "KDCPw") `
 
-## suspicious_lsass_ssp_was_loaded
+## Suspicious_lsass ssp was loaded
 ` event_id:4622 AND not SecurityPackageName:("*pku2u" or "*TSSSP" or "*NTLM" or "*Negotiate" or "*NegoExtender" or "*Schannel" or "*Kerberos" or "*Wdigest" or "*Microsoft Unified Security Protocol Provider" or "cloudap") `
 
 ## Suspicious service that start interesting system binary
@@ -81,14 +81,14 @@ https://speakerdeck.com/heirhabarov/phdays-2018-threat-hunting-hands-on-lab
 ## Suspicious services credential dumping tools
 ` event_id:("4697" or "7045") AND (process_command_line:("*rpc::server*" or "*service::me*" or "*fgexec*" or "*servpw*" or "*cachedump*" or "*dumpsvc*" or "*mimidrv*" or "*mimikatz*" or "*wceservice*" or "*wce service*" or "*pwdump*" or "*gsecdump*" or "*cachedump*") OR service_name:("*fgexec*" or "*servpw*" or "*cachedump*" or "*dumpsvc*" or "*mimidrv*" or "*mimikatz*" or "*wceservice*" or "*wce" or "service*" or "*pwdump*" or "*gsecdump*" or "*cachedump*")) `
 
-## suspicious_services_remote_execution_tools
+## Suspicious services remote execution_tools
 ` (event_id:("4697" or "7045") OR (log_name:Autoruns AND Category:Services))  AND (process_command_line:("*psexe*" or "*winexe*" or "*paexe*" or "*remcom*") OR service_name:("*BTOBTO*" or "*psexe*" or "*winexe*" or "*paexe*" or "*remcom*")) `
 
 
-## suspicious powershell execution of encoded script
+## Suspicious powershell execution of encoded script
 ` process_command_line:*powershell* AND (process_command_line:("* -e *" or "* -en *" or "* -ec *" or "* -enc *" or "* -enco" or "* -encod" or "* -encode" or "* -encoded" or "* -encodedc" or "* -encodedco" or "* -encodedcom" or "* -encodedcomm" or "* -encodedcomma" or "* -encodedcomman" or "* -encodedcommand") OR process_command_line:("*StreamReader*" or "*GzipStream*" or "*Decompress*" or "*MemoryStream*" or "*FromBase64String*")) `
 
-## uac_bypass_via_event_viewer
+## UAC bypass via event viewer
 ` (event_id:("1" or "4688") AND process_parent_path:"*\\\\eventvwr.exe" AND not process_name:"*\\\\mmc.exe" ) OR (event_id:"13" AND registry_key_path:"*mscfile" AND registry_key_path:"*shell*" AND registry_key_path:"*open*" AND registry_key_path:"*command*") `
 
 
