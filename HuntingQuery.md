@@ -12,7 +12,7 @@ https://speakerdeck.com/heirhabarov/phdays-2018-threat-hunting-hands-on-lab
 ## WMI Squid By Two Attack
 ` process_command_line:"wmic" AND process_command_line:"format" and process_command_line: ("http" or "https" or "ftp" or "xsl") `
 
-## Wmi squiblydoo attack
+## Regsvr32 squiblydoo attack
 ` process_command_line: regsvr32  AND process_command_line: scrobj  `
 
 ## Suspicious Code Injection
