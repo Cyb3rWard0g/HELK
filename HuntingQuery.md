@@ -3,6 +3,12 @@
 @HeirhabarovT
 https://speakerdeck.com/heirhabarov/phdays-2018-threat-hunting-hands-on-lab
 
+## MSHTA Remote Download and Execute
+` process_name: "mshta.exe" and (process_command_line: "http" or "https") `
+
+## MSHTA Execute local or remote 
+` process_name: "mshta.exe" `
+
 ## Using MSI exec to execute msi by url
 ` process_command_line:"msiexec" AND process_command_line:"http" `
 
@@ -96,6 +102,5 @@ https://speakerdeck.com/heirhabarov/phdays-2018-threat-hunting-hands-on-lab
 
 ## UAC bypass via event viewer
 ` (event_id:("1" or "4688") AND process_parent_path:" \\\\eventvwr.exe" AND not process_name:" \\\\mmc.exe" ) OR (event_id:"13" AND registry_key_path:" mscfile" AND registry_key_path:" shell " AND registry_key_path:" open " AND registry_key_path:" command ") `
-
 
 
