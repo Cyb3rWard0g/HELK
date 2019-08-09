@@ -13,7 +13,7 @@ https://speakerdeck.com/heirhabarov/phdays-2018-threat-hunting-hands-on-lab
 ` process_command_line:"msiexec" AND process_command_line:"http" `
 
 ## Suspicious Processes Spawned From ms office
-` event_id:("1" OR "4688") AND process_parent_path:(" \\\\excel.exe" or " \\\\winword.exe" or " \\\\powepnt.exe" or " \\\\msaccess.exe" or " \\\\mspub.exe" or " \\\\outook.exe") AND process_path:(" \\\\cmd.exe" or " \\\\powershell.exe" or " \\\\wscript.exe" or " \\\\cscript.exe" or " \\\\bitsadmin.exe" or " \\\\certutil.exe" or " \\\\schtasks.exe" or " \\\\rundll32.exe" or " \\\\regsvr32.exe" or " \\\\wmic.exe" or " \\\\mshta.exe" or " \\\\msiexec.exe" or " \\\\schtasks.exe" or " \\\\msbuild.exe") `
+` event_id:("1" OR "4688") AND process_parent_path:(" \\\\excel.exe" or " \\\\winword.exe" or " \\\\powepnt.exe" or " \\\\msaccess.exe" or " \\\\mspub.exe" or " \\\\outook.exe") AND process_path:(" \\\\cmd.exe" or " \\\\powershell.exe" or " \\\\wscript.exe" or " \\\\cscript.exe" or " \\\\bitsadmin.exe" or " \\\\certutil.exe" or " \\\\schtasks.exe" or " \\\\rundll32.exe" or " \\\\regsvr32.exe" or " \\\\wmic.exe" or " \\\\mshta.exe" or " \\\\msiexec.exe" or " \\\\schtasks.exe" or " \\\\msbuild.exe" or "\\\\control.exe") `
 
 ## WMI Squid By Two Attack
 ` process_command_line:"wmic" AND process_command_line:"format" and process_command_line: ("http" or "https" or "ftp" or "xsl") `
