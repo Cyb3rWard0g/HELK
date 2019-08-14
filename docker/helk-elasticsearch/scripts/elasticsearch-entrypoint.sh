@@ -25,7 +25,7 @@ if [[ -z "$ES_JAVA_OPTS" ]]; then
         ES_MEMORY="${ES_MEMORY}g"
       fi
     fi
-    export ES_JAVA_OPTS="${HELK_ELASTICSEARCH_JAVA_OPTS} -Xms${ES_MEMORY} -Xmx${ES_MEMORY} "
+    export ES_JAVA_OPTS="-Xms${ES_MEMORY} -Xmx${ES_MEMORY}"
 fi
 echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Setting ES_JAVA_OPTS to $ES_JAVA_OPTS"
 
