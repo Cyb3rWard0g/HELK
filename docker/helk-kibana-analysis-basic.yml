@@ -16,7 +16,6 @@ services:
       - node.name=helk-1
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=false
-      - "HELK_ELASTICSEARCH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ulimits:
       memlock:
         soft: -1

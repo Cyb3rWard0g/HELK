@@ -17,7 +17,6 @@ services:
       - xpack.license.self_generated.type=trial
       - xpack.security.enabled=true
       - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
-      - "HELK_ELASTICSEARCH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ulimits:
       memlock:
         soft: -1
