@@ -151,8 +151,8 @@ if [[ -z "$LS_JAVA_OPTS" ]]; then
       LS_MEMORY_HIGH="1300m"
     elif [ $AVAILABLE_MEMORY -gt 3000 ]; then
       # Set high & low, so logstash doesn't use everything unnecessarily, it will usually flux up and down in usage -- and doesn't "severely" despite what everyone seems to believe
-      LS_MEMORY=$(( AVAILABLE_MEMORY / 4 ))
-      LS_MEMORY_HIGH=$(( AVAILABLE_MEMORY / 2 ))
+      LS_MEMORY="$(( AVAILABLE_MEMORY / 4 ))m"
+      LS_MEMORY_HIGH="$(( AVAILABLE_MEMORY / 2 ))m"
       if [ $AVAILABLE_MEMORY -gt 31000 ]; then
         LS_MEMORY="8000m"
         LS_MEMORY_HIGH="31000m"
