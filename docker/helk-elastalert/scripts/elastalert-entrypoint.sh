@@ -38,9 +38,9 @@ sed -i "s/^es_host\:.*$/es_host\: ${ES_HOST}/g" $ESALERT_HOME/config.yaml
 sed -i "s/^es_port\:.*$/es_port\: ${ES_PORT}/g" $ESALERT_HOME/config.yaml
 
 # *********** Check if Elasticsearch is up ***************
-echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-until curl -s $ES_HOST:$ES_PORT -o /dev/null; do
-    sleep 1
+until [[ "$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS)" == "200" ]]; do
+    echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
+    sleep 3
 done
 
 # *********** Creating Elastalert Status Index ***************
