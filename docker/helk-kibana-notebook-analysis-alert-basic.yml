@@ -182,7 +182,7 @@ services:
     networks:
       helk:
   helk-elastalert:
-    image: cyb3rward0g/helk-elastalert:0.2.4
+    build: helk-elastalert/
     container_name: helk-elastalert
     restart: always
     depends_on:
