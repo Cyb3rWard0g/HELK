@@ -22,10 +22,7 @@ ENV ESALERT_SIGMA_HOME=/opt/sigma
 RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   libmagic-dev \
   build-essential \
-  python-setuptools \
-  python2.7 \
-  python2.7-dev \
-  python-pip \
+  python3-setuptools \
   git \
   python3-pip \
   python3-dev \
@@ -39,13 +36,12 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   && git clone https://github.com/Yelp/elastalert.git ${ESALERT_HOME} \
   && bash -c 'mkdir -pv /etc/elastalert/rules' \
   && cd ${ESALERT_HOME} \
-  && python -m pip install --upgrade pip \
-  && pip install urllib3==1.24.3 \
-  && pip install -r requirements.txt \
-  && python setup.py install \
+  && sudo pip3 install --upgrade pip \
+  && pip3 install urllib3 \
+  && pip3 install -r requirements.txt \
+  && python3 setup.py install \
   # ********* Download SIGMA *******************
   && git clone https://github.com/Cyb3rWard0g/sigma.git ${ESALERT_SIGMA_HOME} \
-  && sudo pip3 install --upgrade pip \
   && pip3 install -r ${ESALERT_SIGMA_HOME}/tools/requirements.txt
 
 # ********* Copy Elastalert files **************
