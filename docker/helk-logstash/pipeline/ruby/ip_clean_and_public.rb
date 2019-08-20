@@ -217,8 +217,8 @@ def filter(event)
     else
       event.set("#{@parent_field}_ip_version", version_ip_addresses)
       event.set("#{@parent_field}_ip_public", ip_addresses_public)
-      event.set("#{@parent_field}_ip_type]", ip_addresses_type)
-      event.set("#{@parent_field}_ip_rfc]", ip_addresses_rfc)
+      event.set("#{@parent_field}_ip_type", ip_addresses_type)
+      event.set("#{@parent_field}_ip_rfc", ip_addresses_rfc)
       event.remove("#{@orig_ip_address}")
       event.set("#{@orig_ip_address}", clean_ip_addresses)
     end
