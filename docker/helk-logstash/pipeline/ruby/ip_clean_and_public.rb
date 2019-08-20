@@ -60,49 +60,49 @@ def filter(event)
 
         # Private/RFC1918
         if ip_address.start_with?( "10.", "192.168." )
-            ip_public = false
+            ip_public = "false"
             ip_type = "private"
             ip_rfc = "RFC_1918"
 
         # (Local)link-local RFC3927
         elsif ip_address.start_with?( "169.254." )
-            ip_public = false
+            ip_public = "false"
             ip_type = "local"
             ip_rfc = "RFC_3927"
 
         # Loopback RFC1122-3.2.1.3
         elsif ip_address.start_with?( "127." )
-            ip_public = false
+            ip_public = "false"
             ip_type = "loopback"
             ip_rfc = "RFC_1122-3.2.1.3"
 
         # RFC1700
         elsif ip_address.start_with?("0.")
-            ip_public = false
+            ip_public = "false"
             ip_type = "reserved_as_a_source_address_only"
             ip_rfc = "RFC_1700"
 
         # IPv6 to IP4 anycast RFC3068
         elsif ip_address.start_with?( "192.88.99." )
-            ip_public = false
+            ip_public = "false"
             ip_type = "6to4"
             ip_rfc = "RFC_3068"
 
         # IPv6 to IP4 anycast RFC7535
         elsif ip_address.start_with?( "192.31.196." )
-            ip_public = false
+            ip_public = "false"
             ip_type = "as112-v4"
             ip_rfc = "RFC_3068"
 
         # IPv6 to IP4 anycast RFC7450, "Automatic Multicast Tunneling"
         elsif ip_address.start_with?( "192.52.193" )
-            ip_public = false
+            ip_public = "false"
             ip_type = "amt"
             ip_rfc = "RFC_7450"
 
         #  Reserved RFC6890, RFC1122-3.2.1.3, RFC2544, RFC5737
         elsif ip_address.start_with?( "0.", "192.0.0.", "192.0.1.", "192.0.2.", "192.18.", "192.19.", "198.51.100.", "203.0.113." )
-            ip_public = false
+            ip_public = "false"
             ip_type = "reserved"
             ip_rfc = [ "RFCRFC_19186890", "RFCRFC_19181122-3.2.1.3", "RFCRFC_19182544", "RFCRFC_19185737" ]
 
@@ -110,11 +110,11 @@ def filter(event)
         elsif ip_address.start_with?( "172." )
             # Check if 2nd octet is in range(between) 16 to 31
             if ip_address.split(".")[1].to_i.between?(16,31)
-                ip_public = false
+                ip_public = "false"
                 ip_type = "private"
                 ip_rfc = "RFC_1918"
             else
-              ip_public = true
+              ip_public = "true"
               ip_type = "public"
               ip_rfc = "RFC_1366"
             end
@@ -123,11 +123,11 @@ def filter(event)
         elsif ip_address.start_with?( "100." )
             # Check if 2nd octet is in range(between) 64 to 127
             if ip_address.split(".")[1].to_i.between?(64,127)
-                ip_public = false
+                ip_public = "false"
                 ip_type = "private"
                 ip_rfc = "RFC_1918"
             else
-              ip_public = true
+              ip_public = "true"
               ip_type = "public"
               ip_rfc = "RFC_1366"
             end
@@ -136,25 +136,25 @@ def filter(event)
         elsif ip_address.start_with?( "2" )
             # Broadcast
             if ip_address == "255.255.255.255"
-                ip_public = false
+                ip_public = "false"
                 ip_type = "broadcast"
                 ip_rfc = "RFC_8190"
 
             # Multicast
             # Check if 1st octet is in range(between) 224 to 255
             elsif ip_address.split(".")[0].to_i.between?(224,255)
-                ip_public = false
+                ip_public = "false"
                 ip_type = "multicast"
                 ip_rfc = "RFC_1112"
             else
-              ip_public = true
+              ip_public = "true"
               ip_type = "public"
               ip_rfc = "RFC_1366"
             end
 
         # RFC1366, Public/Routable
           else
-            ip_public = true
+            ip_public = "true"
             ip_type = "public"
             ip_rfc = "RFC_1366"
         end
@@ -173,12 +173,12 @@ def filter(event)
       begin
         ip_address_check = IPAddr.new(ip_address)
         # Public IP Check
-        ip_public = true
+        ip_public = "true"
         temp_ip_check = "zDamTyILGeKD4H0.IbPK6g"
         IPv6Privatecidr.each do |i_p|
           cidr = IPAddr.new(i_p)
           if cidr.include?(ip_address_check)
-            ip_public = false
+            ip_public = "false"
           end
         end
         # set parameters
