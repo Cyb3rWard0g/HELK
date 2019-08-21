@@ -56,10 +56,15 @@
         "enabled": false
       },
       "z_original_message": {
-        "enabled": false
+        "type": "text",
+        "norms": false
       },
       "z_logstash_pipeline": {
         "enabled": false
+      },
+      "message": {
+        "type": "alias",
+        "path": "z_original_message"
       }
     }
   }
