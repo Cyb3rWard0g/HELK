@@ -1,7 +1,7 @@
 {
   "order": 50,
   "index_patterns": [ "logs-endpoint-winevent-*" ],
-  "version": 2019062301,
+  "version": 2019082101,
   "settings": {
     "analysis": {
       "analyzer": {
@@ -169,6 +169,18 @@
             "type": "keyword"
           }
         }
+      },
+      "reporter_logon_id": {
+        "type": "long"
+      },
+      "SubjectLogonId": {
+        "type": "long"
+      },
+      "TargetLogonId": {
+        "type": "long"
+      },
+      "user_logon_id": {
+        "type": "long"
       }
     }
   }
