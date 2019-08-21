@@ -1,7 +1,7 @@
 {
   "order": 99,
   "index_patterns": [ "logs-*" ],
-  "version": 2019060301,
+  "version": 2019082101,
   "mappings": {
     "properties": {
       "any_ip_addr": {
@@ -19,22 +19,11 @@
           }
         }
       },
-      "fingerprint_network_community_id": {
-        "type": "keyword"
-      },
       "related": {
         "properties": {
           "ip": {
             "type": "alias",
             "path": "any_ip_addr"
-          }
-        }
-      },
-      "network": {
-        "properties": {
-          "community_id": {
-            "type": "alias",
-            "path": "fingerprint_network_community_id"
           }
         }
       }

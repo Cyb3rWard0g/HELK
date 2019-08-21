@@ -9,8 +9,6 @@
       "target_process_id":{"type":"integer"},
       "process_parent_id":{"type":"integer"},
       "user_session_id":{"type":"integer"},
-      "src_port":{"type":"integer"},
-      "dst_port":{"type":"integer"},
       "version":{"type":"integer"}
     }
   }

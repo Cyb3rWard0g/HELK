@@ -183,8 +183,13 @@ def filter(event)
         end
         # set parameters
         #TODO:eventually set to real type(rfc description) and real rfc (rfc code)
-        ip_type = "n/a"
-        ip_rfc = "n/a"
+        if ip_address == "::1"
+          ip_type = "loopback"
+          ip_rfc = "RFC_4291"
+        else
+          ip_type = "n/a"
+          ip_rfc = "n/a"
+        end
         clean_ip_addresses.push(ip_address)
         version_ip_addresses.push("6")
         ip_addresses_public.push(ip_public)

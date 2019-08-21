@@ -1,7 +1,7 @@
 {
   "order": 91,
   "index_patterns": [ "logs-*" ],
-  "version": 20190603,
+  "version": 2019082101,
   "mappings": {
     "properties": {
       "src_nat_ip_addr": {
@@ -83,6 +83,72 @@
           },
           "location": {
             "type": "geo_point"
+          }
+        }
+      },
+      "source": {
+        "nat": {
+          "properties": {
+            "ip": {
+              "type": "alias",
+              "path": "src_nat_ip_addr"
+            },
+            "as": {
+              "number": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.asn"
+              },
+              "organization": {
+                "properties": {
+                  "name": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.as_org"
+                  }
+                }
+              }
+            },
+            "geo": {
+              "continent_code": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.continent_code"
+              },
+              "country_code2": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.country_code2"
+              },
+              "country_code3": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.country_code3"
+              },
+              "country_name": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.country_name"
+              },
+              "latitude": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.latitude"
+              },
+              "location": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.location"
+              },
+              "longitude": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.longitude"
+              },
+              "postal_code": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.postal_code"
+              },
+              "region_name": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.region_name"
+              },
+              "timezone": {
+                "type": "alias",
+                "path": "meta_src_nat_ip_geo.timezone"
+              }
+            }
           }
         }
       }
