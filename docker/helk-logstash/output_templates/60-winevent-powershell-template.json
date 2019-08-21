@@ -89,7 +89,7 @@
             }
           },
           "pipeline_id": {
-            "type": "integer"
+            "type": "long"
           },
           "remaining_payload": {
             "type": "text",
@@ -128,7 +128,7 @@
             }
           },
           "sequence_number": {
-            "type": "integer"
+            "type": "long"
           },
           "shell_id": {
             "type": "keyword"

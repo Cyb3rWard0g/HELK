@@ -13,7 +13,7 @@
       "network_initiated":{"type":"boolean"},
       "thread_new_id":{"type":"integer"},
       "module_signed":{"type":"boolean"},
-      "process_parent_id":{"type":"integer"},
+      "process_parent_id":{"type":"long"},
       "sysmon_version": {
         "type": "float",
         "fields": {
@@ -22,9 +22,9 @@
           }
         }
       },
-      "target_process_id":{"type":"integer"},
-      "user_session_id":{"type":"integer"},
-      "thread_id":{"type":"integer"},
+      "target_process_id":{"type":"long"},
+      "user_session_id":{"type":"long"},
+      "thread_id":{"type":"long"},
       "version":{"type":"integer"}
     }
   }

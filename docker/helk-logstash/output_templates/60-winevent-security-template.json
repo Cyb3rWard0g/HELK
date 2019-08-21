@@ -6,10 +6,10 @@
     "properties":{
       "@date_new_time":{"type":"date"},
       "@date_previous_time":{"type":"date"},
-      "target_process_id":{"type":"integer"},
-      "process_parent_id":{"type":"integer"},
-      "user_session_id":{"type":"integer"},
-      "version":{"type":"integer"}
+      "target_process_id":{"type":"long"},
+      "process_parent_id":{"type":"long"},
+      "user_session_id":{"type":"long"},
+      "version":{"type":"long"}
     }
   }
 }
