@@ -1,4 +1,6 @@
-
 helk-logstash/.DS_Store
 .DS_Store
 .git
+.idea/
+.testing/
+.gitignore
