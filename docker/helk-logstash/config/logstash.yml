@@ -43,7 +43,6 @@
 # How many events to retrieve from inputs before sending to filters+workers
 #
 # pipeline.batch.size: 125
-pipeline.batch.size: 1000
 #
 # How long to wait before dispatching an undersized batch to filters+workers
 # Value is in milliseconds.
@@ -94,7 +93,7 @@ config.reload.interval: 60s
 # ------------ Module Settings ---------------
 # Define modules here.  Modules definitions must be defined as an array.
 # The simple way to see this is to prepend each `name` with a `-`, and keep
-# all associated variables under the `name` they are associated with, and 
+# all associated variables under the `name` they are associated with, and
 # above the next, like this:
 #
 # modules:
@@ -104,7 +103,7 @@ config.reload.interval: 60s
 #     var.PLUGINTYPE2.PLUGINNAME1.KEY1: VALUE
 #     var.PLUGINTYPE3.PLUGINNAME3.KEY1: VALUE
 #
-# Module variable names must be in the format of 
+# Module variable names must be in the format of
 #
 # var.PLUGIN_TYPE.PLUGIN_NAME.KEY
 #
