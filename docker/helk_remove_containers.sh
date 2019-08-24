@@ -35,7 +35,9 @@ if [ $ERROR -ne 0 ]; then
 fi
 
 echo "[HELK-REMOVE-CONTAINERS] Removing all images.."
-docker rmi $(docker images -a | awk '{ print $1,$3 }' | grep helk | awk '{print $2}') >> $LOGFILE 2>&1
+docker rmi $(docker images -a | awk '{ print $1,$3 }' | grep 'cyb3rward0g\|helk' | awk '{print $2}') >> $LOGFILE 2>&1
+docker rmi $(docker images -a | awk '{ print $1,$3 }' | grep cp-ksql | awk '{print $2}') >> $LOGFILE 2>&1
+docker rmi $(docker images -a | awk '{ print $1,$3 }' | grep 'logstash\|kibana\|elasticsearch' | awk '{print $2}') >> $LOGFILE 2>&1
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not remove images.."
