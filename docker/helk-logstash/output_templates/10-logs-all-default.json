@@ -6,7 +6,7 @@
     "index": {
       "mapping": {
         "ignore_malformed": true,
-        "total_fields.limit": "3750",
+        "total_fields.limit": "10000",
         "coerce": true
       }
     },
