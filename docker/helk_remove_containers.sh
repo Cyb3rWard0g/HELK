@@ -8,7 +8,7 @@
 
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
-   echo "[HELK-INSTALLATION-INFO] YOU MUST BE ROOT TO RUN THIS SCRIPT!!!" 
+   echo "[HELK-INSTALLATION-INFO] YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
    exit 1
 fi
 
@@ -19,7 +19,7 @@ echoerror() {
 }
 
 echo "[HELK-REMOVE-CONTAINERS] Stopping all running containers.."
-docker stop $(docker ps -a | awk '{ print $1,$2 }' | grep helk | awk '{print $1 }') >> $LOGFILE 2>&1
+docker stop $(docker ps --format '{{.Names}}' | grep -E '^helk\-') >> $LOGFILE 2>&1
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not stop running containers.."
@@ -27,7 +27,7 @@ if [ $ERROR -ne 0 ]; then
 fi
 
 echo "[HELK-REMOVE-CONTAINERS] Removing all containers.."
-docker rm $(docker ps -a | awk '{ print $1,$2 }' | grep helk | awk '{print $1 }') >> $LOGFILE 2>&1
+docker rm $(docker ps -a --format '{{.Names}}' | grep -E '^helk\-') >> $LOGFILE 2>&1
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not remove containers.."
