@@ -38,11 +38,12 @@
             "type": "alias",
             "path": "fingerprint_network_community_id"
           },
-            "transport": "alias",
+          "transport": {
+            "type": "alias",
             "path": "network_protocol"
           }
         }
       }
-  }
+    }
   }
 }
