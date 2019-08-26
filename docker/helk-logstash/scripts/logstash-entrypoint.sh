@@ -6,134 +6,93 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
+# *********** Helk log tagging variables ***************
+# For more efficient script editing/reading, and also if/when we switch to different install script language
+HELK_LOGSTASH_INFO_TAG="[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO]"
+HELK_ERROR_TAG="[HELK-LOGSTASH-DOCKER-INSTALLATION-ERROR]"
+
 # *********** Environment Variables ***************
 DIR=/usr/share/logstash/output_templates
 
-if [[ -z "$ELASTICSEARCH_URL" ]]; then
-    export ELASTICSEARCH_URL="http://helk-elasticsearch:9200"
+if [[ -z "$ES_HOST" ]]; then
+  ES_HOST=helk-elasticsearch
 fi
-echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Setting Elasticsearch URL to $ELASTICSEARCH_URL"
+echo "$HELK_LOGSTASH_INFO_TAG Setting Elasticsearch server name to $ES_HOST"
 
-# ******** Set Trial License Variables ***************
+if [[ -z "$ES_PORT" ]]; then
+  ES_PORT=9200
+fi
+echo "$HELK_LOGSTASH_INFO_TAG Setting Elasticsearch server port to $ES_PORT"
+
 if [[ -n "$ELASTIC_PASSWORD" ]]; then
   if [[ -z "$ELASTIC_USERNAME" ]]; then
-    ELASTIC_USERNAME=elastic
+      ELASTIC_USERNAME=elastic
   fi
-  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting Elasticsearch's username to access Elasticsearch to $ELASTIC_USERNAME"
+  echo "$HELK_LOGSTASH_INFO_TAG Setting Elasticsearch username to $ELASTIC_USERNAME"
+  ELASTICSEARCH_ACCESS=http://$ELASTIC_USERNAME:"${ELASTIC_PASSWORD}"@$ES_HOST:$ES_PORT
+else
+  ELASTICSEARCH_ACCESS=http://$ES_HOST:$ES_PORT
+fi
 
-  if [[ -z "$ELASTIC_HOST" ]]; then
-    ELASTIC_HOST=helk-elasticsearch
-  fi
-  echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Setting Elasticsearch host name to $ELASTIC_HOST"
-
-  if [[ -z "$ELASTIC_PORT" ]]; then
-    ELASTIC_PORT=9200
-  fi
-  echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Setting Elasticsearch port to $ELASTIC_PORT"
-
+CLUSTER_SETTINGS='
+{
+  "persistent": {
+    "search.max_open_scroll_context": 15000,
+    "indices.breaker.request.limit" : "70%",
+    "cluster.max_shards_per_node": 3000
+  },
+  "transient": {
+    "search.max_open_scroll_context": 15000,
+    "indices.breaker.request.limit" : "70%",
+    "cluster.max_shards_per_node": 3000
+  }
+}
+'
+# ******** Set Trial License Variables ***************
+if [[ -n "$ELASTIC_PASSWORD" ]]; then
   # ****** Updating Pipeline configs ***********
   for config in /usr/share/logstash/pipeline/*-output.conf
   do
-      echo "[HELK-LOGSTASH-INSTALLATION-INFO] Updating pipeline config $config..."
+      echo "$HELK_LOGSTASH_INFO_TAG Updating pipeline config $config..."
       sed -i "s/#password \=>.*$/password \=> \'${ELASTIC_PASSWORD}\'/g" ${config}
   done
-
-  # *********** Check if Elasticsearch is up ***************
-  echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-  until curl -s -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD $ELASTICSEARCH_URL -o /dev/null; do
-    sleep 1
-  done
-
-else
-  # *********** Check if Elasticsearch is up ***************
-  echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Waiting for elasticsearch URI to be accessible.."
-  until curl -s $ELASTICSEARCH_URL -o /dev/null; do
-      sleep 1
-  done
-
 fi
 
+# *********** Check if Elasticsearch is up ***************
+until [[ "$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS)" == "200" ]]; do
+    echo "$HELK_LOGSTASH_INFO_TAG Waiting for elasticsearch URI to be accessible.."
+    sleep 3
+done
+
 # ********** Uploading templates to Elasticsearch *******
-echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Uploading templates to elasticsearch.."
+echo "$HELK_LOGSTASH_INFO_TAG Uploading templates to elasticsearch.."
 for file in ${DIR}/*.json; do
     template_name=$(echo $file | sed -r ' s/^.*\/[0-9]+\-//')
-    while true; do
-      echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Uploading $template_name template to elasticsearch.."
-      if [[ -n "$ELASTIC_PASSWORD" ]]; then
-        STATUS=$(curl -s -o /dev/null -w '%{http_code}' -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD $ELASTICSEARCH_URL)
-        if [ $STATUS -eq 200 ]; then
-          curl -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD -X POST $ELASTICSEARCH_URL/_template/$template_name -H 'Content-Type: application/json' -d@${file}
-          break
-        else
-          sleep 1
-        fi
-      else
-        STATUS=$(curl -s -o /dev/null -w '%{http_code}' $ELASTICSEARCH_URL)
-        if [ $STATUS -eq 200 ]; then
-          curl -X POST $ELASTICSEARCH_URL/_template/$template_name -H 'Content-Type: application/json' -d@${file}
-          break
-        else
-          sleep 1
-        fi
-      fi
+    echo "$HELK_LOGSTASH_INFO_TAG Uploading $template_name template to elasticsearch.."
+    until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS/_template/$template_name -d@${file} -H 'Content-Type: application/json')" == "200" ]]; do
+      echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading $template_name"
+      sleep 2
     done
 done
 
 # ******** Cluster Settings ***************
 echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Configuring elasticsearch cluster settings.."
-while true; do
-  if [[ -n "$ELASTIC_PASSWORD" ]]; then
-    STATUS=$(curl -s -o /dev/null -w '%{http_code}' -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD $ELASTICSEARCH_URL)
-    if [ $STATUS -eq 200 ]; then
-      curl -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD -XPUT $ELASTICSEARCH_URL/_cluster/settings -H 'Content-Type: application/json' -d'
-        {
-          "persistent": {
-            "search.max_open_scroll_context": 15000,
-            "indices.breaker.request.limit" : "70%"
-          },
-          "transient": {
-            "search.max_open_scroll_context": 15000,
-            "indices.breaker.request.limit" : "70%"
-          }
-        }'
-      break
-    else
-      sleep 1
-    fi
-  else
-    STATUS=$(curl -s -o /dev/null -w '%{http_code}' $ELASTICSEARCH_URL)
-    if [ $STATUS -eq 200 ]; then
-      curl -XPUT $ELASTICSEARCH_URL/_cluster/settings -H 'Content-Type: application/json' -d'
-        {
-          "persistent": {
-            "search.max_open_scroll_context": 15000,
-            "indices.breaker.request.limit" : "70%",
-            "cluster.max_shards_per_node": 3000
-          },
-          "transient": {
-            "search.max_open_scroll_context": 15000,
-            "indices.breaker.request.limit" : "70%",
-            "cluster.max_shards_per_node": 3000
-          }
-        }'
-      break
-    else
-      sleep 1
-    fi
-  fi
+until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT $ELASTICSEARCH_ACCESS/_cluster/settings -H 'Content-Type: application/json' -d "$CLUSTER_SETTINGS")" == "200" ]]; do
+  echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading $template_name"
+  sleep 2
 done
 
 # ********** Install Plugins *****************
-echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Checking Logstash plugins.."
+echo "$HELK_LOGSTASH_INFO_TAG Checking Logstash plugins.."
 # Test a few to determine if probably all already installed
 if ( logstash-plugin list 'prune' ) && ( logstash-plugin list 'i18n' ) && ( logstash-plugin list 'wmi' ); then
-    echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Plugins are already installed"
+    echo "$HELK_LOGSTASH_INFO_TAG Plugins are already installed"
 else
 # logstash-plugin install logstash-filter-dns && logstash-plugin install logstash-filter-cidr && logstash-plugin install logstash-input-lumberjack && logstash-plugin install logstash-output-lumberjack && logstash-plugin install logstash-output-zabbix && logstash-plugin install logstash-filter-geoip && logstash-plugin install logstash-codec-cef && logstash-plugin install logstash-output-syslog && logstash-filter-dissect && logstash-plugin install logstash-output-kafka && logstash-plugin install logstash-input-kafka && logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-alter && logstash-plugin install logstash-filter-fingerprint && logstash-plugin install logstash-output-stdout && logstash-plugin install logstash-filter-prune && logstash-plugin install logstash-codec-gzip_lines && logstash-plugin install logstash-codec-avro && logstash-plugin install logstash-codec-netflow && logstash-plugin install logstash-filter-i18n && logstash-plugin install logstash-filter-environment && logstash-plugin install logstash-filter-de_dot && logstash-plugin install logstash-input-snmptrap && logstash-plugin install logstash-input-snmp && logstash-plugin install logstash-input-jdbc && logstash-plugin install logstash-input-wmi && logstash-plugin install logstash-filter-clone && logstash-plugin update
 	if (logstash-plugin install file:///usr/share/logstash/plugins/logstash-offline-plugins-7.3.0.zip); then
-    echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Logstash plugins installed via offline package.."
+    echo "$HELK_LOGSTASH_INFO_TAG Logstash plugins installed via offline package.."
   else
-    echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Trying to install logstash plugins over the Internet.."
+    echo "$HELK_LOGSTASH_INFO_TAG Trying to install logstash plugins over the Internet.."
     logstash-plugin install logstash-filter-translate && logstash-plugin install logstash-filter-dns && logstash-plugin install logstash-filter-cidr && logstash-plugin install logstash-filter-geoip && logstash-plugin update logstash-filter-dissect && logstash-plugin install logstash-output-kafka && logstash-plugin install logstash-input-kafka && logstash-plugin install logstash-filter-alter && logstash-plugin install logstash-filter-fingerprint && logstash-plugin install logstash-filter-prune && logstash-plugin install logstash-codec-gzip_lines && logstash-plugin install logstash-codec-netflow && logstash-plugin install logstash-filter-i18n && logstash-plugin install logstash-filter-environment && logstash-plugin install logstash-filter-de_dot && logstash-plugin install logstash-input-wmi && logstash-plugin install logstash-filter-clone && logstash-plugin update
   fi
 fi
@@ -158,15 +117,15 @@ if [[ -z "$LS_JAVA_OPTS" ]]; then
         LS_MEMORY_HIGH="31000m"
       fi
     else
-      echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] $LS_MEMORY MB is not enough memory for Logstash yet.."
+      echo "$HELK_LOGSTASH_INFO_TAG $LS_MEMORY MB is not enough memory for Logstash yet.."
       sleep 1
     fi
     export LS_JAVA_OPTS="${HELK_LOGSTASH_JAVA_OPTS} -Xms${LS_MEMORY} -Xmx${LS_MEMORY_HIGH} "
     break
   done
 fi
-echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
+echo "$HELK_LOGSTASH_INFO_TAG Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
 
 # ********** Starting Logstash *****************
-echo "[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO] Running docker-entrypoint script.."
+echo "$HELK_LOGSTASH_INFO_TAG Running docker-entrypoint script.."
 /usr/local/bin/docker-entrypoint
