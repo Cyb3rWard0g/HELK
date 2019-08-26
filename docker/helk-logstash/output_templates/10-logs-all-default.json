@@ -1,7 +1,7 @@
 {
   "order": 10,
   "index_patterns": [ "logs-*" ],
-  "version": 2019060301,
+  "version": 2019082501,
   "settings": {
     "index": {
       "mapping": {
@@ -21,14 +21,13 @@
         "strings": {
           "match_mapping_type": "string",
           "mapping": {
-            "type": "text",
-            "norms": false,
+            "ignore_above": 4096,
             "fields": {
-              "keyword": {
-                "type": "keyword",
-                "ignore_above": 1024
+              "text": {
+                "type": "text"
               }
-            }
+            },
+            "type": "keyword"
           }
         }
       }
