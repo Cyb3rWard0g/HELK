@@ -3,11 +3,11 @@
   "index_patterns": [
     "elastalert*"
   ],
-  "version": 2019081701,
+  "version": 2019082501,
   "settings": {
     "index": {
       "mapping": {
-        "total_fields.limit": "5000"
+        "total_fields.limit": "10000"
       }
     },
     "number_of_replicas": 0,
@@ -18,7 +18,9 @@
       "match_body": {
         "properties": {
           "z_logstash_pipeline": {
-            "enabled": false
+            "doc_values": false,
+            "norms": false,
+            "type": "text"
           }
         }
       }
