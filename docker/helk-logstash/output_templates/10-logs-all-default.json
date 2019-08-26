@@ -59,7 +59,9 @@
         "norms": false
       },
       "z_logstash_pipeline": {
-        "enabled": false
+        "doc_values": false,
+        "norms": false,
+        "type": "text"
       },
       "message": {
         "type": "alias",
