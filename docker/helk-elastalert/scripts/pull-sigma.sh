@@ -91,7 +91,6 @@ echo " "
 # ******* Removing Noise Rules *****************************
 echo "Removing Elastalert rules that generate too much noise. Replacing them with HELK rules.."
 echo "--------------------------------------------------------------------------------------------"
-find $ESALERT_HOME/rules/ -type f -name 'sigma_sysmon_powershell_suspicious_parameter_variation.yml' -delete
 
 
 # Patching one issue in SIGMA Integration
