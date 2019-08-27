@@ -5,8 +5,6 @@
 # HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
-# Reference:
-# https://github.com/Yelp/elastalert/issues/211
 
 # *********** Environment Variables***************
 if [[ -z "$ES_HOST" ]]; then
