@@ -499,8 +499,8 @@ show_final_information(){
         echo "HELK KIBANA URL: https://${HOST_IP}"
         echo "HELK KIBANA USER: helk"
         echo "HELK KIBANA PASSWORD: ${KIBANA_UI_PASSWORD_INPUT}"
-        echo "HELK SPARK MASTER UI: http://${HOST_IP}:8080"
-        echo "HELK JUPYTER SERVER URL: http://${HOST_IP}/jupyter"
+        echo "HELK SPARK MASTER UI: https://${HOST_IP}:8080"
+        echo "HELK JUPYTER SERVER URL: https://${HOST_IP}/jupyter"
         get_jupyter_credentials
     elif [[ ${HELK_BUILD} == "helk-kibana-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-analysis-alert" ]]; then
         echo "HELK KIBANA URL: https://${HOST_IP}"
