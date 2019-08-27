@@ -88,7 +88,7 @@ echo "[+++] Finished processing $rule_counter SIGMA rules"
 echo "-------------------------------------------------------"
 echo " "
 
-# ******* Removing Noise Rules *****************************
+# ******* Removing Rules w/ Too Many False Positives *****************************
 echo "Removing Elastalert rules that generate too much noise. Replacing them with HELK rules.."
 echo "--------------------------------------------------------------------------------------------"
 
