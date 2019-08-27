@@ -6,12 +6,17 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
+# *********** Helk log tagging variables ***************
+# For more efficient script editing/reading, and also if/when we switch to different install script language
+HELK_ELASTALERT_INFO_TAG="HELK-ELASTALERT-DOCKER-INSTALLATION-INFO"
+#HELK_ERROR_TAG="[HELK-ELASTALERT-DOCKER-INSTALLATION-ERROR]"
+
 # ******* Change directory to SIGMA local repo ************
 cd $ESALERT_SIGMA_HOME
 
 # ******* Check if Elastalert rules folder has SIGMA rules ************
-echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Checking if Elastalert rules folder has SIGMA rules.."
-if ls $ESALERT_HOME/rules/ | grep -v '^helk_' >/dev/null 2>&1; then
+echo "${HELK_ELASTALERT_INFO_TAG} Checking if Elastalert rules folder has SIGMA rules.."
+if ls "${ESALERT_HOME}"/rules/ | grep -v '^helk_' >/dev/null 2>&1; then
     echo "[+++++] SIGMA rules available in rules folder.."
     SIGMA_RULES_AVAILABLE=YES
 else
@@ -19,11 +24,11 @@ else
 fi
 
 # ******* Check if local SIGMA repo needs update *************
-echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Fetch updates for SIGMA remote.."
+echo "${HELK_ELASTALERT_INFO_TAG} Fetch updates for SIGMA remote.."
 git remote update
 
 # Reference: https://stackoverflow.com/a/3278427
-echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Checking to see if local SIGMA repo is up to date or not.."
+echo "${HELK_ELASTALERT_INFO_TAG} Checking to see if local SIGMA repo is up to date or not.."
 UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse "$UPSTREAM")
