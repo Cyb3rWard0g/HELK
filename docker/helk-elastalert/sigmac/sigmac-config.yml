@@ -1,3 +1,6 @@
+Title: HELK SIGMA Converter Mapping
+order: 20
+defaultindex: logs-*
 logsources:
   windows-application:
     product: windows
@@ -27,7 +30,6 @@ logsources:
     product: windows
     service: powershell-classic
     index: logs-endpoint-winevent-powershell-*
-defaultindex: logs-*
 fieldmappings:
     AccessMask: object_access_mask_requested
     AccountName: user_name
