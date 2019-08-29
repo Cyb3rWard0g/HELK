@@ -3,7 +3,7 @@
   "index_patterns": [
     "elastalert*"
   ],
-  "version": 2019082501,
+  "version": 2019082901,
   "settings": {
     "index": {
       "mapping": {
@@ -12,16 +12,5 @@
     },
     "number_of_replicas": 0,
     "number_of_shards": 3
-  },
-  "mappings": {
-    "properties": {
-      "match_body": {
-        "properties": {
-          "z_logstash_pipeline": {
-            "type": "keyword"
-          }
-        }
-      }
-    }
   }
 }
