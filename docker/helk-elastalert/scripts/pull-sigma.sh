@@ -46,7 +46,7 @@ elif [ $LOCAL = $BASE ]; then
     git pull
     if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
         echo "[+++++++++] Elastalert rules folder has potentially old SIGMA rules.."
-        find $ESALERT_HOME/rules/ -type f -not -name 'helk_*' -delete
+        find $ESALERT_HOME/rules/ -type f -not -name "helk_*" -delete
     fi
 elif [ $REMOTE = $BASE ]; then
     echo "[++++++] Need to push"
@@ -55,6 +55,18 @@ else
     echo "[++++++] Diverged"
     #exit 1
 fi
+
+# *********** Unsupported SIGMA Functions ***************
+# Unsupported feature "near" aggregation operator not yet implemented https://github.com/Neo23x0/sigma/issues/209
+SIGMAremoveNearRules() {
+    if grep --quiet -E "\s+condition/\s+.*\s+|\s+near\s+" "$1"; then
+        echo "[---] Skipping incompatible rule $1, reference: https://github.com/Neo23x0/sigma/issues/209"
+        #rm "$1"
+        return 0
+    else
+      return 1
+    fi
+}
 
 # ******* Transforming every Windows SIGMA rule to elastalert rules *******
 echo " "
@@ -69,17 +81,25 @@ for  rule_category in rules/windows/* ; do
     if [ "$rule_category" == rules/windows/process_creation ]; then
         for rule in $rule_category/* ; do
             if [ $rule != rules/windows/process_creation/win_mal_adwind.yml ]; then
-                echo "[+++] Processing Windows rule: $rule .."
-                tools/sigmac -t elastalert -c sigmac-config.yml -c tools/config/generic/sysmon.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
-                tools/sigmac -t elastalert -c sigmac-config.yml -c tools/config/generic/windows-audit.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
-                rule_counter=$[$rule_counter +1]
+                if SIGMAremoveNearRules "$rule"; then
+                    continue
+                else
+                    echo "[+++] Processing Windows process creation rule: $rule .."
+                    tools/sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    tools/sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    rule_counter=$[$rule_counter +1]
+                fi
             fi
         done
-    else    
+    else
         for rule in $rule_category/* ; do
-            echo "[+++] Processing Windows rule: $rule .."
-            tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
-            rule_counter=$[$rule_counter +1]
+            if SIGMAremoveNearRules "$rule"; then
+                continue
+            else
+                echo "[+++] Processing additional Windows rule: $rule .."
+                tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
+                rule_counter=$[$rule_counter +1]
+            fi
         done
     fi
 done
@@ -95,15 +115,15 @@ echo "--------------------------------------------------------------------------
 
 # Patching one issue in SIGMA Integration
 # References:
-# Unsupported feature 'near' aggregation operator not yet implemented https://github.com/Neo23x0/sigma/issues/209
 # ONE SIGMA Rule & TWO log sources: https://github.com/Neo23x0/sigma/issues/205
+
 
 # ******** Deleting Empty Files ***********
 echo " "
 echo "Removing empty files.."
 echo "-------------------------"
 rule_counter=0
-for ef in $ESALERT_HOME/rules/* ; do 
+for ef in $ESALERT_HOME/rules/* ; do
     if [[ -s $ef ]]; then
         continue
     else
@@ -120,10 +140,10 @@ echo " "
 rule_counter=0
 echo "Fixing Elastalert rule files with multiple SIGMA rules in them.."
 echo "------------------------------------------------------------------"
-for er in $ESALERT_HOME/rules/*; do 
+for er in $ESALERT_HOME/rules/*; do
     echo "[+++] Identifiying extra new lines in file $er .."
     counter=0
-    while read line; do 
+    while read line; do
         if [ "$line" == "" ]; then
             counter=$[$counter +1]
         fi
