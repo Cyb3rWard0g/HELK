@@ -18,9 +18,7 @@
       "match_body": {
         "properties": {
           "z_logstash_pipeline": {
-            "doc_values": false,
-            "norms": false,
-            "type": "text"
+            "type": "keyword"
           }
         }
       }
