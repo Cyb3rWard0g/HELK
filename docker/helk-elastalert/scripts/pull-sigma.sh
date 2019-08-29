@@ -39,7 +39,7 @@ if [ $LOCAL = $REMOTE ]; then
     if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
         echo "[++++++] SIGMA rules available in Elastalert rules folder.."
         echo "[++++++] Nothing to do here.."
-        exit 1
+        #exit 1
     fi
 elif [ $LOCAL = $BASE ]; then
     echo "[++++++] Local SIGMA repo needs to be updated. Updating local SIGMA repo.."
@@ -50,10 +50,10 @@ elif [ $LOCAL = $BASE ]; then
     fi
 elif [ $REMOTE = $BASE ]; then
     echo "[++++++] Need to push"
-    exit 1
+    #exit 1
 else
     echo "[++++++] Diverged"
-    exit 1
+    #exit 1
 fi
 
 # ******* Transforming every Windows SIGMA rule to elastalert rules *******
