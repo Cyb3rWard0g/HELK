@@ -53,7 +53,7 @@ fieldmappings:
     DestinationIsIpv6: dst_is_ipv6
     DestinationPort: dst_port
     DestinationPortName: dst_port_name
-    Details: 
+    Details:
         EventID=13: registry_key_value
     Device: device_name
     EngineVersion: powershell.engine.version
@@ -103,7 +103,7 @@ fieldmappings:
     ParentCommandLine: process_parent_command_line
     PipeName: pipe_name
     ProcessName: process_path
-    ProcesssCommandLine: process_command_line
+    ProcessCommandLine: process_command_line
     Product: file_product
     Properties: object_properties
     Protocol:
@@ -131,7 +131,7 @@ fieldmappings:
     State:
         EventID=4: service_state
         EventID=16: sysmon_configuration_state
-    SubjectUserName: 
+    SubjectUserName:
         EventID=4624: user_reporter_name
         EventId=4648: user_name
         EventID=5140: user_name
