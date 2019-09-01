@@ -1,7 +1,7 @@
 {
   "order": 50,
   "index_patterns": [ "logs-endpoint-winevent-*" ],
-  "version": 2019082101,
+  "version": 2019090101,
   "settings": {
     "analysis": {
       "analyzer": {
@@ -46,13 +46,7 @@
           "filter": [ "lowercase" ]
         }
       }
-    },
-    "index": {
-      "mapping": {
-        "total_fields.limit": "3000"
-      }
-    },
-    "refresh_interval": "30s"
+    }
   },
   "mappings": {
     "properties":{
