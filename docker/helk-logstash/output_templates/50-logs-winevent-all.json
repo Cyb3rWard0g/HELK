@@ -57,113 +57,96 @@
         "type":"long"
       },
       "keywords": {
-        "type": "text",
-        "norms": false,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "type": "keyword"
+          "text": {
+            "type": "text"
           }
         }
       },
       "file_name": {
-        "type": "text",
-        "norms": false,
-        "analyzer": "cli_n_file_analyzer",
+        "eager_global_ordinals": true,
+        "ignore_above": 7500,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "ignore_above": 7500,
-            "type": "keyword",
-            "eager_global_ordinals": true
+          "text": {
+            "analyzer": "cli_n_file_analyzer",
+            "type": "text"
           }
         }
       },
       "logon_process_name": {
-        "type": "text",
-        "norms": false,
-        "analyzer": "cli_n_file_analyzer",
+        "eager_global_ordinals": true,
+        "ignore_above": 7500,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "ignore_above": 7500,
-            "type": "keyword",
-            "eager_global_ordinals": true
+          "text": {
+            "analyzer": "cli_n_file_analyzer",
+            "type": "text"
           }
         }
       },
       "object_name": {
-        "type": "text",
-        "norms": false,
-        "analyzer": "cli_n_file_analyzer",
+        "ignore_above": 7500,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "ignore_above": 7500,
-            "type": "keyword"
+          "text": {
+            "analyzer": "cli_n_file_analyzer",
+            "type": "text"
           }
         }
       },
       "process_command_line": {
-        "type": "text",
-        "norms": false,
-        "analyzer": "cli_n_file_analyzer",
+        "eager_global_ordinals": true,
+        "ignore_above": 7500,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "ignore_above": 7500,
-            "type": "keyword",
-            "eager_global_ordinals": true
+          "text": {
+            "analyzer": "cli_n_file_analyzer",
+            "type": "text"
           }
         }
       },
       "process_current_directory": {
-        "type": "text",
-        "norms": false,
-        "analyzer": "cli_n_file_analyzer",
+        "ignore_above": 7500,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "ignore_above": 7500,
-            "type": "keyword"
+          "text": {
+            "analyzer": "cli_n_file_analyzer",
+            "type": "text"
           }
         }
       },
       "process_parent_path": {
-        "type": "text",
-        "norms": false,
-        "analyzer": "cli_n_file_analyzer",
+        "eager_global_ordinals": true,
+        "ignore_above": 7500,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "ignore_above": 7500,
-            "type": "keyword",
-            "eager_global_ordinals": true
+          "text": {
+            "analyzer": "cli_n_file_analyzer",
+            "type": "text"
           }
         }
       },
       "process_parent_command_line": {
-        "type": "text",
-        "norms": false,
-        "analyzer": "cli_n_file_analyzer",
+        "eager_global_ordinals": true,
+        "ignore_above": 7500,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "ignore_above": 7500,
-            "type": "keyword",
-            "eager_global_ordinals": true
+          "text": {
+            "analyzer": "cli_n_file_analyzer",
+            "type": "text"
           }
         }
       },
       "process_path": {
-        "type": "text",
-        "norms": false,
-        "analyzer": "cli_n_file_analyzer",
+        "ignore_above": 7500,
+        "eager_global_ordinals": true,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "ignore_above": 7500,
-            "type": "keyword",
-            "eager_global_ordinals": true
-          }
-        }
-      },
-      "process_target_id": {
-        "type": "long",
-        "fields": {
-          "keyword": {
-            "type": "keyword"
+          "text": {
+            "analyzer": "cli_n_file_analyzer",
+            "type": "text"
           }
         }
       },
