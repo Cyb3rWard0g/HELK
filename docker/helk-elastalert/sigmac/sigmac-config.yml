@@ -1,4 +1,4 @@
-Title: HELK SIGMA Converter Mapping
+Title: HELK index patterns and OSSEM field mappings
 order: 20
 defaultindex: logs-*
 logsources:
@@ -49,7 +49,7 @@ fieldmappings:
     Destination:
         EventID=20: wmi_consumer_destination
     DestinationHostname: dst_host_name
-    DestinationIp: dst_ip
+    DestinationIp: dst_ip_addr
     DestinationIsIpv6: dst_is_ipv6
     DestinationPort: dst_port
     DestinationPortName: dst_port_name
@@ -98,6 +98,7 @@ fieldmappings:
         EventID=21: wmi_operation
     OperationType: object_operation_type
     ParentImage: process_parent_path
+    ParentProcessName: process_parent_path
     PasswordLastSet: user_attribute_password_lastset
     Path: process_path
     ParentCommandLine: process_parent_command_line
