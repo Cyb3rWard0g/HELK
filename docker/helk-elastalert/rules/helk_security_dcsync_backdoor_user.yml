@@ -4,7 +4,7 @@ description: Detects potential DCSync backdoor user
 filter:
 - query:
     query_string:
-      query: (event_id:5136  AND dsobject_attribute_name:"ntsecuritydescriptor" AND dsobject_attribute_value:("1131f6aa-9c07-11d1-f79f-00c04fc2dcd2" OR "1131f6ad-9c07-11d1-f79f-00c04fc2dcd2" OR "89e95b76-444d-4c62-991a-0facbeda640c"))
+      query: (event_id:5136 AND dsobject_attribute_name:"ntsecuritydescriptor" AND dsobject_attribute_value:("1131f6aa-9c07-11d1-f79f-00c04fc2dcd2" OR "1131f6ad-9c07-11d1-f79f-00c04fc2dcd2" OR "89e95b76-444d-4c62-991a-0facbeda640c"))
 index: logs-endpoint-winevent-security*
 name: Windows-DCSync-backdoor-user_0
 priority: 2
