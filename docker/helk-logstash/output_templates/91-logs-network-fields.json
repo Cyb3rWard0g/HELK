@@ -22,6 +22,9 @@
       "network_protocol": {
         "type": "keyword"
       },
+      "network_transport": {
+        "type": "keyword"
+      },
       "destination": {
         "properties": {
           "port": {
@@ -46,7 +49,7 @@
           },
           "transport": {
             "type": "alias",
-            "path": "network_protocol"
+            "path": "network_transport"
           }
         }
       }
