@@ -1,16 +1,22 @@
 {
   "order": 91,
   "index_patterns": [ "logs-*" ],
-  "version": 2019082101,
+  "version": 2019090201,
   "mappings": {
     "properties": {
       "dst_port": {
         "type": "long"
       },
+      "dst_nat_port": {
+        "type": "long"
+      },
       "src_port": {
         "type": "long"
       },
-      "fingerprint_network_community_id": {
+      "src_nat_port": {
+        "type": "long"
+      },
+      "network_community_id": {
         "type": "keyword"
       },
       "network_protocol": {
