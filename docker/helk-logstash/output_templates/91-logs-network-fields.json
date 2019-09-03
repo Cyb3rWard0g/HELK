@@ -42,7 +42,7 @@
         "properties": {
           "community_id": {
             "type": "alias",
-            "path": "fingerprint_network_community_id"
+            "path": "network_community_id"
           },
           "transport": {
             "type": "alias",
