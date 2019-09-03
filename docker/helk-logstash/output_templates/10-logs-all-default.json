@@ -1,7 +1,7 @@
 {
   "order": 10,
   "index_patterns": [ "logs-*" ],
-  "version": 2019082501,
+  "version": 2019090101,
   "settings": {
     "index": {
       "mapping": {
@@ -22,12 +22,12 @@
           "match_mapping_type": "string",
           "mapping": {
             "ignore_above": 4096,
+            "type": "keyword",
             "fields": {
               "text": {
                 "type": "text"
               }
-            },
-            "type": "keyword"
+            }
           }
         }
       }
@@ -43,11 +43,10 @@
         "type": "date"
       },
       "meta_log_tags": {
-        "type": "text",
-        "norms": false,
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "type": "keyword"
+          "text": {
+            "type": "text"
           }
         }
       },
