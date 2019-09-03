@@ -50,9 +50,12 @@
   },
   "mappings": {
     "properties":{
-      "process_id":{"type":"integer"},
-      "event_id":{"type":"integer"},
-      "record_number":{"type":"long"},
+      "event_id": {
+        "type":"long"
+      },
+      "record_number":{
+        "type":"long"
+      },
       "keywords": {
         "type": "text",
         "norms": false,
@@ -164,16 +167,37 @@
           }
         }
       },
+      "process_id": {
+        "type":"long"
+      },
+      "process_parent_id": {
+        "type":"long"
+      },
+      "process_target_id": {
+        "type": "long"
+      },
       "reporter_logon_id": {
         "type": "long"
+      },
+      "target_process_id": {
+        "type": "long"
+      },
+      "thread_id": {
+        "type": "long"
+      },
+      "thread_new_id": {
+        "type": "long"
+      },
+      "user_logon_id": {
+        "type": "long"
+      },
+      "user_session_id": {
+        "type":"long"
       },
       "SubjectLogonId": {
         "type": "long"
       },
       "TargetLogonId": {
-        "type": "long"
-      },
-      "user_logon_id": {
         "type": "long"
       }
     }
