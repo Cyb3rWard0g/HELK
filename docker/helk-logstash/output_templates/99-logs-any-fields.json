@@ -1,7 +1,7 @@
 {
   "order": 99,
   "index_patterns": [ "logs-*" ],
-  "version": 2019082101,
+  "version": 2019090101,
   "mappings": {
     "properties": {
       "any_ip_addr": {
@@ -14,8 +14,14 @@
             "doc_values": false
           },
           "as_org": {
-            "type": "text",
-            "norms": false
+            "norms": false,
+            "type": "keyword",
+            "fields": {
+              "text": {
+                "analyzer": "standard",
+                "type": "text"
+              }
+            }
           }
         }
       },
