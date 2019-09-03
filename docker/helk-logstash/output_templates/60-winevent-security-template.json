@@ -1,14 +1,11 @@
 {
   "order": 60,
   "index_patterns": "logs-endpoint-winevent-security-*",
-  "version": 2018080101,
+  "version": 2019090201,
   "mappings":{
     "properties":{
       "@date_new_time":{"type":"date"},
       "@date_previous_time":{"type":"date"},
-      "target_process_id":{"type":"long"},
-      "process_parent_id":{"type":"long"},
-      "user_session_id":{"type":"long"},
       "version":{"type":"long"}
     }
   }
