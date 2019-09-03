@@ -4,7 +4,7 @@ description: Detects potential recon for domain admins via net samrp
 filter:
 - query:
     query_string:
-      query: (event_id:1 AND process_name:("net.exe" OR "net1.exe") AND process_command_line:"domain admins")
+      query: (event_id:1 AND process_name:("net.exe" OR "net1.exe") AND process_command_line.text:"domain admins")
 index: logs-endpoint-winevent-sysmon-*
 name: Windows-net-domain-admins_0
 priority: 2

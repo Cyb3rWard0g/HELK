@@ -4,7 +4,7 @@ description: Detects adversaries clearing logs via wevtutil
 filter:
 - query:
     query_string:
-      query: (event_id:1 AND process_command_line:wevtutil AND process_command_line:cl)
+      query: (event_id:1 AND process_command_line.text:wevtutil AND process_command_line.text:cl)
 index: logs-endpoint-winevent-sysmon-*
 name: Windows-wevtutil-clear-logs_0
 priority: 2

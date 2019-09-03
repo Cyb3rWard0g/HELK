@@ -4,7 +4,7 @@ description: Detects potential suspicious powershell parameters
 filter:
 - query:
     query_string:
-      query: (process_path:("*\\Powershell.exe") AND event_id:"1" AND process_command_line.keyword:( /.*\-w.*h.*/ /.*\-NoP.*/ /.*\-noni.*/ /.*\-ec.*/ /.*\-en.*/))
+      query: (process_path.text:("*\\Powershell.exe") AND event_id:"1" AND process_command_line:( /.*\-w.*h.*/ /.*\-NoP.*/ /.*\-noni.*/ /.*\-ec.*/ /.*\-en.*/))
 index: logs-endpoint-winevent-*
 name: Windows-Suspicious-Powershell-commands_0
 priority: 2

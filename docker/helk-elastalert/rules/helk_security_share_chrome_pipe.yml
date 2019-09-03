@@ -4,7 +4,7 @@ description: Detects suspicious use the common chrome named pipe
 filter:
 - query:
     query_string:
-      query: (event_id:5145 AND _exists_:src_ip_addr AND share_relative_target_name:mojo)
+      query: (event_id:5145 AND _exists_:src_ip_addr AND share_relative_target_name.text:mojo)
 index: logs-endpoint-winevent-security-*
 name: Windows-_0
 priority: 2

@@ -4,7 +4,7 @@ description: Detects potential psexec via powershell module
 filter:
 - query:
     query_string:
-      query: (event_id:7045 AND service_image_path:(comspec OR powershell))
+      query: (event_id:7045 AND service_image_path.text:(comspec OR powershell))
 index: logs-endpoint-winevent-system-*
 name: Windows-System-Psexec-Powershell-Module_0
 priority: 2
