@@ -85,8 +85,8 @@ for  rule_category in rules/windows/* ; do
                     continue
                 else
                     echo "[+++] Processing Windows process creation rule: $rule .."
-                    tools/sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
-                    tools/sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    tools/sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml --backend-option keyword_blacklist="event_id,record_number,reporter_logon_id,SubjectLogonId,TargetLogonId,user_logon_id,process_id,pipeline_id,sequence_number,sysmon_version,target_process_id,reporter_logon_id,process_parent_id,process_target_id,user_session_id,thread_id,dst_nat_ip_public,meta_dst_ip_geo.asn,meta_dst_nat_ip_geo.asn,meta_src__ip_geo.asn,meta_src_nat_ip_geo.asn,dst_port,src_port,dst_nat_port,src_nat_port,network_initiated,module_signed,version" -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    tools/sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml --backend-option keyword_blacklist="event_id,record_number,reporter_logon_id,SubjectLogonId,TargetLogonId,user_logon_id,process_id,pipeline_id,sequence_number,sysmon_version,target_process_id,reporter_logon_id,process_parent_id,process_target_id,user_session_id,thread_id,dst_nat_ip_public,meta_dst_ip_geo.asn,meta_dst_nat_ip_geo.asn,meta_src__ip_geo.asn,meta_src_nat_ip_geo.asn,dst_port,src_port,dst_nat_port,src_nat_port,network_initiated,module_signed,version" -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
                     rule_counter=$[$rule_counter +1]
                 fi
             fi
@@ -97,7 +97,7 @@ for  rule_category in rules/windows/* ; do
                 continue
             else
                 echo "[+++] Processing additional Windows rule: $rule .."
-                tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
+                tools/sigmac -t elastalert -c sigmac-config.yml --backend-option keyword_blacklist="event_id,record_number,reporter_logon_id,SubjectLogonId,TargetLogonId,user_logon_id,process_id,pipeline_id,sequence_number,sysmon_version,target_process_id,reporter_logon_id,process_parent_id,process_target_id,user_session_id,thread_id,dst_nat_ip_public,meta_dst_ip_geo.asn,meta_dst_nat_ip_geo.asn,meta_src__ip_geo.asn,meta_src_nat_ip_geo.asn,dst_port,src_port,dst_nat_port,src_nat_port,network_initiated,module_signed,version" -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
                 rule_counter=$[$rule_counter +1]
             fi
         done
