@@ -1,3 +1,6 @@
+Title: HELK index patterns and OSSEM field mappings
+order: 20
+defaultindex: logs-*
 logsources:
   windows-application:
     product: windows
@@ -27,7 +30,6 @@ logsources:
     product: windows
     service: powershell-classic
     index: logs-endpoint-winevent-powershell-*
-defaultindex: logs-*
 fieldmappings:
     AccessMask: object_access_mask_requested
     AccountName: user_name
@@ -47,8 +49,7 @@ fieldmappings:
     Destination:
         EventID=20: wmi_consumer_destination
     DestinationHostname: dst_host_name
-    DestinationIp: dst_ip
-    DestinationIsIpv6: dst_is_ipv6
+    DestinationIp: dst_ip_addr
     DestinationPort: dst_port
     DestinationPortName: dst_port_name
     Details: 
@@ -101,7 +102,7 @@ fieldmappings:
     ParentCommandLine: process_parent_command_line
     PipeName: pipe_name
     ProcessName: process_path
-    ProcesssCommandLine: process_command_line
+    ProcessCommandLine: process_command_line
     Product: file_product
     Properties: object_properties
     Protocol:
