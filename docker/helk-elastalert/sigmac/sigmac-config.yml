@@ -1,6 +1,12 @@
 Title: HELK index patterns and OSSEM field mappings
 order: 20
-defaultindex: logs-*
+backends:
+  - es-qs
+  - es-dsl
+  - kibana
+  - xpack-watcher
+  - elastalert
+  - elastalert-dsl
 logsources:
   windows-application:
     product: windows
@@ -30,6 +36,7 @@ logsources:
     product: windows
     service: powershell-classic
     index: logs-endpoint-winevent-powershell-*
+defaultindex: logs-*
 fieldmappings:
     AccessMask: object_access_mask_requested
     AccountName: user_name
