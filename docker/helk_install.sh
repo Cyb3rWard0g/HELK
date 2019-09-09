@@ -22,6 +22,9 @@ INSTALL_MINIMUM_MEMORY=5000
 INSTALL_MINIMUM_MEMORY_NOTEBOOK=8000
 ## In GBs
 INSTALL_MINIMUM_DISK=25
+## Sysctl Parameters
+SYSCTL_VM_MAX_MAP_COUNT=4120294
+SYSCTL_VM_SWAPPINESS=15
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
@@ -449,15 +452,22 @@ prepare_helk(){
     fi
 
     # *********** Checking internal set up ***************
-    echo "$HELK_INFO_TAG Checking local vm.max_map_count variable and setting it to 4120294"
-    MAX_MAP_COUNT=4120294
-    if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
-        sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT >> $LOGFILE 2>&1
+    echo "$HELK_INFO_TAG Checking local vm.max_map_count variable and setting it to $SYSCTL_VM_MAX_MAP_COUNT"
+    if [ -n "$SYSCTL_VM_MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
+        sysctl -q -w vm.max_map_count=$SYSCTL_VM_MAX_MAP_COUNT >> $LOGFILE 2>&1
         if [ $ERROR -ne 0 ]; then
-            echoerror "Could not set vm.max_map_count to $MAX_MAP_COUNT (Error Code: $ERROR)."
+            echoerror "Could not set vm.max_map_count to $SYSCTL_VM_MAX_MAP_COUNT (Error Code: $ERROR)."
         fi
-        echo "vm.max_map_count = $MAX_MAP_COUNT" > /etc/sysctl.d/90-helk-overwritten-during-docker-install-sysctl-tuning.conf;
     fi
+    echo "$HELK_INFO_TAG Setting local vm.swappiness variable to $SYSCTL_VM_SWAPPINESS"
+    if [ -n "$SYSCTL_VM_SWAPPINESS" -a -f /proc/sys/vm/swappiness ]; then
+        sysctl -q -w vm.swappiness=$SYSCTL_VM_SWAPPINESS >> $LOGFILE 2>&1
+        if [ $ERROR -ne 0 ]; then
+            echoerror "Could not set vm.swappiness to $SYSCTL_VM_SWAPPINESS (Error Code: $ERROR)."
+        fi
+    fi
+    echo "vm.max_map_count = $SYSCTL_VM_MAX_MAP_COUNT" > /etc/sysctl.d/90-helk-overwritten-during-docker-install-sysctl-tuning.conf;
+    echo "vm.swappiness = $SYSCTL_VM_SWAPPINESS" >> /etc/sysctl.d/90-helk-overwritten-during-docker-install-sysctl-tuning.conf;
 }
 
 get_jupyter_credentials(){
