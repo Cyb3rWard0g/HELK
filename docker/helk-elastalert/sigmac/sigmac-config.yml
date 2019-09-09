@@ -57,7 +57,6 @@ fieldmappings:
         EventID=20: wmi_consumer_destination
     DestinationHostname: dst_host_name
     DestinationIp: dst_ip_addr
-    DestinationIsIpv6: dst_is_ipv6
     DestinationPort: dst_port
     DestinationPortName: dst_port_name
     Details:
