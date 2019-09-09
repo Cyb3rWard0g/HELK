@@ -156,9 +156,6 @@
       "process_parent_id": {
         "type":"long"
       },
-      "process_target_id": {
-        "type": "long"
-      },
       "reporter_logon_id": {
         "type": "long"
       },
