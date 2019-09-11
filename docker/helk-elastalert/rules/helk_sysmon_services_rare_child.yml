@@ -4,7 +4,7 @@ description: Detects rare childs from services.exe (gold image based)
 filter:
 - query:
     query_string:
-      query: (event_id:1 AND process_parent_name:"services.exe" AND NOT (process_path:"\windows\system32" OR process_path:"\program files\windows defender\mpcmdrun.exe" OR "\program files (x86)\google\update\googleupdate.exe" OR "c:\windows\servicing"))
+      query: (event_id:1 AND process_parent_name:"services.exe" AND NOT (process_path:"\\windows\\system32" OR process_path:"\\program\ files\\windows\ defender\\mpcmdrun.exe" OR "\\program\ files\ \(x86\)\\google\\update\\googleupdate.exe" OR "c:\\windows\\servicing"))
 index: logs-endpoint-winevent-sysmon-*
 name: Windows-services-rare-child_0
 priority: 2
