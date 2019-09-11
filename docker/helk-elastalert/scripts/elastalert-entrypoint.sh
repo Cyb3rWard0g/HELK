@@ -46,6 +46,10 @@ until [[ "$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS)" == "2
     sleep 3
 done
 
+# *********** Transform SIGMA Rules to Elastalert Signatures *************
+echo "$HELK_ELASTALERT_INFO_TAG Executing pull-sigma.sh script.."
+/etc/elastalert/pull-sigma.sh
+
 # *********** Creating Elastalert Status Index ***************
 response_code=$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS/elastalert_status)
 if [[ $response_code == 404 ]]; then
@@ -58,10 +62,6 @@ if [[ $response_code == 404 ]]; then
 else
     echo "$HELK_ELASTALERT_INFO_TAG Elastalert index already exists"
 fi
-
-# *********** Transform SIGMA Rules to Elastalert Signatures *************
-echo "$HELK_ELASTALERT_INFO_TAG Executing pull-sigma.sh script.."
-/etc/elastalert/pull-sigma.sh
 
 # *********** Setting Slack Integration *************
 rule_counter=0
