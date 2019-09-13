@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.2
     container_name: helk-elasticsearch
     secrets:
       - source: elasticsearch.yml
@@ -53,7 +53,7 @@ services:
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:7.3.1
+    image: docker.elastic.co/kibana/kibana:7.3.2
     container_name: helk-kibana
     secrets:
       - source: kibana.yml
