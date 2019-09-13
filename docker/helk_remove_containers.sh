@@ -16,6 +16,7 @@ fi
 LOGFILE="/var/log/helk-install.log"
 echoerror() {
     printf "${RC} * ERROR${EC}: $@\n" 1>&2;
+    echo -e "\nPlease see more information in the log file: $LOGFILE\n"
 }
 
 echo "[HELK-REMOVE-CONTAINERS] Stopping all running containers.."
