@@ -39,7 +39,7 @@
       "@version": {
         "type": "keyword"
       },
-      "log_ingest_timestamp": {
+      "z_original_timestamp": {
         "type": "date"
       },
       "meta_log_tags": {
