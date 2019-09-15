@@ -8,7 +8,7 @@
     "properties": {
       "match_body": {
         "properties": {
-          "z_logstash_pipeline": {
+          "z_etl_pipeline": {
             "type": "keyword"
           }
         }
