@@ -3,7 +3,6 @@
 # HELK script: helk_update.sh
 # HELK script description: Update and Rebuild HELK
 # HELK build Stage: Alpha
-# HELK ELK version: 6.5.3
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # Script Author: Dev Dua (@devdua)
 # License: GPL-3.0
@@ -13,10 +12,42 @@ CYAN='\033[0;36m'
 WAR='\033[1;33m'
 STD='\033[0m'
 
+HELK_INFO_TAG="[HELK-UPDATE-INFO]"
+HELK_ERROR_TAG="[HELK-UPDATE-ERROR]"
+
 if [[ $EUID -ne 0 ]]; then
    echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} YOU MUST BE ROOT TO RUN THIS SCRIPT!!!" 
    exit 1
 fi
+
+show_banner(){
+    # *********** Showing HELK Docker menu options ***************
+    echo " "
+    echo "**********************************************"
+    echo "**          HELK - THE HUNTING ELK          **"
+    echo "**                                          **"
+    echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
+    echo "** HELK build version: v0.1.8-alpha05292019 **"
+    echo "** HELK ELK version: 7.1.0                  **"
+    echo "** License: GPL-3.0                         **"
+    echo "**********************************************"
+    echo " "
+}
+
+# *********** Building and Running HELK Images ***************
+build_helk(){
+    COMPOSE_CONFIG="${HELK_BUILD}-${SUBSCRIPTION_CHOICE}.yml"
+    ## ****** Setting KAFKA ADVERTISED_LISTENER environment variable ***********
+    export ADVERTISED_LISTENER=$HOST_IP
+
+    echo "$HELK_INFO_TAG Building & running HELK from $COMPOSE_CONFIG file.."
+    docker-compose -f $COMPOSE_CONFIG up --build -d >> $LOGFILE 2>&1
+    ERROR=$?
+    if [ $ERROR -ne 0 ]; then
+        echoerror "Could not run HELK via docker-compose file $COMPOSE_CONFIG (Error Code: $ERROR)."
+        exit 1
+    fi
+}
 
 # *********** Asking user for Basic or Trial subscription of ELK ***************
 set_helk_subscription(){
@@ -24,16 +55,22 @@ set_helk_subscription(){
         # *********** Accepting Defaults or Allowing user to set HELK subscription ***************
         while true; do
             local subscription_input
-            read -t 30 -p "[HELK-UPDATE-INFO] Set HELK elastic subscription (basic or trial). Default value is basic: " -e -i "basic" subscription_input
+            read -t 30 -p "$HELK_INFO_TAG Set HELK elastic subscription (basic or trial): " -e -i "basic" subscription_input
+            READ_INPUT=$?
             SUBSCRIPTION_CHOICE=${subscription_input:-"basic"}
-            # *********** Validating subscription Input ***************
-            case $SUBSCRIPTION_CHOICE in
-                basic) break;;
-                trial) break;;
-                *)
-                    echo -e "${RED}[HELK-UPDATE-ERROR]${STD} Not a valid subscription. Valid Options: basic or trial"
-                ;;
-            esac
+            if [ $READ_INPUT = 142 ]; then
+                break
+            else
+                # *********** Validating subscription Input ***************
+                case $SUBSCRIPTION_CHOICE in
+                    basic) break;;
+                    trial) break;;
+                    *)
+                        echo -e "${RED}Error...${STD}"
+                        echo "$HELK_ERROR_TAG Not a valid subscription. Valid Options: basic or trial"
+                    ;;
+                esac
+            fi
         done
     fi
 }
@@ -43,23 +80,56 @@ set_helk_build(){
     if [[ -z "$HELK_BUILD" ]]; then
         while true; do
             echo " "
-            echo "*****************************************************"	
+            echo "*****************************************************"
             echo "*      HELK - Docker Compose Build Choices          *"
             echo "*****************************************************"
             echo " "
-            echo "1. KAFKA + KSQL + ELK + NGNIX + ELASTALERT                   "
-            echo "2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT + SPARK + JUPYTER "
+            echo "1. KAFKA + KSQL + ELK + NGNIX"
+            echo "2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT"
+            echo "3. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER"
+            echo "4. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT"
             echo " "
 
             local CONFIG_CHOICE
-            read -p "Enter build choice [ 1 - 2] " CONFIG_CHOICE
-            case $CONFIG_CHOICE in
-                1) HELK_BUILD='helk-kibana-analysis';break ;;
-                2) HELK_BUILD='helk-kibana-notebook-analysis-';break;;
-                *) 
-                    echo -e "${RED}[HELK-UPDATE-ERROR]${STD} Not a valid build"
-                ;;
-            esac
+            read -t 30 -p "Enter build choice [ 1 - 4]: " -e -i "1" CONFIG_CHOICE
+            READ_INPUT=$?
+            HELK_BUILD=${CONFIG_CHOICE:-"helk-kibana-analysis"}
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
+                break
+            else
+                echo "$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
+                case $CONFIG_CHOICE in
+                    1) HELK_BUILD='helk-kibana-analysis';break;;
+                    2) HELK_BUILD='helk-kibana-analysis-alert';break;;
+                    3)
+                      if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
+                        echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
+                        echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
+                        echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
+                        sleep 4
+                      else
+                        HELK_BUILD='helk-kibana-notebook-analysis'
+                        break;
+                      fi
+                    ;;
+                    4)
+                      if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
+                        echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
+                        echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
+                        echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
+                        sleep 4
+                      else
+                        HELK_BUILD='helk-kibana-notebook-analysis-alert'
+                        break;
+                      fi
+                    ;;
+                    *)
+                        echo -e "${RED}Error...${STD}"
+                        echo "$HELK_ERROR_TAG Not a valid build"
+                    ;;
+                esac
+            fi
         done
     fi
 }
@@ -99,10 +169,10 @@ check_min_requirements(){
 check_git_status(){
     GIT_STATUS=$(git status 2>&1)
     RETURN_CODE=$?
-    echo -e "Git status: $GIT_STATUS_FATAL, RetVal : $RETURN_CODE" >> $LOGFILE
-    if [[ -z $GIT_STATUS_FATAL && $RETURN_CODE -gt 0 ]]; then 
+    echo -e "Git status: $GIT_STATUS, RetVal : $RETURN_CODE" >> $LOGFILE
+    if [[ -z $GIT_STATUS && $RETURN_CODE -gt 0 ]]; then 
         echo -e "${WAR}[HELK-UPDATE-WARNING]${STD} Git repository corrupted."
-        read -p "To fix this, all your local modifications to HELK will be overwritten. Do you wish to continue? (y/n) " -n 1 -r
+        read -p ">> To fix this, all your local modifications to HELK will be overwritten. Do you wish to continue? (y/n) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             GIT_REPO_CLEAN=0
@@ -148,14 +218,14 @@ check_github(){
         COMMIT_DIFF=$(git rev-list --count master...helk-repo/master 2>&1)
         CURRENT_COMMIT=$(git rev-parse HEAD 2>&1)
         REMOTE_LATEST_COMMIT=$(git rev-parse helk-repo/master 2>&1)
-        echo "HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1
+        echo "[CD:$COMMIT_DIFF] HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1
         
-        if  [ ! "$COMMIT_DIFF" == "0" ]; then
+        if  [[ ! "$COMMIT_DIFF" == "0" || ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]]; then
             echo "Possibly new release available. Commit diff --> $COMMIT_DIFF" >> $LOGFILE 2>&1
             IS_MASTER_BEHIND=$(git branch -v | grep master | grep behind)
 
             # IF HELK HAS BEEN CLONED FROM OFFICIAL REPO
-            if [ ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]; then
+            if [[ ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]]; then
                 echo "Difference in HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1   
                 echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} New release available. Pulling new code."
                 git checkout master >> $LOGFILE 2>&1
@@ -186,6 +256,10 @@ check_github(){
     fi
 }
 
+check_logstash_connected(){
+    until (docker logs helk-logstash 2>&1 | grep -q "Restored connection to ES instance" ); do sleep 5; done
+}
+
 update_helk() {
     
     set_helk_build
@@ -204,7 +278,7 @@ update_helk() {
         exit 1
     fi
 
-    check_min_requirements
+    #check_min_requirements
 
     echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Rebuilding HELK via docker-compose"
     docker-compose -f $COMPOSE_CONFIG up --build -d -V --force-recreate --always-recreate-deps >> $LOGFILE 2>&1
@@ -220,6 +294,7 @@ update_helk() {
         sleep 1
         : $((secs--))
     done
+    check_logstash_connected
     echo -e "\n${CYAN}[HELK-UPDATE-INFO]${STD} YOUR HELK HAS BEEN UPDATED!"
     echo 0 > /tmp/helk-update
     exit 1
@@ -233,7 +308,7 @@ if [[ -e /tmp/helk-update ]]; then
     UPDATES_FETCHED=`cat /tmp/helk-update`
 
     if [ "$UPDATES_FETCHED" == "1" ]; then
-      echo -e "[HELK-UPDATE-INFO] Updates already downloaded. Starting update..."    
+      echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates already downloaded. Starting update..."    
       update_helk
     fi
 fi
