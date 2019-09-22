@@ -126,7 +126,7 @@ fieldmappings:
     Product: file_product
     Properties: object_properties
     Protocol:
-        EventID=3: network_transport
+        EventID=3: network_protocol
     Query:
         EventID=19: wmi_query
     RelativeTargetName: share_relative_target_name

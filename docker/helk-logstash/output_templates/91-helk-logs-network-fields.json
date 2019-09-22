@@ -16,13 +16,13 @@
       "src_nat_port": {
         "type": "long"
       },
-      "network_community_id": {
+      "fingerprint_network_community_id": {
+        "type": "keyword"
+      },
+      "network_application": {
         "type": "keyword"
       },
       "network_protocol": {
-        "type": "keyword"
-      },
-      "network_transport": {
         "type": "keyword"
       },
       "destination": {
@@ -45,11 +45,15 @@
         "properties": {
           "community_id": {
             "type": "alias",
-            "path": "network_community_id"
+            "path": "fingerprint_network_community_id"
+          },
+          "protocol": {
+            "type": "alias",
+            "path": "network_application"
           },
           "transport": {
             "type": "alias",
-            "path": "network_transport"
+            "path": "network_protocol"
           }
         }
       }
