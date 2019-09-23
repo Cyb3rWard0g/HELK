@@ -19,7 +19,10 @@
       "fingerprint_network_community_id": {
         "type": "keyword"
       },
-      "network_application": {
+      "network_application_name": {
+        "type": "keyword"
+      },
+      "network_application_protocol": {
         "type": "keyword"
       },
       "network_protocol": {
@@ -43,13 +46,17 @@
       },
       "network": {
         "properties": {
+          "application": {
+            "type": "alias",
+            "path": "network_application_name"
+          },
           "community_id": {
             "type": "alias",
             "path": "fingerprint_network_community_id"
           },
           "protocol": {
             "type": "alias",
-            "path": "network_application"
+            "path": "network_application_protocol"
           },
           "transport": {
             "type": "alias",
