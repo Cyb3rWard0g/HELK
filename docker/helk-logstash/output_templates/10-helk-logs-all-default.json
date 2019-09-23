@@ -57,7 +57,7 @@
         "type": "text",
         "norms": false
       },
-      "z_etl_pipeline": {
+      "event_etl_pipeline": {
         "type": "keyword"
       },
       "event_etl_processed_timestamp": {
