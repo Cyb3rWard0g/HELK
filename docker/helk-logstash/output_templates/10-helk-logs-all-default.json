@@ -60,7 +60,7 @@
       "z_etl_pipeline": {
         "type": "keyword"
       },
-      "z_ingest_processed_timestamp": {
+      "event_etl_processed_timestamp": {
         "type": "date"
       },
       "message": {
