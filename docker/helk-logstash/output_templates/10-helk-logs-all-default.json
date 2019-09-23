@@ -53,7 +53,7 @@
       "z_logstash_type": {
         "enabled": false
       },
-      "z_original_message": {
+      "event_original_message": {
         "type": "text",
         "norms": false
       },
@@ -65,7 +65,7 @@
       },
       "message": {
         "type": "alias",
-        "path": "z_original_message"
+        "path": "event_original_message"
       }
     }
   }
