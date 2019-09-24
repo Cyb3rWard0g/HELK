@@ -21,10 +21,10 @@
         "strings": {
           "match_mapping_type": "string",
           "mapping": {
-            "ignore_above": 4096,
             "type": "text",
             "fields": {
-              "text": {
+              "keyword": {
+                "ignore_above": 4096,
                 "type": "keyword"
               }
             }
@@ -43,9 +43,9 @@
         "type": "date"
       },
       "meta_log_tags": {
-        "type": "keyword",
+        "type": "text",
         "fields": {
-          "text": {
+          "keyword": {
             "type": "text"
           }
         }

@@ -76,13 +76,14 @@
           },
           "as_org": {
             "copy_to": "any_ip_geo.as_org",
-            "eager_global_ordinals": true,
+            "type": "text",
+            "analyzer": "standard",
             "fields": {
-              "text": {
-                "type": "text"
+              "keyword": {
+                "eager_global_ordinals": true,
+                "type": "keyword"
               }
-            },
-            "type": "keyword"
+            }
           },
           "country_code2": {
             "type": "keyword"
@@ -141,13 +142,13 @@
           },
           "as_org": {
             "copy_to": "any_ip_geo.as_org",
-            "eager_global_ordinals": true,
+            "type": "text",
             "fields": {
-              "text": {
-                "type": "text"
+              "keyword": {
+                "eager_global_ordinals": true,
+                "type": "keyword"
               }
-            },
-            "type": "keyword"
+            }
           },
           "country_code2": {
             "type": "keyword"
@@ -206,13 +207,13 @@
           },
           "as_org": {
             "copy_to": "any_ip_geo.as_org",
-            "eager_global_ordinals": true,
+            "type": "text",
             "fields": {
-              "text": {
-                "type": "text"
+              "keyword": {
+                "type": "keyword",
+                "eager_global_ordinals": true
               }
-            },
-            "type": "keyword"
+            }
           },
           "country_code2": {
             "type": "keyword"
@@ -271,13 +272,13 @@
           },
           "as_org": {
             "copy_to": "any_ip_geo.as_org",
-            "eager_global_ordinals": true,
+            "type": "text",
             "fields": {
-              "text": {
-                "type": "text"
+              "keyword": {
+                "eager_global_ordinals": true,
+                "type": "keyword"
               }
-            },
-            "type": "keyword"
+            }
           },
           "country_code2": {
             "type": "keyword"

@@ -24,7 +24,7 @@
             "ignore_above": 2048,
             "type": "text",
             "fields": {
-              "text": {
+              "keyword": {
                 "type": "keyword"
               }
             }

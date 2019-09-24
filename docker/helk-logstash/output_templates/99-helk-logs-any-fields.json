@@ -14,12 +14,11 @@
             "doc_values": false
           },
           "as_org": {
-            "norms": false,
-            "type": "keyword",
+            "type": "text",
+            "analyzer": "standard",
             "fields": {
-              "text": {
-                "analyzer": "standard",
-                "type": "text"
+              "keyword": {
+                "type": "keyword"
               }
             }
           }

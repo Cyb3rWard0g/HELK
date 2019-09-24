@@ -57,96 +57,97 @@
         "type":"long"
       },
       "keywords": {
-        "type": "keyword",
+        "type": "text",
         "fields": {
-          "text": {
-            "type": "text"
+          "keyword": {
+            "type": "keyword"
           }
         }
       },
       "file_name": {
-        "eager_global_ordinals": true,
-        "ignore_above": 7500,
-        "type": "keyword",
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
         "fields": {
-          "text": {
-            "analyzer": "cli_n_file_analyzer",
-            "type": "text"
+          "keyword": {
+            "ignore_above": 7500,
+            "eager_global_ordinals": true,
+            "type": "keyword"
           }
         }
       },
       "logon_process_name": {
-        "eager_global_ordinals": true,
-        "ignore_above": 7500,
-        "type": "keyword",
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
         "fields": {
-          "text": {
-            "analyzer": "cli_n_file_analyzer",
-            "type": "text"
+          "keyword": {
+            "ignore_above": 7500,
+            "eager_global_ordinals": true,
+            "type": "keyword"
           }
         }
       },
       "object_name": {
-        "ignore_above": 7500,
-        "type": "keyword",
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
         "fields": {
-          "text": {
-            "analyzer": "cli_n_file_analyzer",
-            "type": "text"
+          "keyword": {
+            "ignore_above": 7500,
+            "type": "keyword"
           }
         }
       },
       "process_command_line": {
-        "eager_global_ordinals": true,
-        "ignore_above": 7500,
-        "type": "keyword",
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
         "fields": {
-          "text": {
-            "analyzer": "cli_n_file_analyzer",
-            "type": "text"
+          "keyword": {
+            "ignore_above": 7500,
+            "eager_global_ordinals": true,
+            "type": "keyword"
           }
         }
       },
       "process_current_directory": {
-        "ignore_above": 7500,
-        "type": "keyword",
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
         "fields": {
-          "text": {
-            "analyzer": "cli_n_file_analyzer",
-            "type": "text"
+          "keyword": {
+            "ignore_above": 7500,
+            "eager_global_ordinals": true,
+            "type": "keyword"
           }
         }
       },
       "process_parent_path": {
-        "eager_global_ordinals": true,
-        "ignore_above": 7500,
-        "type": "keyword",
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
         "fields": {
-          "text": {
-            "analyzer": "cli_n_file_analyzer",
-            "type": "text"
+          "keyword": {
+            "ignore_above": 7500,
+            "eager_global_ordinals": true,
+            "type": "keyword"
           }
         }
       },
       "process_parent_command_line": {
-        "eager_global_ordinals": true,
-        "ignore_above": 7500,
-        "type": "keyword",
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
         "fields": {
-          "text": {
-            "analyzer": "cli_n_file_analyzer",
-            "type": "text"
+          "keyword": {
+            "ignore_above": 7500,
+            "eager_global_ordinals": true,
+            "type": "keyword"
           }
         }
       },
       "process_path": {
-        "ignore_above": 7500,
-        "eager_global_ordinals": true,
-        "type": "keyword",
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
         "fields": {
-          "text": {
-            "analyzer": "cli_n_file_analyzer",
-            "type": "text"
+          "keyword": {
+            "ignore_above": 7500,
+            "eager_global_ordinals": true,
+            "type": "keyword"
           }
         }
       },
