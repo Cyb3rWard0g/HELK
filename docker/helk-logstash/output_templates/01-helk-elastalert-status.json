@@ -8,7 +8,7 @@
     "properties": {
       "match_body": {
         "properties": {
-          "event_etl_pipeline": {
+          "etl_pipeline": {
             "type": "keyword"
           }
         }
