@@ -3,8 +3,24 @@
   "index_patterns": [
     "elastalert_status*"
   ],
-  "version": 2019082901,
+  "version": 2019082924,
   "mappings": {
+    "dynamic_templates": [
+      {
+        "strings": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "ignore_above": 4096,
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      }
+    ],
     "properties": {
       "match_body": {
         "properties": {
