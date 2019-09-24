@@ -22,10 +22,10 @@
           "match_mapping_type": "string",
           "mapping": {
             "ignore_above": 4096,
-            "type": "keyword",
+            "type": "text",
             "fields": {
               "text": {
-                "type": "text"
+                "type": "keyword"
               }
             }
           }
