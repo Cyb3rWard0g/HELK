@@ -25,6 +25,8 @@ services:
         soft: 160000
         hard: 160000
     restart: always
+    ports:
+      - "9200:9200"
     networks:
       helk:
   helk-logstash:
