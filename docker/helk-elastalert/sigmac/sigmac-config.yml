@@ -1,4 +1,4 @@
-Title: HELK index patterns and OSSEM field mappings
+title: HELK index patterns and OSSEM field mappings
 order: 20
 backends:
   - es-qs
