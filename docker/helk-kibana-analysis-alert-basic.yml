@@ -29,7 +29,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    image: docker.elastic.co/logstash/logstash:7.3.2
+    image: docker.elastic.co/logstash/logstash:7.4
     container_name: helk-logstash
     secrets:
       - source: logstash.yml
