@@ -1,0 +1,31 @@
+# HELK winevent-silkservice filter conf file
+# HELK build Stage: Alpha
+# Author: Roberto Rodriguez (@Cyb3rWard0g)
+# License: GPL-3.0
+# Reference: https://github.com/Cyb3rWard0g/HELK/blob/master/docker/helk-logstash/pipeline/1010-winevent-winlogbeats-filter.conf
+
+filter {
+  if [log_name] == "SilkService-Log"{
+    mutate { add_field => { "z_logstash_pipeline" => "1536" } }
+    json {
+      source => "param1"
+    }
+    ruby {
+      code => "
+        xmleventdatafields = event.get('XmlEventData')
+        # Sometimes does not exist, so check that first -- then move the nests
+        if !xmleventdatafields.nil?
+          xmleventdatafields.each {|k, v|
+            if xmleventdatafields.to_s != '(NULL)'
+              event.set(k, v)
+            end
+          }
+        end
+        # Finally remove the nest completely
+        event.remove('XmlEventData')
+        event.remove('param1')
+      "
+      tag_on_exception =>  "ruby_exception_silkservice_cleanup"
+    }
+  }
+}
