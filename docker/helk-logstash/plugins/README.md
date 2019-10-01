@@ -76,7 +76,7 @@ cd logstash-standalone/
 ./bin/logstash-plugin install logstash-input-syslog && 
 ./bin/logstash-plugin install logstash-input-tcp && 
 ./bin/logstash-plugin install logstash-input-udp && 
-./bin/logstash-plugin install logstash-input-wmi && 
+./bin/logstash-plugin install logstash-input-wmi
 ```
 
 1) Install the logstash output plugins  
