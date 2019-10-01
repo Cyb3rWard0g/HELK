@@ -94,7 +94,7 @@ services:
     networks:
       helk:
   helk-kafka-broker:
-    image: cyb3rward0g/helk-kafka-broker:2.2.0
+    build: helk-kafka-broker/
     container_name: helk-kafka-broker
     restart: always
     depends_on:
@@ -144,7 +144,7 @@ services:
     networks:
       helk:
   helk-elastalert:
-    image: cyb3rward0g/helk-elastalert:0.2.5
+    build: helk-elastalert/
     container_name: helk-elastalert
     restart: always
     depends_on:
