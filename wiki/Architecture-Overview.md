@@ -31,7 +31,7 @@ Kibana makes it easy to understand large volumes of data. Its simple, browser-ba
 "The Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text. Uses include: data cleaning and transformation, numerical simulation, statistical modeling, data visualization, machine learning, and much more."[Jupyter Reference](http://jupyter.org/)
 
 ## Curator
-"Curator now performs many operations on your Elasticsearch indices, from delete to snapshot to shard allocation routing."
+"Curator now performs many operations on your Elasticsearch indices, from delete to snapshot to shard allocation routing." [Curator Reference](https://www.elastic.co/guide/en/elasticsearch/client/curator/current/command-line.html)
 
 # Enrichments
 Another component that sets the HELK apart form other ELK builds is the different enrichments applied to the data it collects.
