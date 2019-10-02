@@ -3,7 +3,7 @@
 # HELK script: helk_install.sh
 # HELK script description: HELK installation
 # HELK build Stage: Alpha
-# Author: Roberto Rodriguez (@Cyb3rWard0g)
+# Author: Ashlee Jones (@AshleeJones04)
 # License: GPL-3.0
 
 # *********** Helk log tagging variables ***************
@@ -12,7 +12,7 @@ HELK_INFO_TAG="[HELK-INSTALLATION-INFO]"
 HELK_ERROR_TAG="[HELK-INSTALLATION-ERROR]"
 # Make sure to use "echo -e" with this variable
 INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in our installation Wiki\
-\n$HELK_ERROR_TAG Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+\n$HELK_ERROR_TAG Installation Wiki: https://github.com/AlfieJ04/HELK-CUSTOM/wiki/Installation"
 
 # *********** Variables for user modification ***************
 # Careful editing unless you know what you are doing :)
@@ -499,6 +499,7 @@ show_final_information(){
         echo "HELK KIBANA URL: https://${HOST_IP}"
         echo "HELK KIBANA USER: helk"
         echo "HELK KIBANA PASSWORD: ${KIBANA_UI_PASSWORD_INPUT}"
+        echo "HELK Elasticsearch URL: http://${HOST_IP}:9200"
         echo "HELK SPARK MASTER UI: http://${HOST_IP}:8080"
         echo "HELK JUPYTER SERVER URL: http://${HOST_IP}/jupyter"
         get_jupyter_credentials

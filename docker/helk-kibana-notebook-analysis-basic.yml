@@ -181,6 +181,17 @@ services:
       - helk-spark-master
     networks:
       helk:
+  helk-curator:
+    image: alfiej04/helk-curator:0.0.2
+    container_name: helk-curator
+    restart: always
+    depends_on:
+      - helk-elasticsearch
+    environment:
+      ES_HOST: helk-elasticsearch
+      ES_PORT: 9200
+    networks:
+      helk:
 
 networks:
   helk:
