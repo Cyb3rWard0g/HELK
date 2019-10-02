@@ -1,5 +1,13 @@
 alert:
 - debug
+- email
+email: 
+      - "your@emailaddress.com"
+smtp_host: "smtp.outlook.com" #for O365 email addresses
+smtp_port: 587 #for O365 email addresses
+smtp_ssl: true
+from_addr: "your@emailaddress.com"
+smtp_auth_file: "/etc/elastalert/smtp_auth_file.yaml"
 description: Detects suspicious use the common chrome named pipe
 filter:
 - query:

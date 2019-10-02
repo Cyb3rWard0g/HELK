@@ -13,7 +13,7 @@ run_every:
     seconds: 30
 buffer_time:
     seconds: 45
-es_host: helk-elasticsearch
+es_host: HELKIP
 es_port: 9200
 alert_time_limit:
     days: 1

@@ -28,6 +28,7 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   python3-dev \
   python3-setuptools \
   tzdata \
+  nano \
   # ********* Clean ****************************
   && apt-get -qy clean \
   autoremove \
@@ -47,6 +48,7 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
 # ********* Copy Elastalert files **************
 COPY scripts/* ${ESALERT_HOME}/
 COPY config.yaml ${ESALERT_HOME}/
+COPY smtp_auth_file.yaml ${ESALERT_HOME}/
 COPY rules/* ${ESALERT_HOME}/rules/
 COPY sigmac/sigmac-config.yml ${ESALERT_SIGMA_HOME}/sigmac-config.yml
 

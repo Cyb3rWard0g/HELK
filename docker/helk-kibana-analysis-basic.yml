@@ -25,6 +25,8 @@ services:
         soft: 160000
         hard: 160000
     restart: always
+    ports:
+      - "9200:9200"
     networks:
       helk:
   helk-logstash:
@@ -138,6 +140,17 @@ services:
         KSQL_HEAP_OPTS: -Xmx1g
     entrypoint: /bin/sh
     tty: true
+    networks:
+      helk:
+  helk-curator:
+    image: alfiej04/helk-curator:0.0.2
+    container_name: helk-curator
+    restart: always
+    depends_on:
+      - helk-elasticsearch
+    environment:
+      ES_HOST: helk-elasticsearch
+      ES_PORT: 9200
     networks:
       helk:
 
