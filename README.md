@@ -41,7 +41,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 ## WIKI
 
 * [Introduction](https://github.com/Cyb3rWard0g/HELK/wiki)
-* [Architecture Overview](https://github.com/Cyb3rWard0g/HELK/wiki/Installation/Architecture-Overview)
+* [Architecture Overview](https://github.com/Cyb3rWard0g/HELK/wiki/Architecture-Overview)
   * [Kafka](https://github.com/Cyb3rWard0g/HELK/wiki/Kafka)
   * [Logstash](https://github.com/Cyb3rWard0g/HELK/wiki/Logstash)
   * [Elasticsearch](https://github.com/Cyb3rWard0g/HELK/wiki/Elasticsearch)

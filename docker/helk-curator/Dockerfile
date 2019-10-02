@@ -1,7 +1,7 @@
 # HELK script: HELK Curator Dockerfile
 # HELK build Stage: Alpha
 # Author: Ashlee Jones (@AshleeJones04)
-# License: Apache 2.0
+# License: GPL-3.0
 
 # References: 
 # https://github.com/elastic/curator
