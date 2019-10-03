@@ -164,6 +164,7 @@ services:
     environment:
       ES_HOST: helk-elasticsearch
       ES_PORT: 9200
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
     networks:
       helk:
 
