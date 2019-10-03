@@ -116,7 +116,7 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; the
   '
 else
   # *********** Creating Kibana index-patterns ***************
-  declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*" "mitre-attack-*" "elastalert_status" "elastalert_status_status" "elastalert_status_error" "elastalert_status_silence" "elastalert_status_past" "sysmon-join-*")
+  declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*" "mitre-attack-*" "elastalert_status" "elastalert_status_status" "elastalert_status_error" "elastalert_status_silence" "elastalert_status_past" "sysmon-join-*" "logs-endpoint-winevent-etw-*")
 
   echo "[+++] Creating Kibana Index Patterns..."
   for index in ${!index_patterns[@]}; do
