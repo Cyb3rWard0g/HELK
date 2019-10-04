@@ -182,7 +182,7 @@ services:
     networks:
       helk:
   helk-curator:
-    image: alfiej04/helk-curator:0.0.2
+    image: alfiej04/helk-curator:0.0.3
     container_name: helk-curator
     restart: always
     depends_on:
