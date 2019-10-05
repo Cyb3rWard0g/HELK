@@ -1,2 +1,2 @@
-0 0 * * * /usr/share/curator --config /usr/share/curator/curator.yml /usr/share/curator/actions.yaml >> /var/log/helk-curator-cron.log 2>&1
+0 0 * * * /usr/local/bin/curator --config /usr/share/curator/curator.yml /usr/share/curator/actions.yaml >> /var/log/helk-curator-cron.log 2>&1
 # An empty line is required at the end of this file for a valid cron file.
