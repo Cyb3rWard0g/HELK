@@ -19,7 +19,7 @@
       "meta_user_reporter_name_is_machine": {
         "type": "boolean"
       },
-      "meta_user_target_name_is_machine": {
+      "meta_target_user_name_is_machine": {
         "type": "boolean"
       }
     }
