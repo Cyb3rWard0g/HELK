@@ -512,6 +512,8 @@ show_final_information(){
     echo " "
     echo "IT IS HUNTING SEASON!!!!!"
     echo " "
+    echo "You can stop all the HELK docker containers by running the following command:"
+    echo " [+] sudo docker-compose stop $COMPOSE_CONFIG"
     echo " "
 }
 
