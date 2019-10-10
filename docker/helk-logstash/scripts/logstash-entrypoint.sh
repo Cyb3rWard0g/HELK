@@ -61,9 +61,16 @@ if [[ -n "$ELASTIC_PASSWORD" ]]; then
 fi
 
 # *********** Check if Elasticsearch is up ***************
-until [[ "$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS)" == "200" ]]; do
-    echo "$HELK_LOGSTASH_INFO_TAG Waiting for elasticsearch URI to be accessible.."
-    sleep 3
+while true
+  do
+    ES_STATUS_CODE=$(curl --silent --output /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS)
+    if [ "$ES_STATUS_CODE" -eq 200 ]; then
+      echo "$HELK_LOGSTASH_INFO_TAG Connected successfully to elasticsearch URI.."
+      break
+    else
+      echo "$HELK_LOGSTASH_INFO_TAG Waiting for elasticsearch URI to be accessible.."
+    fi
+    sleep 5
 done
 
 # ********** Uploading templates to Elasticsearch *******
