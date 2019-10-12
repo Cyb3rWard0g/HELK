@@ -1,6 +1,5 @@
 # HELK [Alpha]
 
-![version](https://img.shields.io/badge/version-0.1.4-blue.svg?maxAge=2592000)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub issues-closed](https://img.shields.io/github/issues-closed/Cyb3rward0g/HELK.svg)](https://GitHub.com/Cyb3rWard0g/HELK/issues?q=is%3Aissue+is%3Aclosed)
 [![Twitter](https://img.shields.io/twitter/follow/THE_HELK.svg?style=social&label=Follow)](https://twitter.com/THE_HELK)
@@ -93,13 +92,9 @@ root@ede2a2503030:/opt/helk/scripts#
 
 * Roberto Rodriguez [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g) [@THE_HELK](https://twitter.com/THE_HELK)
 
-# Contributors
+# Current Committers
 
-* Jose Luis Rodriguez [@Cyb3rPandaH](https://twitter.com/Cyb3rPandaH)
-* Robby Winchester [@robwinchester3](https://twitter.com/robwinchester3)
-* Jared Atkinson [@jaredatkinson](https://twitter.com/jaredcatkinson)
 * Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
-* Lee Christensen [@tifkin_](https://twitter.com/tifkin_)
 
 # Contributing
 
