@@ -53,7 +53,7 @@ fieldmappings:
       EventID=5145: share_access_mask
       EventID=5447: object_access_mask
     AccountName: user_name
-    AllowedToDelegateTo: user_attribute_allowed_todelegate
+    AllowedToDelegateTo: target_user_allowed_to_delegate
     AttributeLDAPDisplayName: dsobject_attribute_name
     AuditPolicyChanges: policy_changes
     AuthenticationPackageName: logon_authentication_package
