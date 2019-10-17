@@ -4,6 +4,11 @@ services:
   helk-elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     container_name: helk-elasticsearch
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "5m"
     secrets:
       - source: elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
@@ -32,6 +37,11 @@ services:
   helk-logstash:
     build: helk-logstash/
     container_name: helk-logstash
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "5m"
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
@@ -55,6 +65,11 @@ services:
   helk-kibana:
     image: docker.elastic.co/kibana/kibana:7.4.0
     container_name: helk-kibana
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "5m"
     secrets:
       - source: kibana.yml
         target: /usr/share/kibana/config/kibana.yml
@@ -73,6 +88,11 @@ services:
   helk-nginx:
     image: cyb3rward0g/helk-nginx:0.0.7
     container_name: helk-nginx
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "5m"
     volumes:
       - ./helk-nginx/config/trial-elk:/etc/nginx/sites-available/default
       - ./helk-nginx/scripts/:/opt/helk/scripts/
@@ -88,6 +108,11 @@ services:
   helk-zookeeper:
     image: cyb3rward0g/helk-zookeeper:2.2.0
     container_name: helk-zookeeper
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-logstash
@@ -96,6 +121,11 @@ services:
   helk-kafka-broker:
     build: helk-kafka-broker/
     container_name: helk-kafka-broker
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-zookeeper
@@ -116,6 +146,11 @@ services:
   helk-ksql-server:
     image: confluentinc/cp-ksql-server:5.1.3
     container_name: helk-ksql-server
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-kafka-broker
@@ -135,6 +170,11 @@ services:
   helk-ksql-cli:
     image: confluentinc/cp-ksql-cli:5.1.3
     container_name: helk-ksql-cli
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     depends_on:
       - helk-ksql-server
     environment:
@@ -146,6 +186,11 @@ services:
   helk-elastalert:
     build: helk-elastalert/
     container_name: helk-elastalert
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "5m"
     restart: always
     depends_on:
       - helk-logstash

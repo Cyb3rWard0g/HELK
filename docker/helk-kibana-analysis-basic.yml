@@ -4,6 +4,11 @@ services:
   helk-elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     container_name: helk-elasticsearch
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "5m"
     secrets:
       - source: elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
