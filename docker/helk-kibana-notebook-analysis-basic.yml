@@ -7,7 +7,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-file: "10"
+        max-file: "9"
         max-size: "6m"
     secrets:
       - source: elasticsearch.yml
@@ -39,7 +39,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-file: "10"
+        max-file: "9"
         max-size: "6m"
     secrets:
       - source: logstash.yml
@@ -67,7 +67,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-file: "10"
+        max-file: "9"
         max-size: "6m"
     secrets:
       - source: kibana.yml
@@ -88,7 +88,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-file: "10"
+        max-file: "9"
         max-size: "6m"
     secrets:
       - source: htpasswd.users

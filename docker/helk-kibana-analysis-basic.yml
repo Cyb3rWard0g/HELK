@@ -7,7 +7,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-file: "10"
+        max-file: "9"
         max-size: "6m"
     secrets:
       - source: elasticsearch.yml
