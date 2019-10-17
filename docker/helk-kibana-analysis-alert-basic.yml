@@ -8,7 +8,7 @@ services:
       driver: "json-file"
       options:
         max-file: "10"
-        max-size: "5m"
+        max-size: "6m"
     secrets:
       - source: elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
@@ -40,7 +40,7 @@ services:
       driver: "json-file"
       options:
         max-file: "10"
-        max-size: "5m"
+        max-size: "6m"
     secrets:
       - source: logstash.yml
         target: /usr/share/logstash/config/logstash.yml
@@ -68,7 +68,7 @@ services:
       driver: "json-file"
       options:
         max-file: "10"
-        max-size: "5m"
+        max-size: "6m"
     secrets:
       - source: kibana.yml
         target: /usr/share/kibana/config/kibana.yml
@@ -89,7 +89,7 @@ services:
       driver: "json-file"
       options:
         max-file: "10"
-        max-size: "5m"
+        max-size: "6m"
     secrets:
       - source: htpasswd.users
         target: /etc/nginx/htpasswd.users
@@ -190,7 +190,7 @@ services:
       driver: "json-file"
       options:
         max-file: "5"
-        max-size: "5m"
+        max-size: "6m"
     restart: always
     depends_on:
       - helk-logstash
