@@ -1,7 +1,7 @@
 {
   "order": 990,
   "index_patterns": [
-    "clone-*"
+    "original-logs-clone-*"
   ],
   "version": 2019101801,
   "settings": {
@@ -11,7 +11,7 @@
         "total_fields.limit": "10000"
       }
     },
-    "refresh_interval": "30s",
+    "refresh_interval": "10s",
     "number_of_replicas": 0,
     "number_of_shards": 5
   },
@@ -23,10 +23,37 @@
           "match_mapping_type": "string",
           "mapping": {
             "type": "keyword",
-            "ignore_above": 512
+            "doc_values": false,
+            "norms": false
           }
         }
       }
-    ]
+    ],
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "cloned": {
+        "properties": {
+          "@timestamp": {
+            "type": "date"
+          },
+          "agent": {
+            "properties": {
+              "type": {
+                "type": "keyword"
+              }
+            }
+          },
+          "log_hash": {
+            "type": "keyword",
+            "doc_values": false
+          },
+          "type": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
   }
 }
