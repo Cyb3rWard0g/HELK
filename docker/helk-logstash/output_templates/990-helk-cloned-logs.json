@@ -11,7 +11,7 @@
         "total_fields.limit": "10000"
       }
     },
-    "refresh_interval": "10s",
+    "refresh_interval": "35s",
     "number_of_replicas": 0,
     "number_of_shards": 5
   },
