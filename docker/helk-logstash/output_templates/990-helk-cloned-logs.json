@@ -1,0 +1,32 @@
+{
+  "order": 990,
+  "index_patterns": [
+    "clone-*"
+  ],
+  "version": 2019101801,
+  "settings": {
+    "index": {
+      "codec": "best_compression",
+      "mapping": {
+        "total_fields.limit": "10000"
+      }
+    },
+    "refresh_interval": "30s",
+    "number_of_replicas": 0,
+    "number_of_shards": 5
+  },
+  "mappings": {
+    "dynamic": "true",
+    "dynamic_templates": [
+      {
+        "strings": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "keyword",
+            "ignore_above": 512
+          }
+        }
+      }
+    ]
+  }
+}
