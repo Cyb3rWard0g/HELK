@@ -1,7 +1,7 @@
 {
   "order": 60,
   "index_patterns": [ "logs-endpoint-winevent-powershell-*" ],
-  "version": 2018080201,
+  "version": 2019102401,
   "mappings":{
     "properties": {
       "powershell": {
@@ -10,6 +10,16 @@
           "command": {
             "properties": {
               "name": {
+                "type": "text",
+                "norms": false,
+                "analyzer": "standard",
+                "fields": {
+                  "keyword": {
+                    "type": "keyword"
+                  }
+                }
+              },
+              "invocation": {
                 "type": "text",
                 "norms": false,
                 "analyzer": "standard",
