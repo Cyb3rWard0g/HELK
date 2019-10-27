@@ -5,3 +5,4 @@ helk-logstash/.DS_Store
 .testing/
 .gitignore
 /docker/helk-logstash/pipeline/custom
+/.vscode/
