@@ -109,18 +109,18 @@ cd logstash-standalone/
 7) Remove some unnecessary plugins, again yes
 
 ```bash
-./bin/logstash-plugin remove logstash-input-couchdb_changes &&
-./bin/logstash-plugin remove logstash-input-gelf &&
-./bin/logstash-plugin remove logstash-input-ganglia &&
-./bin/logstash-plugin remove logstash-input-graphite &&
-./bin/logstash-plugin remove logstash-input-imap &&
-./bin/logstash-plugin remove logstash-input-twitter &&
-./bin/logstash-plugin remove logstash-output-cloudwatch &&
-./bin/logstash-plugin remove logstash-output-graphite &&
-./bin/logstash-plugin remove logstash-output-nagios &&
-./bin/logstash-plugin remove logstash-output-rabbitmq &&
-./bin/logstash-plugin remove logstash-output-webhdfs &&
-./bin/logstash-plugin remove logstash-codec-graphite
+./bin/logstash-plugin remove logstash-input-couchdb_changes;
+./bin/logstash-plugin remove logstash-input-gelf;
+./bin/logstash-plugin remove logstash-input-ganglia;
+./bin/logstash-plugin remove logstash-input-graphite;
+./bin/logstash-plugin remove logstash-input-imap;
+./bin/logstash-plugin remove logstash-input-twitter;
+./bin/logstash-plugin remove logstash-output-cloudwatch;
+./bin/logstash-plugin remove logstash-output-graphite;
+./bin/logstash-plugin remove logstash-output-nagios;
+./bin/logstash-plugin remove logstash-output-rabbitmq;
+./bin/logstash-plugin remove logstash-output-webhdfs;
+./bin/logstash-plugin remove logstash-codec-graphite;
 ```
 
 8) List the plugins and corresponding versions, then add the output to [logstash-plugin-information.yml](logstash-plugin-information.yml)
