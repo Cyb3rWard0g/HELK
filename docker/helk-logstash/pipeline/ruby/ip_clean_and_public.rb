@@ -15,7 +15,7 @@ def filter(event)
 
   # Check if IPv6 determination is already made
   ip_addresses_is_ipv6 = event.get(@orig_is_ipv6)
-  if event.get(ip_addresses_is_ipv6).nil?
+  if ip_addresses_is_ipv6.nil?
     ip_addresses_is_ipv6 = Array.new
   else
     ip_addresses_is_ipv6 = [ ip_addresses_is_ipv6 ]
