@@ -7,10 +7,19 @@ IPv6Privatecidr = [ "fc00::/7", "fe80::/10", "ff00::/8", "2001:db8::/32", "2001:
 def register(params)
   @parent_field = params["parent_field"]
   @orig_ip_address = params["ip"]
+  @orig_is_ipv6 = params["is_ipv6"]
 end
 
 def filter(event)
   ip_addresses = event.get(@orig_ip_address)
+
+  # Check if IPv6 determination is already made
+  ip_addresses_is_ipv6 = event.get(@orig_is_ipv6)
+  if event.get(ip_addresses_is_ipv6).nil?
+    ip_addresses_is_ipv6 = Array.new
+  else
+    ip_addresses_is_ipv6 = [ ip_addresses_is_ipv6 ]
+  end
 
   ip_addresses_public = Array.new
   ip_addresses_type = Array.new
@@ -28,12 +37,12 @@ def filter(event)
 
   for ip_address in ip_addresses
     #### General Cleanup
-    # Remove qouted
+    # Remove quoted
     ip_address = ip_address.delete("'")
     ip_address = ip_address.delete("\"")
     # Remove ending "."
     ip_address = ip_address.chomp
-    # Remove preceeding "."# Don't ask.. reverse + chomp + reverse up to 16 times faster
+    # Remove preceding "."# Don't ask.. reverse + chomp + reverse up to 16 times faster
     ip_address = ip_address.reverse.chomp(".").reverse
     # Remove ending or beginning whitespace
     ip_address = ip_address.lstrip.rstrip
@@ -45,7 +54,7 @@ def filter(event)
     # IPv4
     ip_address_length = ip_address.length
     if !ip_address.include?(":") && !( /[a-z]/ === ip_address ) && ip_address_length <= 15 && ip_address_length >= 7
-      # Remove any preceeding zeroes in each octet
+      # Remove any preceding zeroes in each octet
       temp_ip = Array.new
       ip_address.split(".").each do |octet|
           octet = octet.to_i.to_s
@@ -161,6 +170,7 @@ def filter(event)
         # set parameters
         clean_ip_addresses.push(ip_address)
         version_ip_addresses.push("4")
+        ip_addresses_is_ipv6.push("false")
         ip_addresses_public.push(ip_public)
         ip_addresses_type.push(ip_type)
         ip_addresses_rfc.push(ip_rfc)
@@ -192,6 +202,7 @@ def filter(event)
         end
         clean_ip_addresses.push(ip_address)
         version_ip_addresses.push("6")
+        ip_addresses_is_ipv6.push("true")
         ip_addresses_public.push(ip_public)
         ip_addresses_type.push(ip_type)
         ip_addresses_rfc.push(ip_rfc)
@@ -213,6 +224,7 @@ def filter(event)
     # Use to make array versus non array
     if number_of_ip_addresses == 1
       event.set("#{@parent_field}_ip_version", version_ip_addresses[0])
+      event.set("#{@parent_field}_is_ipv6", ip_addresses_is_ipv6[0])
       event.set("#{@parent_field}_ip_public", ip_addresses_public[0])
       event.set("#{@parent_field}_ip_type", ip_addresses_type[0])
       event.set("#{@parent_field}_ip_rfc", ip_addresses_rfc[0])
@@ -221,6 +233,7 @@ def filter(event)
 
     else
       event.set("#{@parent_field}_ip_version", version_ip_addresses)
+      event.set("#{@parent_field}_is_ipv6", ip_addresses_is_ipv6)
       event.set("#{@parent_field}_ip_public", ip_addresses_public)
       event.set("#{@parent_field}_ip_type", ip_addresses_type)
       event.set("#{@parent_field}_ip_rfc", ip_addresses_rfc)

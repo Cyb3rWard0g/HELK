@@ -1,7 +1,7 @@
 {
   "order": 92,
   "index_patterns": [ "logs-*" ],
-  "version": 2019090101,
+  "version": 2019110901,
   "mappings": {
     "properties": {
       "dst_ip_addr": {
@@ -20,6 +20,9 @@
       "dst_ip_version": {
         "type": "keyword"
       },
+      "dst_is_ipv6": {
+        "type": "boolean"
+      },
       "dst_nat_ip_addr": {
         "type": "ip",
         "copy_to": "any_ip_addr"
@@ -35,6 +38,9 @@
       },
       "dst_nat_ip_version": {
         "type": "keyword"
+      },
+      "dst_nat_is_ipv6": {
+        "type": "boolean"
       },
       "src_ip_addr": {
         "type": "ip",
@@ -52,6 +58,9 @@
       "src_ip_version": {
         "type": "keyword"
       },
+      "src_is_ipv6": {
+        "type": "boolean"
+      },
       "src_nat_ip_addr": {
         "type": "ip",
         "copy_to": "any_ip_addr"
@@ -67,6 +76,9 @@
       },
       "src_nat_ip_version": {
         "type": "keyword"
+      },
+      "src_nat_is_ipv6": {
+        "type": "boolean"
       },
       "meta_dst_ip_geo": {
         "properties": {
