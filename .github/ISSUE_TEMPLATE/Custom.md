@@ -4,17 +4,47 @@ about: Describe the issue that you are having
 
 ---
 
-**Describe the problem**
+#### Describe the problem
 
-**What steps did you take trying to fix the issue?**
+#### Provide the output of the following commands
 
-**How could we replicate the issue?**
+Get operating system and version
+for linux (except Mac) use:  
+`cat /etc/os-release`  
+for Mac/OSX use:  
+`sw_vers`  
+Get disk space, memory, processor cores, and docker storage  
+`echo -e "\nDocker Space:" && df -h /var/lib/docker; echo -e "\nMemory:" && free -g; echo -e "\nCores:" && getconf _NPROCESSORS_ONLN`  
+Get output of the HELK docker containers:  
+`docker ps --filter "name=helk"`
 
-**If you are having issue during the installation stage, please provide the HELK installation logs located at /var/log/helk-install.log**
+```
+Place all output, from the above commands, here
+```
 
-**What version of HELK are you using?**
+#### Provide the HELK installation logs located at /var/log/helk-install.log if you are having install errors
 
-**What operating system and version are you using to host the HELK?**
+```
+Place the output here
+```
 
-**Any additional context?**
-other log files, pictures, etc.
+#### What version of HELK are you using
+
+just provide the date you cloned the HELK repo:
+```
+Place the date here
+```
+
+##### What steps did you take trying to fix the issue
+
+##### How could we replicate the issue
+
+##### Any additionally code or log context you would like to provide
+
+```
+Place the output here
+```
+
+#### Any additional context or input you have
+
+pictures, comments, etc.
