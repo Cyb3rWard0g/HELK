@@ -14,7 +14,7 @@ about: Describe the issue that you are having
 
 **What version of HELK are you using?**
 
-**What OS are you using to host the HELK?**
+**What operating system and version are you using to host the HELK?**
 
 **Any additional context?**
 other log files, pictures, etc.
