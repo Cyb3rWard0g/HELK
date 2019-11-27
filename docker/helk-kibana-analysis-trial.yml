@@ -126,6 +126,7 @@ services:
       KSQL_KSQL_CACHE_MAX_BYTES_BUFFERING: 10000000
       KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: earliest
       KSQL_HEAP_OPTS: -Xmx1g
+      KSQL_OPTS: "-Dconfluent.support.metrics.enable=false"
     ports:
       - 8088:8088
     networks:
