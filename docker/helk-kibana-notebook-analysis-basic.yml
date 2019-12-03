@@ -43,6 +43,7 @@ services:
     ports:
       - "5044:5044"
       - "8531:8531"
+      - "3515:3515"
     restart: always
     depends_on:
       - helk-kibana
@@ -103,7 +104,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat
+      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, nxlog_mordor
       KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
       LOG_RETENTION_HOURS: 4
     ports:
