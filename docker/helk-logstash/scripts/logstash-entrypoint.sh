@@ -169,6 +169,32 @@ if [[ -z "$LS_JAVA_OPTS" ]]; then
 fi
 echo "$HELK_LOGSTASH_INFO_TAG Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
 
+# ********* Setting Logstash PIPELINE_WORKERS ***************
+if [[ -z "$PIPELINE_WORKERS" ]]; then
+  # Get total CPUs/cores as reported by OS
+  TOTAL_CORES=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
+  # try one more way
+  [ -z "$TOTAL_CORES" ] && TOTAL_CORES=$(getconf NPROCESSORS_ONLN)
+  # Unable to get reported cores
+  if [ -z "$TOTAL_CORES" ]; then
+    TOTAL_CORES=1
+    echo "$HELK_ERROR_TAG unable to get number of CPUs/cores as reported by the OS"
+  fi
+  # Set workers based on available cores
+  if [ "$TOTAL_CORES" -ge 1 ] && [ "$TOTAL_CORES" -le 3 ]; then
+    PIPELINE_WORKERS=1
+    # Divide by 2
+  elif [ "$TOTAL_CORES" -ge 4 ]; then
+    PIPELINE_WORKERS="$(( TOTAL_CORES / 2 ))"
+  # some unknown number
+  else
+    echo "$HELK_ERROR_TAG reported CPUs/cores not an integer? not greater or equal to 1.."
+    PIPELINE_WORKERS=1
+  fi
+  export PIPELINE_WORKERS
+fi
+echo "$HELK_LOGSTASH_INFO_TAG Setting PIPELINE_WORKERS to ${PIPELINE_WORKERS}"
+
 # ********** Starting Logstash *****************
 echo "$HELK_LOGSTASH_INFO_TAG Running docker-entrypoint script.."
 /usr/local/bin/docker-entrypoint
