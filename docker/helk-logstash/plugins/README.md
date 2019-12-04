@@ -76,7 +76,6 @@ cd logstash-standalone/
 ./bin/logstash-plugin install logstash-input-elasticsearch &&
 ./bin/logstash-plugin install logstash-input-file &&
 ./bin/logstash-plugin install logstash-input-jdbc &&
-./bin/logstash-plugin install logstash-input-kafka &&
 ./bin/logstash-plugin install logstash-input-lumberjack &&
 ./bin/logstash-plugin install logstash-input-snmptrap &&
 ./bin/logstash-plugin install logstash-input-syslog &&
@@ -85,13 +84,18 @@ cd logstash-standalone/
 ./bin/logstash-plugin install logstash-input-wmi
 ```
 
-5) Install the logstash output plugins
+5) Install the logstash integration plugins
+
+```bash
+./bin/logstash-plugin install logstash-integration-kafka
+```
+
+6) Install the logstash output plugins
 
 ```bash
 ./bin/logstash-plugin install logstash-output-csv &&
 ./bin/logstash-plugin install logstash-output-elasticsearch &&
 ./bin/logstash-plugin install logstash-output-email &&
-./bin/logstash-plugin install logstash-output-kafka &&
 ./bin/logstash-plugin install logstash-output-lumberjack &&
 ./bin/logstash-plugin install logstash-output-nagios &&
 ./bin/logstash-plugin install logstash-output-stdout &&
@@ -100,13 +104,13 @@ cd logstash-standalone/
 ./bin/logstash-plugin install logstash-output-udp
 ```
 
-6) Update the plugins... Even after you have already installed them...
+7) Update the plugins... Even after you have already installed them...
 
 ```bash
 ./bin/logstash-plugin update
 ```
 
-7) Remove some unnecessary plugins, again yes
+8) Remove some unnecessary plugins, again yes
 
 ```bash
 ./bin/logstash-plugin remove logstash-input-couchdb_changes;
@@ -123,24 +127,29 @@ cd logstash-standalone/
 ./bin/logstash-plugin remove logstash-codec-graphite;
 ```
 
-8) List the plugins and corresponding versions, then add the output to [logstash-plugin-information.yml](logstash-plugin-information.yml)
+9) List the plugins and corresponding versions, then add the output to [logstash-plugin-information.yml](logstash-plugin-information.yml)
 
 ```bash
 ./bin/logstash-plugin list --verbose
 ```
 
-9) Package the plugins
+10) Package the plugins
 
 ```bash
 ./bin/logstash-plugin prepare-offline-pack --output helk-offline-logstash-codec_and_filter_plugins.zip --overwrite logstash-codec-* logstash-filter-* &&
 ./bin/logstash-plugin prepare-offline-pack --output helk-offline-logstash-input_and_output-plugins.zip --overwrite logstash-input-* logstash-output-*
 ```
 
-10) Hash the packaged plugins
+11) Hash the packaged plugins
 
 ```bash
 sha512sum helk-offline-logstash-codec_and_filter_plugins.zip > helk-offline-logstash-codec_and_filter_plugins.zip.sha512 &&
 sha512sum helk-offline-logstash-input_and_output-plugins.zip > helk-offline-logstash-input_and_output-plugins.zip.sha512
 ```
 
-11) Move the plugins and sha512 file, via your preferred method, to [this directory](.)
+12) Set timestamp of when updated
+```bash
+printf "%s" "$(date +"%Y-%m-%d %T")" > helk-plugins-updated-timestamp.txt
+```
+
+13) Move the plugins and files, via your preferred method, to [this directory](.)
