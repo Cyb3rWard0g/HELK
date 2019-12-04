@@ -10,8 +10,8 @@ LABEL description="Dockerfile base for the HELK Kafka."
 ENV DEBIAN_FRONTEND noninteractive
 
 # *********** Kafka Variables ***************
-ENV KAFKA_VERSION=2.2.1
-ENV SCALA_VERSION=2.12.9
+ENV KAFKA_VERSION=2.3.1
+ENV SCALA_VERSION=2.12.10
 ENV KAFKA_LOGS_PATH=/var/log/kafka
 ENV KAFKA_CONSOLE_LOG=/var/log/kafka/helk-kafka.log
 ENV KAFKA_HOME=/opt/helk/kafka
