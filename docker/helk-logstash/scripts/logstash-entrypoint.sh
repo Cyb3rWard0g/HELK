@@ -99,19 +99,45 @@ until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS
 done
 
 # ********** Install Plugins *****************
+plugins_time_file="/usr/share/logstash/plugins/helk-plugins-updated-timestamp.txt"
 echo "$HELK_LOGSTASH_INFO_TAG Checking Logstash plugins.."
-# Test a few to determine if probably all already installed
-if ( logstash-plugin list | grep 'logstash-filter-prune' ) && ( logstash-plugin list | grep 'logstash-input-wmi' ); then
-    echo "$HELK_LOGSTASH_INFO_TAG Plugins are already installed"
-else
-	if (logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip) && (logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip); then
-    echo "$HELK_LOGSTASH_INFO_TAG Logstash plugins installed via offline package.."
+# check if has been 30 days since plugins have been updated
+if test -f "$plugins_time_file"; then
+  plugins_last_time=$(date -d "$(<"$plugins_time_file")" '+%s')
+  plugins_current_time=$(date -d "$(<"$plugins_time_file")" '+%s')
+  plugins_day_diff=$(( ( plugins_current_time - plugins_last_time )/(60*60*24) ))
+  if [ "$plugins_day_diff" -ge 30 ]; then
+    plugins_oudated="yes"
+    echo "$HELK_LOGSTASH_INFO_TAG Plugins have not been updated in over 30 days.."
   else
-    echo "$HELK_LOGSTASH_INFO_TAG Trying to install logstash plugins over the internet.."
-    logstash-plugin install logstash-codec-avro logstash-codec-es_bulk logstash-codec-cef logstash-codec-gzip_lines logstash-codec-json logstash-codec-json_lines logstash-codec-netflow logstash-codec-nmap logstash-codec-protobuf logstash-filter-alter logstash-filter-bytes logstash-filter-cidr logstash-filter-cipher logstash-filter-clone logstash-filter-csv logstash-filter-de_dot logstash-filter-dissect logstash-filter-dns logstash-filter-elasticsearch logstash-filter-fingerprint logstash-filter-geoip logstash-filter-i18n logstash-filter-jdbc_static logstash-filter-jdbc_streaming logstash-filter-json logstash-filter-json_encode logstash-filter-kv logstash-filter-memcached logstash-filter-metricize logstash-filter-prune logstash-filter-translate logstash-filter-urldecode logstash-filter-useragent logstash-filter-xml logstash-input-beats logstash-input-elasticsearch logstash-input-file logstash-input-jdbc logstash-input-kafka logstash-input-lumberjack logstash-input-snmptrap logstash-input-syslog logstash-input-tcp logstash-input-udp logstash-input-wmi logstash-output-csv logstash-output-elasticsearch logstash-output-email logstash-output-kafka logstash-output-lumberjack logstash-output-nagios logstash-output-stdout logstash-output-syslog logstash-output-tcp logstash-output-udp
-    echo "$HELK_LOGSTASH_INFO_TAG Trying to update logstash plugins over the internet.."
+    plugins_oudated="no"
+  fi
+else
+  plugins_oudated="yes"
+fi
+# Test a few plugins determine if probably all already installed
+if ( logstash-plugin list | grep 'logstash-filter-prune' ) && ( logstash-plugin list | grep 'logstash-input-wmi' ); then
+  plugins_previous_install="yes"
+  echo "$HELK_LOGSTASH_INFO_TAG Plugins from previous install detected.."
+else
+  plugins_previous_install="no"
+  echo "$HELK_LOGSTASH_INFO_TAG Plugins from previous install not detected.."
+fi
+# If have not been updated in X time or not installed at all.. then install them
+if [ $plugins_previous_install = "no" ] || [ $plugins_oudated = "yes" ]; then
+	if [ -f "/usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip" ] && [  -f "/usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip" ]; then
+    echo "$HELK_LOGSTASH_INFO_TAG Installing Logstash plugins via offline package.."
+	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
+	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip
+  else
+    echo "$HELK_LOGSTASH_INFO_TAG Installing logstash plugins over the internet.."
+    logstash-plugin install logstash-codec-avro logstash-codec-es_bulk logstash-codec-cef logstash-codec-gzip_lines logstash-codec-json logstash-codec-json_lines logstash-codec-netflow logstash-codec-nmap logstash-codec-protobuf logstash-filter-alter logstash-filter-bytes logstash-filter-cidr logstash-filter-cipher logstash-filter-clone logstash-filter-csv logstash-filter-de_dot logstash-filter-dissect logstash-filter-dns logstash-filter-elasticsearch logstash-filter-fingerprint logstash-filter-geoip logstash-filter-i18n logstash-filter-jdbc_static logstash-filter-jdbc_streaming logstash-filter-json logstash-filter-json_encode logstash-filter-kv logstash-filter-memcached logstash-filter-metricize logstash-filter-prune logstash-filter-translate logstash-filter-urldecode logstash-filter-useragent logstash-filter-xml logstash-input-beats logstash-input-elasticsearch logstash-input-file logstash-input-jdbc logstash-input-lumberjack logstash-input-snmptrap logstash-input-syslog logstash-input-tcp logstash-input-udp logstash-input-wmi logstash-output-csv logstash-output-elasticsearch logstash-output-email logstash-output-lumberjack logstash-output-nagios logstash-output-stdout logstash-output-syslog logstash-output-tcp logstash-output-udp
+    echo "$HELK_LOGSTASH_INFO_TAG Updating Logstash plugins over the internet.."
     logstash-plugin update
   fi
+  printf "%s" "$(date +"%Y-%m-%d %T")" > "$plugins_time_file"
+else
+  echo "$HELK_LOGSTASH_INFO_TAG Logstash plugins already installed and up to date.."
 fi
 
 # ********* Setting LS_JAVA_OPTS ***************
