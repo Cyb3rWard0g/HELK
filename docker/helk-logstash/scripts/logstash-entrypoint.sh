@@ -56,14 +56,14 @@ if [[ -n "$ELASTIC_PASSWORD" ]]; then
   for config in /usr/share/logstash/pipeline/*-output.conf
   do
       echo "$HELK_LOGSTASH_INFO_TAG Updating pipeline config $config..."
-      sed -i "s/#password \=>.*$/password \=> \'${ELASTIC_PASSWORD}\'/g" ${config}
+      sed -i "s/#password \=>.*$/password \=> \'${ELASTIC_PASSWORD}\'/g" "${config}"
   done
 fi
 
 # *********** Check if Elasticsearch is up ***************
 while true
   do
-    ES_STATUS_CODE=$(curl --silent --output /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS)
+    ES_STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS)
     if [ "$ES_STATUS_CODE" -eq 200 ]; then
       echo "$HELK_LOGSTASH_INFO_TAG Connected successfully to elasticsearch URI.."
       break
@@ -78,21 +78,21 @@ echo "$HELK_LOGSTASH_INFO_TAG Uploading templates to elasticsearch.."
 for file in ${DIR}/*.json; do
     template_name=$(echo $file | sed -r ' s/^.*\/[0-9]+\-//' | sed -r ' s/\.json$//')
     echo "$HELK_LOGSTASH_INFO_TAG Uploading $template_name template to elasticsearch.."
-    until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS/_template/$template_name -d@${file} -H 'Content-Type: application/json')" == "200" ]]; do
+    until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS/_template/"$template_name" -d@"${file}" -H 'Content-Type: application/json')" == "200" ]]; do
       echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading $template_name"
       sleep 2
     done
 done
 
 # ******** Cluster Settings ***************
-echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Configuring elasticsearch cluster settings.."
+echo "$HELK_LOGSTASH_INFO_TAG Configuring elasticsearch cluster settings.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT $ELASTICSEARCH_ACCESS/_cluster/settings -H 'Content-Type: application/json' -d "$CLUSTER_SETTINGS")" == "200" ]]; do
   echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading $template_name"
   sleep 2
 done
 
 # ******** Create Data For Kibana Experience ***************
-echo "[HELK-ES-DOCKER-INSTALLATION-INFO] Setting up additional Kibana/UI experience parameter.."
+echo "$HELK_LOGSTASH_INFO_TAG Setting up additional Kibana/UI experience parameter.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS/logs-endpoint-winevent-sysmon-1990.12.18/_doc/TestHELKDataWindowsSysmon000001 -H 'Content-Type: application/json' -d "$TestHELKDataWindowsSysmon000001")" == "200" ]]; do
   echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading data"
   sleep 2
@@ -119,22 +119,22 @@ if [[ -z "$LS_JAVA_OPTS" ]]; then
   while true; do
     # Check using more accurate MB
     AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
-    if [ $AVAILABLE_MEMORY -ge 900 -a $AVAILABLE_MEMORY -le 1000 ]; then
+    if [ "$AVAILABLE_MEMORY" -ge 900 ] && [ "$AVAILABLE_MEMORY" -le 1000 ]; then
       LS_MEMORY="400m"
       LS_MEMORY_HIGH="1000m"
-    elif [ $AVAILABLE_MEMORY -ge 1001 -a $AVAILABLE_MEMORY -le 3000 ]; then
+    elif [ "$AVAILABLE_MEMORY" -ge 1001 ] && [ "$AVAILABLE_MEMORY" -le 3000 ]; then
       LS_MEMORY="700m"
       LS_MEMORY_HIGH="1300m"
-    elif [ $AVAILABLE_MEMORY -gt 3000 ]; then
+    elif [ "$AVAILABLE_MEMORY" -gt 3000 ]; then
       # Set high & low, so logstash doesn't use everything unnecessarily, it will usually flux up and down in usage -- and doesn't "severely" despite what everyone seems to believe
       LS_MEMORY="$(( AVAILABLE_MEMORY / 4 ))m"
       LS_MEMORY_HIGH="$(( AVAILABLE_MEMORY / 2 ))m"
-      if [ $AVAILABLE_MEMORY -gt 31000 ]; then
+      if [ "$AVAILABLE_MEMORY" -gt 31000 ]; then
         LS_MEMORY="8000m"
         LS_MEMORY_HIGH="31000m"
       fi
     else
-      echo "$HELK_LOGSTASH_INFO_TAG $LS_MEMORY MB is not enough memory for Logstash yet.."
+      echo "$HELK_ERROR_TAG $LS_MEMORY MB is not enough memory for Logstash yet.."
       sleep 1
     fi
     export LS_JAVA_OPTS="${HELK_LOGSTASH_JAVA_OPTS} -Xms${LS_MEMORY} -Xmx${LS_MEMORY_HIGH} "

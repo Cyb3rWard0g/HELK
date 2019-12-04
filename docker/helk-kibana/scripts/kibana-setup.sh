@@ -6,13 +6,11 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-# References:
-# https://github.com/elastic/kibana/issues/3709 (https://github.com/hobti01)
-# https://explainshell.com/explain?cmd=set+-euxo%20pipefail
-# https://github.com/elastic/beats-dashboards/blob/master/load.sh
-# https://github.com/elastic/kibana/issues/14872
-# https://github.com/elastic/stack-docker/blob/master/docker-compose.yml
-# https://stackoverflow.com/a/42377880
+# *********** Helk log tagging variables ***************
+# For more efficient script editing/reading, and also if/when we switch to different install script language
+TAG_NAME="SETUP"
+HELK_INFO_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-INFO:"
+HELK_ERROR_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-ERROR:"
 
 # *********** Setting Variables ***************
 KIBANA_URL=http://$SERVER_HOST:$SERVER_PORT

@@ -8,8 +8,9 @@
 
 # *********** Helk log tagging variables ***************
 # For more efficient script editing/reading, and also if/when we switch to different install script language
-HELK_INFO_TAG="[HELK-KIBANA-DOCKER-INSTALLATION-INFO]"
-HELK_ERROR_TAG="[HELK-KIBANA-DOCKER-INSTALLATION-ERROR]"
+TAG_NAME="ENTRYPOINT"
+HELK_INFO_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-INFO:"
+HELK_ERROR_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-ERROR:"
 
 # *********** Install Plugins *********************
 
@@ -22,7 +23,7 @@ echo "$HELK_INFO_TAG Setting Elasticsearch URL to $ELASTICSEARCH_HOSTS"
 if [[ -z "$SERVER_HOST" ]]; then
   export SERVER_HOST=helk-kibana
 fi
-echo "$HELK_INFO_TAG Setting Kibana server host to $SERVER_HOST"
+echo "$HELK_INFO_TAG Setting Kibana server to $SERVER_HOST"
 
 if [[ -z "$SERVER_PORT" ]]; then
   export SERVER_PORT=5601
