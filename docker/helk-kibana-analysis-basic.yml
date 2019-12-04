@@ -63,7 +63,7 @@ services:
       - source: kibana.yml
         target: /usr/share/kibana/config/kibana.yml
     volumes:
-      - ./helk-kibana/dashboards:/usr/share/kibana/dashboards
+      - ./helk-kibana/objects:/usr/share/kibana/objects
       - ./helk-kibana/scripts:/usr/share/kibana/scripts
       - ./helk-kibana/custom:/usr/share/kibana/custom
     entrypoint: /usr/share/kibana/scripts/kibana-entrypoint.sh
