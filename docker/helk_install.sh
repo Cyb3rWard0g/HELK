@@ -210,6 +210,15 @@ install_docker_compose(){
     COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
     curl -L https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
     chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
+    OSNAME=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d '=' -f 2)
+    if [[ $OSNAME == *"CentOS"* ]]; then
+        if ! [[ $PATH == *"/usr/local/bin"* ]]; then # small check not to have it 2 times
+            export PATH=$PATH:/usr/local/bin
+        else
+            echo "[INFO] /usr/local/bin is already in PATH environment variable !"
+        fi
+        docker-compose version
+    fi
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install docker-compose (Error Code: $ERROR)."
