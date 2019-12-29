@@ -1,11 +1,8 @@
 helk-logstash/.DS_Store
 .DS_Store
 .git
+.vscode/
 .idea/
 .testing/
-.gitignore
-# HELK Custom Logstash
-docker/helk-logstash/pipeline/*-custom*.conf
-/.vscode/
-# HELK Custom Kibana
-docker/helk-kibana/dashboards/*custom*
+# HELK Custom Configurations
+*custom*
