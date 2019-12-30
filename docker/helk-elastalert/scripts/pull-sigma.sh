@@ -6,12 +6,17 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
+# *********** Helk log tagging variables ***************
+# For more efficient script editing/reading, and also if/when we switch to different install script language
+HELK_ELASTALERT_INFO_TAG="HELK-ELASTALERT-DOCKER-INSTALLATION-INFO"
+#HELK_ERROR_TAG="[HELK-ELASTALERT-DOCKER-INSTALLATION-ERROR]"
+
 # ******* Change directory to SIGMA local repo ************
-cd $ESALERT_SIGMA_HOME
+cd "$ESALERT_SIGMA_HOME" || exit
 
 # ******* Check if Elastalert rules folder has SIGMA rules ************
-echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Checking if Elastalert rules folder has SIGMA rules.."
-if ls $ESALERT_HOME/rules/ | grep -v '^helk_' >/dev/null 2>&1; then
+echo "$HELK_ELASTALERT_INFO_TAG Checking if Elastalert rules folder has SIGMA rules.."
+if ls "$ESALERT_HOME"/rules/ | grep -v "^helk_" >/dev/null 2>&1; then
     echo "[+++++] SIGMA rules available in rules folder.."
     SIGMA_RULES_AVAILABLE=YES
 else
@@ -19,12 +24,12 @@ else
 fi
 
 # ******* Check if local SIGMA repo needs update *************
-echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Fetch updates for SIGMA remote.."
+echo "$HELK_ELASTALERT_INFO_TAG Fetch updates for SIGMA remote.."
 git remote update
 
 # Reference: https://stackoverflow.com/a/3278427
-echo "[HELK-ELASTALERT-DOCKER-INSTALLATION-INFO] Checking to see if local SIGMA repo is up to date or not.."
-UPSTREAM=${1:-'@{u}'}
+echo "$HELK_ELASTALERT_INFO_TAG Checking to see if local SIGMA repo is up to date or not.."
+UPSTREAM=${1:-"@{u}"}
 LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse "$UPSTREAM")
 BASE=$(git merge-base @ "$UPSTREAM")
@@ -34,22 +39,34 @@ if [ $LOCAL = $REMOTE ]; then
     if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
         echo "[++++++] SIGMA rules available in Elastalert rules folder.."
         echo "[++++++] Nothing to do here.."
-        exit 1
+        #exit 1
     fi
 elif [ $LOCAL = $BASE ]; then
     echo "[++++++] Local SIGMA repo needs to be updated. Updating local SIGMA repo.."
     git pull
     if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
         echo "[+++++++++] Elastalert rules folder has potentially old SIGMA rules.."
-        find $ESALERT_HOME/rules/ -type f -not -name 'helk_*' -delete
+        find $ESALERT_HOME/rules/ -type f -not -name "helk_*" -delete
     fi
 elif [ $REMOTE = $BASE ]; then
     echo "[++++++] Need to push"
-    exit 1
+    #exit 1
 else
     echo "[++++++] Diverged"
-    exit 1
+    #exit 1
 fi
+
+# *********** Unsupported SIGMA Functions ***************
+# Unsupported feature "near" aggregation operator not yet implemented https://github.com/Neo23x0/sigma/issues/209
+SIGMAremoveNearRules() {
+    if grep --quiet -E "\s+condition/\s+.*\s+|\s+near\s+" "$1"; then
+        echo "[---] Skipping incompatible rule $1, reference: https://github.com/Neo23x0/sigma/issues/209"
+        #rm "$1"
+        return 0
+    else
+      return 1
+    fi
+}
 
 # ******* Transforming every Windows SIGMA rule to elastalert rules *******
 echo " "
@@ -64,17 +81,25 @@ for  rule_category in rules/windows/* ; do
     if [ "$rule_category" == rules/windows/process_creation ]; then
         for rule in $rule_category/* ; do
             if [ $rule != rules/windows/process_creation/win_mal_adwind.yml ]; then
-                echo "[+++] Processing Windows rule: $rule .."
-                tools/sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
-                tools/sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
-                rule_counter=$[$rule_counter +1]
+                if SIGMAremoveNearRules "$rule"; then
+                    continue
+                else
+                    echo "[+++] Processing Windows process creation rule: $rule .."
+                    tools/sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    tools/sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    rule_counter=$[$rule_counter +1]
+                fi
             fi
         done
-    else    
+    else
         for rule in $rule_category/* ; do
-            echo "[+++] Processing Windows rule: $rule .."
-            tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
-            rule_counter=$[$rule_counter +1]
+            if SIGMAremoveNearRules "$rule"; then
+                continue
+            else
+                echo "[+++] Processing additional Windows rule: $rule .."
+                tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
+                rule_counter=$[$rule_counter +1]
+            fi
         done
     fi
 done
@@ -83,23 +108,22 @@ echo "[+++] Finished processing $rule_counter SIGMA rules"
 echo "-------------------------------------------------------"
 echo " "
 
-# ******* Removing Noise Rules *****************************
+# ******* Removing Rules w/ Too Many False Positives *****************************
 echo "Removing Elastalert rules that generate too much noise. Replacing them with HELK rules.."
 echo "--------------------------------------------------------------------------------------------"
-find $ESALERT_HOME/rules/ -type f -name 'sigma_sysmon_powershell_suspicious_parameter_variation.yml' -delete
 
 
 # Patching one issue in SIGMA Integration
 # References:
-# Unsupported feature 'near' aggregation operator not yet implemented https://github.com/Neo23x0/sigma/issues/209
 # ONE SIGMA Rule & TWO log sources: https://github.com/Neo23x0/sigma/issues/205
+
 
 # ******** Deleting Empty Files ***********
 echo " "
 echo "Removing empty files.."
 echo "-------------------------"
 rule_counter=0
-for ef in $ESALERT_HOME/rules/* ; do 
+for ef in $ESALERT_HOME/rules/* ; do
     if [[ -s $ef ]]; then
         continue
     else
@@ -116,10 +140,10 @@ echo " "
 rule_counter=0
 echo "Fixing Elastalert rule files with multiple SIGMA rules in them.."
 echo "------------------------------------------------------------------"
-for er in $ESALERT_HOME/rules/*; do 
+for er in $ESALERT_HOME/rules/*; do
     echo "[+++] Identifiying extra new lines in file $er .."
     counter=0
-    while read line; do 
+    while read line; do
         if [ "$line" == "" ]; then
             counter=$[$counter +1]
         fi

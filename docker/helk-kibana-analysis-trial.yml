@@ -2,14 +2,20 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
     container_name: helk-elasticsearch
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "9"
+        max-size: "6m"
     secrets:
       - source: elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
     volumes:
       - esdata:/usr/share/elasticsearch/data
       - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
+      - ./helk-elasticsearch/config/jvm.options:/usr/share/elasticsearch/config/jvm.options
     entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
     environment:
       - cluster.name=helk-cluster
@@ -31,6 +37,11 @@ services:
   helk-logstash:
     build: helk-logstash/
     container_name: helk-logstash
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "9"
+        max-size: "6m"
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
@@ -42,23 +53,28 @@ services:
       - xpack.monitoring.elasticsearch.username=logstash_system
       - xpack.monitoring.elasticsearch.password=logstashpassword
       - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
+      - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
       - "5044:5044"
       - "8531:8531"
-      - "3515:3515"
     restart: always
     depends_on:
       - helk-kibana
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:7.1.0
+    image: docker.elastic.co/kibana/kibana:7.5.1
     container_name: helk-kibana
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "9"
+        max-size: "6m"
     secrets:
       - source: kibana.yml
         target: /usr/share/kibana/config/kibana.yml
     volumes:
-      - ./helk-kibana/dashboards:/usr/share/kibana/dashboards
+      - ./helk-kibana/objects:/usr/share/kibana/objects
       - ./helk-kibana/scripts:/usr/share/kibana/scripts
     entrypoint: /usr/share/kibana/scripts/kibana-entrypoint.sh
     environment:
@@ -72,6 +88,11 @@ services:
   helk-nginx:
     image: cyb3rward0g/helk-nginx:0.0.7
     container_name: helk-nginx
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "9"
+        max-size: "6m"
     volumes:
       - ./helk-nginx/config/trial-elk:/etc/nginx/sites-available/default
       - ./helk-nginx/scripts/:/opt/helk/scripts/
@@ -87,6 +108,11 @@ services:
   helk-zookeeper:
     image: cyb3rward0g/helk-zookeeper:2.2.0
     container_name: helk-zookeeper
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-logstash
@@ -95,6 +121,11 @@ services:
   helk-kafka-broker:
     image: cyb3rward0g/helk-kafka-broker:2.2.0
     container_name: helk-kafka-broker
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-zookeeper
@@ -105,7 +136,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, nxlog_mordor
+      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, zeek
       KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
       LOG_RETENTION_HOURS: 4
     ports:
@@ -115,6 +146,11 @@ services:
   helk-ksql-server:
     image: confluentinc/cp-ksql-server:5.1.3
     container_name: helk-ksql-server
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-kafka-broker
@@ -127,7 +163,6 @@ services:
       KSQL_KSQL_CACHE_MAX_BYTES_BUFFERING: 10000000
       KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: earliest
       KSQL_HEAP_OPTS: -Xmx1g
-      KSQL_OPTS: "-Dconfluent.support.metrics.enable=false"
     ports:
       - 8088:8088
     networks:
@@ -135,6 +170,11 @@ services:
   helk-ksql-cli:
     image: confluentinc/cp-ksql-cli:5.1.3
     container_name: helk-ksql-cli
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     depends_on:
       - helk-ksql-server
     environment:
