@@ -335,8 +335,8 @@ check_github(){
                 git clean  -d  -fx . >> $LOGFILE 2>&1
                 git pull helk-repo master >> $LOGFILE 2>&1
                 REBUILD_NEEDED=1
-                touch /tmp/helk-update
-                echo $REBUILD_NEEDED > /tmp/helk-update
+                touch "$UPDATES_FETCHED_FILE"
+                echo $REBUILD_NEEDED > "$UPDATES_FETCHED_FILE"
 
             # IF HELK HAS BEEN CLONED FROM THE OFFICIAL REPO & MODIFIED
             elif [[ -z $IS_MASTER_BEHIND ]]; then
@@ -411,19 +411,20 @@ update_helk() {
     done
     check_logstash_connected
     echo -e "\n${CYAN}[HELK-UPDATE-INFO]${STD} YOUR HELK HAS BEEN UPDATED!"
-    echo 0 > /tmp/helk-update
+    echo 0 > "$UPDATES_FETCHED_FILE"
     exit 1
 }
 
 LOGFILE="/var/log/helk-update.log"
+UPDATES_FETCHED_FILE="/tmp/helk-update"
 REBUILD_NEEDED=0
 GIT_REPO_CLEAN=1
 
 echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} You can track the verbose output of this script at $LOGFILE"
 sleep 1
 
-if [[ -e /tmp/helk-update ]]; then
-    UPDATES_FETCHED=`cat /tmp/helk-update`
+if [[ -e $UPDATES_FETCHED_FILE ]]; then
+    UPDATES_FETCHED=`cat $UPDATES_FETCHED_FILE`
 
     if [ "$UPDATES_FETCHED" == "1" ]; then
       echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates already downloaded. Starting update..."
