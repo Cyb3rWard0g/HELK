@@ -201,7 +201,7 @@ install_docker(){
             fi
             echo "$HELK_INFO_TAG Docker successfully installed via snap."
         else
-            echo "$HELK_INFO_TAG Docker could not be installed. Check /var/log/helk-install.log for details."
+            echo "$HELK_INFO_TAG Docker could not be installed. Check $LOGFILE for details."
             exit 1
         fi
     fi
