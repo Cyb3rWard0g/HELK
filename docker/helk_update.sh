@@ -365,7 +365,14 @@ check_logstash_connected(){
 }
 
 update_helk() {
-    
+
+    echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Git repository has been updated..."
+    read -p "Do you wish to continue the update? (y/n) " -n 1 -r
+    echo
+    if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+        echo -e "\nExiting script..."
+        exit 1
+    fi
     set_helk_build
     set_helk_subscription
 
