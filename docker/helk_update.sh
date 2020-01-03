@@ -337,17 +337,18 @@ check_github(){
                 REBUILD_NEEDED=1
                 touch "$UPDATES_FETCHED_FILE"
                 echo $REBUILD_NEEDED > "$UPDATES_FETCHED_FILE"
+              fi
 
             # IF HELK HAS BEEN CLONED FROM THE OFFICIAL REPO & MODIFIED
-            elif [[ -z $IS_MASTER_BEHIND ]]; then
+            if [[ -n $IS_MASTER_BEHIND ]]; then
                 echo "Current master branch ahead of remote branch, possibly modified. Exiting..." >> $LOGFILE 2>&1
-                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available."
-
-            else
-                echo "Repository misconfigured. Exiting..." >> $LOGFILE 2>&1
-                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available."
-
+                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available. Current repo has been modified."
             fi
+            if [[ $REBUILD_NEEDED == 0 ]] && [[ -z $IS_MASTER_BEHIND ]]; then
+                echo "Repository misconfigured. Exiting..." >> $LOGFILE 2>&1
+                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available. Current repo is misconfigured."
+            fi
+
         else
             echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available."    
         fi
@@ -430,15 +431,18 @@ if [[ -e $UPDATES_FETCHED_FILE ]]; then
     if [ "$UPDATES_FETCHED" == "1" ]; then
       echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates for the HELK repository have already been downloaded..."
       # Give user option to clear the feteched updates
-      read -p "Do you to want to use the already downlaoded updates? (y/n): " -e -i "y" -n 1 -r
+      read -p "Do you to want to use the already downloaded updates? (y/n): " -e -i "y" -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-          update_helk
           echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates already downloaded. Starting update..."
-      fi
+          echo "Updates already downloaded. Starting update..." >> $LOGFILE 2>&1
+          update_helk
       else
-        rm $UPDATES_FETCHED_FILE
         echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Re-downloading updates..."
+        echo "Performing download/update fetch again" >> $LOGFILE 2>&1
+        rm $UPDATES_FETCHED_FILE
+      fi
+
     fi
 fi
 
