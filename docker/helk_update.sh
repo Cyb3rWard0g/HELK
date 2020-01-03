@@ -312,8 +312,7 @@ check_github(){
 
     if [ $GIT_REPO_CLEAN == 1 ]; then
         if [[ -z "$(git remote | grep helk-repo)" ]]; then
-            #TODO:#TESTING
-            git remote add helk-repo https://github.com/neu5ron/HELK.git  >> $LOGFILE 2>&1
+            git remote add helk-repo https://github.com/Cyb3rWard0g/HELK.git  >> $LOGFILE 2>&1
         else
             echo "HELK repo exists" >> $LOGFILE 2>&1
         fi
@@ -356,8 +355,7 @@ check_github(){
     else
         cd ..
         git clean  -d  -fx . >> $LOGFILE 2>&1
-        #TODO:#TESTING
-        git remote add helk-repo https://github.com/neu5ron/HELK.git  >> $LOGFILE 2>&1
+        git remote add helk-repo https://github.com/Cyb3rWard0g/HELK.git  >> $LOGFILE 2>&1
         git pull helk-repo master >> $LOGFILE 2>&1    
     fi
 }
