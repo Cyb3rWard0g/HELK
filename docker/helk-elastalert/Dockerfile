@@ -41,7 +41,8 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   && pip3 install -r requirements.txt \
   && python3 setup.py install \
   # ********* Download SIGMA *******************
-  && git clone https://github.com/Cyb3rWard0g/sigma.git ${ESALERT_SIGMA_HOME} \
+  #TODO:#TESTING
+  && git clone https://github.com/neu5ron/sigma.git ${ESALERT_SIGMA_HOME} \
   && pip3 install -r ${ESALERT_SIGMA_HOME}/tools/requirements.txt
 
 # ********* Copy Elastalert files **************
