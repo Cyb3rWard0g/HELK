@@ -309,7 +309,7 @@ check_github(){
 
     if [ $GIT_REPO_CLEAN == 1 ]; then
         if [[ -z "$(git remote | grep helk-repo)" ]]; then
-            git remote add helk-repo https://github.com/Cyb3rWard0g/HELK.git  >> $LOGFILE 2>&1
+            git remote add helk-repo https://github.com/neu5ron/HELK.git  >> $LOGFILE 2>&1
         else
             echo "HELK repo exists" >> $LOGFILE 2>&1
         fi
@@ -407,6 +407,9 @@ update_helk() {
 LOGFILE="/var/log/helk-update.log"
 REBUILD_NEEDED=0
 GIT_REPO_CLEAN=1
+
+echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} You can track the verbose output of this script at $LOGFILE"
+sleep 1
 
 if [[ -e /tmp/helk-update ]]; then
     UPDATES_FETCHED=`cat /tmp/helk-update`
