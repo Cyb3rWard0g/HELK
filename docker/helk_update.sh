@@ -421,7 +421,7 @@ UPDATES_FETCHED_FILE="/tmp/helk-update"
 REBUILD_NEEDED=0
 GIT_REPO_CLEAN=1
 
-echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} You can track the verbose output of this script at $LOGFILE"
+echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} You can track the verbose output of this script at $LOGFILE\n"
 sleep 1
 
 if [[ -e $UPDATES_FETCHED_FILE ]]; then
@@ -430,14 +430,15 @@ if [[ -e $UPDATES_FETCHED_FILE ]]; then
     if [ "$UPDATES_FETCHED" == "1" ]; then
       echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates for the HELK repository have already been downloaded..."
       # Give user option to clear the feteched updates
-      echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} However, there may be scenarios where you want to re-download and refresh the status of this script..."
-      read -p "Do you to re-download and refresh the script? (y/n) " -n 1 -r
+      read -p "Do you to continue without the re-download? (y/n): " -e -i "y" -n 1 -r
       echo
-      if ! [[ $REPLY =~ ^[Yy]$ ]]; then
-          echo -e "\nExiting script..."
-          exit 1
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+          update_helk
+          echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates already downloaded. Starting update..."
       fi
-      update_helk
+      else
+        rm $UPDATES_FETCHED_FILE
+        echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Re-downloading updates..."
     fi
 fi
 
