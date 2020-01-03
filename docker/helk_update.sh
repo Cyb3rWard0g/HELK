@@ -163,7 +163,7 @@ set_network(){
         esac
         # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
         local ip_choice
-        read -t 30 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
+        read -t 180 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
         # ******* Validation ************
         #READ_INPUT=$?
         #HOST_IP="${ip_choice:-$HOST_IP}"
