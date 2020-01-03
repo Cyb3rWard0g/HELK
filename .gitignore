@@ -1,4 +1,8 @@
-
 helk-logstash/.DS_Store
 .DS_Store
 .git
+.vscode/
+.idea/
+.testing/
+# HELK Custom Configurations
+*custom*

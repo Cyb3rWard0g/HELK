@@ -21,7 +21,10 @@ INSTALL_MINIMUM_MEMORY=5000
 ## In MBs
 INSTALL_MINIMUM_MEMORY_NOTEBOOK=8000
 ## In GBs
-INSTALL_MINIMUM_DISK=25
+INSTALL_MINIMUM_DISK=20
+## Sysctl Parameters
+SYSCTL_VM_MAX_MAP_COUNT=4120294
+SYSCTL_VM_SWAPPINESS=25
 
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
@@ -198,7 +201,7 @@ install_docker(){
             fi
             echo "$HELK_INFO_TAG Docker successfully installed via snap."
         else
-            echo "$HELK_INFO_TAG Docker could not be installed. Check /var/log/helk-install.log for details."
+            echo "$HELK_INFO_TAG Docker could not be installed. Check $LOGFILE for details."
             exit 1
         fi
     fi
@@ -220,8 +223,10 @@ install_docker_compose(){
 # *********** Set helk elasticsearch password ******************************
 set_elasticsearch_password(){
     if [[ -z "$ELASTICSEARCH_PASSWORD_INPUT" ]] && [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
+        echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Elasticsearch password and store it securely for future use."
+        sleep 2
         while true; do
-            read -t 30 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
+            read -t 90 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
             READ_INPUT=$?
             ELASTICSEARCH_PASSWORD_INPUT=${ELASTICSEARCH_PASSWORD_INPUT:-"elasticpassword"}
             if [ $READ_INPUT = 142 ]; then
@@ -248,8 +253,10 @@ set_elasticsearch_password(){
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password(){
     if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
+        echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."
+        sleep 2
         while true; do
-            read -t 30 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+            read -t 90 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
             READ_INPUT=$?
             KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
             if [ $READ_INPUT = 142 ]; then
@@ -301,7 +308,7 @@ set_network(){
         esac
         # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
         local ip_choice
-        read -t 30 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
+        read -t 90 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
         # ******* Validation ************
         #READ_INPUT=$?
         #HOST_IP="${ip_choice:-$HOST_IP}"
@@ -449,15 +456,22 @@ prepare_helk(){
     fi
 
     # *********** Checking internal set up ***************
-    echo "$HELK_INFO_TAG Checking local vm.max_map_count variable and setting it to 4120294"
-    MAX_MAP_COUNT=4120294
-    if [ -n "$MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
-        sysctl -q -w vm.max_map_count=$MAX_MAP_COUNT >> $LOGFILE 2>&1
+    echo "$HELK_INFO_TAG Checking local vm.max_map_count variable and setting it to $SYSCTL_VM_MAX_MAP_COUNT"
+    if [ -n "$SYSCTL_VM_MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
+        sysctl -q -w vm.max_map_count=$SYSCTL_VM_MAX_MAP_COUNT >> $LOGFILE 2>&1
         if [ $ERROR -ne 0 ]; then
-            echoerror "Could not set vm.max_map_count to $MAX_MAP_COUNT (Error Code: $ERROR)."
+            echoerror "Could not set vm.max_map_count to $SYSCTL_VM_MAX_MAP_COUNT (Error Code: $ERROR)."
         fi
-        echo "vm.max_map_count = $MAX_MAP_COUNT" > /etc/sysctl.d/90-helk-overwritten-during-docker-install-sysctl-tuning.conf;
     fi
+    echo "$HELK_INFO_TAG Setting local vm.swappiness variable to $SYSCTL_VM_SWAPPINESS"
+    if [ -n "$SYSCTL_VM_SWAPPINESS" -a -f /proc/sys/vm/swappiness ]; then
+        sysctl -q -w vm.swappiness=$SYSCTL_VM_SWAPPINESS >> $LOGFILE 2>&1
+        if [ $ERROR -ne 0 ]; then
+            echoerror "Could not set vm.swappiness to $SYSCTL_VM_SWAPPINESS (Error Code: $ERROR)."
+        fi
+    fi
+    echo "vm.max_map_count = $SYSCTL_VM_MAX_MAP_COUNT" > /etc/sysctl.d/90-helk-overwritten-during-docker-install-sysctl-tuning.conf;
+    echo "vm.swappiness = $SYSCTL_VM_SWAPPINESS" >> /etc/sysctl.d/90-helk-overwritten-during-docker-install-sysctl-tuning.conf;
 }
 
 get_jupyter_credentials(){
@@ -480,8 +494,8 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.8-alpha05292019 **"
-    echo "** HELK ELK version: 7.1.0                  **"
+    echo "** HELK build version: v0.1.8-alpha01032020 **"
+    echo "** HELK ELK version: 7.5.1                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
     echo " "
@@ -499,8 +513,8 @@ show_final_information(){
         echo "HELK KIBANA URL: https://${HOST_IP}"
         echo "HELK KIBANA USER: helk"
         echo "HELK KIBANA PASSWORD: ${KIBANA_UI_PASSWORD_INPUT}"
-        echo "HELK SPARK MASTER UI: http://${HOST_IP}:8080"
-        echo "HELK JUPYTER SERVER URL: http://${HOST_IP}/jupyter"
+        echo "HELK SPARK MASTER UI: https://${HOST_IP}:8080"
+        echo "HELK JUPYTER SERVER URL: https://${HOST_IP}/jupyter"
         get_jupyter_credentials
     elif [[ ${HELK_BUILD} == "helk-kibana-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-analysis-alert" ]]; then
         echo "HELK KIBANA URL: https://${HOST_IP}"
@@ -513,7 +527,7 @@ show_final_information(){
     echo "IT IS HUNTING SEASON!!!!!"
     echo " "
     echo "You can stop all the HELK docker containers by running the following command:"
-    echo " [+] sudo docker-compose -f $COMPOSE_CONFIG stop"
+    echo " [+] sudo docker-compose stop $COMPOSE_CONFIG"
     echo " "
 }
 
