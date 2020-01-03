@@ -223,7 +223,7 @@ install_docker_compose(){
 # *********** Set helk elasticsearch password ******************************
 set_elasticsearch_password(){
     if [[ -z "$ELASTICSEARCH_PASSWORD_INPUT" ]] && [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
-        echo "Please make sure to create a custom Elasticsearch password and store it securely for future use."
+        echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Elasticsearch password and store it securely for future use."
         sleep 2
         while true; do
             read -t 90 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
@@ -253,7 +253,7 @@ set_elasticsearch_password(){
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password(){
     if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
-        echo "Please make sure to create a custom Kibana password and store it securely for future use."
+        echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."
         sleep 2
         while true; do
             read -t 90 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
@@ -308,7 +308,7 @@ set_network(){
         esac
         # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
         local ip_choice
-        read -t 30 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
+        read -t 90 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
         # ******* Validation ************
         #READ_INPUT=$?
         #HOST_IP="${ip_choice:-$HOST_IP}"
