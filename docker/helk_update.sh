@@ -76,6 +76,105 @@ set_helk_subscription(){
     fi
 }
 
+# *********** Set helk elasticsearch password ******************************
+set_elasticsearch_password(){
+    if [[ -z "$ELASTICSEARCH_PASSWORD_INPUT" ]] && [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
+        echo "If you used a custom Elasticsearch password then you must use fill it in here, otherwise use the filled in default."
+        sleep 2
+        while true; do
+            read -t 180 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
+            READ_INPUT=$?
+            ELASTICSEARCH_PASSWORD_INPUT=${ELASTICSEARCH_PASSWORD_INPUT:-"elasticpassword"}
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n$HELK_INFO_TAG HELK elasticsearch password set to ${ELASTICSEARCH_PASSWORD_INPUT}"
+                break
+            else
+                read -p "$HELK_INFO_TAG Verify HELK Elasticsearch Password: " ELASTICSEARCH_PASSWORD_INPUT_VERIFIED
+                echo -e "$HELK_INFO_TAG HELK elasticsearch password set to ${ELASTICSEARCH_PASSWORD_INPUT}"
+                # *********** Validating Password Input ***************
+                if [[ "$ELASTICSEARCH_PASSWORD_INPUT" == "$ELASTICSEARCH_PASSWORD_INPUT_VERIFIED" ]]; then
+                    break
+                else
+                    echo -e "${RED}Error...${STD}"
+                    echo "$HELK_INFO_TAG Your password values do not match.."
+                fi
+            fi
+        done
+        export ELASTIC_PASSWORD=$ELASTICSEARCH_PASSWORD_INPUT
+    elif [[ "$ELASTICSEARCH_PASSWORD_INPUT" ]] && [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
+        export ELASTIC_PASSWORD=$ELASTICSEARCH_PASSWORD_INPUT
+    fi
+}
+
+# *********** Set helk kibana UI password ******************************
+set_kibana_ui_password(){
+    if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
+        echo "If you used a custom Kibana password then you must use fill it in here, otherwise use the filled in default."
+        sleep 2
+        while true; do
+            read -t 180 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+            READ_INPUT=$?
+            KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
+            if [ $READ_INPUT = 142 ]; then
+                echo -e "\n$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
+                break
+            else
+                read -p "$HELK_INFO_TAG Verify HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT_VERIFIED
+                #echo -e "$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
+                # *********** Validating Password Input ***************
+                if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then
+                    break
+                else
+                    echo -e "${RED}Error...${STD}"
+                    echo "$HELK_INFO_TAG Your password values do not match.."
+                fi
+            fi
+        done
+    fi
+    if [[ $SUBSCRIPTION_CHOICE == "basic" ]]; then
+        # *********** Check if htpasswd is installed ***************
+        if ! [ -x "$(command -v htpasswd)" ]; then
+            install_htpasswd
+        fi
+        mv helk-nginx/htpasswd.users helk-nginx/htpasswd.users_backup >> $LOGFILE 2>&1
+        htpasswd -b -c helk-nginx/htpasswd.users "helk" $KIBANA_UI_PASSWORD_INPUT >> $LOGFILE 2>&1
+        ERROR=$?
+        if [ $ERROR -ne 0 ]; then
+            echoerror "Could not add helk to htpasswd.users file (Error Code: $ERROR)."
+            exit 1
+        fi
+    elif [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
+        export KIBANA_UI_PASSWORD=$KIBANA_UI_PASSWORD_INPUT
+    else
+        echo "$HELK_INFO_TAG Subscription Choice MUST be provided first.."
+        exit 1
+    fi
+}
+# *********** Set HELK network settings ***************
+set_network(){
+    if [[ -z "$HOST_IP" ]]; then
+        # *********** Getting Host IP ***************
+        # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
+        #echo "$HELK_INFO_TAG Obtaining current host IP.."
+        case "${SYSTEM_KERNEL}" in
+            Linux*)     HOST_IP=$(ip route get 1 | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b" | tail -1);;
+            Darwin*)    HOST_IP=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2);;
+            *)          HOST_IP="UNKNOWN:${SYSTEM_KERNEL}"
+        esac
+        # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
+        local ip_choice
+        read -t 30 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
+        # ******* Validation ************
+        #READ_INPUT=$?
+        #HOST_IP="${ip_choice:-$HOST_IP}"
+        #if [ $READ_INPUT  = 142 ]; then
+        #    echo -e "\n$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+        #else
+        #    echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+        #fi
+    fi
+}
+
 # *********** Asking user for docker compose config ***************
 set_helk_build(){
     if [[ -z "$HELK_BUILD" ]]; then
@@ -210,7 +309,7 @@ check_github(){
 
     if [ $GIT_REPO_CLEAN == 1 ]; then
         if [[ -z "$(git remote | grep helk-repo)" ]]; then
-            git remote add helk-repo https://github.com/Cyb3rWard0g/HELK.git  >> $LOGFILE 2>&1 
+            git remote add helk-repo https://github.com/Cyb3rWard0g/HELK.git  >> $LOGFILE 2>&1
         else
             echo "HELK repo exists" >> $LOGFILE 2>&1
         fi
@@ -265,6 +364,10 @@ update_helk() {
     
     set_helk_build
     set_helk_subscription
+
+    set_network
+    set_kibana_ui_password
+    set_elasticsearch_password
 
     echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Stopping HELK and starting update"
     COMPOSE_CONFIG="${HELK_BUILD}-${SUBSCRIPTION_CHOICE}.yml"
