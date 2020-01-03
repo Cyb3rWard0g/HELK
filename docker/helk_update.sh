@@ -20,6 +20,8 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+SYSTEM_KERNEL="$(uname -s)"
+
 show_banner(){
     # *********** Showing HELK Docker menu options ***************
     echo " "
