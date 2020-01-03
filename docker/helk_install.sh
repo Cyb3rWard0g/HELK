@@ -223,8 +223,10 @@ install_docker_compose(){
 # *********** Set helk elasticsearch password ******************************
 set_elasticsearch_password(){
     if [[ -z "$ELASTICSEARCH_PASSWORD_INPUT" ]] && [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
+        echo "Please make sure to create a custom Elasticsearch password and store it securely for future use."
+        sleep 2
         while true; do
-            read -t 30 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
+            read -t 90 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
             READ_INPUT=$?
             ELASTICSEARCH_PASSWORD_INPUT=${ELASTICSEARCH_PASSWORD_INPUT:-"elasticpassword"}
             if [ $READ_INPUT = 142 ]; then
@@ -251,8 +253,10 @@ set_elasticsearch_password(){
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password(){
     if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
+        echo "Please make sure to create a custom Kibana password and store it securely for future use."
+        sleep 2
         while true; do
-            read -t 30 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+            read -t 90 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
             READ_INPUT=$?
             KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
             if [ $READ_INPUT = 142 ]; then
