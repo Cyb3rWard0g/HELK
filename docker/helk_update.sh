@@ -430,7 +430,7 @@ if [[ -e $UPDATES_FETCHED_FILE ]]; then
     if [ "$UPDATES_FETCHED" == "1" ]; then
       echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates for the HELK repository have already been downloaded..."
       # Give user option to clear the feteched updates
-      read -p "Do you to continue without the re-download? (y/n): " -e -i "y" -n 1 -r
+      read -p "Do you to want to use the already downlaoded updates? (y/n): " -e -i "y" -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
           update_helk
