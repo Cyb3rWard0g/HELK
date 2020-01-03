@@ -365,7 +365,7 @@ check_logstash_connected(){
 }
 
 update_helk() {
-
+    # Give user option to continue with rebuild after repo has been updated
     echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Git repository has been updated..."
     read -p "Do you wish to continue the update? (y/n) " -n 1 -r
     echo
@@ -373,6 +373,7 @@ update_helk() {
         echo -e "\nExiting script..."
         exit 1
     fi
+
     set_helk_build
     set_helk_subscription
 
@@ -427,7 +428,15 @@ if [[ -e $UPDATES_FETCHED_FILE ]]; then
     UPDATES_FETCHED=`cat $UPDATES_FETCHED_FILE`
 
     if [ "$UPDATES_FETCHED" == "1" ]; then
-      echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates already downloaded. Starting update..."
+      echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Download of the HELK repository updates has already been performed..." >> $LOGFILE 2>&1
+      # Give user option to clear the feteched updates
+      echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} However, there may be scenarios where you want to re-download and refresh the status of this script..."
+      read -p "Do you to re-download and refresh the script? (y/n) " -n 1 -r
+      echo
+      if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+          echo -e "\nExiting script..."
+          exit 1
+      fi
       update_helk
     fi
 fi
