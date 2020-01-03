@@ -14,6 +14,7 @@ STD='\033[0m'
 
 HELK_INFO_TAG="[HELK-UPDATE-INFO]"
 HELK_ERROR_TAG="[HELK-UPDATE-ERROR]"
+HELK_WARNING_TAG="[HELK-UPDATE-WARNING]"
 
 if [[ $EUID -ne 0 ]]; then
    echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} YOU MUST BE ROOT TO RUN THIS SCRIPT!!!" 
@@ -273,7 +274,7 @@ check_git_status(){
     RETURN_CODE=$?
     echo -e "Git status: $GIT_STATUS, RetVal : $RETURN_CODE" >> $LOGFILE
     if [[ -z $GIT_STATUS && $RETURN_CODE -gt 0 ]]; then 
-        echo -e "${WAR}[HELK-UPDATE-WARNING]${STD} Git repository corrupted."
+        echo -e "${WAR}${HELK_WARNING_TAG}${STD} Git repository corrupted."
         read -p ">> To fix this, all your local modifications to HELK will be overwritten. Do you wish to continue? (y/n) " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -330,7 +331,7 @@ check_github(){
             # IF HELK HAS BEEN CLONED FROM OFFICIAL REPO
             if [[ ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]]; then
                 echo "Difference in HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1   
-                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} New release available. Pulling new code."
+                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} New release(s) available. Attempting to pull new code."
                 git checkout master >> $LOGFILE 2>&1
                 git clean  -d  -fx . >> $LOGFILE 2>&1
                 git pull helk-repo master >> $LOGFILE 2>&1
@@ -342,11 +343,11 @@ check_github(){
             # IF HELK HAS BEEN CLONED FROM THE OFFICIAL REPO & MODIFIED
             if [[ -n $IS_MASTER_BEHIND ]]; then
                 echo "Current master branch ahead of remote branch, possibly modified. Exiting..." >> $LOGFILE 2>&1
-                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available. Current repo has been modified."
+                echo -e "${WAR}${HELK_WARNING_TAG}${STD} Current install has been modified."
             fi
             if [[ $REBUILD_NEEDED == 0 ]] && [[ -z $IS_MASTER_BEHIND ]]; then
                 echo "Repository misconfigured. Exiting..." >> $LOGFILE 2>&1
-                echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available. Current repo is misconfigured."
+                echo -e "${RED}${HELK_ERROR_TAG}${STD} Current repo is misconfigured."
             fi
 
         else
@@ -367,11 +368,12 @@ check_logstash_connected(){
 
 update_helk() {
     # Give user option to continue with rebuild after repo has been updated
-    echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Git repository has been updated..."
-    read -p "Do you wish to continue the update? (y/n) " -n 1 -r
+    echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Git repository updated..."
+    read -p "Do you wish to continue and build the docker containers? (y/n) " -n 1 -r
     echo
     if ! [[ $REPLY =~ ^[Yy]$ ]]; then
         echo -e "\nExiting script..."
+        echo "User Exiting..." >> $LOGFILE 2>&1
         exit 1
     fi
 
@@ -434,7 +436,6 @@ if [[ -e $UPDATES_FETCHED_FILE ]]; then
       read -p "Do you to want to use the already downloaded updates? (y/n): " -e -i "y" -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
-          echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates already downloaded. Starting update..."
           echo "Updates already downloaded. Starting update..." >> $LOGFILE 2>&1
           update_helk
       else
