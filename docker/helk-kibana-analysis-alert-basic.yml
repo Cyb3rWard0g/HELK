@@ -34,16 +34,13 @@ services:
     networks:
       helk:
   helk-logstash:
-    image: docker.elastic.co/logstash/logstash:7.5.1
+    build: helk-logstash/
     container_name: helk-logstash
     logging:
       driver: "json-file"
       options:
         max-file: "9"
         max-size: "6m"
-    secrets:
-      - source: logstash.yml
-        target: /usr/share/logstash/config/logstash.yml
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
