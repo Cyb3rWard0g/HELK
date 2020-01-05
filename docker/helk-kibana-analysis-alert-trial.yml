@@ -44,6 +44,7 @@ services:
         max-size: "6m"
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
+      - ./helk-logstash/mordor_pipeline:/usr/share/logstash/mordor_pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
@@ -137,7 +138,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, nxlog_mordor
+      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, mordor
       KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
       LOG_RETENTION_HOURS: 4
     ports:
