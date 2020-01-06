@@ -32,7 +32,7 @@ echo "$HELK_INFO_TAG Kibana server is up."
 
 # *********** Set URL session store *********************
 echo "$HELK_INFO_TAG Setting URL session store"
-curl -X PUT -u "${ELASTICSEARCH_CREDS}" "$KIBANA_HOST/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
+curl -X POST -u "${ELASTICSEARCH_CREDS}" "$KIBANA_HOST/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
 {
   \"changes\":{
       \"state:storeInSessionStorage\": true
