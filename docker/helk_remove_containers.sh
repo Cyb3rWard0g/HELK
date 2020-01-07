@@ -12,6 +12,12 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# *********** Add docker-compose path ***************
+export PATH=$PATH:/usr/local/bin
+
+# *********** Get configuration ***************
+$CONFIG=helk-kibana-analysis-basic.yml
+
 # *********** Set Log File ***************
 LOGFILE="/var/log/helk-install.log"
 echoerror() {
@@ -19,7 +25,7 @@ echoerror() {
 }
 
 echo "[HELK-REMOVE-CONTAINERS] Stopping all running containers.."
-docker stop $(docker ps -a | awk '{ print $1,$2 }' | grep helk | awk '{print $1 }') >> $LOGFILE 2>&1
+docker-compose -f $CONFIG stop
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not stop running containers.."
@@ -27,6 +33,7 @@ if [ $ERROR -ne 0 ]; then
 fi
 
 echo "[HELK-REMOVE-CONTAINERS] Removing all containers.."
+docker-compose -f $CONFIG rm
 docker rm $(docker ps -a | awk '{ print $1,$2 }' | grep helk | awk '{print $1 }') >> $LOGFILE 2>&1
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
