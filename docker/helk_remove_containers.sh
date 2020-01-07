@@ -16,7 +16,7 @@ fi
 export PATH=$PATH:/usr/local/bin
 
 # *********** Get configuration ***************
-$CONFIG=helk-kibana-analysis-basic.yml
+read -ep "Which config file did you install ? (please provide file name with extension) " CONFIG
 
 # *********** Set Log File ***************
 LOGFILE="/var/log/helk-install.log"
