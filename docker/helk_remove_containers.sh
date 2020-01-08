@@ -25,7 +25,7 @@ echoerror() {
 }
 
 echo "[HELK-REMOVE-CONTAINERS] Stopping all running containers.."
-docker-compose -f $CONFIG stop
+docker-compose -f $CONFIG stop >> $LOGFILE 2>&1
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not stop running containers.."
@@ -33,8 +33,7 @@ if [ $ERROR -ne 0 ]; then
 fi
 
 echo "[HELK-REMOVE-CONTAINERS] Removing all containers.."
-docker-compose -f $CONFIG rm
-docker rm $(docker ps -a | awk '{ print $1,$2 }' | grep helk | awk '{print $1 }') >> $LOGFILE 2>&1
+docker-compose -f $CONFIG rm >> $LOGFILE 2>&1
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not remove containers.."
