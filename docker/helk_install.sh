@@ -23,6 +23,10 @@ INSTALL_MINIMUM_MEMORY_NOTEBOOK=8000
 ## In GBs
 INSTALL_MINIMUM_DISK=25
 
+# *********** Variables to use again later ***************
+#distro
+DISTRO=
+
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
 
@@ -100,6 +104,7 @@ check_system_info(){
             centos)
                 if [ -z "$DIST_VERSION" ] && [ -r /etc/os-release ]; then
                     DIST_VERSION="$(. /etc/os-release && echo "$VERSION_ID")"
+                    DISTRO=$LSB_DIST
                 fi
             ;;
             rhel|ol|sles)
@@ -184,6 +189,10 @@ install_docker(){
     curl -fsSL https://get.docker.com -o get-docker.sh >> $LOGFILE 2>&1
     chmod +x get-docker.sh >> $LOGFILE 2>&1
     ./get-docker.sh >> $LOGFILE 2>&1
+    if [ $DISTRO == "centos" ]; then
+        systemctl enable docker.service
+        systemctl start docker.service
+    fi
     ERROR=$?
     if [ $ERROR -ne 0 ]; then
         echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
@@ -210,8 +219,7 @@ install_docker_compose(){
     COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
     curl -L https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose >> $LOGFILE 2>&1
     chmod +x /usr/local/bin/docker-compose >> $LOGFILE 2>&1
-    OSNAME=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d '=' -f 2)
-    if [[ $OSNAME == *"CentOS"* ]]; then
+    if [[ $DISTRO == "centos" ]]; then
         if ! [[ $PATH == *"/usr/local/bin"* ]]; then # small check not to have it 2 times
             export PATH=$PATH:/usr/local/bin
         else
