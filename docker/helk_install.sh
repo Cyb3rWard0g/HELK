@@ -201,7 +201,7 @@ install_docker(){
             fi
             echo "$HELK_INFO_TAG Docker successfully installed via snap."
         else
-            echo "$HELK_INFO_TAG Docker could not be installed. Check /var/log/helk-install.log for details."
+            echo "$HELK_INFO_TAG Docker could not be installed. Check $LOGFILE for details."
             exit 1
         fi
     fi
@@ -223,8 +223,10 @@ install_docker_compose(){
 # *********** Set helk elasticsearch password ******************************
 set_elasticsearch_password(){
     if [[ -z "$ELASTICSEARCH_PASSWORD_INPUT" ]] && [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
+        echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Elasticsearch password and store it securely for future use."
+        sleep 2
         while true; do
-            read -t 30 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
+            read -t 90 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
             READ_INPUT=$?
             ELASTICSEARCH_PASSWORD_INPUT=${ELASTICSEARCH_PASSWORD_INPUT:-"elasticpassword"}
             if [ $READ_INPUT = 142 ]; then
@@ -251,8 +253,10 @@ set_elasticsearch_password(){
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password(){
     if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
+        echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."
+        sleep 2
         while true; do
-            read -t 30 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+            read -t 90 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
             READ_INPUT=$?
             KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
             if [ $READ_INPUT = 142 ]; then
@@ -304,7 +308,7 @@ set_network(){
         esac
         # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
         local ip_choice
-        read -t 30 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
+        read -t 90 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i ${HOST_IP} ip_choice
         # ******* Validation ************
         #READ_INPUT=$?
         #HOST_IP="${ip_choice:-$HOST_IP}"
@@ -490,7 +494,7 @@ show_banner(){
     echo "**          HELK - THE HUNTING ELK          **"
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.9-alpha08022019 **"
+    echo "** HELK build version: v0.1.8-alpha01032020 **"
     echo "** HELK ELK version: 7.5.1                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"

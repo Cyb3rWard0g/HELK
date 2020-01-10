@@ -44,6 +44,7 @@ services:
         max-size: "6m"
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
+      - ./helk-logstash/mordor_pipeline:/usr/share/logstash/mordor_pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
@@ -57,6 +58,7 @@ services:
     ports:
       - "5044:5044"
       - "8531:8531"
+      - "3515:3515"
     restart: always
     depends_on:
       - helk-kibana
@@ -137,7 +139,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, zeek
+      KAFKA_CREATE_TOPICS: winlogbeat, winevent, SYSMON_JOIN, filebeat
       KAFKA_HEAP_OPTS: -Xmx1g -Xms1g
       LOG_RETENTION_HOURS: 4
     ports:
@@ -164,6 +166,7 @@ services:
       KSQL_KSQL_CACHE_MAX_BYTES_BUFFERING: 10000000
       KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: earliest
       KSQL_HEAP_OPTS: -Xmx500m
+      KSQL_OPTS: "-Dconfluent.support.metrics.enable=false"
     ports:
       - 8088:8088
     networks:

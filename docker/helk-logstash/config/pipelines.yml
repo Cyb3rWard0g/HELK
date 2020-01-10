@@ -1,0 +1,4 @@
+- pipeline.id: main
+  path.config: "/usr/share/logstash/pipeline/"
+- pipeline.id: mordor
+  path.config: "/usr/share/logstash/mordor_pipeline/"

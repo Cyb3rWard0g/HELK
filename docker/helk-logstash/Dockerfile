@@ -11,4 +11,7 @@ LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
 RUN mv /usr/share/logstash/config/logstash.yml /usr/share/logstash/config/logstash.yml.backup
+RUN mv /usr/share/logstash/config/pipelines.yml /usr/share/logstash/config/pipelines.yml.backup
+
 COPY --chown=logstash:logstash config/logstash.yml /usr/share/logstash/config/logstash.yml
+COPY --chown=logstash:logstash config/pipelines.yml /usr/share/logstash/config/pipelines.yml
