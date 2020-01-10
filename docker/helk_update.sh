@@ -343,10 +343,14 @@ check_github(){
             if [[ -n $IS_MASTER_BEHIND ]]; then
                 echo "Current master branch ahead of remote branch, possibly modified. Exiting..." >> $LOGFILE 2>&1
                 echo -e "${WAR}${HELK_WARNING_TAG}${STD} Current install has been modified."
+                echo -e "${WAR}${HELK_WARNING_TAG}${STD} Please commit your changes using git and then re-run this script."
+                exit 1             
             fi
             if [[ $REBUILD_NEEDED == 0 ]] && [[ -z $IS_MASTER_BEHIND ]]; then
                 echo "Repository misconfigured. Exiting..." >> $LOGFILE 2>&1
                 echo -e "${RED}${HELK_ERROR_TAG}${STD} Current repo is misconfigured."
+                echo -e "\nExiting script..."
+                exit 1
             fi
 
         else
