@@ -3,7 +3,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM cyb3rward0g/jupyter-hunt:0.0.4
+FROM cyb3rward0g/jupyter-hunter:0.0.8
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile Notebooks-Forge Jupyter-Hunt Project."
 
@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND noninteractive
 USER root
 
 # *********** Setting Environment Variables ***************
-ENV POSTGRESQL_VERSION=42.2.5
+ENV POSTGRESQL_VERSION=42.2.9
 
 # ********** Installing additional libraries **************
 RUN mkdir /opt/jupyter/notebooks/datasets \
@@ -26,7 +26,6 @@ RUN mkdir /opt/jupyter/notebooks/datasets \
 
 # *********** Adding HELK scripts and files to Container ***************
 COPY notebooks/* ${JUPYTER_DIR}/notebooks/
-COPY datasets/* ${JUPYTER_DIR}/notebooks/datasets/
 COPY spark/* ${SPARK_HOME}/conf/
 COPY scripts/* ${JUPYTER_DIR}/scripts/
 
