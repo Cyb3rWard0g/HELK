@@ -10,9 +10,9 @@
 
 rules_folder: rules
 run_every:
-    seconds: 30
+    seconds: 60
 buffer_time:
-    seconds: 45
+    seconds: 900
 es_host: helk-elasticsearch
 es_port: 9200
 alert_time_limit:
