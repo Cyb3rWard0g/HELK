@@ -192,7 +192,7 @@ services:
         max-file: "5"
         max-size: "1m"
     environment:
-      JUPYTER_TYPE: lab
+      JUPYTER_TYPE: notebook
       JUPYTER_BASE_URL: /jupyter
     volumes:
       - notebooks:/opt/helk/jupyter/notebooks
