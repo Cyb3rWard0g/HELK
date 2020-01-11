@@ -25,7 +25,9 @@ RUN mkdir /opt/jupyter/notebooks/datasets \
     && wget https://jdbc.postgresql.org/download/postgresql-${POSTGRESQL_VERSION}.jar -P /opt/jupyter/spark/jars/
 
 # *********** Adding HELK scripts and files to Container ***************
-COPY notebooks/* ${JUPYTER_DIR}/notebooks/
+COPY notebooks/demos ${JUPYTER_DIR}/notebooks/demos
+COPY notebooks/tutorials ${JUPYTER_DIR}/notebooks/tutorials
+COPY notebooks/sigma ${JUPYTER_DIR}/notebooks/sigma
 COPY spark/* ${SPARK_HOME}/conf/
 COPY scripts/* ${JUPYTER_DIR}/scripts/
 
