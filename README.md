@@ -3,8 +3,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub issues-closed](https://img.shields.io/github/issues-closed/Cyb3rward0g/HELK.svg)](https://GitHub.com/Cyb3rWard0g/HELK/issues?q=is%3Aissue+is%3Aclosed)
 [![Twitter](https://img.shields.io/twitter/follow/THE_HELK.svg?style=social&label=Follow)](https://twitter.com/THE_HELK)
-[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
-
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 The Hunting ELK or simply the HELK is one of the first open source hunt platforms with  advanced analytics capabilities such as SQL declarative language, graphing, structured streaming, and even machine learning via Jupyter notebooks and Apache Spark over an ELK stack. This project was developed primarily for research, but due to its flexible design and core components, it can be deployed in larger environments with the right configurations and scalable infrastructure.
 
