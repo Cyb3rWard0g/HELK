@@ -85,8 +85,8 @@ for  rule_category in rules/windows/* ; do
                     continue
                 else
                     echo "[+++] Processing Windows process creation rule: $rule .."
-                    tools/sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
-                    tools/sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
                     rule_counter=$[$rule_counter +1]
                 fi
             fi
@@ -97,7 +97,7 @@ for  rule_category in rules/windows/* ; do
                 continue
             else
                 echo "[+++] Processing additional Windows rule: $rule .."
-                tools/sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
+                sigmac -t elastalert -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) $rule
                 rule_counter=$[$rule_counter +1]
             fi
         done

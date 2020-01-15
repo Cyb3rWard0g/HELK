@@ -39,11 +39,12 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   && sudo pip3 install --upgrade pip \
   && sudo pip3 install --upgrade setuptools \
   && pip3 install urllib3 \
+  && pip3 install -U enum34 \
   && pip3 install -r requirements.txt \
   && python3 setup.py install \
   # ********* Download SIGMA *******************
-  && git clone https://github.com/Cyb3rWard0g/sigma.git ${ESALERT_SIGMA_HOME} \
-  && pip3 install -r ${ESALERT_SIGMA_HOME}/tools/requirements.txt
+  && pip3 install -U sigmatools \
+  && git clone https://github.com/Cyb3rWard0g/sigma.git ${ESALERT_SIGMA_HOME}
 
 # ********* Copy Elastalert files **************
 COPY scripts/* ${ESALERT_HOME}/
