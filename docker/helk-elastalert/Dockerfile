@@ -37,6 +37,7 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   && bash -c 'mkdir -pv /etc/elastalert/rules' \
   && cd ${ESALERT_HOME} \
   && sudo pip3 install --upgrade pip \
+  && sudo pip3 install --upgrade setuptools \
   && pip3 install urllib3 \
   && pip3 install -r requirements.txt \
   && python3 setup.py install \
