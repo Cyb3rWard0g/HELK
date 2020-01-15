@@ -34,7 +34,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    build: helk-logstash/
+    image: docker.elastic.co/logstash/logstash:7.5.1
     container_name: helk-logstash
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
