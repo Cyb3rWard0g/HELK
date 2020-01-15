@@ -72,7 +72,7 @@ services:
     networks:
       helk:
   helk-nginx:
-    image: cyb3rward0g/helk-nginx:0.0.7
+    image: otrf/helk-nginx:0.0.8
     container_name: helk-nginx
     secrets:
       - source: htpasswd.users
@@ -90,7 +90,7 @@ services:
     networks:
       helk:
   helk-zookeeper:
-    image: cyb3rward0g/helk-zookeeper:2.2.0
+    image: otrf/helk-zookeeper:2.3.0
     container_name: helk-zookeeper
     restart: always
     depends_on:
@@ -98,7 +98,7 @@ services:
     networks:
       helk:
   helk-kafka-broker:
-    image: cyb3rward0g/helk-kafka-broker:2.2.0
+    image: otrf/helk-kafka-broker:2.3.0
     container_name: helk-kafka-broker
     restart: always
     depends_on:

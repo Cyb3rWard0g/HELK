@@ -82,7 +82,7 @@ services:
     networks:
       helk:
   helk-nginx:
-    image: cyb3rward0g/helk-nginx:0.0.7
+    image: otrf/helk-nginx:0.0.8
     container_name: helk-nginx
     logging:
       driver: "json-file"
@@ -105,7 +105,7 @@ services:
     networks:
       helk:
   helk-zookeeper:
-    image: cyb3rward0g/helk-zookeeper:2.2.0
+    image: otrf/helk-zookeeper:2.3.0
     container_name: helk-zookeeper
     logging:
       driver: "json-file"
@@ -118,7 +118,7 @@ services:
     networks:
       helk:
   helk-kafka-broker:
-    image: cyb3rward0g/helk-kafka-broker:2.2.0
+    image: otrf/helk-kafka-broker:2.3.0
     container_name: helk-kafka-broker
     logging:
       driver: "json-file"
@@ -202,7 +202,7 @@ services:
     networks:
       helk:
   helk-spark-master:
-    image: cyb3rward0g/helk-spark-master:2.4.3
+    image: otrf/helk-spark-master:2.4.4
     container_name: helk-spark-master
     logging:
       driver: "json-file"
@@ -220,7 +220,7 @@ services:
     networks:
       helk:
   helk-spark-worker:
-    image: cyb3rward0g/helk-spark-worker:2.4.3
+    image: otrf/helk-spark-worker:2.4.4
     container_name: helk-spark-worker
     logging:
       driver: "json-file"
@@ -238,7 +238,7 @@ services:
     networks:
       helk:
   helk-elastalert:
-    image: cyb3rward0g/helk-elastalert:0.2.5
+    build: helk-elastalert/
     container_name: helk-elastalert
     logging:
       driver: "json-file"
