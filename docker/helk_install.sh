@@ -22,7 +22,7 @@ INSTALL_MINIMUM_MEMORY=5000
 INSTALL_MINIMUM_MEMORY_NOTEBOOK=8000
 ## In GBs
 INSTALL_MINIMUM_DISK=25
-
+## Sysctl Parameters
 SYSCTL_VM_MAX_MAP_COUNT=4120294	
 SYSCTL_VM_SWAPPINESS=25
 
@@ -236,8 +236,8 @@ install_docker_compose(){
 # *********** Set helk elasticsearch password ******************************
 set_elasticsearch_password(){
     if [[ -z "$ELASTICSEARCH_PASSWORD_INPUT" ]] && [[ $SUBSCRIPTION_CHOICE == "trial" ]]; then
-    echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Elasticsearch password and store it securely for future use."	
-    sleep 2
+        echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Elasticsearch password and store it securely for future use."	
+        sleep 2
         while true; do
             read -t 90 -p "$HELK_INFO_TAG Set HELK Elasticsearch Password: " -e -i "elasticpassword" ELASTICSEARCH_PASSWORD_INPUT
             READ_INPUT=$?
@@ -266,8 +266,8 @@ set_elasticsearch_password(){
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password(){
     if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
-    echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."	
-    sleep 2
+        echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."	
+        sleep 2
         while true; do
             read -t 90 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
             READ_INPUT=$?
@@ -507,7 +507,7 @@ show_banner(){
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
     echo "** HELK build version: v0.1.8-alpha01032020 **"
-    echo "** HELK ELK version: 7.5.0                  **"
+    echo "** HELK ELK version: 7.5.1                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
     echo " "
