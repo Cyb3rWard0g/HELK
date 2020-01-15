@@ -451,7 +451,7 @@ prepare_helk(){
             install_docker
         fi
         # ********** Check if docker-compose is installed *******
-        if ! [ -x "$(command -v docker-compose)" ] || ! [ -x "$(command -v /usr/local/bin/docker-compose)" ]; then
+        if ! [ -x "$(command -v docker-compose)" ] && ! [ -x "$(command -v /usr/local/bin/docker-compose)" ]; then
             install_docker_compose
         fi
     else
