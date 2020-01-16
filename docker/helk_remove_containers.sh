@@ -41,7 +41,7 @@ done
 
 # *********** Stop, remove containers, volumes and network ***********
 echo "$LABEL Using docker-compose to remove installation..."
-if [ "$(docker-compose version; echo $?)" != 0 ]; then
+if [ "$(command -v docker-compose; echo $?)" != 0 ]; then
     /usr/local/bin/docker-compose -f $INSTALL_FILE down --rmi all -v >> $LOGFILE 2>&1 # try to force command
 else
     docker-compose -f $INSTALL_FILE down --rmi all -v >> $LOGFILE 2>&1
