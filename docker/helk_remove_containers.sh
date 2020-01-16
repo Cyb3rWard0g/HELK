@@ -52,7 +52,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "$LABEL Removing all images..."
-docker rmi $(docker images -a | awk '{ print $1,$3 }' | grep 'cyb3rward0g\|helk\|logstash\|kibana\|elasticsearch\|cp-ksql' | awk '{ print $2 }') >> $LOGFILE 2>&1
+docker rmi $(docker images -a | awk '{ print $1,$3 }' | grep 'ortf\|helk\|logstash\|kibana\|elasticsearch\|cp-ksql' | awk '{ print $2 }') >> $LOGFILE 2>&1
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not remove images.."
