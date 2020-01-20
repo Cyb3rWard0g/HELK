@@ -1,86 +1,63 @@
 #!/bin/bash
 
 # HELK script: kibana-setup.sh
-# HELK script description: Creates Kibana index patterns, dashboards and visualizations automatically.
+# HELK script description: Checks to make sure Kibana starts correctly, runs other scripts such as setting up objects and index patterns, and the basic settings
 # HELK build Stage: Alpha
-# Author: Roberto Rodriguez (@Cyb3rWard0g)
+# Author: Roberto Rodriguez (@Cyb3rWard0g), Nate Guagenti (@neu5ron)
 # License: GPL-3.0
 
-# References:
-# https://github.com/elastic/kibana/issues/3709 (https://github.com/hobti01)
-# https://explainshell.com/explain?cmd=set+-euxo%20pipefail
-# https://github.com/elastic/beats-dashboards/blob/master/load.sh
-# https://github.com/elastic/kibana/issues/14872
-# https://github.com/elastic/stack-docker/blob/master/docker-compose.yml
-# https://stackoverflow.com/a/42377880
+# *********** Helk log tagging variables ***************
+# For more efficient script editing/reading, and also if/when we switch to different install script language
+TAG_NAME="SETUP"
+HELK_INFO_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-INFO:"
+HELK_ERROR_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-ERROR:"
 
-# *********** Setting Variables ***************
-KIBANA_URL=http://$SERVER_HOST:$SERVER_PORT
-TIME_FIELD="@timestamp"
-DEFAULT_INDEX="logs-endpoint-winevent-sysmon-*"
-DIR=/usr/share/kibana/dashboards
+# *********** Wait for Kibana port to be up ***************
+#until curl -s $KIBANA_URL -o /dev/null; do
+until curl --silent "${KIBANA_ACCESS}" --output /dev/null; do
+    echo "$HELK_INFO_TAG Waiting for Kibana internal port to be up.."
+    sleep 5
+done
+echo "$HELK_INFO_TAG Kibana internal port is up.."
 
-# *********** Waiting for Kibana port to be up ***************
-echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Checking to see if kibana port is up..."
-until curl -s $KIBANA_URL -o /dev/null; do
-    sleep 1
+# *********** Wait for Kibana server to be running ***************
+until [[ "$(curl -s -o /dev/null -w "%{http_code}" "${KIBANA_ACCESS}/status")" == "200" ]]; do
+  echo "$HELK_INFO_TAG Waiting for kibana server.."
+  sleep 2
+done
+echo "$HELK_INFO_TAG Kibana server is up."
+
+# *********** Creating Kibana index-patterns ***************
+/usr/share/kibana/scripts/kibana-setup-index_patterns.sh
+
+# *********** Set URL session store *********************
+echo "$HELK_INFO_TAG Setting URL session store"
+curl -X POST -u "${ELASTICSEARCH_CREDS}" "$KIBANA_HOST/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
+{
+  \"changes\":{
+      \"state:storeInSessionStorage\": true
+    }
+}
+"
+
+DIR=/usr/share/kibana/objects/dashboards
+# *********** Loading dashboards ***************
+echo "$HELK_INFO_TAG Loading Dashboards..."
+for file in ${DIR}/*.json
+do
+    echo "[++++++] Loading dashboard file ${file}"
+    until curl -X POST -s -o /dev/null -u "${ELASTICSEARCH_CREDS}" "${KIBANA_HOST}/api/kibana/dashboards/import" -H 'kbn-xsrf: true' \
+    -H 'Content-type:application/json' -d @${file}
+    do
+      sleep 1
+    done
 done
 
-# *********** Waiting for Kibana server to be running ***************
-until $(curl --output /dev/null --silent --head --fail "$KIBANA_URL"); do
-  echo "waiting for kibana server.."
-  sleep 1
-done
-
-# ******** Set Trial License Variables ***************
+# ******** Set Elastic License Variables ***************
 if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; then
-  # *********** Creating Kibana index-patterns ***************
-  declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*" "mitre-attack-*" "elastalert_status" "elastalert_status_status" "elastalert_status_error" "elastalert_status_silence" "elastalert_status_past" "sysmon-join-*" "logs-endpoint-winevent-etw-*")
-  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Creating Kibana Index Patterns..."
-  for index in ${!index_patterns[@]}; do
-      echo "[++++++] creating kibana index ${index_patterns[${index}]}"
-      until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST "$KIBANA_URL/api/saved_objects/index-pattern/${index_patterns[${index}]}" \
-      -H "Content-Type: application/json" -H "kbn-xsrf: true" \
-      -d"{\"attributes\":{\"title\":\"${index_patterns[${index}]}\",\"timeFieldName\":\"$TIME_FIELD\"}}"
-      do
-        sleep 1
-      done
-  done
-
-  # *********** Making Sysmon the default index ***************
-  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Making Sysmon the default index..."
-  until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST -H "Content-Type: application/json" -H "kbn-xsrf: true" \
-  "$KIBANA_URL/api/kibana/settings/defaultIndex" \
-  -d"{\"value\":\"$DEFAULT_INDEX\"}"
-  do
-    sleep 1
-  done
-
-  # *********** Set URL session store *********************
-  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting URL session store"
-  curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST "$KIBANA_URL/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
-  {
-    \"changes\":{
-        \"state:storeInSessionStorage\": true
-      }
-  }
-  "
-
-  # *********** Loading dashboards ***************
-  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Loading Dashboards..."
-  for file in ${DIR}/*.json
-  do
-      echo "[++++++] Loading dashboard file ${file}"
-      until curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST "$KIBANA_URL/api/kibana/dashboards/import" -H 'kbn-xsrf: true' \
-      -H 'Content-type:application/json' -d @${file}
-      do
-        sleep 1
-      done
-  done
-
   # *********** Creating HELK User *********************
-  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting HELK's user password to $KIBANA_UI_PASSWORD"
-  curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST "$ELASTICSEARCH_HOSTS/_security/user/helk" -H 'Content-Type: application/json' -d"
+  echo "$HELK_INFO_TAG Setting HELK's user password to $KIBANA_UI_PASSWORD"
+  curl -X POST -s -o /dev/null -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_security/user/helk" -H 'Content-Type: application/json' -d"
   {
     \"password\" : \"$KIBANA_UI_PASSWORD\",
     \"roles\" : [ \"superuser\" ],
@@ -90,7 +67,7 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; the
   "
 
   # *********** Create Roles *******************
-  curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST "$ELASTICSEARCH_HOSTS/_security/role/hunters" -H 'Content-Type: application/json' -d'
+  curl -X POST -s -o /dev/null -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_security/role/hunters" -H 'Content-Type: application/json' -d'
   {
     "run_as": [],
     "cluster": [],
@@ -102,7 +79,7 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; the
     ]
   }
   '
-  curl -u $ELASTICSEARCH_USERNAME:$ELASTICSEARCH_PASSWORD -X POST "$ELASTICSEARCH_HOSTS/_xpack/security/role/sysmon_hunters" -H 'Content-Type: application/json' -d'
+  curl -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_security/role/sysmon_hunters" -H 'Content-Type: application/json' -d'
   {
     "run_as": [],
     "cluster": [],
@@ -114,51 +91,6 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; the
     ]
   }
   '
-else
-  # *********** Creating Kibana index-patterns ***************
-  declare -a index_patterns=("logs-endpoint-*" "logs-*" "logs-endpoint-winevent-sysmon-*" "logs-endpoint-winevent-security-*" "logs-endpoint-winevent-system-*" "logs-endpoint-winevent-application-*" "logs-endpoint-winevent-wmiactivity-*" "logs-endpoint-winevent-powershell-*" "mitre-attack-*" "elastalert_status" "elastalert_status_status" "elastalert_status_error" "elastalert_status_silence" "elastalert_status_past" "sysmon-join-*" "logs-endpoint-winevent-etw-*")
-
-  echo "[+++] Creating Kibana Index Patterns..."
-  for index in ${!index_patterns[@]}; do
-      echo "[++++++] creating kibana index ${index_patterns[${index}]}"
-      until curl -X POST "$KIBANA_URL/api/saved_objects/index-pattern/${index_patterns[${index}]}" \
-      -H "Content-Type: application/json" -H "kbn-xsrf: true" \
-      -d"{\"attributes\":{\"title\":\"${index_patterns[${index}]}\",\"timeFieldName\":\"$TIME_FIELD\"}}"
-      do
-          sleep 1
-      done
-  done
-
-  # *********** Set URL session store *********************
-  echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Setting URL session store"
-  curl -X POST "$KIBANA_URL/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
-  {
-    \"changes\":{
-        \"state:storeInSessionStorage\": true
-      }
-  }
-  "
-
-  # *********** Making Sysmon the default index ***************
-  echo "[++] Making Sysmon the default index..."
-  until curl -X POST -H "Content-Type: application/json" -H "kbn-xsrf: true" \
-  "$KIBANA_URL/api/kibana/settings/defaultIndex" \
-  -d"{\"value\":\"$DEFAULT_INDEX\"}"
-  do
-      sleep 1
-  done
-
-  # *********** Loading dashboards ***************
-  echo "[+++] Loading Dashboards..."
-  for file in ${DIR}/*.json
-  do
-      echo "[++++++] Loading dashboard file ${file}"
-      until curl -X POST "$KIBANA_URL/api/kibana/dashboards/import" -H 'kbn-xsrf: true' \
-      -H 'Content-type:application/json' -d @${file}
-      do
-          sleep 1
-      done
-  done
 fi
 
 # ******** Modifiying Kibana Interface - HELK Logo **********

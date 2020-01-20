@@ -6,9 +6,12 @@
 # References:
 # https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
 
-FROM docker.elastic.co/logstash/logstash:7.1.0
+FROM docker.elastic.co/logstash/logstash:7.5.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
 RUN mv /usr/share/logstash/config/logstash.yml /usr/share/logstash/config/logstash.yml.backup
+RUN mv /usr/share/logstash/config/pipelines.yml /usr/share/logstash/config/pipelines.yml.backup
+
 COPY --chown=logstash:logstash config/logstash.yml /usr/share/logstash/config/logstash.yml
+COPY --chown=logstash:logstash config/pipelines.yml /usr/share/logstash/config/pipelines.yml

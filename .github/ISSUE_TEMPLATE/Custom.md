@@ -35,6 +35,13 @@ just provide the date you cloned the HELK repo:
 Place the date here
 ```
 
+#### What version of Winlogbeat are you using if you are using Windows/WEF logs
+
+just provide the date you cloned the HELK repo:
+```
+Place the version here
+```
+
 ##### What steps did you take trying to fix the issue
 
 ##### How could we replicate the issue

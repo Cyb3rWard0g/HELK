@@ -2,14 +2,20 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.1.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
     container_name: helk-elasticsearch
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "9"
+        max-size: "6m"
     secrets:
       - source: elasticsearch.yml
         target: /usr/share/elasticsearch/config/elasticsearch.yml
     volumes:
       - esdata:/usr/share/elasticsearch/data
       - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
+      - ./helk-elasticsearch/config/jvm.options:/usr/share/elasticsearch/config/jvm.options
     entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
     environment:
       - cluster.name=helk-cluster
@@ -31,8 +37,14 @@ services:
   helk-logstash:
     build: helk-logstash/
     container_name: helk-logstash
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "9"
+        max-size: "6m"
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
+      - ./helk-logstash/mordor_pipeline:/usr/share/logstash/mordor_pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
@@ -42,6 +54,7 @@ services:
       - xpack.monitoring.elasticsearch.username=logstash_system
       - xpack.monitoring.elasticsearch.password=logstashpassword
       - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
+      - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
       - "5044:5044"
       - "8531:8531"
@@ -52,13 +65,18 @@ services:
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:7.1.0
+    image: docker.elastic.co/kibana/kibana:7.5.1
     container_name: helk-kibana
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "9"
+        max-size: "6m"
     secrets:
       - source: kibana.yml
         target: /usr/share/kibana/config/kibana.yml
     volumes:
-      - ./helk-kibana/dashboards:/usr/share/kibana/dashboards
+      - ./helk-kibana/objects:/usr/share/kibana/objects
       - ./helk-kibana/scripts:/usr/share/kibana/scripts
     entrypoint: /usr/share/kibana/scripts/kibana-entrypoint.sh
     environment:
@@ -70,8 +88,13 @@ services:
     networks:
       helk:
   helk-nginx:
-    image: cyb3rward0g/helk-nginx:0.0.7
+    image: otrf/helk-nginx:0.0.8
     container_name: helk-nginx
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "9"
+        max-size: "6m"
     volumes:
       - ./helk-nginx/config/trial-helk:/etc/nginx/sites-available/default
       - ./helk-nginx/scripts/:/opt/helk/scripts/
@@ -86,16 +109,26 @@ services:
     networks:
       helk:
   helk-zookeeper:
-    image: cyb3rward0g/helk-zookeeper:2.2.0
+    image: otrf/helk-zookeeper:2.3.0
     container_name: helk-zookeeper
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-logstash
     networks:
       helk:
   helk-kafka-broker:
-    image: cyb3rward0g/helk-kafka-broker:2.2.0
+    image: otrf/helk-kafka-broker:2.3.0
     container_name: helk-kafka-broker
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-zookeeper
@@ -106,7 +139,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, SYSMON_JOIN, filebeat, nxlog_mordor
+      KAFKA_CREATE_TOPICS: winlogbeat, winevent, SYSMON_JOIN, filebeat
       KAFKA_HEAP_OPTS: -Xmx1g -Xms1g
       LOG_RETENTION_HOURS: 4
     ports:
@@ -116,6 +149,11 @@ services:
   helk-ksql-server:
     image: confluentinc/cp-ksql-server:5.1.3
     container_name: helk-ksql-server
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     restart: always
     depends_on:
       - helk-kafka-broker
@@ -136,6 +174,11 @@ services:
   helk-ksql-cli:
     image: confluentinc/cp-ksql-cli:5.1.3
     container_name: helk-ksql-cli
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     depends_on:
       - helk-ksql-server
     environment:
@@ -147,8 +190,13 @@ services:
   helk-jupyter:
     build: helk-jupyter/
     container_name: helk-jupyter
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     environment:
-      JUPYTER_TYPE: lab
+      JUPYTER_TYPE: notebook
       JUPYTER_BASE_URL: /jupyter
     volumes:
       - notebooks:/opt/helk/jupyter/notebooks
@@ -158,8 +206,13 @@ services:
     networks:
       helk:
   helk-spark-master:
-    image: cyb3rward0g/helk-spark-master:2.4.3
+    image: otrf/helk-spark-master:2.4.4
     container_name: helk-spark-master
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     environment:
       SPARK_MASTER_PORT: 7077
       SPARK_MASTER_WEBUI_PORT: 8080
@@ -171,8 +224,13 @@ services:
     networks:
       helk:
   helk-spark-worker:
-    image: cyb3rward0g/helk-spark-worker:2.4.3
+    image: otrf/helk-spark-worker:2.4.4
     container_name: helk-spark-worker
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "1m"
     environment:
       SPARK_MASTER: spark://helk-spark-master:7077
       SPARK_WORKER_MEMORY: 1g

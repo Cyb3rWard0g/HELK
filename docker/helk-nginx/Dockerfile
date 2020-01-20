@@ -7,7 +7,7 @@
 # https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
 # https://github.com/spujadas/elk-docker/blob/master/Dockerfile
 
-FROM cyb3rward0g/helk-base:0.0.2
+FROM otrf/helk-base:0.0.4
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Nginx."
 
