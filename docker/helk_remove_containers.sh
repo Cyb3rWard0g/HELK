@@ -75,18 +75,22 @@ if [ $ERROR -ne 0 ]; then
 fi
 
 # *********** Remove HELK service from firewalld ***********
-echo "$LABEL Removing firewall service..."
-rm /etc/firewalld/services/helk.xml >> $LOGFILE 2>&1
-if [ $? -ne 0 ]; then
-    echoerror "Could not remove file from firewalld directory..."
-    exit 1
-fi
+DIST="$(. /etc/os-release && echo "$ID")"
 
-echo "$LABEL Reloading firewall..."
-firewall-cmd --reload >> $LOGFILE 2>&1
-if [ $? -ne 0 ]; then
-    echoerror "Could not reload firewall..."
-    exit 1
+if [[ "$DIST" == "centos" ]]; then
+    echo "$LABEL Removing firewall service..."
+    rm /etc/firewalld/services/helk.xml >> $LOGFILE 2>&1
+    if [ $? -ne 0 ]; then
+        echoerror "Could not remove file from firewalld directory..."
+        exit 1
+    fi
+
+    echo "$LABEL Reloading firewall..."
+    firewall-cmd --reload >> $LOGFILE 2>&1
+    if [ $? -ne 0 ]; then
+        echoerror "Could not reload firewall..."
+        exit 1
+    fi
 fi
 
 echo "$LABEL You have successfully removed HELK containers.."
