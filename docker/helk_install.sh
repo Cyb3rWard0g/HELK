@@ -543,6 +543,15 @@ show_final_information(){
     echo " "
 }
 
+setup_firewall(){
+    if [[ "$LSB_DIST" == "centos" ]]; then
+        source ./helk_setup_firewall.sh
+        if [[ $? -ne 0 ]]; then
+            echoerror "Could not start firewall script..."
+        fi
+    fi
+}
+
 install_helk(){
     show_banner
     check_min_requirements
