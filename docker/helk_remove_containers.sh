@@ -39,6 +39,21 @@ while true; do
     esac
 done
 
+
+# *********** Prune volumes ***************
+while true; do
+    read -e -p "$LABEL Do you want to prune the es_data volume ? " -i "yes" PRUNE
+    case "$PRUNE" in
+        yes)
+            docker volume prune
+            break;;			
+        no)
+            break;;
+        *)
+            echo "$LABEL Error, you can only chose yes or no..."
+    esac
+done
+
 # *********** Stop, remove containers, volumes and network ***********
 echo "$LABEL Using docker-compose to remove installation..."
 if [ "$(command -v docker-compose; echo $?)" != 0 ]; then
@@ -47,15 +62,30 @@ else
     docker-compose -f $INSTALL_FILE down --rmi all -v >> $LOGFILE 2>&1
 fi
 if [ $? -ne 0 ]; then
-    echoerror "Error while trying to use the docker-compose command.."
+    echoerror "Error while trying docker-compose command.."
     exit 1
 fi
 
 echo "$LABEL Removing all images..."
-docker rmi $(docker images -a | awk '{ print $1,$3 }' | grep 'ortf\|helk\|logstash\|kibana\|elasticsearch\|cp-ksql' | awk '{ print $2 }') >> $LOGFILE 2>&1
+docker rmi $(docker images -a | awk '{ print $1,$3 }' | grep 'cyb3rward0g\|helk\|logstash\|kibana\|elasticsearch\|cp-ksql' | awk '{ print $2 }') >> $LOGFILE 2>&1
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not remove images.."
+    exit 1
+fi
+
+# *********** Remove HELK service from firewalld ***********
+echo "$LABEL Removing firewall service..."
+rm /etc/firewalld/services/helk.xml >> $LOGFILE 2>&1
+if [ $? -ne 0 ]; then
+    echoerror "Could not remove file from firewalld directory..."
+    exit 1
+fi
+
+echo "$LABEL Reloading firewall..."
+firewall-cmd --reload >> $LOGFILE 2>&1
+if [ $? -ne 0 ]; then
+    echoerror "Could not reload firewall..."
     exit 1
 fi
 
