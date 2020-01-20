@@ -11,8 +11,7 @@
 HELK_INFO_TAG="[HELK-INSTALLATION-INFO]"
 HELK_ERROR_TAG="[HELK-INSTALLATION-ERROR]"
 # Make sure to use "echo -e" with this variable
-INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in our installation Wiki\
-\n$HELK_ERROR_TAG Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in our installation Wiki\n$HELK_ERROR_TAG Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
 
 # *********** Variables for user modification ***************
 # Careful editing unless you know what you are doing :)
