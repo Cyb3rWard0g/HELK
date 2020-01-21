@@ -1,0 +1,29 @@
+- url: /introduction
+- url: /installation
+- title: GitHub Repository
+  url: https://github.com/Cyb3rWard0g/HELK
+  external: true
+- divider: true
+- header: Architecture
+- url: /architecture/elasticsearch
+- url: /architecture/logstash
+- url: /architecture/kibana
+- divider: true
+- header: How-To
+- url: /how-to/docker/docker
+  sections:
+    - url: /how-to/docker/docker-export-images
+    - url: /how-to/docker/docker-load-images
+- url: /how-to/logstash/logstash
+  sections:
+    - url: /how-to/logstash/logstash-create-plugins-offline
+- url: /how-to/kafka/kafka
+  sections:
+    - url: /how-to/kafka/kafka-topic-ingestion
+    - url: /how-to/kafka/kafka-update-ip
+- url: /how-to/ksql/ksql
+  sections:
+    - url: /how-to/ksql/ksql-deploy-locally
+- url: /how-to/winlogbeat/winlogbeat
+  sections:
+    - url: /how-to/winlogbeat/winlogbeat-shipping

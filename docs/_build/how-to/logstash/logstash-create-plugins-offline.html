@@ -1,0 +1,62 @@
+---
+title: |-
+  Create Plugins Offline Package
+pagenum: 9
+prev_page:
+  url: /how-to/logstash/logstash.html
+next_page:
+  url: /how-to/kafka/kafka.html
+suffix: .md
+search: logstash offline filter helk plugins system bash package zip installed docker plugin usr share installing internet export access where already successfully container sudo prepare bin kafka input codec install copy isolated create extra still being following steps zipped loaded does not stuck remember need exec ti using script pack translate dns cidr geoip dissect output alter fingerprint prune gziplines netflow environment dedot wmi clone created command file local cp e bust authorized ssh scp home should able
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Create Plugins Offline Package</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you are installing HELK, and the helk-logstash extra plugins are still being installed over the Internet, you can use the following steps to export them in an zipped offline package to then be loaded to the system that does not have access to the Internet and it is stuck at installing plugins.</p>
+<p>Remember that you will need to do this in a system where HELK is already installed and the plugins were installed successfully.</p>
+<ul>
+<li>Access your helk-logstash docker container in the system where HELK was successfully installed already:</li>
+</ul>
+<div class="highlight"><pre><span></span>sudo docker <span class="nb">exec</span> -ti helk-logstash bash
+</pre></div>
+
+<pre><code>bash-4.2$</code></pre>
+<ul>
+<li>Using the logstash-plugin script prepare and export the plugins offline package</li>
+</ul>
+<div class="highlight"><pre><span></span>bin/logstash-plugin prepare-offline-pack logstash-filter-translate logstash-filter-dns  logstash-filter-cidr  logstash-filter-geoip logstash-filter-dissect  logstash-output-kafka  logstash-input-kafka  logstash-filter-alter  logstash-filter-fingerprint  logstash-filter-prune  logstash-codec-gzip_lines  logstash-codec-netflow  logstash-filter-i18n  logstash-filter-environment  logstash-filter-de_dot  logstash-input-wmi  logstash-filter-clone
+</pre></div>
+
+<pre><code>Offline package created at: /usr/share/logstash/logstash-offline-plugins-6.6.1.zip
+
+You can install it with this command
+bin/logstash-plugin install file:///usr/share/logstash/logstash-offline-plugins-6.6.1.zip</code></pre>
+<ul>
+<li>Copy the offline package from your helk-logstash container to your local system</li>
+</ul>
+<div class="highlight"><pre><span></span>sudo docker cp helk-logstash:/usr/share/logstash/logstash-offline-plugins-6.6.1.zip .
+</pre></div>
+<ul>
+<li>Copy the logstash-offline-plugins-6.6.1.zip to the OFFLINE-ISOLATED (i.e. 10.0.10.102) system. You bust be authorized to ssh to it.</li>
+</ul>
+<div class="highlight"><pre><span></span>scp logstash-offline-plugins-6.6.1.zip helk@10.0.10.102:/home/helk/
+</pre></div>
+<p>Now you should be able to use it in the offline-isolated HELK system</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
