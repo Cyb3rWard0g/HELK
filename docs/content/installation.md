@@ -69,12 +69,6 @@ In order to make the installation of the HELK easy for everyone, the project com
   * If the license is set to trial, HELK asks you to set the password for the elastic account.
 
 ```
-helk@ubuntu:~$ 
-helk@ubuntu:~$ ls
-HELK
-helk@ubuntu:~$ cd HELK/docker/
-helk@ubuntu:~/HELK/docker$ sudo ./helk_install.sh 
- 
 **********************************************
 **          HELK - THE HUNTING ELK          **
 **                                          **

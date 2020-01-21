@@ -8,7 +8,7 @@
 
 The Hunting ELK or simply the HELK is one of the first open source hunt platforms with  advanced analytics capabilities such as SQL declarative language, graphing, structured streaming, and even machine learning via Jupyter notebooks and Apache Spark over an ELK stack. This project was developed primarily for research, but due to its flexible design and core components, it can be deployed in larger environments with the right configurations and scalable infrastructure.
 
-![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
+![alt text](docs/content/images/HELK-Design.png "HELK Infrastructure")
 
 # Goals
 
@@ -23,14 +23,8 @@ The project is currently in an alpha stage, which means that the code and the fu
 
 ## Docs:
 
-* [Introduction](https://github.com/Cyb3rWard0g/HELK/wiki)
-* [Architecture Overview](https://github.com/Cyb3rWard0g/HELK/wiki/Architecture-Overview)
-  * [Kafka](https://github.com/Cyb3rWard0g/HELK/wiki/Kafka)
-  * [Logstash](https://github.com/Cyb3rWard0g/HELK/wiki/Logstash)
-  * [Elasticsearch](https://github.com/Cyb3rWard0g/HELK/wiki/Elasticsearch)
-  * [Kibana](https://github.com/Cyb3rWard0g/HELK/wiki/Kibana)
-  * [Spark](https://github.com/Cyb3rWard0g/HELK/wiki/Spark)
-* [Installation](https://github.com/Cyb3rWard0g/HELK/wiki/Installation)
+* [Introduction](https://thehelk.com/introduction.html)
+* [Installation](https://thehelk.com/installation.html)
 
 # Resources
 

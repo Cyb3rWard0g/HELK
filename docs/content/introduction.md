@@ -6,7 +6,7 @@
 <a href="https://github.com/ellerbrock/open-source-badges/"><img src="https://badges.frapsoft.com/os/v3/open-source.svg?v=103" class="left"></a>
 <a href="https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha"><img src="https://img.shields.io/badge/stability-alpha-f4d03f.svg" class="left"></a>
 <div style="clear:both;"></div>
-<br/>
+
 <img src="images/HELK-Design.png">
 
 The Hunting ELK or simply the HELK is one of the first open source hunt platforms with advanced analytics capabilities such as SQL declarative language, graphing, structured streaming, and even machine learning via Jupyter notebooks and Apache Spark over an ELK stack. This project was developed primarily for research, but due to its flexible design and core components, it can be deployed in larger environments with the right configurations and scalable infrastructure.
@@ -45,6 +45,20 @@ The Hunting ELK or simply the HELK is one of the first open source hunt platform
 ## Contributing
 
 There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below. I would love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring
+
+# TO-Do
+
+- [ ] Kubernetes Cluster Migration
+- [ ] OSQuery Data Ingestion
+- [ ] MITRE ATT&CK mapping to logs or dashboards
+- [ ] Cypher for Apache Spark Integration (Adding option for Zeppelin Notebook)
+- [ ] Test and integrate neo4j spark connectors with build
+- [ ] Add more network data sources (i.e Bro)
+- [ ] Research & integrate spark structured direct streaming
+- [ ] Packer Images
+- [ ] Terraform integration (AWS, Azure, GC)
+- [ ] Add more Jupyter Notebooks to teach the basics
+- [ ] Auditd beat intergation
 
 ## License: GPL-3.0
 
