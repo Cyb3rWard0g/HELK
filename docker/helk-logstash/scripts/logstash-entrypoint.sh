@@ -116,7 +116,7 @@ else
   plugins_oudated="yes"
 fi
 # Test a few plugins determine if probably all already installed
-if ( logstash-plugin list | grep 'logstash-filter-prune' ) && ( logstash-plugin list | grep 'logstash-input-wmi' ); then
+if ( logstash-plugin list  2> /dev/null | grep 'logstash-filter-prune' ) && ( logstash-plugin list  2> /dev/null | grep 'logstash-input-wmi' ); then
   plugins_previous_install="yes"
   echo "$HELK_LOGSTASH_INFO_TAG Plugins from previous install detected.."
 else
