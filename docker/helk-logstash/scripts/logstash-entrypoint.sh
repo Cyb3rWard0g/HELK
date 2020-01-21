@@ -122,6 +122,8 @@ if ( logstash-plugin list  2> /dev/null | grep 'logstash-filter-prune' ) && ( lo
 else
   plugins_previous_install="no"
   echo "$HELK_LOGSTASH_INFO_TAG Plugins from previous install not detected.."
+  echo "$HELK_LOGSTASH_INFO_TAG Updating Logstash plugins over the internet for first run.."
+  logstash-plugin update
 fi
 # If have not been updated in X time or not installed at all.. then install them
 if [ $plugins_previous_install = "no" ] || [ $plugins_oudated = "yes" ]; then
