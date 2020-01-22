@@ -89,7 +89,7 @@ done
 # ******** Cluster Settings ***************
 echo "$HELK_LOGSTASH_INFO_TAG Configuring elasticsearch cluster settings.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT $ELASTICSEARCH_ACCESS/_cluster/settings -H 'Content-Type: application/json' -d "$CLUSTER_SETTINGS")" == "200" ]]; do
-  echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading $template_name"
+  echo "$HELK_LOGSTASH_INFO_TAG Retrying cluster settings"
   sleep 2
 done
 
@@ -103,12 +103,11 @@ done
 # ******** Create Data For Kibana Experience ***************
 echo "$HELK_LOGSTASH_INFO_TAG Setting up additional Kibana/UI experience parameter.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS/logs-endpoint-winevent-sysmon-1990.12.18/_doc/TestHELKDataWindowsSysmon000001 -H 'Content-Type: application/json' -d "$TestHELKDataWindowsSysmon000001")" == "200" ]]; do
-  echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading data"
+  echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading data for kibana experience"
   sleep 2
 done
 
 # ********** Install Plugins *****************
-plugins_time_file="/usr/share/logstash/plugins/helk-plugins-updated-timestamp.txt"
 echo "$HELK_LOGSTASH_INFO_TAG Checking Logstash plugins.."
 # check if has been 30 days since plugins have been updated
 if test -f "$plugins_time_file"; then
