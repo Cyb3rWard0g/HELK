@@ -80,6 +80,14 @@ until [[ "$(curl -s -o /dev/null -w "%{http_code}"  -u "${ELASTICSEARCH_CREDS}" 
 done
 sleep 5
 
+# *********** Wait for Elasticsearch cluster to be yellow/green ***************
+echo "$HELK_INFO_TAG Waiting for elasticsearch cluster"
+until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X GET -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_cluster/health?wait_for_status=yellow")" == "200" ]]; do
+  echo "$HELK_INFO_TAG Waiting for elasticsearch cluster health.."
+  sleep 5
+done
+echo "$HELK_INFO_TAG Elasticsearch cluster is up.."
+
 # *********** Set Elastic License Variables ***************
 
 if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
