@@ -35,7 +35,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    build: helk-logstash/
+    image: otrf/helk-logstash:7.5.2
     container_name: helk-logstash
     logging:
       driver: "json-file"
@@ -47,12 +47,15 @@ services:
       - ./helk-logstash/mordor_pipeline:/usr/share/logstash/mordor_pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
+      - ./helk-logstash/config:/usr/share/logstash/config
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     environment:
       - xpack.monitoring.elasticsearch.username=logstash_system
       - xpack.monitoring.elasticsearch.password=logstashpassword
+      - xpack.monitoring.enabled=true
+      - xpack.monitoring.elasticsearch.hosts=http://helk-elasticsearch:9200
       - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
       - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
