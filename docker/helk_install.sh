@@ -11,7 +11,7 @@
 HELK_INFO_TAG="[HELK-INSTALLATION-INFO]"
 HELK_ERROR_TAG="[HELK-INSTALLATION-ERROR]"
 # Make sure to use "echo -e" with this variable
-INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in our installation Wiki\n$HELK_ERROR_TAG Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in the Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
 
 # *********** Variables for user modification ***************
 # Careful editing unless you know what you are doing :)
@@ -30,7 +30,7 @@ export COMPOSE_HTTP_TIMEOUT=300
 
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
-  echo "$HELK_INFO_TAG YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
+  echo "$HELK_INFO_TAG YOU MUST BE ROOT TO RUN THIS SCRIPT!"
   exit 1
 fi
 
@@ -115,13 +115,14 @@ check_min_requirements() {
       echo "$HELK_INFO_TAG Available Memory: $AVAILABLE_MEMORY MBs"
     else
       echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY"
+      echo "$HELK_INFO_TAG This may be because you are already running the HELK docker containers.. If so, stop them and try again"
       echo "$HELK_ERROR_TAG Available Memory: $AVAILABLE_MEMORY MBs"
       echo -e $INSTALL_ERROR_CHECK_WIKI
       exit 1
     fi
   else
-    echo "$HELK_INFO_TAG I could not calculate available memory for $SYSTEM_KERNEL!!!!!"
-    echo "$HELK_INFO_TAG Make sure you have at least $INSTALL_MINIMUM_MEMORY MBs of available memory!!!!!!"
+    echo "$HELK_ERROR_TAG I could not calculate available memory for $SYSTEM_KERNEL"
+    echo "$HELK_ERROR_TAG Make sure you have at least $INSTALL_MINIMUM_MEMORY MBs of available memory"
   fi
 }
 
