@@ -13,7 +13,6 @@ HELK_INFO_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-INFO:"
 HELK_ERROR_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-ERROR:"
 
 # *********** Wait for Kibana port to be up ***************
-#until curl -s $KIBANA_URL -o /dev/null; do
 until curl --silent "${KIBANA_ACCESS}" --output /dev/null; do
     echo "$HELK_INFO_TAG Waiting for Kibana internal port to be up.."
     sleep 5
