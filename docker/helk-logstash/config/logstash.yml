@@ -1,4 +1,4 @@
-# Helk Custom
+# HELK Custom
 # pipeline.workers: 2
 # node.name: test
 pipeline.batch.size: 1000
