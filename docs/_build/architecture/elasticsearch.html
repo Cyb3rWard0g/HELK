@@ -1,0 +1,130 @@
+---
+title: |-
+  Elasticsearch
+pagenum: 2
+prev_page:
+  url: /installation.html
+next_page:
+  url: /architecture/logstash.html
+suffix: .md
+search: elasticsearch helk set heap memory docker mbs config available gbs jvm example file not else usr share own using options edit following restart value cluster xmsg xmxg esjavaopts environment yml bash size ram perform functions keep aggregations run amount important variables therefore note max only lines always above add under license basic scripts uses order various list track such data perfect however ways logic below shown gb server getting settings sure min same also restarting temporarily service database coming back online here should wanted services option kibana analysis rebuild container elastic need entrypoint name xpack soft hard compose f build
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Elasticsearch</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="../../images/ELASTICSEARCH-Design.png"></p>
+<h2 id="HELK's-Elasticsearch-Heap-Size">HELK's Elasticsearch Heap Size<a class="anchor-link" href="#HELK's-Elasticsearch-Heap-Size"> </a></h2><p>Elasticsearch uses heap, which can more specifically be referred to as memory/RAM, in order to perform various functions.<br>
+A list of some of the functions this heap/memory does is as follows (keep in mind this is not an exhaustive list):</p>
+<ul>
+<li>Keep track of indexes</li>
+<li>When aggregations are run such as calculating sums, mathematical variations, sub aggregations of aggregations, etc..</li>
+<li>When certain searches are </li>
+<li>Keep track of offsets of the tokens/terms of indexed values (aka events/logs/data)</li>
+</ul>
+<p>As you can see, heap and the amount of it is important in a healthy setup. The HELK installation process uses various functions to try to set the "perfect" amount of heap, however there are thousands of variables in all the different ways people use/install HELK.<br>
+Therefore, we are unable to account for them all and thus our logic will never be perfect and unfortunately may not work best for you. However, we have given you an ability to set your own heap and we have described the logic if you choose to let HELK determine what to set it.</p>
+<p>Heap can and or is set one of four ways, as detailed below.</p>
+<h3 id="1)-Allow-HELK-to-calculate-how-much-to-assign.">1) Allow HELK to calculate how much to assign.<a class="anchor-link" href="#1)-Allow-HELK-to-calculate-how-much-to-assign."> </a></h3><p>This is based on the available memory and variables shown in the code block below.<br>
+It’s very important to note <code>available memory</code>, not the amount of memory the host has.<br>
+An example to show why this is critical to understand.. If you have a 100GB RAM server, but the server is actively using 90GBs of RAM - then you will NOT get the max 31GB heap/memory for elasticsearch. In this example you would actually end up getting roughly 3 GBs for the heap. Because, with only 10 GBs of available/free memory, it could cause drastic issues to lock up all of the remaining memory!</p>
+
+<pre><code>if available memory &gt;= 1000 MBs and &lt;= 5999 MBs:
+  then set to 2000 MBs
+else if available memory =&gt; 6000 MBs and &lt;= 8999 MBs:
+  then set to 3200 MBs
+else if available memory =&gt; 9000 MBs and &lt;= 12999 MBs:
+  then set to 5000 MBs
+else if available memory =&gt; 13000 MBs and &lt;= 16000 MBs:
+  then set to 7100 MBs
+else:
+  if available memory =&gt; 31 GBs:
+    then set to 31 GBs
+  else:
+    set to available memory in GBs</code></pre>
+<h3 id="2)-Set-your-own-heap">2) Set your own heap<a class="anchor-link" href="#2)-Set-your-own-heap"> </a></h3><p>In order to define your own heap settings, in the file <code>HELK/docker/helk-elasticsearch/config/jvm.options</code>
+edit the following two lines that begin with</p>
+<p><code>#-Xms</code><br>
+<code>#-Xmx</code></p>
+<p>Then make sure to restart elasticsearch.<br>
+<strong>Always set the min and max JVM heap size to the same value<br>
+Also, you will be restarting elasticsearch. Therefore your cluster will temporarily be down as the elasticsearch service/database is coming back online</strong></p>
+<p>Here is an example of how to perform the above:</p>
+
+<pre><code># Edit the file jvm file
+sudo nano HELK/docker/helk-elasticsearch/config/jvm.options
+# Resulting lines (as mentioned that you should edit from above)
+# should look something like the following if you wanted to set the heap to 16GBs
+-Xms16g
+-Xmx16g
+# Restart elasticsearch
+docker restart helk-elasticsearch</code></pre>
+<h3 id="3)-Add-ES_JAVA_OPTS-to-the-docker-config-file">3) Add <code>ES_JAVA_OPTS</code> to the docker config file<a class="anchor-link" href="#3)-Add-ES_JAVA_OPTS-to-the-docker-config-file"> </a></h3><p>Which docker config file to use is shown later.<br>
+You will add this value under <code>services.helk-elasticsearch.environment</code>. 
+Example, if I used the option for ELK + Kafka with no license and no alerting and I wanted to set the heap to 16GBs<br>
+Then I would edit <code>HELK/docker/helk-kibana-analysis-basic.yml</code> and add the following line under the environment seciton:<br>
+<code>- "ES_JAVA_OPTS=-Xms16g -Xmx16g"</code></p>
+<p>Then make sure rebuild the elasticsearch docker container.<br>
+<strong>Always set the min and max JVM heap size to the same value<br>
+Also, you will be restarting elasticsearch. Therefore your cluster will temporarily be down as the elasticsearch service/database is coming back online</strong><br>
+<strong>Note if you are using (elastic) license you will need to set your ELASTIC_PASSWORD and KIBANA_UI_PASSWORD variables (and logstash password if applicable)</strong></p>
+<p>Here is how to perform the above:</p>
+
+<pre><code># Example config (only showing the beginning lines) Note, that these settings may not match your config exactly, but that the important thing is to have the value under the environment section
+version: '3.5'
+
+services:
+  helk-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    container_name: helk-elasticsearch
+    secrets:
+      - source: elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
+      - ./helk-elasticsearch/config/jvm.options:/usr/share/elasticsearch/config/jvm.options
+    entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
+    environment:
+      - cluster.name=helk-cluster
+      - node.name=helk-1
+      - xpack.license.self_generated.type=basic
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS= -Xms16g -Xmx16g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nproc: 20480
+      nofile:
+        soft: 160000
+        hard: 160000
+    restart: always
+    networks:
+      helk:
+# Rebuild the elasticsearch docker container
+`docker-compose -f HELK/docker/helk-kibana-analysis-basic.yml up --build -d`</code></pre>
+<h4 id="4)-Set-at-run-time-using-custom-bash-variable">4) Set at run time using custom bash variable<a class="anchor-link" href="#4)-Set-at-run-time-using-custom-bash-variable"> </a></h4><p>Example bash variable such as:</p>
+<div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">ES_JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xms16g -Xmx16g&quot;</span>
+</pre></div>
+<p>Then run the following using your own docker config file.</p>
+<div class="highlight"><pre><span></span>docker-compose -f <span class="nv">$PlaceDockerConfigFileNameHere</span> up --build -d
+</pre></div>
+<p><strong>Only use this option if you explicitly need to. Please know what your getting into to ;)</strong></p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

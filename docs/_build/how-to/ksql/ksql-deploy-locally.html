@@ -1,0 +1,184 @@
+---
+title: |-
+  Deploy KSQL Locally
+pagenum: 14
+prev_page:
+  url: /how-to/ksql/ksql.html
+next_page:
+  url: /how-to/winlogbeat/winlogbeat.html
+suffix: .md
+search: kafka ksql confluent server stop control center run start tar x class gz bash src consumer options help cli connect console false avro bin schema registry reset producer zookeeper rest query value v download mqtt topics configs file output limit helk self managed software platform format io lib cd ls acls api streams service verifiable security broker replica perf test metrics partitions log robertos mbp wardog config configfile h outputformat row streamedqueryrowlimit timeout streamedquerytimeoutms list available tabular optional maximum streamed queries must fall following range option command line arguments address streaming sql engine apache copyright inc located having trouble type
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Deploy KSQL Locally</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can use KSQL CLI to connect to the HELK's KSQL Server from a different system. You will have to download the self-managed software Confluent platform and then run KSQL</p>
+<ul>
+<li>Download the self-managed software Confluent platform in a .tar.gz format from: <a href="https://www.confluent.io/download/#popup_form_3109">https://www.confluent.io/download/#popup_form_3109</a></li>
+<li>Decompress the folder:</li>
+</ul>
+<div class="highlight"><pre><span></span>tar -xvzf confluent-5.1.2-2.11.tar.gz
+</pre></div>
+
+<pre><code>x confluent-5.1.2/
+x confluent-5.1.2/src/
+x confluent-5.1.2/src/avro-cpp-1.8.0-confluent5.1.2.tar.gz
+x confluent-5.1.2/src/librdkafka-0.11.6-confluent5.1.2.tar.gz
+x confluent-5.1.2/src/confluent-libserdes-5.1.2.tar.gz
+x confluent-5.1.2/src/avro-c-1.8.0-confluent5.1.2.tar.gz
+x confluent-5.1.2/lib/</code></pre>
+<ul>
+<li>Access the KSQL scripts:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="nb">cd</span> confluent-5.1.2
+ls
+</pre></div>
+
+<pre><code>README  bin etc lib logs    share   src</code></pre>
+<div class="highlight"><pre><span></span><span class="nb">cd</span> bin/
+ls
+</pre></div>
+
+<pre><code>confluent               kafka-acls              kafka-mirror-maker          kafka-server-stop           schema-registry-start
+confluent-hub               kafka-api-start             kafka-mqtt-run-class            kafka-streams-application-reset     schema-registry-stop
+confluent-rebalancer            kafka-avro-console-consumer     kafka-mqtt-start            kafka-topics                schema-registry-stop-service
+connect-distributed         kafka-avro-console-producer     kafka-mqtt-stop             kafka-verifiable-consumer       security-plugins-run-class
+connect-standalone          kafka-broker-api-versions       kafka-preferred-replica-election    kafka-verifiable-producer       sr-acl-cli
+control-center-3_0_0-reset      kafka-configs               kafka-producer-perf-test        ksql                    support-metrics-bundle
+control-center-3_0_1-reset      kafka-console-consumer          kafka-reassign-partitions       ksql-datagen                windows
+control-center-console-consumer     kafka-console-producer          kafka-replica-verification      ksql-print-metrics          zookeeper-security-migration
+control-center-export           kafka-consumer-groups           kafka-rest-run-class            ksql-run-class              zookeeper-server-start
+control-center-reset            kafka-consumer-perf-test        kafka-rest-start            ksql-server-start           zookeeper-server-stop
+control-center-run-class        kafka-delegation-tokens         kafka-rest-stop             ksql-server-stop            zookeeper-shell
+control-center-set-acls         kafka-delete-records            kafka-rest-stop-service         ksql-stop
+control-center-start            kafka-dump-log              kafka-run-class             replicator
+control-center-stop         kafka-log-dirs              kafka-server-start          schema-registry-run-class
+Robertos-MBP:bin wardog$</code></pre>
+<ul>
+<li>Check the options for KSQL:</li>
+</ul>
+<div class="highlight"><pre><span></span>./ksql --help
+</pre></div>
+
+<pre><code>NAME
+        ksql - KSQL CLI
+
+SYNOPSIS
+        ksql [ --config-file &lt;configFile&gt; ] [ {-h | --help} ]
+                [ --output &lt;outputFormat&gt; ]
+                [ --query-row-limit &lt;streamedQueryRowLimit&gt; ]
+                [ --query-timeout &lt;streamedQueryTimeoutMs&gt; ] [--] &lt;server&gt;
+
+OPTIONS
+        --config-file &lt;configFile&gt;
+            A file specifying configs for Ksql and its underlying Kafka Streams
+            instance(s). Refer to KSQL documentation for a list of available
+            configs.
+
+        -h, --help
+            Display help information
+
+        --output &lt;outputFormat&gt;
+            The output format to use (either 'JSON' or 'TABULAR'; can be
+            changed during REPL as well; defaults to TABULAR)
+
+        --query-row-limit &lt;streamedQueryRowLimit&gt;
+            An optional maximum number of rows to read from streamed queries
+
+            This options value must fall in the following range: value &gt;= 1
+
+
+        --query-timeout &lt;streamedQueryTimeoutMs&gt;
+            An optional time limit (in milliseconds) for streamed queries
+
+            This options value must fall in the following range: value &gt;= 1
+
+
+        --
+            This option can be used to separate command-line options from the
+            list of arguments (useful when arguments might be mistaken for
+            command-line options)
+
+        &lt;server&gt;
+            The address of the Ksql server to connect to (ex:
+            http://confluent.io:9098)
+
+            This option may occur a maximum of 1 times
+
+Robertos-MBP:bin wardog$</code></pre>
+<ul>
+<li>Connect to the HELK KSQL Server. You will just need to point to the IP address of your HELK Docker environment over port 8088</li>
+</ul>
+<div class="highlight"><pre><span></span>./ksql http://192.168.64.138:8088
+</pre></div>
+
+<pre><code>                  ===========================================
+                  =        _  __ _____  ____  _             =
+                  =       | |/ // ____|/ __ \| |            =
+                  =       | ' /| (___ | |  | | |            =
+                  =       |  &lt;  \___ \| |  | | |            =
+                  =       | . \ ____) | |__| | |____        =
+                  =       |_|\_\_____/ \___\_\______|       =
+                  =                                         =
+                  =  Streaming SQL Engine for Apache Kafka® =
+                  ===========================================
+
+Copyright 2017-2018 Confluent Inc.
+
+CLI v5.1.2, Server v5.1.0 located at http://192.168.64.138:8088
+
+Having trouble? Type 'help' (case-insensitive) for a rundown of how things work!
+
+ksql&gt;</code></pre>
+<ul>
+<li>Verify that you can see the topics available in the HELK Kafka broker</li>
+</ul>
+<div class="highlight"><pre><span></span>./ksql http://192.168.64.138:8088
+</pre></div>
+
+<pre><code>                  ===========================================
+                  =        _  __ _____  ____  _             =
+                  =       | |/ // ____|/ __ \| |            =
+                  =       | ' /| (___ | |  | | |            =
+                  =       |  &lt;  \___ \| |  | | |            =
+                  =       | . \ ____) | |__| | |____        =
+                  =       |_|\_\_____/ \___\_\______|       =
+                  =                                         =
+                  =  Streaming SQL Engine for Apache Kafka® =
+                  ===========================================
+
+Copyright 2017-2018 Confluent Inc.
+
+CLI v5.1.2, Server v5.1.0 located at http://192.168.64.138:8088
+
+Having trouble? Type 'help' (case-insensitive) for a rundown of how things work!
+
+ksql&gt; SHOW TOPICS;
+
+ Kafka Topic | Registered | Partitions | Partition Replicas | Consumers | ConsumerGroups 
+-----------------------------------------------------------------------------------------
+ filebeat    | false      | 1          | 1                  | 0         | 0              
+ SYSMON_JOIN | false      | 1          | 1                  | 0         | 0              
+ winlogbeat  | false      | 1          | 1                  | 0         | 0              
+ winsecurity | false      | 1          | 1                  | 0         | 0              
+ winsysmon   | false      | 1          | 1                  | 0         | 0              
+-----------------------------------------------------------------------------------------
+ksql&gt;</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
