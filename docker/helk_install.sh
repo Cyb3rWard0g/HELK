@@ -59,16 +59,22 @@ persist_conf() {
     mkdir -p $HELK_DIR >>$LOGFILE 2>&1
   fi
 
-  if [[ -e $HELK_CONF_FILE ]]; then
-    SYSCTL_VM_MAX_MAP_COUNT=$(cat $HELK_CONF_FILE | grep SYSCTL_VM_MAX_MAP_COUNT | cut -d'=' -f2)
-    HOST_IP=$(cat $HELK_CONF_FILE | grep HOST_IP | cut -d'=' -f2)
-    HELK_BUILD=$(cat $HELK_CONF_FILE | grep HELK_BUILD | cut -d'=' -f2)
-    SUBSCRIPTION_CHOICE=$(cat $HELK_CONF_FILE | grep SUBSCRIPTION_CHOICE | cut -d'=' -f2)
-    sed -i -e "s/SYSCTL_VM_MAX_MAP_COUNT=/SYSCTL_VM_MAX_MAP_COUNT=$SYSCTL_VM_MAX_MAP_COUNT/g" $HELK_CONF_FILE >>$LOGFILE 2>&1
-    sed -i -e "s/SYSCTL_VM_SWAPPINESS=/SYSCTL_VM_SWAPPINESS=$SYSCTL_VM_SWAPPINESS/g" $HELK_CONF_FILE >>$LOGFILE 2>&1
-    sed -i -e "s/HOST_IP=/HOST_IP=$HOST_IP/g" $HELK_CONF_FILE >>$LOGFILE 2>&1
-    sed -i -e "s/HELK_BUILD=/HELK_BUILD=$HELK_BUILD/g" $HELK_CONF_FILE >>$LOGFILE 2>&1
-    sed -i -e "s/SUBSCRIPTION_CHOICE=/=$SUBSCRIPTION_CHOICE/g" $HELK_CONF_FILE >>$LOGFILE 2>&1
+  COMPOSE_CONFIG="${HELK_BUILD}-${SUBSCRIPTION_CHOICE}.yml"
+
+  if [[ -f $HELK_CONF_FILE ]]; then
+    #TODO:give choice to set these or just move completely to update script
+    #SYSCTL_VM_MAX_MAP_COUNT=$(cat $HELK_CONF_FILE | grep SYSCTL_VM_MAX_MAP_COUNT | cut -d'=' -f2)
+    #HOST_IP=$(cat $HELK_CONF_FILE | grep HOST_IP | cut -d'=' -f2)
+    #HELK_BUILD=$(cat $HELK_CONF_FILE | grep HELK_BUILD | cut -d'=' -f2)
+    #SUBSCRIPTION_CHOICE=$(cat $HELK_CONF_FILE | grep SUBSCRIPTION_CHOICE | cut -d'=' -f2)
+    {
+      sed -i -e "s/^SYSCTL_VM_MAX_MAP_COUNT[[:blank:]]*=[[:blank:]]*.*/SYSCTL_VM_MAX_MAP_COUNT=$SYSCTL_VM_MAX_MAP_COUNT/" $HELK_CONF_FILE
+      sed -i -e "s/^SYSCTL_VM_SWAPPINESS[[:blank:]]*=[[:blank:]]*.*/SYSCTL_VM_SWAPPINESS=$SYSCTL_VM_SWAPPINESS/" $HELK_CONF_FILE
+      sed -i -e "s/^HOST_IP[[:blank:]]*=[[:blank:]]*.*/HOST_IP=$HOST_IP/" $HELK_CONF_FILE
+      sed -i -e "s/^HELK_BUILD[[:blank:]]*=[[:blank:]]*.*/HELK_BUILD=$HELK_BUILD/" $HELK_CONF_FILE
+      sed -i -e "s/^SUBSCRIPTION_CHOICE[[:blank:]]*=[[:blank:]]*.*/SUBSCRIPTION_CHOICE=$SUBSCRIPTION_CHOICE/" $HELK_CONF_FILE
+      sed -i -e "s/^COMPOSE_CONFIG[[:blank:]]*=[[:blank:]]*.*/COMPOSE_CONFIG=$COMPOSE_CONFIG/" $HELK_CONF_FILE
+    } >> $LOGFILE 2>&1
   else
     touch $HELK_CONF_FILE >>$LOGFILE 2>&1
     {
@@ -77,6 +83,7 @@ persist_conf() {
       echo "HOST_IP=$HOST_IP"
       echo "HELK_BUILD=$HELK_BUILD"
       echo "SUBSCRIPTION_CHOICE=$SUBSCRIPTION_CHOICE"
+      echo "COMPOSE_CONFIG=$COMPOSE_CONFIG"
     } >> $HELK_CONF_FILE 2>&1
   fi
 }
@@ -97,12 +104,13 @@ set_install_info() {
     echo "DIST_VERSION=$DIST_VERSION"
     echo "AVAILABLE_DOCKER_DISK=$AVAILABLE_DOCKER_DISK"
     echo "HELK_GIT_BUILD=$HELK_GIT_BUILD"
+    echo "COMPOSE_CONFIG=$COMPOSE_CONFIG"
   } >> $HELK_INFO_FILE 2>&1
 }
 # ********** Check Minimum Requirements **************
 check_min_requirements() {
   # *********** Check System Kernel Name ***************
-  echo "$HELK_INFO_TAG HELK being hosted on a $SYSTEM_KERNEL box"
+  echo "$HELK_INFO_TAG HELK hosted on a $SYSTEM_KERNEL box"
   if [ "$SYSTEM_KERNEL" == "Linux" ]; then
     ARCHITECTURE=$(uname -m)
     if [ "${ARCHITECTURE}" != "x86_64" ]; then
@@ -384,7 +392,6 @@ set_network() {
 
 # *********** Building and Running HELK Images ***************
 build_helk() {
-  COMPOSE_CONFIG="${HELK_BUILD}-${SUBSCRIPTION_CHOICE}.yml"
   ## ****** Setting KAFKA ADVERTISED_LISTENER environment variable ***********
   export ADVERTISED_LISTENER=$HOST_IP
 
