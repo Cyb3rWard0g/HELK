@@ -15,17 +15,17 @@ HELK_ERROR_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-ERROR:"
 # *********** Install Plugins *********************
 
 # *********** Environment Variables ***************
-if [[ -z "$ELASTICSEARCH_HOSTS" ]]; then
+if [ -z "$ELASTICSEARCH_HOSTS" ]; then
   export ELASTICSEARCH_HOSTS=http://helk-elasticsearch:9200
 fi
 echo "$HELK_INFO_TAG Setting Elasticsearch URL to $ELASTICSEARCH_HOSTS"
 
-if [[ -z "$SERVER_HOST" ]]; then
+if [ -z "$SERVER_HOST" ]; then
   export SERVER_HOST=helk-kibana
 fi
 echo "$HELK_INFO_TAG Setting Kibana server to $SERVER_HOST"
 
-if [[ -z "$SERVER_PORT" ]]; then
+if [ -z "$SERVER_PORT" ]; then
   export SERVER_PORT=5601
 fi
 echo "$HELK_INFO_TAG Setting Kibana server port to $SERVER_PORT"
@@ -33,36 +33,19 @@ echo "$HELK_INFO_TAG Setting Kibana server port to $SERVER_PORT"
 KIBANA_HOST=http://$SERVER_HOST:$SERVER_PORT
 echo "$HELK_INFO_TAG Setting Kibana URL to $KIBANA_HOST"
 
-if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
-  if [[ -z "$ELASTICSEARCH_USERNAME" ]]; then
+if [ -n "$ELASTICSEARCH_PASSWORD" ]; then
+  if [ -z "$ELASTICSEARCH_USERNAME" ]; then
     export ELASTICSEARCH_USERNAME=elastic
-    echo "$HELK_INFO_TAG Setting Elasticsearch username to access Elasticsearch to HELK's default"
-  else
-    echo "$HELK_INFO_TAG Setting Elasticsearch username to access Elasticsearch to your predfined username"
   fi
-
-  if [[ -z "$KIBANA_USER" ]]; then
+  if [ -z "$KIBANA_USER" ]; then
     export KIBANA_USER=kibana
-    echo "$HELK_INFO_TAG Setting Kibana username to access Elasticsearch to HELK's default"
-  else
-    echo "$HELK_INFO_TAG Setting Kibana username to access Elasticsearch to your predfined username"
   fi
-
-  if [[ -z "$KIBANA_PASSWORD" ]]; then
+  if [ -z "$KIBANA_PASSWORD" ]; then
     export KIBANA_PASSWORD=kibanapassword
-    echo "$HELK_INFO_TAG Setting Kibana password to access Elasticsearch to HELK's default"
-    echo "$HELK_INFO_TAG Setting Kibana password to HELK's default"
-  else
-    echo "$HELK_INFO_TAG Setting Kibana password to access Elasticsearch to your predfined password"
   fi
-
-  if [[ -z "$KIBANA_UI_PASSWORD" ]]; then
+  if [ -z "$KIBANA_UI_PASSWORD" ]; then
     export KIBANA_UI_PASSWORD=hunting
-    echo "$HELK_INFO_TAG Setting Kibana UI password to HELK's default"
-  else
-    echo "$HELK_INFO_TAG Setting Kibana UI password to your predfined password"
   fi
-
   export ELASTICSEARCH_CREDS="${ELASTICSEARCH_USERNAME}:${ELASTICSEARCH_PASSWORD}"
   KIBANA_ACCESS=http://$KIBANA_USER:"$KIBANA_PASSWORD"@$SERVER_HOST:$SERVER_PORT
 
@@ -74,32 +57,33 @@ export KIBANA_ACCESS
 export KIBANA_HOST
 
 # *********** Check if Elasticsearch is up ***************
-until [[ "$(curl -s -o /dev/null -w "%{http_code}"  -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}")" == "200" ]]; do
-  echo "$HELK_INFO_TAG Waiting for elasticsearch URI to be accessible.."
+until [ "$(curl -s -o /dev/null -w "%{http_code}"  -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}")" = "200" ]; do
+  echo "$HELK_INFO_TAG Waiting for very basic elasticsearch check.."
   sleep 5
 done
 sleep 5
 
 # *********** Wait for Elasticsearch cluster to be yellow/green ***************
 echo "$HELK_INFO_TAG Waiting for elasticsearch cluster"
-until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X GET -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_cluster/health?wait_for_status=yellow")" == "200" ]]; do
-  echo "$HELK_INFO_TAG Waiting for elasticsearch cluster health.."
+until [ "$(curl -s -o /dev/null -w '%{http_code}' -X GET -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_cluster/health/.kibana?level=shards?wait_for_status=yellow")" = "200" ]; do
+  echo "$HELK_INFO_TAG Waiting for elasticsearch kibana index cluster health.."
   sleep 5
 done
 echo "$HELK_INFO_TAG Elasticsearch cluster is up.."
 
 # *********** Set Elastic License Variables ***************
 
-if [[ -n "$ELASTICSEARCH_PASSWORD" ]]; then
+if [ -n "$ELASTICSEARCH_PASSWORD" ]; then
   # *********** Change Kibana and Logstash password ***************
-  echo "$HELK_INFO_TAG Submitting a request to change the password of a Kibana and Logstash users .."
-  until curl -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}"/_security/user/kibana/_password -H 'Content-Type:application/json' -d "{\"password\": \"${KIBANA_PASSWORD}\"}"
-  do
+  echo "$HELK_INFO_TAG Submitting a request to change the password of the Kibana user"
+  until [ "$(curl -s -o /dev/null -w '%{http_code}' -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_security/user/kibana/_password" -H 'Content-Type:application/json' -d "{\"password\": \"${KIBANA_PASSWORD}\"}")" = "200" ]; do
+    echo "$HELK_INFO_TAG Retrying Kibana user password change.."
     sleep 2
   done
 
-  until curl -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}"/_security/user/logstash_system/_password -H 'Content-Type:application/json' -d "{\"password\": \"logstashpassword\"}"
-  do
+  echo "$HELK_INFO_TAG Submitting a request to change the password of the Logstash user"
+  until [ "$(curl -s -o /dev/null -w '%{http_code}' -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_security/user/logstash_system/_password" -H 'Content-Type:application/json' -d "{\"password\": \"logstashpassword\"}")" = "200" ]; do
+    echo "$HELK_INFO_TAG Retrying Logstash user password change.."
     sleep 2
   done
 fi
