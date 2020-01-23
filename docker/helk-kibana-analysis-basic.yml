@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
     container_name: helk-elasticsearch
     logging:
       driver: "json-file"
@@ -34,17 +34,20 @@ services:
     networks:
       helk:
   helk-logstash:
-    image: docker.elastic.co/logstash/logstash:7.5.1
+    image: otrf/helk-logstash:7.5.2
     container_name: helk-logstash
     volumes:
       - ./helk-logstash/pipeline:/usr/share/logstash/pipeline
       - ./helk-logstash/mordor_pipeline:/usr/share/logstash/mordor_pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
+      - ./helk-logstash/config:/usr/share/logstash/config
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     environment:
+      - xpack.monitoring.enabled=true
+      - xpack.monitoring.elasticsearch.hosts=http://helk-elasticsearch:9200
       - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
       - "5044:5044"
@@ -56,7 +59,7 @@ services:
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:7.5.1
+    image: docker.elastic.co/kibana/kibana:7.5.2
     container_name: helk-kibana
     secrets:
       - source: kibana.yml
