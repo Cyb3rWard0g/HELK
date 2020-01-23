@@ -65,8 +65,8 @@ sleep 5
 
 # *********** Wait for Elasticsearch cluster to be yellow/green ***************
 echo "$HELK_INFO_TAG Waiting for elasticsearch cluster"
-until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X GET -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_cluster/health?wait_for_status=yellow")" == "200" ]]; do
-  echo "$HELK_INFO_TAG Waiting for elasticsearch cluster health.."
+until [ "$(curl -s -o /dev/null -w '%{http_code}' -X GET -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_cluster/health/.kibana?level=shards?wait_for_status=yellow")" = "200" ]; do
+  echo "$HELK_INFO_TAG Waiting for elasticsearch kibana index cluster health.."
   sleep 5
 done
 echo "$HELK_INFO_TAG Elasticsearch cluster is up.."
