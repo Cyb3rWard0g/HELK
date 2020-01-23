@@ -46,7 +46,6 @@ if [ -n "$ELASTICSEARCH_PASSWORD" ]; then
   if [ -z "$KIBANA_UI_PASSWORD" ]; then
     export KIBANA_UI_PASSWORD=hunting
   fi
-
   export ELASTICSEARCH_CREDS="${ELASTICSEARCH_USERNAME}:${ELASTICSEARCH_PASSWORD}"
   KIBANA_ACCESS=http://$KIBANA_USER:"$KIBANA_PASSWORD"@$SERVER_HOST:$SERVER_PORT
 
@@ -76,14 +75,15 @@ echo "$HELK_INFO_TAG Elasticsearch cluster is up.."
 
 if [ -n "$ELASTICSEARCH_PASSWORD" ]; then
   # *********** Change Kibana and Logstash password ***************
-  echo "$HELK_INFO_TAG Submitting a request to change the password of a Kibana and Logstash users .."
-  until curl -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}"/_security/user/kibana/_password -H 'Content-Type:application/json' -d "{\"password\": \"${KIBANA_PASSWORD}\"}"
-  do
+  echo "$HELK_INFO_TAG Submitting a request to change the password of the Kibana user"
+  until [ "$(curl -s -o /dev/null -w '%{http_code}' -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_security/user/kibana/_password" -H 'Content-Type:application/json' -d "{\"password\": \"${KIBANA_PASSWORD}\"}")" = "200" ]; do
+    echo "$HELK_INFO_TAG Retrying Kibana user password change.."
     sleep 2
   done
 
-  until curl -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}"/_security/user/logstash_system/_password -H 'Content-Type:application/json' -d "{\"password\": \"logstashpassword\"}"
-  do
+  echo "$HELK_INFO_TAG Submitting a request to change the password of the Logstash user"
+  until [ "$(curl -s -o /dev/null -w '%{http_code}' -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_security/user/logstash_system/_password" -H 'Content-Type:application/json' -d "{\"password\": \"logstashpassword\"}")" = "200" ]; do
+    echo "$HELK_INFO_TAG Retrying Logstash user password change.."
     sleep 2
   done
 fi
