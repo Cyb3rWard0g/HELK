@@ -61,6 +61,7 @@ persist_conf() {
   fi
 
   COMPOSE_CONFIG="${HELK_BUILD}-${SUBSCRIPTION_CHOICE}.yml"
+  #TODO: add check if CentOS if selinux is enabled and if enforcement mode or note
 
   if [[ -f $HELK_CONF_FILE ]]; then
     #TODO:give choice to set these or just move completely to update script
