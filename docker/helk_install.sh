@@ -505,6 +505,19 @@ prepare_helk() {
     # *********** Check if docker is installed ***************
     if [ -x "$(command -v docker)" ]; then
       echo "$HELK_INFO_TAG Docker already installed"
+      # Check to make sure docker is started before continuing with all the components that use docker
+      echo "$HELK_INFO_TAG Assesing if Docker is running.."
+      while true; do
+        if (systemctl --quiet is-active docker.service); then
+          echo "$HELK_INFO_TAG Docker is running."
+          break
+        else
+          echo "$HELK_ERROR_TAG Docker is not running. Attempting to start it.."
+          systemctl enable docker.service
+          systemctl start docker.service
+          sleep 2
+        fi
+      done
       echo "$HELK_INFO_TAG Making sure you assigned enough disk space to the current Docker base directory"
       AVAILABLE_DOCKER_DISK=$(df -m "$(docker info --format '{{.DockerRootDir}}')" | awk '$1 ~ /\//{printf "%.f", $4 / 1024}')
       if [[ "${AVAILABLE_DOCKER_DISK}" -ge $INSTALL_MINIMUM_DISK ]]; then
