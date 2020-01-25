@@ -625,6 +625,7 @@ install_helk() {
   prepare_helk
   persist_conf
   set_install_info
+  setup_firewall
   build_helk
   check_logstash_connected
   show_final_information
