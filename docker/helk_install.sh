@@ -25,6 +25,7 @@ INSTALL_MINIMUM_DISK=20
 SYSCTL_VM_MAX_MAP_COUNT=4120294
 SYSCTL_VM_SWAPPINESS=25
 
+# *********** Export variables to environment ***************
 export DOCKER_CLIENT_TIMEOUT=300
 export COMPOSE_HTTP_TIMEOUT=300
 
@@ -248,6 +249,10 @@ install_docker() {
   curl -fsSL https://get.docker.com -o get-docker.sh >>$LOGFILE 2>&1
   chmod +x get-docker.sh >>$LOGFILE 2>&1
   ./get-docker.sh >>$LOGFILE 2>&1
+  if [ "$LSB_DIST" -eq "centos" ]; then
+    systemctl enable docker.service
+    systemctl start docker.service
+  fi
   ERROR=$?
   if [ $ERROR -ne 0 ]; then
     echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
@@ -274,8 +279,7 @@ install_docker_compose() {
   COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
   curl -L https://github.com/docker/compose/releases/download/"$COMPOSE_VERSION"/docker-compose-"$(uname -s)"-"$(uname -m)" -o /usr/local/bin/docker-compose >>$LOGFILE 2>&1
   chmod +x /usr/local/bin/docker-compose >>$LOGFILE 2>&1
-  OSNAME=$(cat /etc/os-release | grep "PRETTY_NAME" | cut -d '=' -f 2)
-  if [[ $OSNAME == *"CentOS"* ]]; then
+  if [[ "$LSB_DIST" -eq "centos" ]]; then
     if ! [[ $PATH == *"/usr/local/bin"* ]]; then # small check not to have it 2 times
       export PATH=$PATH:/usr/local/bin
     else
@@ -513,7 +517,7 @@ prepare_helk() {
       install_docker
     fi
     # ********** Check if docker-compose is installed *******
-    if ! [ -x "$(command -v docker-compose)" ]; then
+    if ! [ -x "$(command -v docker-compose)" ] && ! [ -x "$(command -v /usr/local/bin/docker-compose)" ]; then
       install_docker_compose
     fi
   else
@@ -596,8 +600,17 @@ show_final_information() {
   echo "IT IS HUNTING SEASON!!!!!"
   echo " "
   echo "You can stop all the HELK docker containers by running the following command:"
-  echo " [+] sudo docker-compose stop $COMPOSE_CONFIG"
+  echo " [+] sudo docker-compose -f $COMPOSE_CONFIG stop"
   echo " "
+}
+
+setup_firewall(){
+    if [[ "$LSB_DIST" == "centos" ]]; then
+        source ./helk_setup_firewall.sh
+        if [[ $? -ne 0 ]]; then
+            echoerror "Could not start firewall script..."
+        fi
+    fi
 }
 
 install_helk() {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>helk</short>
+  <description>Firewall service for the HELK.</description>
+  <port protocol="tcp" port="9092" />
+</service>
