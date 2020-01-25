@@ -13,12 +13,19 @@ HELK_INFO_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-INFO:"
 HELK_ERROR_TAG="HELK-KIBANA-DOCKER-$TAG_NAME-ERROR:"
 
 # *********** Wait for Kibana port to be up ***************
-#until curl -s $KIBANA_URL -o /dev/null; do
 until curl --silent "${KIBANA_ACCESS}" --output /dev/null; do
     echo "$HELK_INFO_TAG Waiting for Kibana internal port to be up.."
     sleep 5
 done
 echo "$HELK_INFO_TAG Kibana internal port is up.."
+
+# *********** Wait for Elasticsearch Kibana Index to be yellow/green ***************
+echo "$HELK_INFO_TAG Checking elasticsearch '.kibana' index"
+until [ "$(curl -s -o /dev/null -w '%{http_code}' -X GET -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_cluster/health/.kibana?level=shards?wait_for_status=yellow")" = "200" ]; do
+  echo "$HELK_INFO_TAG Waiting for elasticsearch '.kibana' index to start.."
+  sleep 5
+done
+echo "$HELK_INFO_TAG Elasticsearch '.kibana' index is up.."
 
 # *********** Wait for Kibana server to be running ***************
 until [[ "$(curl -s -o /dev/null -w "%{http_code}" "${KIBANA_ACCESS}/status")" == "200" ]]; do

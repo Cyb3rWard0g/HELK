@@ -50,6 +50,8 @@ CLUSTER_SETTINGS='
 '
 TestHELKDataWindowsSysmon000001='{"type":"wineventlog","user_reporter_type":"User","src_ip_type":"private","user_account":"nt authority\\test helk data","meta_user_name_is_machine":"false","provider_guid":"5770385F-C22A-43E0-BF4C-06F5698FFBD9","host_name":"test-helk-data.local","agent":{"type":"winlogbeat","id":"5ef4b480-a7e2-4bba-b1af-b2a6eba8312d","ephemeral_id":"bfdeead4-32b9-4251-9ba3-b4dcd7d1e786","hostname":"test-helk-data","version":"7.3.1"},"version":5,"process_guid":"A69770E2-4C0C-5D63-0000-0010C0F50000","network_protocol":"tcp","event_id":3,"log_name":"Microsoft-Windows-Sysmon/Operational","src_ip_version":"4","src_host_name":"test-helk-data.local","@event_date_creation":"1990-12-18T16:55:26.674Z","src_ip_public":"false","dst_ip_rfc":"RFC_1918","event":{"kind":"event","action":"Network connection detected (rule: NetworkConnect)","created":"1990-12-18T20:25:48.470Z","code":3},"src_ip_rfc":"RFC_1918","process_id":"976","user_reporter_name":"SYSTEM","dst_host_name":"test-helk-data2.local","dst_ip_version":"4","src_ip_addr":"10.66.6.121","z_original_timestamp":"1990-12-18T20:25:46.516Z","thread_id":1304,"src_port":"58570","src_is_ipv6":"false","user_domain":"nt authority","dst_ip_addr":"10.66.6.21","ecs":{"version":"1.0.1"},"opcode":"Info","dst_port":"5985","process_name":"svchost.exe","record_number":124793,"winlog":{"channel":"Microsoft-Windows-Sysmon/Operational","provider_guid":"{5770385F-C22A-43E0-BF4C-06F5698FFBD9}","opcode":"Info","record_id":124793,"process":{"thread":{"id":1304},"pid":1432},"task":"Network connection detected (rule: NetworkConnect)","host_name":"test-helk-data.local","version":5,"provider_name":"Microsoft-Windows-Sysmon","event_id":3,"api":"wineventlog"},"etl_processed_timestamp":"2015-10-07T19:07:50.302Z","dst_ip_type":"private","dst_is_ipv6":"false","level":"information","action":"networkconnect","@version":"1","process_path":"c:\\windows\\system32\\svchost.exe","user_name":"network service","source_name":"Microsoft-Windows-Sysmon","dst_ip_public":"false","user_reporter_sid":"S-1-5-18","event_original_message":"test helk data","etl_pipeline":["all-filter-0098","fingerprint-winlogbeats7","winlogbeat_7-field_nest_cleanup","winlogbeat_7-copy_to_originals","1500","1521","1522","1523_1","1524_2","1524_6","1531","1541_1","1544_2","1544_3","1544_6","1544_7","1544_8","dst_ip_addr_clean_and_public","src_ip_addr_clean_and_public","winevent-hostname-cleanup","winevent-user_name-is-machine-account","winevent-user_reporter_name-is-machine-account","copy-8802-001","copy-8802-002"],"beat_hostname":"test-helk-data","log":{"level":"information"},"user_reporter_domain":"NT AUTHORITY","meta_user_reporter_name_is_machine":"false","fingerprint_network_community_id":"1:EeVyZ07VGj1n0rld+xCLFdM+u8M=","@timestamp":"1990-12-18T20:25:46.516Z","task":"Network connection detected (rule: NetworkConnect)","network_initiated":"true","beat_version":"7.3.1"}'
 
+KIBANA_INDEX_PRIORITY='{"index.priority":100}'
+
 # ******** Set Trial License Variables ***************
 if [[ -n "$ELASTIC_PASSWORD" ]]; then
   # ****** Updating Pipeline configs ***********
@@ -87,19 +89,25 @@ done
 # ******** Cluster Settings ***************
 echo "$HELK_LOGSTASH_INFO_TAG Configuring elasticsearch cluster settings.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT $ELASTICSEARCH_ACCESS/_cluster/settings -H 'Content-Type: application/json' -d "$CLUSTER_SETTINGS")" == "200" ]]; do
-  echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading $template_name"
+  echo "$HELK_LOGSTASH_INFO_TAG Retrying cluster settings"
+  sleep 2
+done
+
+# *********** Set Kibana Index Priority ***************
+echo "$HELK_LOGSTASH_INFO_TAG Configuring elasticsearch cluster settings.."
+until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT "${ELASTICSEARCH_ACCESS}/.kiban*/_settings" -H 'Content-Type: application/json' -d "$KIBANA_INDEX_PRIORITY")" == "200" ]]; do
+  echo "$HELK_LOGSTASH_INFO_TAG Retrying Kibana index priority"
   sleep 2
 done
 
 # ******** Create Data For Kibana Experience ***************
 echo "$HELK_LOGSTASH_INFO_TAG Setting up additional Kibana/UI experience parameter.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS/logs-endpoint-winevent-sysmon-1990.12.18/_doc/TestHELKDataWindowsSysmon000001 -H 'Content-Type: application/json' -d "$TestHELKDataWindowsSysmon000001")" == "200" ]]; do
-  echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading data"
+  echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading data for kibana experience"
   sleep 2
 done
 
 # ********** Install Plugins *****************
-plugins_time_file="/usr/share/logstash/plugins/helk-plugins-updated-timestamp.txt"
 echo "$HELK_LOGSTASH_INFO_TAG Checking Logstash plugins.."
 # check if has been 30 days since plugins have been updated
 if test -f "$plugins_time_file"; then
@@ -116,12 +124,14 @@ else
   plugins_oudated="yes"
 fi
 # Test a few plugins determine if probably all already installed
-if ( logstash-plugin list | grep 'logstash-filter-prune' ) && ( logstash-plugin list | grep 'logstash-input-wmi' ); then
+if ( logstash-plugin list  2> /dev/null | grep 'logstash-filter-prune' ) && ( logstash-plugin list  2> /dev/null | grep 'logstash-input-wmi' ); then
   plugins_previous_install="yes"
   echo "$HELK_LOGSTASH_INFO_TAG Plugins from previous install detected.."
 else
   plugins_previous_install="no"
   echo "$HELK_LOGSTASH_INFO_TAG Plugins from previous install not detected.."
+  echo "$HELK_LOGSTASH_INFO_TAG Updating Logstash plugins over the internet for first run.."
+  logstash-plugin update
 fi
 # If have not been updated in X time or not installed at all.. then install them
 if [ $plugins_previous_install = "no" ] || [ $plugins_oudated = "yes" ]; then
