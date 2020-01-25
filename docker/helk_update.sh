@@ -31,7 +31,7 @@ show_banner(){
     echo "**                                          **"
     echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
     echo "** HELK build version: v0.1.8-alpha01032020 **"
-    echo "** HELK ELK version: 7.5.1                  **"
+    echo "** HELK ELK version: 7.5.2                  **"
     echo "** License: GPL-3.0                         **"
     echo "**********************************************"
     echo " "
@@ -435,7 +435,7 @@ if [[ -e $UPDATES_FETCHED_FILE ]]; then
     if [ "$UPDATES_FETCHED" == "1" ]; then
       echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Updates for the HELK repository have already been downloaded..."
       # Give user option to clear the feteched updates
-      read -p "Do you to want to use the already downloaded updates? (y/n): " -e -i "y" -n 1 -r
+      read -p "Do you to want to use the already downloaded updates? (y/n): " -e -i "n" -n 1 -r
       echo
       if [[ $REPLY =~ ^[Yy]$ ]]; then
           echo "Updates already downloaded. Starting update..." >> $LOGFILE 2>&1

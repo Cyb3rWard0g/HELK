@@ -1,10 +1,10 @@
-# Helk Custom
-# pipeline.workers: 2
-# node.name: test
-pipeline.batch.size: 1000
+# HELK Custom
+pipeline.batch.size: 500
 config.reload.automatic: true
 config.reload.interval: 60s
-log.level: warn
-http.host: "0.0.0.0"
-xpack.monitoring.elasticsearch.hosts: http://helk-elasticsearch:9200
-xpack.monitoring.enabled: true
+# Following variables and values be set at docker runtime
+#pipeline.workers: 2
+#xpack.monitoring.elasticsearch.hosts: http://helk-elasticsearch:9200
+#log.level: warn
+#http.host: "0.0.0.0"
+#xpack.monitoring.enabled: true

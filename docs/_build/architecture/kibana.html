@@ -1,0 +1,56 @@
+---
+title: |-
+  Kibana
+pagenum: 4
+prev_page:
+  url: /architecture/logstash.html
+next_page:
+  url: /how-to/docker/docker.html
+suffix: .md
+search: logs kibana img src images png endpoint winevent overview helk monitoring sysmon elasticsearch logstash docker security right additionally currently dashboards globaldashboard networkdashboard sysmondashboard tail usr share config kibanalogs log design visualize discover sure being sent least windows events helks ip preferred browser dont away update picker top include farther back window just started sending wait minute check again creates automatically index patterns sets default application system powershell wmiactivity discovery comes views x pack basic free license initial nodes troubleshooting apart running ps follow located example exec f times not working because still starting ran into error
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Kibana</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="../../images/KIBANA-Design.png"></p>
+<h2 id="Visualize-your-logs">Visualize your logs<a class="anchor-link" href="#Visualize-your-logs"> </a></h2><h3 id="Discover">Discover<a class="anchor-link" href="#Discover"> </a></h3><p>Make sure you have logs being sent to your HELK first (At least Windows security and Sysmon events). Then, go to <code>https://&lt;HELK's IP&gt;</code> in your preferred browser. If you don’t see logs right away then update your time picker (in the top right) to include a farther back window. Additionally, if you just started sending logs then wait a minute and check again.</p>
+<p>Currently, HELK creates automatically 7 index patterns for you and sets <strong>logs-endpoint-winevent-sysmon-*</strong> as your default one:</p>
+<ul>
+<li>"logs-*"</li>
+<li>"logs-endpoint-winevent-sysmon-*"</li>
+<li>"logs-endpoint-winevent-security-*"</li>
+<li>"logs-endpoint-winevent-application-*"</li>
+<li>"logs-endpoint-winevent-system-*"</li>
+<li>"logs-endpoint-winevent-powershell-*"</li>
+<li>"logs-endpoint-winevent-wmiactivity-*"</li>
+</ul>
+<p><img src="../../images/KIBANA-Discovery.png"></p>
+<h2 id="Dashboards">Dashboards<a class="anchor-link" href="#Dashboards"> </a></h2><p>Currently, the HELK comes with 3 dashboards:</p>
+<h3 id="Global_Dashboard">Global_Dashboard<a class="anchor-link" href="#Global_Dashboard"> </a></h3><p><img src="../../images/KIBANA-GlobalDashboard.png"></p>
+<h3 id="Network_Dashboard">Network_Dashboard<a class="anchor-link" href="#Network_Dashboard"> </a></h3><p><img src="../../images/KIBANA-NetworkDashboard.png"></p>
+<h3 id="Sysmon_Dashboard">Sysmon_Dashboard<a class="anchor-link" href="#Sysmon_Dashboard"> </a></h3><p><img src="../../images/KIBANA-SysmonDashboard.png"></p>
+<h2 id="Monitoring-Views-(x-Pack-Basic-Free-License)">Monitoring Views (x-Pack Basic Free License)<a class="anchor-link" href="#Monitoring-Views-(x-Pack-Basic-Free-License)"> </a></h2><h3 id="Kibana-Initial-Overview">Kibana Initial Overview<a class="anchor-link" href="#Kibana-Initial-Overview"> </a></h3><p><img src="../../images/MONITORING-Kibana-Overview.png"></p>
+<h3 id="Elasticsearch-Overview">Elasticsearch Overview<a class="anchor-link" href="#Elasticsearch-Overview"> </a></h3><p><img src="../../images/MONITORING-Elasticsearch-Overview.png"></p>
+<h3 id="Logstash-Overview">Logstash Overview<a class="anchor-link" href="#Logstash-Overview"> </a></h3><p><img src="../../images/MONITORING-Logstash-Overview.png"></p>
+<p><img src="../../images/MONITORING-Logstash-Nodes-Overview.png"></p>
+<h2 id="Troubleshooting">Troubleshooting<a class="anchor-link" href="#Troubleshooting"> </a></h2><p>Apart from running <code>docker ps</code> and <code>docker logs --follow --tail 25 helk-kibana</code>, additionally you can look at logs located at <code>/usr/share/kibana/config/kibana_logs.log</code>.</p>
+<p>Example: <code>docker exec helk-kibana tail -f /usr/share/kibana/config/kibana_logs.log</code></p>
+<p>Many times Kibana will not be "working" because elasticsearch is still starting up or has ran into an error.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

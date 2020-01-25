@@ -1,14 +1,14 @@
-# HELK [Alpha]
+# HELK
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub issues-closed](https://img.shields.io/github/issues-closed/Cyb3rward0g/HELK.svg)](https://GitHub.com/Cyb3rWard0g/HELK/issues?q=is%3Aissue+is%3Aclosed)
 [![Twitter](https://img.shields.io/twitter/follow/THE_HELK.svg?style=social&label=Follow)](https://twitter.com/THE_HELK)
-[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
-
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.png?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
 
 The Hunting ELK or simply the HELK is one of the first open source hunt platforms with  advanced analytics capabilities such as SQL declarative language, graphing, structured streaming, and even machine learning via Jupyter notebooks and Apache Spark over an ELK stack. This project was developed primarily for research, but due to its flexible design and core components, it can be deployed in larger environments with the right configurations and scalable infrastructure.
 
-![alt text](resources/images/HELK_Design.png "HELK Infrastructure")
+![alt text](docs/content/images/HELK-Design.png "HELK Infrastructure")
 
 # Goals
 
@@ -21,58 +21,11 @@ The Hunting ELK or simply the HELK is one of the first open source hunt platform
 
 The project is currently in an alpha stage, which means that the code and the functionality are still changing. We haven't yet tested the system with large data sources and in many scenarios. We invite you to try it and welcome any feedback.
 
-# HELK Features
+## Docs:
 
-* **Kafka:** A distributed publish-subscribe messaging system that is designed to be fast, scalable, fault-tolerant, and durable.
-* **Elasticsearch:** A highly scalable open-source full-text search and analytics engine.
-* **Logstash:** A data collection engine with real-time pipelining capabilities.
-* **Kibana:** An open source analytics and visualization platform designed to work with Elasticsearch.
-* **ES-Hadoop:** An open-source, stand-alone, self-contained, small library that allows Hadoop jobs (whether using Map/Reduce or libraries built upon it such as Hive, Pig or Cascading or new upcoming libraries like Apache Spark ) to interact with Elasticsearch.
-* **Spark:** A fast and general-purpose cluster computing system. It provides high-level APIs in Java, Scala, Python and R, and an optimized engine that supports general execution graphs.
-* **GraphFrames:** A package for Apache Spark which provides DataFrame-based Graphs.
-* **Jupyter Notebook:** An open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
-* **KSQL:** Confluent KSQL is the open source, streaming SQL engine that enables real-time data processing against Apache Kafka®. It provides an easy-to-use, yet powerful interactive SQL interface for stream processing on Kafka, without the need to write code in a programming language such as Java or Python
-* **Elastalert:** ElastAlert is a simple framework for alerting on anomalies, spikes, or other patterns of interest from data in Elasticsearch
-    * **Sigma:** Sigma is a generic and open signature format that allows you to describe relevant log events in a straightforward manner.
+* [Introduction](https://thehelk.com/introduction.html)
+* [Installation](https://thehelk.com/installation.html)
 
-# Getting Started
-
-## WIKI
-
-* [Introduction](https://github.com/Cyb3rWard0g/HELK/wiki)
-* [Architecture Overview](https://github.com/Cyb3rWard0g/HELK/wiki/Architecture-Overview)
-  * [Kafka](https://github.com/Cyb3rWard0g/HELK/wiki/Kafka)
-  * [Logstash](https://github.com/Cyb3rWard0g/HELK/wiki/Logstash)
-  * [Elasticsearch](https://github.com/Cyb3rWard0g/HELK/wiki/Elasticsearch)
-  * [Kibana](https://github.com/Cyb3rWard0g/HELK/wiki/Kibana)
-  * [Spark](https://github.com/Cyb3rWard0g/HELK/wiki/Spark)
-* [Installation](https://github.com/Cyb3rWard0g/HELK/wiki/Installation)
-
-## (Docker) Accessing the HELK's Images
-
-By default, the HELK's containers are run in the background (Detached). You can see all your docker containers by running the following command:
-```
-sudo docker ps
-
-CONTAINER ID        IMAGE                                  COMMAND                  CREATED             STATUS              PORTS                                            NAMES
-a97bd895a2b3        cyb3rward0g/helk-spark-worker:2.3.0    "./spark-worker-entr…"   About an hour ago   Up About an hour    0.0.0.0:8082->8082/tcp                           helk-spark-worker2
-cbb31f688e0a        cyb3rward0g/helk-spark-worker:2.3.0    "./spark-worker-entr…"   About an hour ago   Up About an hour    0.0.0.0:8081->8081/tcp                           helk-spark-worker
-5d58068aa7e3        cyb3rward0g/helk-kafka-broker:1.1.0    "./kafka-entrypoint.…"   About an hour ago   Up About an hour    0.0.0.0:9092->9092/tcp                           helk-kafka-broker
-bdb303b09878        cyb3rward0g/helk-kafka-broker:1.1.0    "./kafka-entrypoint.…"   About an hour ago   Up About an hour    0.0.0.0:9093->9093/tcp                           helk-kafka-broker2
-7761d1e43d37        cyb3rward0g/helk-nginx:0.0.2           "./nginx-entrypoint.…"   About an hour ago   Up About an hour    0.0.0.0:80->80/tcp                               helk-nginx
-ede2a2503030        cyb3rward0g/helk-jupyter:0.32.1        "./jupyter-entrypoin…"   About an hour ago   Up About an hour    0.0.0.0:4040->4040/tcp, 0.0.0.0:8880->8880/tcp   helk-jupyter
-ede19510e959        cyb3rward0g/helk-logstash:6.2.4        "/usr/local/bin/dock…"   About an hour ago   Up About an hour    5044/tcp, 9600/tcp                               helk-logstash
-e92823b24b2d        cyb3rward0g/helk-spark-master:2.3.0    "./spark-master-entr…"   About an hour ago   Up About an hour    0.0.0.0:7077->7077/tcp, 0.0.0.0:8080->8080/tcp   helk-spark-master
-6125921b310d        cyb3rward0g/helk-kibana:6.2.4          "./kibana-entrypoint…"   About an hour ago   Up About an hour    5601/tcp                                         helk-kibana
-4321d609ae07        cyb3rward0g/helk-zookeeper:3.4.10      "./zookeeper-entrypo…"   About an hour ago   Up About an hour    2888/tcp, 0.0.0.0:2181->2181/tcp, 3888/tcp       helk-zookeeper
-9cbca145fb3e        cyb3rward0g/helk-elasticsearch:6.2.4   "/usr/local/bin/dock…"   About an hour ago   Up About an hour    9200/tcp, 9300/tcp                               helk-elasticsearch
-```
-
-Then, you will just have to pick which container you want to access and run the following following commands:
-```
-sudo docker exec -ti <image-name> bash
-root@ede2a2503030:/opt/helk/scripts#
-```
 # Resources
 
 * [Welcome to HELK! : Enabling Advanced Analytics Capabilities](https://cyberwardog.blogspot.com/2018/04/welcome-to-helk-enabling-advanced_9.html)

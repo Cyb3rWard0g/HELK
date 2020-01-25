@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
     container_name: helk-elasticsearch
     logging:
       driver: "json-file"
@@ -34,7 +34,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    build: helk-logstash/
+    image: otrf/helk-logstash:7.5.2
     container_name: helk-logstash
     logging:
       driver: "json-file"
@@ -46,10 +46,13 @@ services:
       - ./helk-logstash/mordor_pipeline:/usr/share/logstash/mordor_pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
+      - ./helk-logstash/config:/usr/share/logstash/config
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     environment:
+      - xpack.monitoring.enabled=true
+      - xpack.monitoring.elasticsearch.hosts=http://helk-elasticsearch:9200
       - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
       - "5044:5044"
@@ -61,7 +64,7 @@ services:
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:7.5.1
+    image: docker.elastic.co/kibana/kibana:7.5.2
     container_name: helk-kibana
     logging:
       driver: "json-file"
@@ -82,7 +85,7 @@ services:
     networks:
       helk:
   helk-nginx:
-    image: cyb3rward0g/helk-nginx:0.0.7
+    image: otrf/helk-nginx:0.0.8
     container_name: helk-nginx
     logging:
       driver: "json-file"
@@ -105,7 +108,7 @@ services:
     networks:
       helk:
   helk-zookeeper:
-    image: cyb3rward0g/helk-zookeeper:2.2.0
+    image: otrf/helk-zookeeper:2.3.0
     container_name: helk-zookeeper
     logging:
       driver: "json-file"
@@ -118,7 +121,7 @@ services:
     networks:
       helk:
   helk-kafka-broker:
-    image: cyb3rward0g/helk-kafka-broker:2.2.0
+    image: otrf/helk-kafka-broker:2.3.0
     container_name: helk-kafka-broker
     logging:
       driver: "json-file"
@@ -184,7 +187,7 @@ services:
     networks:
       helk:
   helk-elastalert:
-    image: cyb3rward0g/helk-elastalert:0.2.5
+    image: otrf/helk-elastalert:0.2.6
     container_name: helk-elastalert
     logging:
       driver: "json-file"

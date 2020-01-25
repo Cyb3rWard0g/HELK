@@ -1,0 +1,49 @@
+---
+title: |-
+  Check Kafka Topic Ingestion
+pagenum: 2
+prev_page:
+  url: /installation.html
+next_page:
+  url: 
+suffix: .md
+search: kafka broker helk kafkacat bash consumer topic container console sh winlogbeat following sudo docker exec ti run script opt bin bootstrap server beginning apache install github com edenhill check ingestion few ways accomplish helks access running command available simply without interactive shell generic non jvm producer think netcat instructions repo b t c references example org quickstart quickstartconsume
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Check Kafka Topic Ingestion</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There are a few ways that you can accomplish this</p>
+<h2 id="HELK's-Kafka-broker-container">HELK's Kafka broker container<a class="anchor-link" href="#HELK's-Kafka-broker-container"> </a></h2><p>Access your kafka broker container by running the following command:</p>
+<div class="highlight"><pre><span></span>sudo docker <span class="nb">exec</span> -ti helk-kafka-broker bash
+</pre></div>
+<p>Run the kafka-console-consumer.sh script available in the container:</p>
+<div class="highlight"><pre><span></span>/opt/helk/kafka/bin/kafka-console-consumer.sh --bootstrap-server helk-kafka-broker:9092 --topic winlogbeat --from-beginning
+</pre></div>
+<p>or simply run the script without an interactive shell</p>
+<div class="highlight"><pre><span></span>sudo docker <span class="nb">exec</span> -ti helk-kafka-broker /opt/helk/kafka/bin/kafka-console-consumer.sh --bootstrap-server helk-kafka-broker:9092 --topic winlogbeat --from-beginning
+</pre></div>
+<h2 id="Kafkacat">Kafkacat<a class="anchor-link" href="#Kafkacat"> </a></h2><p>It is generic non-JVM producer and consumer for Apache Kafka &gt;=0.8, think of it as a netcat for Kafka. You can install it by following the <a href="https://github.com/edenhill/kafkacat#install">instructions</a> from the Kafkacat repo.</p>
+<div class="highlight"><pre><span></span>kafkacat -b <span class="m">10</span>.0.10.100:9092 -t winlogbeat -C
+</pre></div>
+<h2 id="References">References<a class="anchor-link" href="#References"> </a></h2><ul>
+<li><a href="https://kafka.apache.org/quickstart#quickstart_consume">Kafka Consumer Example</a></li>
+<li><a href="https://github.com/edenhill/kafkacat">Kafkacat</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
