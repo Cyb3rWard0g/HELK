@@ -251,7 +251,6 @@ install_docker() {
   chmod +x get-docker.sh >>$LOGFILE 2>&1
   ./get-docker.sh >>$LOGFILE 2>&1
   if [ "$LSB_DIST" == "centos" ]; then
-    # Link docker-compose so can be used with sudo
     systemctl enable docker.service
     systemctl start docker.service
   fi
@@ -282,6 +281,7 @@ install_docker_compose() {
   curl -L https://github.com/docker/compose/releases/download/"$COMPOSE_VERSION"/docker-compose-"$(uname -s)"-"$(uname -m)" -o /usr/local/bin/docker-compose >>$LOGFILE 2>&1
   chmod +x /usr/local/bin/docker-compose >>$LOGFILE 2>&1
   if [ "$LSB_DIST" == "centos" ]; then
+    # Link docker-compose so can be used with sudo
     ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
   fi
   ERROR=$?
