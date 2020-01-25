@@ -61,6 +61,7 @@ persist_conf() {
   fi
 
   COMPOSE_CONFIG="${HELK_BUILD}-${SUBSCRIPTION_CHOICE}.yml"
+  #TODO: add check if CentOS if selinux is enabled and if enforcement mode or note
 
   if [[ -f $HELK_CONF_FILE ]]; then
     #TODO:give choice to set these or just move completely to update script
@@ -249,7 +250,9 @@ install_docker() {
   curl -fsSL https://get.docker.com -o get-docker.sh >>$LOGFILE 2>&1
   chmod +x get-docker.sh >>$LOGFILE 2>&1
   ./get-docker.sh >>$LOGFILE 2>&1
-  if [ "$LSB_DIST" -eq "centos" ]; then
+  if [ "$LSB_DIST" == "centos" ]; then
+    # Link docker-compose so can be used with sudo
+    ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
     systemctl enable docker.service
     systemctl start docker.service
   fi
@@ -279,7 +282,7 @@ install_docker_compose() {
   COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
   curl -L https://github.com/docker/compose/releases/download/"$COMPOSE_VERSION"/docker-compose-"$(uname -s)"-"$(uname -m)" -o /usr/local/bin/docker-compose >>$LOGFILE 2>&1
   chmod +x /usr/local/bin/docker-compose >>$LOGFILE 2>&1
-  if [[ "$LSB_DIST" -eq "centos" ]]; then
+  if [[ "$LSB_DIST" == "centos" ]]; then
     if ! [[ $PATH == *"/usr/local/bin"* ]]; then # small check not to have it 2 times
       export PATH=$PATH:/usr/local/bin
     else
@@ -503,6 +506,19 @@ prepare_helk() {
     # *********** Check if docker is installed ***************
     if [ -x "$(command -v docker)" ]; then
       echo "$HELK_INFO_TAG Docker already installed"
+      # Check to make sure docker is started before continuing with all the components that use docker
+      echo "$HELK_INFO_TAG Assesing if Docker is running.."
+      while true; do
+        if (systemctl --quiet is-active docker.service); then
+          echo "$HELK_INFO_TAG Docker is running."
+          break
+        else
+          echo "$HELK_ERROR_TAG Docker is not running. Attempting to start it.."
+          systemctl enable docker.service
+          systemctl start docker.service
+          sleep 2
+        fi
+      done
       echo "$HELK_INFO_TAG Making sure you assigned enough disk space to the current Docker base directory"
       AVAILABLE_DOCKER_DISK=$(df -m "$(docker info --format '{{.DockerRootDir}}')" | awk '$1 ~ /\//{printf "%.f", $4 / 1024}')
       if [[ "${AVAILABLE_DOCKER_DISK}" -ge $INSTALL_MINIMUM_DISK ]]; then

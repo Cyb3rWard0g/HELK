@@ -113,8 +113,24 @@ if [ $? -ne 0 ]; then
 fi
 
 echo -e "${CYAN}${HELK_INFO_TAG}${STD} Removing all images..."
+# HELK Images
+#docker rmi "$(docker images -a | awk '{ print $1,$3 }' | grep 'otrf\|cyb3rward0g\|helk' | awk '{ print $2 }')" >> $LOGFILE 2>&1
 docker rmi "$(docker images -a | awk '{ print $1,$3 }' | grep 'otrf\|cyb3rward0g\|helk\|logstash\|kibana\|elasticsearch\|cp-ksql' | awk '{ print $2 }')" >> $LOGFILE 2>&1
-#TODO: eventually give prompt for removing Elastic/Confluent components as user may be using those for other things on their system
+#TODO: these get removed in docker compose remove, but at some point may be good to implement this.. either: 1) create custom HELK ELK and KSQL images and this won't be an issue/thing or.. 2) figure out how to give option even though using compose.. However, this is really low hanging fruit, not worried about it for now 2019-01-25
+# ELastic/Confluent Images, so give user option to remove them...as the user may be using those for other things on their system
+#echo -e "${CYAN}${HELK_INFO_TAG}${STD} You may be using the official, upstream, Elastic (ELK) and Confluent(KSQL) docker images for other components on your machine..."
+#while true; do
+#    read -e -p "$HELK_INFO_TAG Do you want to delete the docker images for Elasitc (ELK) and Confluent(KSQL) ? " -i "yes" PRUNE
+#    case "$PRUNE" in
+#        yes)
+#            docker rmi "$(docker images -a | awk '{ print $1,$3 }' | grep 'logstash\|kibana\|elasticsearch\|cp-ksql' | awk '{ print $2 }')" >> $LOGFILE 2>&1
+#            break;;
+#        no)
+#            break;;
+#        *)
+#            echo "$HELK_INFO_TAG Error, you can only chose yes or no..."
+#    esac
+#done
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
     echoerror "Could not remove images.."

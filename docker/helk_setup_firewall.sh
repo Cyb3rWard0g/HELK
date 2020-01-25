@@ -12,7 +12,7 @@ fi
 
 # *********** Gather active zones for further use ***********
 ZONES="$(firewall-cmd --get-active-zones | grep -v '^ ' | tr '\n' ' ')"
-echo "$TAG Here is the list of all the active zones wee found." | tee -a $LOGFILE
+echo "$TAG Here is the list of all the active zones found." | tee -a $LOGFILE
 echo "$ZONES" | tee -a $LOGFILE
 
 FIRST="$(echo $ZONES | cut -d ' ' -f 1)"
