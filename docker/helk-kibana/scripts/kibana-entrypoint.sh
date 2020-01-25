@@ -63,17 +63,25 @@ until [ "$(curl -s -o /dev/null -w "%{http_code}"  -u "${ELASTICSEARCH_CREDS}" "
 done
 sleep 5
 
-# *********** Wait for Elasticsearch cluster to be yellow/green ***************
-echo "$HELK_INFO_TAG Waiting for elasticsearch cluster"
-until [ "$(curl -s -o /dev/null -w '%{http_code}' -X GET -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_cluster/health/.kibana?level=shards?wait_for_status=yellow")" = "200" ]; do
-  echo "$HELK_INFO_TAG Waiting for elasticsearch kibana index cluster health.."
-  sleep 5
-done
-echo "$HELK_INFO_TAG Elasticsearch cluster is up.."
-
 # *********** Set Elastic License Variables ***************
 
 if [ -n "$ELASTICSEARCH_PASSWORD" ]; then
+  # Check to see if Security index already exists
+  # https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-exists.html
+  echo "$HELK_INFO_TAG Checking elasticsearch '.security' index found"
+  while true
+    do
+      ES_STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --head -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/.security")
+      if [ "$ES_STATUS_CODE" -eq 200 ]; then
+        echo "$HELK_INFO_TAG Elasticsearch '.security' index found"
+        break
+      elif [ "$ES_STATUS_CODE" -eq 404 ]; then
+        echo "$HELK_INFO_TAG Elasticsearch '.security' index not found. Submitting requests to create it.."
+        break
+      fi
+      sleep 3
+  done
+
   # *********** Change Kibana and Logstash password ***************
   echo "$HELK_INFO_TAG Submitting a request to change the password of the Kibana user"
   until [ "$(curl -s -o /dev/null -w '%{http_code}' -X POST -u "${ELASTICSEARCH_CREDS}" "${ELASTICSEARCH_HOSTS}/_security/user/kibana/_password" -H 'Content-Type:application/json' -d "{\"password\": \"${KIBANA_PASSWORD}\"}")" = "200" ]; do

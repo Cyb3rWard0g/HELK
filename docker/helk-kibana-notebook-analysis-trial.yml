@@ -56,6 +56,7 @@ services:
       - xpack.monitoring.elasticsearch.password=logstashpassword
       - xpack.monitoring.enabled=true
       - xpack.monitoring.elasticsearch.hosts=http://helk-elasticsearch:9200
+      - log.level=warn
       - "ELASTIC_PASSWORD=${ELASTIC_PASSWORD}"
       - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
