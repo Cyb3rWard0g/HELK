@@ -113,7 +113,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo -e "${CYAN}${HELK_INFO_TAG}${STD} Removing all images..."
-docker rmi "$(docker images -a | awk '{ print $1,$3 }' | grep 'otrf|cyb3rward0g\|helk\|logstash\|kibana\|elasticsearch\|cp-ksql' | awk '{ print $2 }')" >> $LOGFILE 2>&1
+docker rmi "$(docker images -a | awk '{ print $1,$3 }' | grep 'otrf\|cyb3rward0g\|helk\|logstash\|kibana\|elasticsearch\|cp-ksql' | awk '{ print $2 }')" >> $LOGFILE 2>&1
 #TODO: eventually give prompt for removing Elastic/Confluent components as user may be using those for other things on their system
 ERROR=$?
 if [ $ERROR -ne 0 ]; then
