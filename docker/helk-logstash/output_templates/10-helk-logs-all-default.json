@@ -1,7 +1,7 @@
 {
   "order": 10,
   "index_patterns": [ "logs-*" ],
-  "version": 2019090101,
+  "version": 2020012801,
   "settings": {
     "index": {
       "mapping": {
@@ -62,6 +62,9 @@
       },
       "etl_processed_timestamp": {
         "type": "date"
+      },
+      "z_etl_version": {
+        "type": "keyword"
       },
       "message": {
         "type": "alias",
