@@ -30,14 +30,14 @@ Place the output here
 
 #### What version of HELK are you using
 
-just provide the date you cloned the HELK repo:
+run the command from within the HELK root directory `cat .git/refs/heads/master`  
+and include what date you cloned the HELK repo
 ```
 Place the date here
 ```
 
 #### What version of Winlogbeat are you using if you are using Windows/WEF logs
 
-just provide the date you cloned the HELK repo:
 ```
 Place the version here
 ```
