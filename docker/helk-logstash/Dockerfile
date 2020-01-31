@@ -10,6 +10,8 @@ FROM docker.elastic.co/logstash/logstash:7.5.2
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
+#COPY --chown=logstash:logstash config/logstash.yml /usr/share/logstash/config/logstash.yml
+#COPY --chown=logstash:logstash config/pipelines.yml /usr/share/logstash/config/pipelines.yml
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 
 # Build with plugins baked in
