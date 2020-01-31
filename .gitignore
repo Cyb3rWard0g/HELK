@@ -4,12 +4,17 @@ helk-logstash/.DS_Store
 .vscode/
 .idea/
 .testing/
+# Backup files / swap
 .bak
 .BAK
 .dpkg-dist
 .swp
 .tmp
 .test
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 # HELK Custom Configurations
 *custom*
 /docker/docker-compose.yml
