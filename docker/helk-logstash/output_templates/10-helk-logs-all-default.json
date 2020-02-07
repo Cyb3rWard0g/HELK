@@ -60,7 +60,7 @@
       "etl_pipeline": {
         "type": "keyword"
       },
-      "etl_processed_timestamp": {
+      "etl_processed_time": {
         "type": "date"
       },
       "z_etl_version": {
