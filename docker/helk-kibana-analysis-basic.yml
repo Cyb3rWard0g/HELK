@@ -53,6 +53,7 @@ services:
     environment:
       - xpack.monitoring.enabled=true
       - xpack.monitoring.elasticsearch.hosts=http://helk-elasticsearch:9200
+      - log.level=warn
       - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
       - "5044:5044"
