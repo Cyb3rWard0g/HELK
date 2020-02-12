@@ -34,7 +34,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    image: otrf/helk-logstash:7.5.2.1
+    image: otrf/helk-logstash:7.5.2.2
     container_name: helk-logstash
     logging:
       driver: "json-file"
@@ -46,7 +46,6 @@ services:
       - ./helk-logstash/mordor_pipeline:/usr/share/logstash/mordor_pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
-      - ./helk-logstash/config:/usr/share/logstash/config
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
