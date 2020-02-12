@@ -10,21 +10,18 @@ FROM docker.elastic.co/logstash/logstash:7.5.2
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
-RUN mv /usr/share/logstash/config/logstash.yml /usr/share/logstash/config/logstash.yml.bak
-RUN mv /usr/share/logstash/config/pipelines.yml /usr/share/logstash/config/pipelines.yml.bak
-COPY --chown=logstash:logstash config/logstash.yml /usr/share/logstash/config/logstash.yml
-COPY --chown=logstash:logstash config/pipelines.yml /usr/share/logstash/config/pipelines.yml
-RUN rm -f /usr/share/logstash/pipeline/logstash.conf
+COPY --chown=logstash:logstash config /usr/share/logstash/config
 
 # Build with plugins baked in
 ENV plugins_time_file="/usr/share/logstash/helk-plugins-updated-timestamp.txt"
 RUN printf "%s" "$(date +"%Y-%m-%d %T")" > "${plugins_time_file}"
 RUN chown logstash:logstash "${plugins_time_file}"
-#RUN echo"$(date +"%Y-%m-%d %T")" > "${plugins_time_file}"
+
 COPY --chown=logstash:logstash plugins/helk-offline-logstash-codec_and_filter_plugins.zip /usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
 COPY --chown=logstash:logstash plugins/helk-offline-logstash-input_and_output-plugins.zip /usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip
-RUN logstash-plugin update
-RUN logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
-RUN logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip
-RUN rm /usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
-RUN rm /usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip
+RUN logstash-plugin update \
+    && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip \
+    && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip \
+    && rm /usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip \
+    && rm /usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip \
+    && rm -f /usr/share/logstash/pipeline/logstash.conf
