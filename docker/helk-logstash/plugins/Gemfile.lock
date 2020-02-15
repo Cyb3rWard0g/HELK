@@ -550,7 +550,7 @@ GEM
       method_source (~> 0.9.0)
       spoon (~> 0.0)
     public_suffix (4.0.3)
-    puma (2.16.0-java)
+    puma (3.12.2)
     rack (1.6.12)
     rack-protection (1.5.5)
       rack
