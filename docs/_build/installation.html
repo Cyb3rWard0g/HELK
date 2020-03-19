@@ -184,10 +184,10 @@ Pulling helk-ksql-cli (confluentinc/cp-ksql-cli:5.1.3)...
 5.1.3: Pulling from confluentinc/cp-ksql-cli
 Digest: sha256:18c0ccb00fbf87679e16e9e0da600548fcb236a2fd173263b09e89b2d3a42cc3
 Status: Downloaded newer image for confluentinc/cp-ksql-cli:5.1.3
-Pulling helk-elastalert (otrf/helk-elastalert:0.2.6)...
+Pulling helk-elastalert (otrf/helk-elastalert:0.3.0)...
 0.2.6: Pulling from otrf/helk-elastalert
 Digest: sha256:ae1096829aacbadce42bd4024b36da3a9636f1901ef4e9e62a12b881cfc23cf5
-Status: Downloaded newer image for otrf/helk-elastalert:0.2.6
+Status: Downloaded newer image for otrf/helk-elastalert:0.3.0
 Creating helk-elasticsearch ... done
 Creating helk-kibana        ... done
 Creating helk-logstash      ... done
@@ -206,7 +206,7 @@ Creating helk-ksql-cli      ... done</code></pre>
 1ee3c0d90b2a        confluentinc/cp-ksql-server:5.1.3                     "/etc/confluent/dock…"   5 minutes ago       Up 5 minutes        0.0.0.0:8088-&gt;8088/tcp                                                             helk-ksql-server
 e753a811ffd2        otrf/helk-kafka-broker:2.4.0                          "./kafka-entrypoint.…"   5 minutes ago       Up 5 minutes        0.0.0.0:9092-&gt;9092/tcp                                                             helk-kafka-broker
 f93239de7d95        otrf/helk-zookeeper:2.4.0                             "./zookeeper-entrypo…"   5 minutes ago       Up 5 minutes        2181/tcp, 2888/tcp, 3888/tcp                                                       helk-zookeeper
-229ea8467075        otrf/helk-elastalert:0.2.6                            "./elastalert-entryp…"   5 minutes ago       Up 5 minutes                                                                                           helk-elastalert
+229ea8467075        otrf/helk-elastalert:0.3.0                            "./elastalert-entryp…"   5 minutes ago       Up 5 minutes                                                                                           helk-elastalert
 f6fd290d2a9d        otrf/helk-nginx:0.1.0                                 "/opt/helk/scripts/n…"   5 minutes ago       Up 5 minutes        0.0.0.0:80-&gt;80/tcp, 0.0.0.0:443-&gt;443/tcp                                           helk-nginx
 d4f2b6d7d21e        otrf/helk-logstash:7.6.1                              "/usr/share/logstash…"   5 minutes ago       Up 5 minutes        0.0.0.0:3515-&gt;3515/tcp, 0.0.0.0:5044-&gt;5044/tcp, 0.0.0.0:8531-&gt;8531/tcp, 9600/tcp   helk-logstash
 c5ae143741ea        docker.elastic.co/kibana/kibana:7.6.1                 "/usr/share/kibana/s…"   5 minutes ago       Up 5 minutes        5601/tcp                                                                           helk-kibana
