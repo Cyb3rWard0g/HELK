@@ -108,7 +108,7 @@ services:
     networks:
       helk:
   helk-zookeeper:
-    image: otrf/helk-zookeeper:2.3.0
+    image: otrf/helk-zookeeper:2.4.0
     container_name: helk-zookeeper
     logging:
       driver: "json-file"
