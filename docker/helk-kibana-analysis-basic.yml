@@ -85,7 +85,7 @@ services:
     networks:
       helk:
   helk-nginx:
-    image: otrf/helk-nginx:0.0.8
+    image: otrf/helk-nginx:0.1.0
     container_name: helk-nginx
     logging:
       driver: "json-file"
