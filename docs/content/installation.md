@@ -147,10 +147,10 @@ Pulling helk-zookeeper (otrf/helk-zookeeper:2.4.0)...
 2.3.0: Pulling from otrf/helk-zookeeper
 Digest: sha256:3e7a0f3a73bcffeac4f239083618c362017005463dd747392a9b43db99535a68
 Status: Downloaded newer image for otrf/helk-zookeeper:2.4.0
-Pulling helk-kafka-broker (otrf/helk-kafka-broker:2.3.0)...
+Pulling helk-kafka-broker (otrf/helk-kafka-broker:2.4.0)...
 2.3.0: Pulling from otrf/helk-kafka-broker
 Digest: sha256:03569d98c46028715623778b4adf809bf417a055c3c19d21f426db4e1b2d6f55
-Status: Downloaded newer image for otrf/helk-kafka-broker:2.3.0
+Status: Downloaded newer image for otrf/helk-kafka-broker:2.4.0
 Pulling helk-ksql-server (confluentinc/cp-ksql-server:5.1.3)...
 5.1.3: Pulling from confluentinc/cp-ksql-server
 Digest: sha256:063add111cc93b1a0118f88b577e31303045d4cc08eb1d21458429f05cba4b02
@@ -183,7 +183,7 @@ sudo docker ps
 CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                                                                              NAMES
 2caa7d86bc9e        confluentinc/cp-ksql-cli:5.1.3                        "/bin/sh"                5 minutes ago       Up 5 minutes                                                                                           helk-ksql-cli
 1ee3c0d90b2a        confluentinc/cp-ksql-server:5.1.3                     "/etc/confluent/dock…"   5 minutes ago       Up 5 minutes        0.0.0.0:8088->8088/tcp                                                             helk-ksql-server
-e753a811ffd2        otrf/helk-kafka-broker:2.3.0                          "./kafka-entrypoint.…"   5 minutes ago       Up 5 minutes        0.0.0.0:9092->9092/tcp                                                             helk-kafka-broker
+e753a811ffd2        otrf/helk-kafka-broker:2.4.0                          "./kafka-entrypoint.…"   5 minutes ago       Up 5 minutes        0.0.0.0:9092->9092/tcp                                                             helk-kafka-broker
 f93239de7d95        otrf/helk-zookeeper:2.4.0                             "./zookeeper-entrypo…"   5 minutes ago       Up 5 minutes        2181/tcp, 2888/tcp, 3888/tcp                                                       helk-zookeeper
 229ea8467075        otrf/helk-elastalert:0.2.6                            "./elastalert-entryp…"   5 minutes ago       Up 5 minutes                                                                                           helk-elastalert
 f6fd290d2a9d        otrf/helk-nginx:0.1.0                                 "/opt/helk/scripts/n…"   5 minutes ago       Up 5 minutes        0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp                                           helk-nginx

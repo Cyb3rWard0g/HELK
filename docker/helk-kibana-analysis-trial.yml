@@ -124,7 +124,7 @@ services:
     networks:
       helk:
   helk-kafka-broker:
-    image: otrf/helk-kafka-broker:2.3.0
+    image: otrf/helk-kafka-broker:2.4.0
     container_name: helk-kafka-broker
     logging:
       driver: "json-file"
