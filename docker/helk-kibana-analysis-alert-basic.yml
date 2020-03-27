@@ -85,7 +85,7 @@ services:
     networks:
       helk:
   helk-nginx:
-    image: otrf/helk-nginx:0.1.0
+    image: otrf/helk-nginx:0.3.0
     container_name: helk-nginx
     logging:
       driver: "json-file"
@@ -96,7 +96,7 @@ services:
       - source: htpasswd.users
         target: /etc/nginx/htpasswd.users
     volumes:
-      - ./helk-nginx/config/basic-elk:/etc/nginx/sites-available/default
+      - ./helk-nginx/config/basic-elk:/etc/nginx/conf.d/default.conf
       - ./helk-nginx/scripts/:/opt/helk/scripts/
     entrypoint: /opt/helk/scripts/nginx-entrypoint.sh
     ports:
