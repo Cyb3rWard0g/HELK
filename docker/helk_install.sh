@@ -6,8 +6,8 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-HELK_BUILD_VERSION="v0.1.8-alpha01032020"
-HELK_ELK_VERSION="7.5.2"
+HELK_BUILD_VERSION="v0.1.9-alpha03272020"
+HELK_ELK_VERSION="7.6.1"
 
 # *********** Helk log tagging variables ***************
 # For more efficient script editing/reading, and also if/when we switch to different install script language
