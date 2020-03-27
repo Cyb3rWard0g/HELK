@@ -1,14 +1,16 @@
 # Follow these steps to get the latest plugins for HELK install scripts and to document them.
 
-**Make sure to use a standalone version of logstash aka the zip/tar.gz version.**
-
+1.
+    Download the zip file of logstash: https://www.elastic.co/downloads/logstash
+1. Unzip the logstash download and then change into directory. Make sure to change the variable `Logstash_Version=` to the file name that was downloaded 
+    ```bash
+    Logstash_Version='logstash-7.6.1'
+    unzip $Logstash_Version
+    cd $Logstash_Version
+    ```
 1. Update existing plugins
     ```bash
     ./bin/logstash-plugin update
-    ```
-1. Using the standalone version of logstash, change into its directory
-    ```bash
-    cd logstash-standalone/
     ```
 1. Remove some unnecessary plugins
     ```bash
@@ -51,8 +53,6 @@
     ./bin/logstash-plugin install logstash-filter-fingerprint &&
     ./bin/logstash-plugin install logstash-filter-geoip &&
     ./bin/logstash-plugin install logstash-filter-i18n &&
-    ./bin/logstash-plugin install logstash-filter-jdbc_static &&
-    ./bin/logstash-plugin install logstash-filter-jdbc_streaming &&
     ./bin/logstash-plugin install logstash-filter-json &&
     ./bin/logstash-plugin install logstash-filter-json_encode &&
     ./bin/logstash-plugin install logstash-filter-kv &&
@@ -67,14 +67,14 @@
 1. Install the logstash integration plugins
     ```bash
     ./bin/logstash-plugin install logstash-integration-kafka &&
-    ./bin/logstash-plugin install logstash-integration-rabbitmq
+    ./bin/logstash-plugin install logstash-integration-rabbitmq &&
+    ./bin/logstash-plugin install logstash-integration-jdbc
     ```
 1. Install the logstash input plugins
     ```bash
     ./bin/logstash-plugin install logstash-input-beats &&
     ./bin/logstash-plugin install logstash-input-elasticsearch &&
     ./bin/logstash-plugin install logstash-input-file &&
-    ./bin/logstash-plugin install logstash-input-jdbc &&
     ./bin/logstash-plugin install logstash-input-lumberjack &&
     ./bin/logstash-plugin install logstash-input-snmp &&
     ./bin/logstash-plugin install logstash-input-snmptrap &&
