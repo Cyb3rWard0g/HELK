@@ -77,11 +77,12 @@ logstash-input-syslog (3.4.1)
 logstash-input-tcp (6.0.4)
 logstash-input-udp (3.3.4)
 logstash-input-unix (3.0.7)
+logstash-input-wmi (3.0.4)
 logstash-integration-jdbc (5.0.1)
  ├── logstash-input-jdbc
  ├── logstash-filter-jdbc_streaming
  └── logstash-filter-jdbc_static
-logstash-integration-kafka (10.0.1)
+logstash-integration-kafka (10.1.0)
  ├── logstash-input-kafka
  └── logstash-output-kafka
 logstash-integration-rabbitmq (7.0.3)
@@ -89,7 +90,7 @@ logstash-integration-rabbitmq (7.0.3)
  └── logstash-output-rabbitmq
 logstash-output-csv (3.0.8)
 logstash-output-elastic_app_search (1.0.0)
-logstash-output-elasticsearch (10.3.3)
+logstash-output-elasticsearch (10.4.1)
 logstash-output-email (4.1.1)
 logstash-output-file (4.2.6)
 logstash-output-http (5.2.4)

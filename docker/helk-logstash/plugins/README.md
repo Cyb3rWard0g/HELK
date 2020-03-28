@@ -130,5 +130,5 @@
     ```
 2. Move the plugins and files, via your preferred method, to `HELK/docker/helk-logstash/plugins/`
     ```bash
-    cp helk-offline* Gemfile Gemfile.lock HELK/docker/helk-logstash/plugins/
+    cp helk-offline* Gemfile HELK/docker/helk-logstash/plugins/
     ```
