@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
     container_name: helk-elasticsearch
     logging:
       driver: "json-file"
@@ -35,7 +35,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    image: otrf/helk-logstash:7.6.1.1
+    image: otrf/helk-logstash:7.6.2.1
     container_name: helk-logstash
     logging:
       driver: "json-file"
@@ -68,7 +68,7 @@ services:
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:7.6.1
+    image: docker.elastic.co/kibana/kibana:7.6.2
     container_name: helk-kibana
     logging:
       driver: "json-file"
