@@ -4,7 +4,7 @@
     Download the zip file of logstash: https://www.elastic.co/downloads/logstash
 1. Unzip the logstash download and then change into directory. Make sure to change the variable `Logstash_Version=` to the file name that was downloaded 
     ```bash
-    Logstash_Version='logstash-7.6.1'
+    Logstash_Version='logstash-7.6.2'
     unzip $Logstash_Version
     cd $Logstash_Version
     ```
@@ -14,86 +14,91 @@
     ```
 1. Remove some unnecessary plugins
     ```bash
-    ./bin/logstash-plugin remove logstash-input-couchdb_changes &&
-    ./bin/logstash-plugin remove logstash-input-gelf &&
-    ./bin/logstash-plugin remove logstash-input-ganglia &&
-    ./bin/logstash-plugin remove logstash-input-graphite &&
-    ./bin/logstash-plugin remove logstash-input-imap &&
-    ./bin/logstash-plugin remove logstash-input-twitter &&
-    ./bin/logstash-plugin remove logstash-output-cloudwatch &&
-    ./bin/logstash-plugin remove logstash-output-graphite &&
-    ./bin/logstash-plugin remove logstash-output-nagios &&
-    ./bin/logstash-plugin remove logstash-output-webhdfs &&
-    ./bin/logstash-plugin remove logstash-codec-graphite
+    ./bin/logstash-plugin remove \
+        logstash-input-couchdb_changes \
+        logstash-input-gelf \
+        logstash-input-ganglia \
+        logstash-input-graphite \
+        logstash-input-imap \
+        logstash-input-twitter \
+        logstash-output-cloudwatch \
+        logstash-output-graphite \
+        logstash-output-nagios \
+        logstash-output-webhdfs \
+        logstash-codec-graphite
     ```
 1. Install the logstash codec plugins
     ```bash
-    ./bin/logstash-plugin install logstash-codec-avro &&
-    ./bin/logstash-plugin install logstash-codec-es_bulk &&
-    ./bin/logstash-plugin install logstash-codec-cef &&
-    ./bin/logstash-plugin install logstash-codec-gzip_lines &&
-    ./bin/logstash-plugin install logstash-codec-json &&
-    ./bin/logstash-plugin install logstash-codec-json_lines &&
-    ./bin/logstash-plugin install logstash-codec-netflow &&
-    ./bin/logstash-plugin install logstash-codec-nmap &&
-    ./bin/logstash-plugin install logstash-codec-protobuf
+    ./bin/logstash-plugin install \
+        logstash-codec-avro \
+        logstash-codec-es_bulk \
+        logstash-codec-cef \
+        logstash-codec-gzip_lines \
+        logstash-codec-json \
+        logstash-codec-json_lines \
+        logstash-codec-netflow \
+        logstash-codec-nmap \
+        logstash-codec-protobuf
     ```
 1. Install the logstash filter plugins
     ```bash
-    ./bin/logstash-plugin install logstash-filter-alter &&
-    ./bin/logstash-plugin install logstash-filter-bytes &&
-    ./bin/logstash-plugin install logstash-filter-cidr &&
-    ./bin/logstash-plugin install logstash-filter-cipher &&
-    ./bin/logstash-plugin install logstash-filter-clone &&
-    ./bin/logstash-plugin install logstash-filter-csv &&
-    ./bin/logstash-plugin install logstash-filter-de_dot &&
-    ./bin/logstash-plugin install logstash-filter-dissect &&
-    ./bin/logstash-plugin install logstash-filter-dns &&
-    ./bin/logstash-plugin install logstash-filter-elasticsearch &&
-    ./bin/logstash-plugin install logstash-filter-fingerprint &&
-    ./bin/logstash-plugin install logstash-filter-geoip &&
-    ./bin/logstash-plugin install logstash-filter-i18n &&
-    ./bin/logstash-plugin install logstash-filter-json &&
-    ./bin/logstash-plugin install logstash-filter-json_encode &&
-    ./bin/logstash-plugin install logstash-filter-kv &&
-    ./bin/logstash-plugin install logstash-filter-memcached &&
-    ./bin/logstash-plugin install logstash-filter-metricize &&
-    ./bin/logstash-plugin install logstash-filter-prune &&
-    ./bin/logstash-plugin install logstash-filter-translate &&
-    ./bin/logstash-plugin install logstash-filter-urldecode &&
-    ./bin/logstash-plugin install logstash-filter-useragent &&
-    ./bin/logstash-plugin install logstash-filter-xml
-    ```
+    ./bin/logstash-plugin install \
+        logstash-filter-alter \
+        logstash-filter-bytes \
+        logstash-filter-cidr \
+        logstash-filter-cipher \
+        logstash-filter-clone \
+        logstash-filter-csv \
+        logstash-filter-de_dot \
+        logstash-filter-dissect \
+        logstash-filter-dns \
+        logstash-filter-elasticsearch \
+        logstash-filter-fingerprint \
+        logstash-filter-geoip \
+        logstash-filter-i18n \
+        logstash-filter-json \
+        logstash-filter-json_encode \
+        logstash-filter-kv \
+        logstash-filter-memcached \
+        logstash-filter-metricize \
+        logstash-filter-prune \
+        logstash-filter-translate \
+        logstash-filter-urldecode \
+        logstash-filter-useragent \
+        logstash-filter-xml
 1. Install the logstash integration plugins
     ```bash
-    ./bin/logstash-plugin install logstash-integration-kafka &&
-    ./bin/logstash-plugin install logstash-integration-rabbitmq &&
-    ./bin/logstash-plugin install logstash-integration-jdbc
+    ./bin/logstash-plugin install \
+         logstash-integration-kafka \
+         logstash-integration-rabbitmq \
+         logstash-integration-jdbc
     ```
 1. Install the logstash input plugins
     ```bash
-    ./bin/logstash-plugin install logstash-input-beats &&
-    ./bin/logstash-plugin install logstash-input-elasticsearch &&
-    ./bin/logstash-plugin install logstash-input-file &&
-    ./bin/logstash-plugin install logstash-input-lumberjack &&
-    ./bin/logstash-plugin install logstash-input-snmp &&
-    ./bin/logstash-plugin install logstash-input-snmptrap &&
-    ./bin/logstash-plugin install logstash-input-syslog &&
-    ./bin/logstash-plugin install logstash-input-tcp &&
-    ./bin/logstash-plugin install logstash-input-udp &&
-    ./bin/logstash-plugin install logstash-input-wmi
+    ./bin/logstash-plugin install \
+        logstash-input-beats \
+        logstash-input-elasticsearch \
+        logstash-input-file \
+        logstash-input-lumberjack \
+        logstash-input-snmp \
+        logstash-input-snmptrap \
+        logstash-input-syslog \
+        logstash-input-tcp \
+        logstash-input-udp \
+        logstash-input-wmi
     ```
 1. Install the logstash output plugins
     ```bash
-    ./bin/logstash-plugin install logstash-output-csv &&
-    ./bin/logstash-plugin install logstash-output-elasticsearch &&
-    ./bin/logstash-plugin install logstash-output-email &&
-    ./bin/logstash-plugin install logstash-output-lumberjack &&
-    ./bin/logstash-plugin install logstash-output-nagios &&
-    ./bin/logstash-plugin install logstash-output-stdout &&
-    ./bin/logstash-plugin install logstash-output-syslog &&
-    ./bin/logstash-plugin install logstash-output-tcp &&
-    ./bin/logstash-plugin install logstash-output-udp
+    ./bin/logstash-plugin install \
+        logstash-output-csv \
+        logstash-output-elasticsearch \
+        logstash-output-email \
+        logstash-output-lumberjack \
+        logstash-output-nagios \
+        logstash-output-stdout \
+        logstash-output-syslog \
+        logstash-output-tcp \
+        logstash-output-udp
     ```
 1. Update the plugins... again...
     ```bash
@@ -113,7 +118,7 @@
     ./bin/logstash-plugin remove logstash-output-nagios 2> /dev/null;
     ./bin/logstash-plugin remove logstash-output-webhdfs 2> /dev/null
     ```
-1. List the plugins and corresponding versions, then add the output to [logstash-plugin-information.yml](logstash-plugin-information.yml)
+1. List the plugins and corresponding versions, then add the output to [logstash-plugin-information.yml](logstash-plugin-information.txt)
 
     ```bash
     ./bin/logstash-plugin list --verbose
