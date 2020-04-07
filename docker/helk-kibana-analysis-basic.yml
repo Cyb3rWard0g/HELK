@@ -17,6 +17,8 @@ services:
       - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
       - ./helk-elasticsearch/config/jvm.options:/usr/share/elasticsearch/config/jvm.options
     entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
+    ports:
+      - "9200:9200"    
     environment:
       - cluster.name=helk-cluster
       - node.name=helk-1
