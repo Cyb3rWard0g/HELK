@@ -58,7 +58,7 @@ if [[ -n "$ELASTIC_PASSWORD" ]]; then
   for config in /usr/share/logstash/pipeline/*-output.conf
   do
       echo "$HELK_LOGSTASH_INFO_TAG Updating pipeline config $config..."
-      sed -i "s/#password \=>.*$/password \=> \'${ELASTIC_PASSWORD}\'/g" "${config}"
+      sed -i "s/\(#\)\{0,1\}password \=>.*$/password \=> \'${ELASTIC_PASSWORD}\'/g" "${config}"
   done
 fi
 
