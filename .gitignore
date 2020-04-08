@@ -19,3 +19,4 @@ __pycache__/
 # HELK Custom Configurations
 *custom*
 /docker/docker-compose.yml
+/docker/helk-nginx/htpasswd.user*
