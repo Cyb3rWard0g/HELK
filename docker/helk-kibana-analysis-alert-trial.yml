@@ -65,6 +65,9 @@ services:
       - "5514:5514"
       - "8515:8515"
       - "8516:8516"
+      - "5514:5514/udp"
+      - "8515:8515/udp"
+      - "8516:8516/udp"
     restart: always
     depends_on:
       - helk-kibana
