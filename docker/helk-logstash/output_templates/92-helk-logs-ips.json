@@ -1,12 +1,18 @@
 {
   "order": 92,
   "index_patterns": [ "logs-*" ],
-  "version": 2019110901,
+  "version": 2020041401,
   "mappings": {
     "properties": {
       "dst_ip_addr": {
         "type": "ip",
-        "copy_to": "any_ip_addr"
+        "copy_to": "any_ip_addr",
+        "fields": {
+          "keyword": {
+            "ignore_above": 1024,
+            "type": "keyword"
+          }
+        }
       },
       "dst_ip_public": {
         "type": "boolean"
@@ -25,7 +31,13 @@
       },
       "dst_nat_ip_addr": {
         "type": "ip",
-        "copy_to": "any_ip_addr"
+        "copy_to": "any_ip_addr",
+        "fields": {
+          "keyword": {
+            "ignore_above": 1024,
+            "type": "keyword"
+          }
+        }
       },
       "dst_nat_ip_public": {
         "type": "boolean"
@@ -44,7 +56,13 @@
       },
       "src_ip_addr": {
         "type": "ip",
-        "copy_to": "any_ip_addr"
+        "copy_to": "any_ip_addr",
+        "fields": {
+          "keyword": {
+            "ignore_above": 1024,
+            "type": "keyword"
+          }
+        }
       },
       "src_ip_public": {
         "type": "boolean"
@@ -63,7 +81,13 @@
       },
       "src_nat_ip_addr": {
         "type": "ip",
-        "copy_to": "any_ip_addr"
+        "copy_to": "any_ip_addr",
+        "fields": {
+          "keyword": {
+            "ignore_above": 1024,
+            "type": "keyword"
+          }
+        }
       },
       "src_nat_ip_public": {
         "type": "boolean"
