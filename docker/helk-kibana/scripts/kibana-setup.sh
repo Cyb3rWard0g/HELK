@@ -50,7 +50,7 @@ curl -X POST -u "${ELASTICSEARCH_CREDS}" "$KIBANA_HOST/api/kibana/settings" -H '
 DIR=/usr/share/kibana/objects/dashboards
 # *********** Loading dashboards ***************
 echo "$HELK_INFO_TAG Loading Dashboards..."
-for file in ${DIR}/*.json
+for file in ${DIR}/*.ndjson
 do
     echo "[++++++] Loading dashboard file ${file}"
     until curl -X POST -s -o /dev/null -u "${ELASTICSEARCH_CREDS}" "${KIBANA_HOST}/api/kibana/dashboards/import" -H 'kbn-xsrf: true' \
@@ -104,4 +104,4 @@ fi
 #echo "[+++] Updating Kibana Logo..."
 #cp -i /usr/share/kibana/custom/HELK.png /usr/share/kibana/optimize/bundles/HELK.png
 #cp -i /usr/share/kibana/optimize/bundles/commons.style.css /usr/share/kibana/optimize/bundles/commons.style.css_backup
-#cp -i /usr/share/kibana/custom/commons.style.css /usr/share/kibana/optimize/bundles/commons.style.css
+#cp-i /usr/share/kibana/custom/commons.style.css /usr/share/kibana/optimize/bundles/commons.style.css
