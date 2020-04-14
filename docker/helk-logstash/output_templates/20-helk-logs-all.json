@@ -1,0 +1,19 @@
+{
+  "order": 20,
+  "index_patterns": [ "logs-*" ],
+  "version": 2020041401,
+  "mappings": {
+    "dynamic_templates": [
+      {
+        "hashes": {
+          "match_mapping_type": "string",
+          "match": "hash*",
+          "mapping": {
+            "ignore_above": 2048,
+            "type": "keyword"
+          }
+        }
+      }
+    ]
+  }
+}
