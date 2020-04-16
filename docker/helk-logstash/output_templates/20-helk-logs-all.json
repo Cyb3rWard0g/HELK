@@ -1,7 +1,7 @@
 {
   "order": 20,
   "index_patterns": [ "logs-*" ],
-  "version": 2020041401,
+  "version": 2020041901,
   "mappings": {
     "dynamic_templates": [
       {
@@ -14,6 +14,30 @@
           }
         }
       }
-    ]
+    ],
+    "properties": {
+      "dst_original_value": {
+        "ignore_above": 4096,
+        "type": "keyword"
+      },
+      "dst_nat_original_value": {
+        "ignore_above": 4096,
+        "type": "keyword"
+      },
+      "host_agent_uid": {
+        "type": "keyword"
+      },
+      "host_uid": {
+        "type": "keyword"
+      },
+      "src_original_value": {
+        "ignore_above": 4096,
+        "type": "keyword"
+      },
+      "src_nat_original_value": {
+        "ignore_above": 4096,
+        "type": "keyword"
+      }
+    }    
   }
 }

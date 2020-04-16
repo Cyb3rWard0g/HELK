@@ -12,10 +12,7 @@ filebeat.inputs:
   #fields_under_root: true
 #----------------------------- Kafka output --------------------------------
 output.kafka:
-  hosts: ["<HELK-IP>:9092", "<HELK-IP>:9093"]
+  # Place your HELK IP(s) here (keep the port).
+  hosts: ["<HELK-IP>:9092"]
   topic: "zeek"
   max_message_bytes: 1000000
-#================================ Procesors =====================================
-processors:
-  - add_host_metadata: ~
-  - add_cloud_metadata: ~

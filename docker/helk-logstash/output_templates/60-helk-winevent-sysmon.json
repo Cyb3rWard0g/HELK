@@ -1,12 +1,11 @@
 {
   "order": 60,
   "index_patterns": [ "logs-endpoint-winevent-sysmon-*" ],
-  "version": 2019090201,
+  "version": 2020041901,
   "mappings":{
     "properties":{
-      "@event_date_creation":{"type":"date"},
-      "@file_date_creation":{"type":"date"},
-      "@file_previous_date_creation":{"type":"date"},
+      "file_creation_time":{"type":"date"},
+      "file_previous_creation_time":{"type":"date"},
       "network_initiated":{"type":"boolean"},
       "thread_new_id":{"type":"integer"},
       "module_signed":{"type":"boolean"},

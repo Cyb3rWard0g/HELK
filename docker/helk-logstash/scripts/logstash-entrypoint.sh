@@ -135,15 +135,15 @@ else
 fi
 # If have not been updated in X time or not installed at all.. then install them
 if [[ ${plugins_previous_install} = "no" ]] || [[ ${plugins_oudated} = "yes" ]]; then
-	if [[ -f "/usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip" ]]; then
+	if [[ -f "/usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip" ]]; then
     echo "$HELK_LOGSTASH_INFO_TAG Installing Logstash plugins via offline package.."
 	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
-	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip
+	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip
+	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip
   else
-    echo "$HELK_LOGSTASH_INFO_TAG Installing logstash plugins over the internet.."
-    logstash-plugin install logstash-codec-avro logstash-codec-es_bulk logstash-codec-cef logstash-codec-gzip_lines logstash-codec-json logstash-codec-json_lines logstash-codec-netflow logstash-codec-nmap logstash-codec-protobuf logstash-filter-alter logstash-filter-bytes logstash-filter-cidr logstash-filter-cipher logstash-filter-clone logstash-filter-csv logstash-filter-de_dot logstash-filter-dissect logstash-filter-dns logstash-filter-elasticsearch logstash-filter-fingerprint logstash-filter-geoip logstash-filter-i18n logstash-filter-jdbc_static logstash-filter-jdbc_streaming logstash-filter-json logstash-filter-json_encode logstash-filter-kv logstash-filter-memcached logstash-filter-metricize logstash-filter-prune logstash-filter-translate logstash-filter-urldecode logstash-filter-useragent logstash-filter-xml logstash-input-beats logstash-input-elasticsearch logstash-input-file logstash-input-jdbc logstash-input-lumberjack logstash-input-snmptrap logstash-input-syslog logstash-input-tcp logstash-input-udp logstash-input-wmi logstash-output-csv logstash-output-elasticsearch logstash-output-email logstash-output-lumberjack logstash-output-nagios logstash-output-stdout logstash-output-syslog logstash-output-tcp logstash-output-udp
-    echo "$HELK_LOGSTASH_INFO_TAG Updating Logstash plugins over the internet.."
-    logstash-plugin update
+    echo "$HELK_ERROR_TAG Logstash plugins not detected.."
+    echo "$HELK_LOGSTASH_INFO_TAG Please open a github ticket"
+    exit 1
   fi
   printf "%s" "$(date +"%Y-%m-%d %T")" > "$plugins_time_file"
 else

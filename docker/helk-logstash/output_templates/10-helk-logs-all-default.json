@@ -53,6 +53,12 @@
       "z_logstash_type": {
         "enabled": false
       },
+      "event_original_time": {
+        "type": "date"
+      },
+      "event_recorded_time": {
+        "type": "date"
+      },
       "event_original_message": {
         "type": "text",
         "norms": false
@@ -63,7 +69,7 @@
       "etl_processed_time": {
         "type": "date"
       },
-      "z_etl_version": {
+      "etl_version": {
         "type": "keyword"
       },
       "message": {

@@ -151,35 +151,104 @@
           }
         }
       },
+      "object_access_mask": {
+        "type": "keyword"
+      },
       "process_id": {
         "type":"long"
+      },
+      "process_id_orig": {
+        "type":"keyword"
       },
       "process_parent_id": {
         "type":"long"
       },
+      "process_parent_id_orig": {
+        "type":"keyword"
+      },
+      "process_granted_access": {
+        "type": "long"
+      },
+      "process_granted_access_orig": {
+        "type": "keyword"
+      },
       "reporter_logon_id": {
         "type": "long"
+      },
+      "reporter_logon_id_orig": {
+        "type": "keyword"
       },
       "target_process_id": {
         "type": "long"
       },
+      "target_process_id_orig": {
+        "type": "keyword"
+      },
       "thread_id": {
         "type": "long"
+      },
+      "thread_id_orig": {
+        "type": "keyword"
       },
       "thread_new_id": {
         "type": "long"
       },
+      "thread_new_id_orig": {
+        "type": "keyword"
+      },
       "user_logon_id": {
         "type": "long"
+      },
+      "user_logon_id_orig": {
+        "type": "keyword"
       },
       "user_session_id": {
         "type":"long"
       },
+      "user_session_id_orig": {
+        "type":"keyword"
+      },
+      "NewProcessId": {
+        "type": "long"
+      },
+      "NewProcessId_orig": {
+        "type": "keyword"
+      },
+      "ProcessId": {
+        "type": "long"
+      },
+      "ProcessId_orig": {
+        "type": "keyword"
+      },
       "SubjectLogonId": {
         "type": "long"
       },
+      "SubjectLogonId_orig": {
+        "type": "keyword"
+      },
       "TargetLogonId": {
         "type": "long"
+      },
+      "TargetLogonId_orig": {
+        "type": "keyword"
+      },
+      "TargetProcessId": {
+        "type": "long"
+      },
+      "TargetProcessId_orig": {
+        "type": "keyword"
+      },
+      "ParentProcessId": {
+        "type": "long"
+      },
+      "ParentProcessId_orig": {
+        "type": "keyword"
+      },
+      "SourceProcessId": {
+        "type": "long"
+      },
+      "SourceProcessId_orig": {
+        "type": "keyword"
       }
     }
   }

@@ -3,6 +3,8 @@
 # Author: Nate Guagenti (@neu5ron)
 # License: GPL-3.0
 
+#TODO: File needs revisited after changes to `1010-winevent-winlogbeats-filter.conf`
+
 filter {
 
   ## Only clone events that have been previously hashed and not mitre attack matrix
@@ -24,7 +26,7 @@ filter {
         "event_original_message",
         "message",
         "meta_log_tags",
-        "z_original_timestamp"
+        "event_original_time"
       ]
     }
     if [type] == "clone" {
