@@ -1,0 +1,21 @@
+###################### Filebeat OSQuery Configuration Example #########################
+# You can find the full configuration reference here:
+# https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html
+#=========================== Filebeat inputs =============================
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/osquery/osqueryd.results.log
+  json.keys_under_root: true
+  fields_under_root: true
+#================================ Outputs =====================================
+#----------------------------- Kafka output --------------------------------
+output.kafka:
+  hosts: ["<HELK-IP>:9092", "<HELK-IP>:9093"]
+  topic: "filebeat"
+  max_message_bytes: 1000000
+#================================ Procesors =====================================
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
