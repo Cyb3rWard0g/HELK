@@ -27,9 +27,10 @@ for item in config map canvas-workpad canvas-element lens query index-pattern vi
         result=$(echo "${response}" | jq -r '.success')
         if [[ ${result} == "true" ]]; then
             created=$((created+1))
+            echo "Successfuly imported ${file}"
         else
             failed=$((failed+1))
-            echo -e "Failed importing ${item} named ${file}: \n ${response}\n"
+            echo -e "Failed to import ${item} named ${file}: \n ${response}\n"
         fi
     done
     cd ..
