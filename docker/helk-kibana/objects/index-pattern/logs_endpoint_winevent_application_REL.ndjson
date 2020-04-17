@@ -1,0 +1,1 @@
+{"attributes":{"timeFieldName":"@timestamp","title":"logs-endpoint-winevent-application-*"},"id":"logs-endpoint-winevent-application-*","migrationVersion":{"index-pattern":"7.6.0"},"references":[],"type":"index-pattern","updated_at":"2020-04-15T12:52:05.239Z","version":"WzcsMV0="}

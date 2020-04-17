@@ -14,10 +14,11 @@ failed=0
 
 echo "Please be patient as we import 100+ custom dashboards, visualizations, and searches..."
 
-for item in config map canvas-workpad canvas-element lens query index-pattern visualization search dashboard url; do
+for item in config map canvas-workpad canvas-element lens query index-pattern search visualization dashboard url; do
     cd ${item} 2>/dev/null || continue
+    pwd
 
-    for file in ${item}/*.ndjson; do
+    for file in *.ndjson; do
         response=$(
         curl -sk -XPOST -u helk:hunting \
             "${KIBANA_URL}/api/saved_objects/_import?overwrite=true" \
@@ -27,7 +28,7 @@ for item in config map canvas-workpad canvas-element lens query index-pattern vi
         result=$(echo "${response}" | jq -r '.success')
         if [[ ${result} == "true" ]]; then
             created=$((created+1))
-            echo "Successfuly imported ${file}"
+            echo "Successfuly imported ${item} named ${file}"
         else
             failed=$((failed+1))
             echo -e "Failed to import ${item} named ${file}: \n ${response}\n"
@@ -37,11 +38,11 @@ for item in config map canvas-workpad canvas-element lens query index-pattern vi
 done
 
 # Set default index
-defaultIndex=$(jq -r '.userValue' index-pattern/default.json)
+#defaultIndex=$(jq -r '.userValue' index-pattern/default.json)
 
-echo "Setting defaultIndex to ${defaultIndex}" > /dev/stderr
-curl -s -XPOST -H"kbn-xsrf: true" -H"Content-Type: application/json" \
-    "${KIBANA_URL}/api/kibana/settings/defaultIndex" -d"{\"value\": \"${defaultIndex}\"}" >/dev/null
+#echo "Setting defaultIndex to ${defaultIndex}" > /dev/stderr
+#curl -s -XPOST -H"kbn-xsrf: true" -H"Content-Type: application/json" \
+#    "${KIBANA_URL}/api/kibana/settings/defaultIndex" -d"{\"value\": \"${defaultIndex}\"}" >/dev/null
 
 echo "Created: ${created}"
 echo "Failed: ${failed}"
