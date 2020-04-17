@@ -64,7 +64,7 @@ for item in config index-pattern search visualization dashboard url map canvas-w
         echo "Exporting ${item} named ${filename} as ${file}" > /dev/stderr
         echo "$object" >> "$file"
     done
-    if [ $(basename pwd) == "${item}" ]; then
+    if [ $(basename $(pwd)) == "${item}" ]; then
         cd ..
     fi
 done
