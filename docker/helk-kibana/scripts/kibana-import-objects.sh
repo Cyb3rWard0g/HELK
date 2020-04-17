@@ -6,9 +6,6 @@
 # Author: Thomas Castronovo (@troplolBE), Nate Guagenti (@neu5ron)
 # License: GPL-3.0
 
-_URL=$1
-KIBANA_URL=${_URL:=https://127.0.0.1:5601}
-
 created=0
 failed=0
 
@@ -20,8 +17,8 @@ for item in config map canvas-workpad canvas-element lens query index-pattern se
 
     for file in *.ndjson; do
         response=$(
-        curl -sk -XPOST -u helk:hunting \
-            "${KIBANA_URL}/api/saved_objects/_import?overwrite=true" \
+        curl -sk -XPOST -u "${ELASTICSEARCH_CREDS}" \
+            "${KIBANA_HOST}/api/saved_objects/_import?overwrite=true" \
             -H "kbn-xsrf: true" \
             --form file=@"${file}"
         )
@@ -36,9 +33,6 @@ for item in config map canvas-workpad canvas-element lens query index-pattern se
     done
     cd ..
 done
-
-# Set default index
-#defaultIndex=$(jq -r '.userValue' index-pattern/default.json)
 
 #echo "Setting defaultIndex to ${defaultIndex}" > /dev/stderr
 #curl -s -XPOST -H"kbn-xsrf: true" -H"Content-Type: application/json" \

@@ -17,7 +17,7 @@ for item in config index-pattern search visualization dashboard url map canvas-w
     first=1
 
     #Cycle through all the saved objects of that category
-    for id in $(curl -sk -u helk:hunting "${KIBANA_URL}/api/saved_objects/_find?type=${item}&per_page=1000" | jq -r '.saved_objects[] | .id'); do
+    for id in $(curl -sk -u "${ELASTICSEARCH_CREDS}" "${KIBANA_HOST}/api/saved_objects/_find?type=${item}&per_page=1000" | jq -r '.saved_objects[] | .id'); do
         #Check first iteration
         if [ $first -eq 1 ]; then
             #Create and go to directory
@@ -26,8 +26,8 @@ for item in config index-pattern search visualization dashboard url map canvas-w
             first=0
         fi
         #Request saved object
-        object=$(curl -sk -XPOST -u helk:hunting \
-            "${KIBANA_URL}/api/saved_objects/_export" \
+        object=$(curl -sk -XPOST -u "${ELASTICSEARCH_CREDS}" \
+            "${KIBANA_HOST}/api/saved_objects/_export" \
             -H "kbn-xsrf: true" \
             -H "Content-Type: application/json" \
             -d"

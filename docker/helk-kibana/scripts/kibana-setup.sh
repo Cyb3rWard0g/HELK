@@ -34,8 +34,11 @@ until [[ "$(curl -s -o /dev/null -w "%{http_code}" "${KIBANA_ACCESS}/status")" =
 done
 echo "$HELK_INFO_TAG Kibana server is up."
 
+# *********** Importing saved objetcs into Kibana ***************
+#/usr/share/kibana/scripts/kibana-import-objects.sh $KIBANA_HOST
+
 # *********** Creating Kibana index-patterns ***************
-/usr/share/kibana/scripts/kibana-setup-index_patterns.sh
+#/usr/share/kibana/scripts/kibana-setup-index_patterns.sh
 
 # *********** Set URL session store *********************
 echo "$HELK_INFO_TAG Setting URL session store"
