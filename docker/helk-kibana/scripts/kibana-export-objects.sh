@@ -25,7 +25,6 @@ for item in config index-pattern search visualization dashboard url map canvas-w
             cd ${item}
             first=0
         fi
-
         #Request saved object
         object=$(curl -sk -XPOST -u helk:hunting \
             "${KIBANA_URL}/api/saved_objects/_export" \
@@ -65,7 +64,9 @@ for item in config index-pattern search visualization dashboard url map canvas-w
         echo "Exporting ${item} named ${filename} as ${file}" > /dev/stderr
         echo "$object" >> "$file"
     done
-    cd ..
+    if [ $(basename pwd) == "${item}" ]; then
+        cd ..
+    fi
 done
 
 echo "Successfully exported ${exports} objects !"
