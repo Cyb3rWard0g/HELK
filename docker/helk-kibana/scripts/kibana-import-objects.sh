@@ -17,7 +17,6 @@ cd $DIR
 
 for item in config map canvas-workpad canvas-element lens query index-pattern search visualization dashboard url; do
     cd ${item} 2>/dev/null || continue
-    pwd
 
     for file in *.ndjson; do
         response=$(
