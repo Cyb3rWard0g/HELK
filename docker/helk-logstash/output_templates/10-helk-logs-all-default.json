@@ -91,6 +91,12 @@
       "etl_processed_time": {
         "type": "date"
       },
+      "etl_host_agent_type": {
+        "type": "keyword"
+      },
+      "etl_host_agent_uid": {
+        "type": "keyword"
+      },
       "etl_version": {
         "type": "keyword"
       },

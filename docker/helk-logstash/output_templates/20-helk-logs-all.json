@@ -24,9 +24,6 @@
         "ignore_above": 4096,
         "type": "keyword"
       },
-      "host_agent_uid": {
-        "type": "keyword"
-      },
       "host_uid": {
         "type": "keyword"
       },
