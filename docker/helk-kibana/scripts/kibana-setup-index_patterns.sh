@@ -31,8 +31,7 @@ declare -a index_patterns=(
     "elastalert_status_past"
     "sysmon-join-*"
     "logs-endpoint-winevent-etw-*"
-    "logs-network-*"
-    "logs-network-zeek-*"
+    "logs-zeek-*"
     "original-*"
     "indexme-*"
 )
