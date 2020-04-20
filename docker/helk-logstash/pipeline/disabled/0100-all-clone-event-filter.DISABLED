@@ -41,7 +41,7 @@ filter {
       #  }
       #}
       mutate {
-        rename => { "z_logstash_type" => "[cloned][type]" }
+        rename => { "type" => "[cloned][type]" }
       }
       # rewrite timestamp
       date {
