@@ -6,10 +6,14 @@
 # Author: Thomas Castronovo (@troplolBE), Nate Guagenti (@neu5ron)
 # License: GPL-3.0
 
+DIR=/usr/share/kibana/objects
+
 created=0
 failed=0
 
 echo "Please be patient as we import 100+ custom dashboards, visualizations, and searches..."
+#Go to the right directory to find objects
+cd $DIR
 
 for item in config map canvas-workpad canvas-element lens query index-pattern search visualization dashboard url; do
     cd ${item} 2>/dev/null || continue

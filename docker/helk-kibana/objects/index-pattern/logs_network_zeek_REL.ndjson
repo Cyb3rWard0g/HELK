@@ -1,1 +1,0 @@
-{"attributes":{"timeFieldName":"@timestamp","title":"logs-network-zeek-*"},"id":"logs-network-zeek-*","migrationVersion":{"index-pattern":"7.6.0"},"references":[],"type":"index-pattern","updated_at":"2020-04-15T12:52:18.124Z","version":"WzE5LDFd"}

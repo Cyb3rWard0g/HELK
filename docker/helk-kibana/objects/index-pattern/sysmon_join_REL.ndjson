@@ -1,1 +1,0 @@
-{"attributes":{"timeFieldName":"@timestamp","title":"sysmon-join-*"},"id":"sysmon-join-*","migrationVersion":{"index-pattern":"7.6.0"},"references":[],"type":"index-pattern","updated_at":"2020-04-15T12:52:14.918Z","version":"WzE2LDFd"}

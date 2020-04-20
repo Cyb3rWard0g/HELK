@@ -6,11 +6,13 @@
 # Authors: Nate Guagenti (@neu5ron), Thomas Castronovo (@troplolBE)
 # License: GPL-3.0
 
-_URL=$1
-KIBANA_URL=${_URL:=http://127.0.0.1:5601}
+DIR=/usr/share/kibana/objects
 
 exports=0
 failed=0
+
+#Go to directory
+cd $DIR
 
 #Cycle trough all the different object types
 for item in config index-pattern search visualization dashboard url map canvas-workpad canvas-element timelion; do
@@ -58,7 +60,7 @@ for item in config index-pattern search visualization dashboard url map canvas-w
         fi
         filename=${filename//[^A-Za-z0-9]/_}
         filename=$(echo "$filename" | sed -E 's/^(.*?[^_]+)(_)*$/\1/g')
-        file="${filename}_REL.ndjson"
+        file="${filename}.ndjson"
 
         #Write to file
         echo "Exporting ${item} named ${filename} as ${file}" > /dev/stderr

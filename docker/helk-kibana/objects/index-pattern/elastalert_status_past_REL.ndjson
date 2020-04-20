@@ -1,2 +1,0 @@
-{"attributes":{"timeFieldName":"@timestamp","title":"elastalert_status_past"},"id":"elastalert_status_past","migrationVersion":{"index-pattern":"7.6.0"},"references":[],"type":"index-pattern","updated_at":"2020-04-15T12:52:13.841Z","version":"WzE1LDFd"}
-{"attributes":{"timeFieldName":"@timestamp","title":"elastalert_status_past"},"id":"elastalert_status_past","migrationVersion":{"index-pattern":"7.6.0"},"references":[],"type":"index-pattern","updated_at":"2020-04-15T12:52:13.841Z","version":"WzE1LDFd"}

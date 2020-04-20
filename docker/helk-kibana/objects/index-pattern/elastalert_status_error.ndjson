@@ -1,0 +1,1 @@
+{"attributes":{"timeFieldName":"@timestamp","title":"elastalert_status_error"},"id":"elastalert_status_error","migrationVersion":{"index-pattern":"7.6.0"},"references":[],"type":"index-pattern","updated_at":"2020-04-17T12:02:41.495Z","version":"WzQ0MiwxXQ=="}
