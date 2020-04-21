@@ -6,7 +6,9 @@
 # Authors: Nate Guagenti (@neu5ron), Thomas Castronovo (@troplolBE)
 # License: GPL-3.0
 
-DIR=/usr/share/kibana/objects
+KIBANA_HOST="$1"
+ELASTICSEARCH_CREDS="$2"
+DIR=$3
 
 exports=0
 failed=0
@@ -75,6 +77,3 @@ echo "Successfully exported ${exports} objects !"
 if [[ $failed -ne 0 ]]; then
     echo "Failed to export ${failed} objects !"
 fi
-# Save default index -- included in file from config
-#echo "Exporting default index pattern setting."
-#curl -sk -u helk:hunting "${KIBANA_URL}/api/kibana/settings" -H "kbn-xsrf: true" -H "Content-Type: application/json" | jq -r '.settings.defaultIndex' > index-pattern/default.json
