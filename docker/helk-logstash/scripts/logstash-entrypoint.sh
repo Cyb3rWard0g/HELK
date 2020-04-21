@@ -6,10 +6,16 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
+RED='\033[0;31m'
+CYAN='\033[0;36m'
+WAR='\033[1;33m'
+STD='\033[0m'
+
 # *********** Helk log tagging variables ***************
 # For more efficient script editing/reading, and also if/when we switch to different install script language
-HELK_LOGSTASH_INFO_TAG="[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO]"
-HELK_ERROR_TAG="[HELK-LOGSTASH-DOCKER-INSTALLATION-ERROR]"
+HELK_INFO_TAG="${CYAN}[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO]${STD}"
+HELK_ERROR_TAG="${RED}[HELK-LOGSTASH-DOCKER-INSTALLATION-ERROR]${STD}"
+HELK_WARNING_TAG="${WAR}[HELK-LOGSTASH-DOCKER-INSTALLATION-WARNING]${STD}"
 
 # *********** Environment Variables ***************
 DIR=/usr/share/logstash/output_templates
@@ -17,18 +23,18 @@ DIR=/usr/share/logstash/output_templates
 if [[ -z "$ES_HOST" ]]; then
   ES_HOST=helk-elasticsearch
 fi
-echo "$HELK_LOGSTASH_INFO_TAG Setting Elasticsearch server name to $ES_HOST"
+echo -e "${HELK_INFO_TAG} Setting Elasticsearch server name to $ES_HOST"
 
 if [[ -z "$ES_PORT" ]]; then
   ES_PORT=9200
 fi
-echo "$HELK_LOGSTASH_INFO_TAG Setting Elasticsearch server port to $ES_PORT"
+echo -e "${HELK_INFO_TAG} Setting Elasticsearch server port to $ES_PORT"
 
 if [[ -n "$ELASTIC_PASSWORD" ]]; then
   if [[ -z "$ELASTIC_USERNAME" ]]; then
       ELASTIC_USERNAME=elastic
   fi
-  echo "$HELK_LOGSTASH_INFO_TAG Setting Elasticsearch username to $ELASTIC_USERNAME"
+  echo -e "${HELK_INFO_TAG} Setting Elasticsearch username to $ELASTIC_USERNAME"
   ELASTICSEARCH_ACCESS="http://${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}@${ES_HOST}:${ES_PORT}"
 else
   ELASTICSEARCH_ACCESS="http://${ES_HOST}:${ES_PORT}"
@@ -38,12 +44,12 @@ CLUSTER_SETTINGS='
 {
   "persistent": {
     "search.max_open_scroll_context": 15000,
-    "indices.breaker.request.limit" : "70%",
+    "indices.breaker.request.limit" : "90%",
     "cluster.max_shards_per_node": 3000
   },
   "transient": {
     "search.max_open_scroll_context": 15000,
-    "indices.breaker.request.limit" : "70%",
+    "indices.breaker.request.limit" : "90%",
     "cluster.max_shards_per_node": 3000
   }
 }
@@ -57,7 +63,7 @@ if [[ -n "$ELASTIC_PASSWORD" ]]; then
   # ****** Updating Pipeline configs ***********
   for config in /usr/share/logstash/pipeline/*-output.conf
   do
-      echo "$HELK_LOGSTASH_INFO_TAG Updating pipeline config $config..."
+      echo -e "${HELK_INFO_TAG} Updating pipeline config $config..."
       sed -i "s/#password \=>.*$/password \=> \'${ELASTIC_PASSWORD}\'/g" "${config}"
   done
 fi
@@ -67,48 +73,48 @@ while true
   do
     ES_STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${ELASTICSEARCH_ACCESS})
     if [[ "$ES_STATUS_CODE" -eq 200 ]]; then
-      echo "$HELK_LOGSTASH_INFO_TAG Connected successfully to elasticsearch URI.."
+      echo -e "${HELK_INFO_TAG} Connected successfully to elasticsearch URI.."
       break
     else
-      echo "$HELK_LOGSTASH_INFO_TAG Waiting for elasticsearch URI to be accessible.."
+      echo -e "${HELK_INFO_TAG} Waiting for elasticsearch URI to be accessible.."
     fi
     sleep 5
 done
 
 # ********** Uploading templates to Elasticsearch *******
-echo "$HELK_LOGSTASH_INFO_TAG Uploading templates for field & value mappings and index settings to elasticsearch .."
+echo -e "${HELK_INFO_TAG} Uploading templates for field & value mappings and index settings to elasticsearch .."
 for file in "${DIR}"/*.json; do
     template_name=$(echo "$file" | sed -r ' s/^.*\/[0-9]+\-//' | sed -r ' s/\.json$//')
-    echo "$HELK_LOGSTASH_INFO_TAG Uploading $template_name template to elasticsearch.."
+    echo -e "${HELK_INFO_TAG} Uploading $template_name template to elasticsearch.."
     until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST ${ELASTICSEARCH_ACCESS}/_template/"$template_name" -d@"${file}" -H 'Content-Type: application/json')" == "200" ]]; do
-      echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading $template_name"
+      echo -e "${HELK_WARNING_TAG} Retrying uploading $template_name"
       sleep 2
     done
 done
 
 # ******** Cluster Settings ***************
-echo "$HELK_LOGSTASH_INFO_TAG Configuring elasticsearch cluster settings.."
+echo -e "${HELK_INFO_TAG} Configuring elasticsearch cluster settings.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT ${ELASTICSEARCH_ACCESS}/_cluster/settings -H 'Content-Type: application/json' -d "$CLUSTER_SETTINGS")" == "200" ]]; do
-  echo "$HELK_LOGSTASH_INFO_TAG Retrying cluster settings"
+  echo -e "${HELK_WARNING_TAG} Retrying cluster settings"
   sleep 2
 done
 
 # *********** Set Kibana Index Priority ***************
-echo "$HELK_LOGSTASH_INFO_TAG Configuring elasticsearch cluster settings.."
+echo -e "${HELK_INFO_TAG} Configuring elasticsearch cluster settings.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT "${ELASTICSEARCH_ACCESS}/.kiban*/_settings" -H 'Content-Type: application/json' -d "$KIBANA_INDEX_PRIORITY")" == "200" ]]; do
-  echo "$HELK_LOGSTASH_INFO_TAG Retrying Kibana index priority"
+  echo -e "${HELK_WARNING_TAG} Retrying Kibana index priority"
   sleep 2
 done
 
 # ******** Create Data For Kibana Experience ***************
-echo "$HELK_LOGSTASH_INFO_TAG Setting up additional Kibana/UI experience parameter.."
+echo -e "${HELK_INFO_TAG} Setting up additional Kibana/UI experience parameter.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST ${ELASTICSEARCH_ACCESS}/logs-endpoint-winevent-sysmon-1990.12.18/_doc/TestHELKDataWindowsSysmon000001 -H 'Content-Type: application/json' -d "$TestHELKDataWindowsSysmon000001")" == "200" ]]; do
-  echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading data for kibana experience"
+  echo -e "${HELK_WARNING_TAG} Retrying uploading data for kibana experience"
   sleep 2
 done
 
 # ********** Install Plugins *****************
-echo "$HELK_LOGSTASH_INFO_TAG Checking Logstash plugins.."
+echo -e "${HELK_INFO_TAG} Checking Logstash plugins.."
 # check if has been 30 days since plugins have been updated
 if test -f "$plugins_time_file"; then
   plugins_last_time=$(date -d "$(<"$plugins_time_file")" '+%s')
@@ -116,7 +122,7 @@ if test -f "$plugins_time_file"; then
   plugins_day_diff=$(( ( plugins_current_time - plugins_last_time )/(60*60*24) ))
   if [[ "$plugins_day_diff" -ge 30 ]]; then
     plugins_oudated="yes"
-    echo "$HELK_LOGSTASH_INFO_TAG Plugins have not been updated in over 30 days.."
+    echo -e "${HELK_INFO_TAG} Plugins have not been updated in over 30 days.."
   else
     plugins_oudated="no"
   fi
@@ -126,28 +132,28 @@ fi
 # Test a few plugins determine if probably all already installed
 if ( logstash-plugin list  2> /dev/null | grep 'logstash-filter-prune' ) && ( logstash-plugin list  2> /dev/null | grep 'logstash-input-wmi' ); then
   plugins_previous_install="yes"
-  echo "$HELK_LOGSTASH_INFO_TAG Plugins from previous install detected.."
+  echo -e "${HELK_INFO_TAG} Plugins from previous install detected.."
 else
   plugins_previous_install="no"
-  echo "$HELK_LOGSTASH_INFO_TAG Plugins from previous install not detected.."
-  echo "$HELK_LOGSTASH_INFO_TAG Updating Logstash plugins over the internet for first run.."
+  echo -e "${HELK_INFO_TAG} Plugins from previous install not detected.."
+  echo -e "${HELK_INFO_TAG} Updating Logstash plugins over the internet for first run.."
   logstash-plugin update
 fi
 # If have not been updated in X time or not installed at all.. then install them
 if [[ ${plugins_previous_install} = "no" ]] || [[ ${plugins_oudated} = "yes" ]]; then
 	if [[ -f "/usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip" ]]; then
-    echo "$HELK_LOGSTASH_INFO_TAG Installing Logstash plugins via offline package.."
+    echo -e "${HELK_INFO_TAG} Installing Logstash plugins via offline package.."
 	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
 	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip
 	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip
   else
-    echo "$HELK_ERROR_TAG Logstash plugins not detected.."
-    echo "$HELK_LOGSTASH_INFO_TAG Please open a github ticket"
+    echo -e "${HELK_ERROR_TAG} Logstash plugins not detected.."
+    echo -e "${HELK_INFO_TAG} Please open a github ticket"
     exit 1
   fi
   printf "%s" "$(date +"%Y-%m-%d %T")" > "$plugins_time_file"
 else
-  echo "$HELK_LOGSTASH_INFO_TAG Logstash plugins already installed and up to date.."
+  echo -e "${HELK_INFO_TAG} Logstash plugins already installed and up to date.."
 fi
 
 # ********* Setting LS_JAVA_OPTS ***************
@@ -155,13 +161,23 @@ if [[ -z "$LS_JAVA_OPTS" ]]; then
   while true; do
     # Check using more accurate MB
     AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
-    if [[ "$AVAILABLE_MEMORY" -ge 900 ]] && [[ "$AVAILABLE_MEMORY" -le 1000 ]]; then
+    if [[ "$AVAILABLE_MEMORY" -ge 700 ]] && [[ "$AVAILABLE_MEMORY" -le 999 ]]; then
+      echo -e "${HELK_WARNING_TAG} Low memory available to the docker container. There is only ${AVAILABLE_MEMORY}MBs."
+      LS_MEMORY="200m"
+      LS_MEMORY_HIGH="600m"
+    elif [[ "$AVAILABLE_MEMORY" -ge 1000 ]] && [[ "$AVAILABLE_MEMORY" -le 1599 ]]; then
+      LS_MEMORY="300m"
+      LS_MEMORY_HIGH="850m"
+    elif [[ "$AVAILABLE_MEMORY" -ge 1600 ]] && [[ "$AVAILABLE_MEMORY" -le 1999 ]]; then
       LS_MEMORY="400m"
       LS_MEMORY_HIGH="1000m"
-    elif [[ "$AVAILABLE_MEMORY" -ge 1001 ]] && [[ "$AVAILABLE_MEMORY" -le 3000 ]]; then
-      LS_MEMORY="700m"
-      LS_MEMORY_HIGH="1300m"
-    elif [[ "$AVAILABLE_MEMORY" -gt 3000 ]]; then
+    elif [[ "$AVAILABLE_MEMORY" -ge 2000 ]] && [[ "$AVAILABLE_MEMORY" -le 2999 ]]; then
+      LS_MEMORY="600m"
+      LS_MEMORY_HIGH="1000m"
+    elif [[ "$AVAILABLE_MEMORY" -ge 3000 ]] && [[ "$AVAILABLE_MEMORY" -le 4999 ]]; then
+      LS_MEMORY="600m"
+      LS_MEMORY_HIGH="1500m"
+    elif [[ "$AVAILABLE_MEMORY" -gt 5000 ]]; then
       # Set high & low, so logstash doesn't use everything unnecessarily, it will usually flux up and down in usage -- and doesn't "severely" despite what everyone seems to believe
       LS_MEMORY="$(( AVAILABLE_MEMORY / 4 ))m"
       LS_MEMORY_HIGH="$(( AVAILABLE_MEMORY / 2 ))m"
@@ -170,14 +186,14 @@ if [[ -z "$LS_JAVA_OPTS" ]]; then
         LS_MEMORY_HIGH="31000m"
       fi
     else
-      echo "$HELK_ERROR_TAG $LS_MEMORY MB is not enough memory for Logstash yet.."
-      sleep 1
+      echo -e "${HELK_WARNING_TAG} ${LS_MEMORY}MBs is not enough memory for Logstash yet.."
+      sleep 5
     fi
     export LS_JAVA_OPTS="${HELK_LOGSTASH_JAVA_OPTS} -Xms${LS_MEMORY} -Xmx${LS_MEMORY_HIGH} "
     break
   done
 fi
-echo "$HELK_LOGSTASH_INFO_TAG Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
+echo -e "${HELK_INFO_TAG} Setting LS_JAVA_OPTS to $LS_JAVA_OPTS"
 
 # ********* Setting Logstash PIPELINE_WORKERS ***************
 if [[ -z "$PIPELINE_WORKERS" ]]; then
@@ -188,7 +204,7 @@ if [[ -z "$PIPELINE_WORKERS" ]]; then
   # Unable to get reported cores
   if [[ -z "$TOTAL_CORES" ]]; then
     TOTAL_CORES=1
-    echo "$HELK_ERROR_TAG unable to get number of CPUs/cores as reported by the OS"
+    echo -e "${HELK_WARNING_TAG} unable to get number of CPUs/cores as reported by the OS"
   fi
   # Set workers based on available cores
   if [[ "$TOTAL_CORES" -ge 1 ]] && [[ "$TOTAL_CORES" -le 3 ]]; then
@@ -198,13 +214,13 @@ if [[ -z "$PIPELINE_WORKERS" ]]; then
     PIPELINE_WORKERS="$(( TOTAL_CORES / 2 ))"
   # some unknown number
   else
-    echo "$HELK_ERROR_TAG reported CPUs/cores not an integer? not greater or equal to 1.."
+    echo -e "${HELK_WARNING_TAG} reported CPUs/cores not an integer? not greater or equal to 1.."
     PIPELINE_WORKERS=1
   fi
   export PIPELINE_WORKERS
 fi
-echo "$HELK_LOGSTASH_INFO_TAG Setting PIPELINE_WORKERS to ${PIPELINE_WORKERS}"
+echo -e "${HELK_INFO_TAG} Setting PIPELINE_WORKERS to ${PIPELINE_WORKERS}"
 
 # ********** Starting Logstash *****************
-echo "$HELK_LOGSTASH_INFO_TAG Running docker-entrypoint script.."
+echo -e "${HELK_INFO_TAG} Running docker-entrypoint script.."
 /usr/local/bin/docker-entrypoint
