@@ -7,9 +7,40 @@
 # License: GPL-3.0
 
 DIR=/usr/share/kibana/objects
+ARRAY=()
 
 created=0
 failed=0
+
+#Function to import files to Kibana
+#Argument 1 = File to import
+#Argument 2 = Retry of import
+
+function importFile
+{
+    local file=${1}
+    local retry=${2}
+
+    response=$(
+    curl -sk -XPOST -u "${ELASTICSEARCH_CREDS}" \
+        "${KIBANA_HOST}/api/saved_objects/_import?overwrite=true" \
+        -H "kbn-xsrf: true" \
+        --form file=@"${file}"
+    )
+    result=$(echo "${response}" | grep -w "success" | cut -d ',' -f 1 | cut -d ':' -f 2 | sed -E 's/[^-[:alnum:]]//g')
+    if [[ "${result}" == "true" ]]; then
+        created=$((created+1))
+        echo "Successfuly imported ${item} named ${file}"
+    else
+        if [[ $retry -ne 1 ]]; then
+            fail="${DIR}/${item}/${file}"
+            ARRAY+=($fail)
+        else
+            failed=$((failed+1))
+        fi
+        echo -e "Failed to import ${item} named ${file}: \n ${response}\n"
+    fi
+}
 
 echo "Please be patient as we import 100+ custom dashboards, visualizations, and searches..."
 #Go to the right directory to find objects
@@ -19,27 +50,22 @@ for item in config map canvas-workpad canvas-element lens query index-pattern se
     cd ${item} 2>/dev/null || continue
 
     for file in *.ndjson; do
-        response=$(
-        curl -sk -XPOST -u "${ELASTICSEARCH_CREDS}" \
-            "${KIBANA_HOST}/api/saved_objects/_import?overwrite=true" \
-            -H "kbn-xsrf: true" \
-            --form file=@"${file}"
-        )
-        result=$(echo "${response}" | jq -r '.success')
-        if [[ ${result} == "true" ]]; then
-            created=$((created+1))
-            echo "Successfuly imported ${item} named ${file}"
-        else
-            failed=$((failed+1))
-            echo -e "Failed to import ${item} named ${file}: \n ${response}\n"
-        fi
+        echo "$file"
+        importFile $file 0
     done
     cd ..
 done
 
-#echo "Setting defaultIndex to ${defaultIndex}" > /dev/stderr
-#curl -s -XPOST -H"kbn-xsrf: true" -H"Content-Type: application/json" \
-#    "${KIBANA_URL}/api/kibana/settings/defaultIndex" -d"{\"value\": \"${defaultIndex}\"}" >/dev/null
+echo -e "Files that failed:\n${ARRAY[@]}"
+echo "Re-trying to import the failed files..."
+
+echo "length of array is ${#ARRAY[@]}"
+if [[ "${#ARRAY[@]}" -ne "0" ]]; then
+    for file in "${ARRAY[@]}"; do
+        echo "${file}"
+        importFile $file 1
+    done
+fi
 
 echo "Created: ${created}"
 echo "Failed: ${failed}"

@@ -35,10 +35,8 @@ done
 echo "$HELK_INFO_TAG Kibana server is up."
 
 # *********** Importing saved objetcs into Kibana ***************
+echo "$HELK_INFO_TAG Importing all the saved objects..."
 /usr/share/kibana/scripts/kibana-import-objects.sh
-
-# *********** Creating Kibana index-patterns ***************
-#/usr/share/kibana/scripts/kibana-setup-index_patterns.sh
 
 # *********** Set URL session store *********************
 echo "$HELK_INFO_TAG Setting URL session store"
