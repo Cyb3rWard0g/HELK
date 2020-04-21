@@ -13,23 +13,32 @@ HELK_ELASTALERT_INFO_TAG="HELK-ELASTALERT-DOCKER-INSTALLATION-INFO"
 
 # ******* Read helk-elastalert preferences ************
 CONFIG_FILE="$ESALERT_HOME/pull-sigma-config.yaml"
+HELK_ERROR_FILE="/tmp/helk_error"
 
 getYamlKey() {
-    python3 -c "import yaml;print(yaml.safe_load(open('$1'))$2)" 
+    python3 -c "import yaml;print(yaml.safe_load(open('$1'))$2)" 2>$HELK_ERROR_FILE
 }
 
 updatesAreEnabled(){
+    if test -f $HELK_ERROR_FILE && grep -q FileNotFoundError $HELK_ERROR_FILE; then
+        echo "$HELK_ELASTALERT_INFO_TAG Update control file missing, proceeding..."
+        return 0
+    fi
+
     local ALLOW_UPDATES=$(getYamlKey $CONFIG_FILE "['allow_updates']")
-    if test -f "tmp/helk_error" && grep -q KeyError "/tmp/helk_error"; then
+    if test -f $HELK_ERROR_FILE && grep -q KeyError $HELK_ERROR_FILE; then
         echo "$HELK_ELASTALERT_INFO_TAG Update control setting missing, proceeding..."
+        return 0
     fi
 
     if [ "$ALLOW_UPDATES" = "False" ]; then
-        echo "$HELK_ELASTALERT_INFO_TAG Updates disabled"
+        echo "$HELK_ELASTALERT_INFO_TAG Updates disabled."
         return 1
     fi
+
+    # If control reaches here, that means updates are enabled.
+    echo "$HELK_ELASTALERT_INFO_TAG Updates enabled."
     test -f "tmp/helk_error" && rm /tmp/helk_error
-    echo "$HELK_ELASTALERT_INFO_TAG Updates enabled"
     return 0
 }
 
