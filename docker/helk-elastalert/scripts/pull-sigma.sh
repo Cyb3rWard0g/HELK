@@ -11,6 +11,28 @@
 HELK_ELASTALERT_INFO_TAG="HELK-ELASTALERT-DOCKER-INSTALLATION-INFO"
 #HELK_ERROR_TAG="[HELK-ELASTALERT-DOCKER-INSTALLATION-ERROR]"
 
+# ******* Read helk-elastalert preferences ************
+CONFIG_FILE="$ESALERT_HOME/pull-sigma-config.yaml"
+
+getYamlKey() {
+    python3 -c "import yaml;print(yaml.safe_load(open('$1'))$2)" 
+}
+
+updatesAreEnabled(){
+    local ALLOW_UPDATES=$(getYamlKey $CONFIG_FILE "['allow_updates']")
+    if test -f "tmp/helk_error" && grep -q KeyError "/tmp/helk_error"; then
+        echo "$HELK_ELASTALERT_INFO_TAG Update control setting missing, proceeding..."
+    fi
+
+    if [ "$ALLOW_UPDATES" = "False" ]; then
+        echo "$HELK_ELASTALERT_INFO_TAG Updates disabled"
+        return 1
+    fi
+    test -f "tmp/helk_error" && rm /tmp/helk_error
+    echo "$HELK_ELASTALERT_INFO_TAG Updates enabled"
+    return 0
+}
+
 # ******* Change directory to SIGMA local repo ************
 cd "$ESALERT_SIGMA_HOME" || exit
 
@@ -23,37 +45,44 @@ else
     echo "[+++++] SIGMA rules not available in rules folder.."
 fi
 
-# ******* Check if local SIGMA repo needs update *************
-echo "$HELK_ELASTALERT_INFO_TAG Fetch updates for SIGMA remote.."
-git remote update
+function getUpdates() {
+    # ******* Check if local SIGMA repo needs update *************
+    echo "$HELK_ELASTALERT_INFO_TAG Fetch updates for SIGMA remote.."
+    git remote update
 
-# Reference: https://stackoverflow.com/a/3278427
-echo "$HELK_ELASTALERT_INFO_TAG Checking to see if local SIGMA repo is up to date or not.."
-UPSTREAM=${1:-"@{u}"}
-LOCAL=$(git rev-parse @)
-REMOTE=$(git rev-parse "$UPSTREAM")
-BASE=$(git merge-base @ "$UPSTREAM")
+    # Reference: https://stackoverflow.com/a/3278427
+    echo "$HELK_ELASTALERT_INFO_TAG Checking to see if local SIGMA repo is up to date or not.."
+    UPSTREAM=${1:-"@{u}"}
+    LOCAL=$(git rev-parse @)
+    REMOTE=$(git rev-parse "$UPSTREAM")
+    BASE=$(git merge-base @ "$UPSTREAM")
 
-if [ $LOCAL = $REMOTE ]; then
-    echo "[++++++] Local SIGMA repo is up-to-date.."
-    if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
-        echo "[++++++] SIGMA rules available in Elastalert rules folder.."
-        echo "[++++++] Nothing to do here.."
+    if [ $LOCAL = $REMOTE ]; then
+        echo "[++++++] Local SIGMA repo is up-to-date.."
+        if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
+            echo "[++++++] SIGMA rules available in Elastalert rules folder.."
+            echo "[++++++] Nothing to do here.."
+            #exit 1
+        fi
+    elif [ $LOCAL = $BASE ]; then
+        echo "[++++++] Local SIGMA repo needs to be updated. Updating local SIGMA repo.."
+        git pull
+        if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
+            echo "[+++++++++] Elastalert rules folder has potentially old SIGMA rules.."
+            find $ESALERT_HOME/rules/ -type f -not -name "helk_*" -delete
+        fi
+    elif [ $REMOTE = $BASE ]; then
+        echo "[++++++] Need to push"
+        #exit 1
+    else
+        echo "[++++++] Diverged"
         #exit 1
     fi
-elif [ $LOCAL = $BASE ]; then
-    echo "[++++++] Local SIGMA repo needs to be updated. Updating local SIGMA repo.."
-    git pull
-    if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
-        echo "[+++++++++] Elastalert rules folder has potentially old SIGMA rules.."
-        find $ESALERT_HOME/rules/ -type f -not -name "helk_*" -delete
-    fi
-elif [ $REMOTE = $BASE ]; then
-    echo "[++++++] Need to push"
-    #exit 1
-else
-    echo "[++++++] Diverged"
-    #exit 1
+}
+
+if updatesAreEnabled; then
+    # There will be additional conditions to be checked here, for example if overwriting of rules (including those added/modified by user) is enabled or not.
+    getUpdates
 fi
 
 # *********** Unsupported SIGMA Functions ***************

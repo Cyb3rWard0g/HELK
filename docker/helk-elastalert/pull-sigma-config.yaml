@@ -1,0 +1,2 @@
+allow_updates: false        # Setting to disable/enable fetching updates from sigma repository, if this key is missing, sigma updates are enabled by default
+overwrite_modified: true    # Setting to control overwriting of rules modified by user, an example
