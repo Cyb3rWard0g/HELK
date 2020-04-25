@@ -21,7 +21,7 @@
         "strings": {
           "match_mapping_type": "string",
           "mapping": {
-            "ignore_above": 2048,
+            "ignore_above": 12048,
             "type": "text",
             "fields": {
               "keyword": {

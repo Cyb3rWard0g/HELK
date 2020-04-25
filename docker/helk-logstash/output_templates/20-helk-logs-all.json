@@ -17,22 +17,22 @@
     ],
     "properties": {
       "dst_original_value": {
-        "ignore_above": 4096,
+        "ignore_above": 32000,
         "type": "keyword"
       },
       "dst_nat_original_value": {
-        "ignore_above": 4096,
+        "ignore_above": 32000,
         "type": "keyword"
       },
       "host_uid": {
         "type": "keyword"
       },
       "src_original_value": {
-        "ignore_above": 4096,
+        "ignore_above": 32000,
         "type": "keyword"
       },
       "src_nat_original_value": {
-        "ignore_above": 4096,
+        "ignore_above": 32000,
         "type": "keyword"
       }
     }    
