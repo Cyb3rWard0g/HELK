@@ -1,55 +1,59 @@
 {
   "order": 12,
   "index_patterns": [ "logs-*" ],
-  "version": 2020020401,
+  "version": 2020041901,
   "mappings": {
     "properties": {
-      "ecs": {
+      "z_elastic_ecs": {
         "properties": {
-          "version": {
-            "type": "keyword"
-          }
-        }
-      },
-      "agent": {
-        "properties": {
-          "ephemeral_id": {
-            "type": "keyword"
+          "ecs": {
+            "properties": {
+              "version": {
+                "type": "keyword"
+              }
+            }
           },
-          "hostname": {
-            "type": "long"
+          "agent": {
+            "properties": {
+              "ephemeral_id": {
+                "type": "keyword"
+              },
+              "hostname": {
+                "type": "long"
+              },
+              "id": {
+                "type": "keyword"
+              },
+              "type": {
+                "type": "keyword"
+              },
+              "version": {
+                "type": "keyword"
+              }
+            }
           },
-          "id": {
-            "type": "keyword"
+          "event": {
+            "properties": {
+              "action": {
+                "type": "keyword"
+              },
+              "code": {
+                "type": "long"
+              },
+              "kind": {
+                "type": "keyword"
+              },
+              "provider": {
+                "type": "keyword"
+              }
+            }
           },
-          "type": {
-            "type": "keyword"
-          },
-          "version": {
-            "type": "keyword"
-          }
-        }
-      },
-      "event": {
-        "properties": {
-          "action": {
-            "type": "keyword"
-          },
-          "code": {
-            "type": "long"
-          },
-          "kind": {
-            "type": "keyword"
-          },
-          "provider": {
-            "type": "keyword"
-          }
-        }
-      },
-      "host": {
-        "properties": {
-          "name": {
-            "type": "keyword"
+          "host": {
+            "properties": {
+              "name": {
+                "type": "keyword"
+              }
+            }
           }
         }
       }

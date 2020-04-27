@@ -29,9 +29,9 @@ if [[ -n "$ELASTIC_PASSWORD" ]]; then
       ELASTIC_USERNAME=elastic
   fi
   echo "$HELK_LOGSTASH_INFO_TAG Setting Elasticsearch username to $ELASTIC_USERNAME"
-  ELASTICSEARCH_ACCESS=http://$ELASTIC_USERNAME:"${ELASTIC_PASSWORD}"@$ES_HOST:$ES_PORT
+  ELASTICSEARCH_ACCESS="http://${ELASTIC_USERNAME}:${ELASTIC_PASSWORD}@${ES_HOST}:${ES_PORT}"
 else
-  ELASTICSEARCH_ACCESS=http://$ES_HOST:$ES_PORT
+  ELASTICSEARCH_ACCESS="http://${ES_HOST}:${ES_PORT}"
 fi
 
 CLUSTER_SETTINGS='
@@ -65,8 +65,8 @@ fi
 # *********** Check if Elasticsearch is up ***************
 while true
   do
-    ES_STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" $ELASTICSEARCH_ACCESS)
-    if [ "$ES_STATUS_CODE" -eq 200 ]; then
+    ES_STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" ${ELASTICSEARCH_ACCESS})
+    if [[ "$ES_STATUS_CODE" -eq 200 ]]; then
       echo "$HELK_LOGSTASH_INFO_TAG Connected successfully to elasticsearch URI.."
       break
     else
@@ -80,7 +80,7 @@ echo "$HELK_LOGSTASH_INFO_TAG Uploading templates for field & value mappings and
 for file in "${DIR}"/*.json; do
     template_name=$(echo "$file" | sed -r ' s/^.*\/[0-9]+\-//' | sed -r ' s/\.json$//')
     echo "$HELK_LOGSTASH_INFO_TAG Uploading $template_name template to elasticsearch.."
-    until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS/_template/"$template_name" -d@"${file}" -H 'Content-Type: application/json')" == "200" ]]; do
+    until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST ${ELASTICSEARCH_ACCESS}/_template/"$template_name" -d@"${file}" -H 'Content-Type: application/json')" == "200" ]]; do
       echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading $template_name"
       sleep 2
     done
@@ -88,7 +88,7 @@ done
 
 # ******** Cluster Settings ***************
 echo "$HELK_LOGSTASH_INFO_TAG Configuring elasticsearch cluster settings.."
-until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT $ELASTICSEARCH_ACCESS/_cluster/settings -H 'Content-Type: application/json' -d "$CLUSTER_SETTINGS")" == "200" ]]; do
+until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT ${ELASTICSEARCH_ACCESS}/_cluster/settings -H 'Content-Type: application/json' -d "$CLUSTER_SETTINGS")" == "200" ]]; do
   echo "$HELK_LOGSTASH_INFO_TAG Retrying cluster settings"
   sleep 2
 done
@@ -102,7 +102,7 @@ done
 
 # ******** Create Data For Kibana Experience ***************
 echo "$HELK_LOGSTASH_INFO_TAG Setting up additional Kibana/UI experience parameter.."
-until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST $ELASTICSEARCH_ACCESS/logs-endpoint-winevent-sysmon-1990.12.18/_doc/TestHELKDataWindowsSysmon000001 -H 'Content-Type: application/json' -d "$TestHELKDataWindowsSysmon000001")" == "200" ]]; do
+until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST ${ELASTICSEARCH_ACCESS}/logs-endpoint-winevent-sysmon-1990.12.18/_doc/TestHELKDataWindowsSysmon000001 -H 'Content-Type: application/json' -d "$TestHELKDataWindowsSysmon000001")" == "200" ]]; do
   echo "$HELK_LOGSTASH_INFO_TAG Retrying uploading data for kibana experience"
   sleep 2
 done
@@ -114,7 +114,7 @@ if test -f "$plugins_time_file"; then
   plugins_last_time=$(date -d "$(<"$plugins_time_file")" '+%s')
   plugins_current_time=$(date -d "$(<"$plugins_time_file")" '+%s')
   plugins_day_diff=$(( ( plugins_current_time - plugins_last_time )/(60*60*24) ))
-  if [ "$plugins_day_diff" -ge 30 ]; then
+  if [[ "$plugins_day_diff" -ge 30 ]]; then
     plugins_oudated="yes"
     echo "$HELK_LOGSTASH_INFO_TAG Plugins have not been updated in over 30 days.."
   else
@@ -134,16 +134,16 @@ else
   logstash-plugin update
 fi
 # If have not been updated in X time or not installed at all.. then install them
-if [ $plugins_previous_install = "no" ] || [ $plugins_oudated = "yes" ]; then
-	if [ -f "/usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip" ] && [  -f "/usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip" ]; then
+if [[ ${plugins_previous_install} = "no" ]] || [[ ${plugins_oudated} = "yes" ]]; then
+	if [[ -f "/usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip" ]]; then
     echo "$HELK_LOGSTASH_INFO_TAG Installing Logstash plugins via offline package.."
 	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
-	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip
+	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip
+	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip
   else
-    echo "$HELK_LOGSTASH_INFO_TAG Installing logstash plugins over the internet.."
-    logstash-plugin install logstash-codec-avro logstash-codec-es_bulk logstash-codec-cef logstash-codec-gzip_lines logstash-codec-json logstash-codec-json_lines logstash-codec-netflow logstash-codec-nmap logstash-codec-protobuf logstash-filter-alter logstash-filter-bytes logstash-filter-cidr logstash-filter-cipher logstash-filter-clone logstash-filter-csv logstash-filter-de_dot logstash-filter-dissect logstash-filter-dns logstash-filter-elasticsearch logstash-filter-fingerprint logstash-filter-geoip logstash-filter-i18n logstash-filter-jdbc_static logstash-filter-jdbc_streaming logstash-filter-json logstash-filter-json_encode logstash-filter-kv logstash-filter-memcached logstash-filter-metricize logstash-filter-prune logstash-filter-translate logstash-filter-urldecode logstash-filter-useragent logstash-filter-xml logstash-input-beats logstash-input-elasticsearch logstash-input-file logstash-input-jdbc logstash-input-lumberjack logstash-input-snmptrap logstash-input-syslog logstash-input-tcp logstash-input-udp logstash-input-wmi logstash-output-csv logstash-output-elasticsearch logstash-output-email logstash-output-lumberjack logstash-output-nagios logstash-output-stdout logstash-output-syslog logstash-output-tcp logstash-output-udp
-    echo "$HELK_LOGSTASH_INFO_TAG Updating Logstash plugins over the internet.."
-    logstash-plugin update
+    echo "$HELK_ERROR_TAG Logstash plugins not detected.."
+    echo "$HELK_LOGSTASH_INFO_TAG Please open a github ticket"
+    exit 1
   fi
   printf "%s" "$(date +"%Y-%m-%d %T")" > "$plugins_time_file"
 else
@@ -155,17 +155,17 @@ if [[ -z "$LS_JAVA_OPTS" ]]; then
   while true; do
     # Check using more accurate MB
     AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024}' /proc/meminfo)
-    if [ "$AVAILABLE_MEMORY" -ge 900 ] && [ "$AVAILABLE_MEMORY" -le 1000 ]; then
+    if [[ "$AVAILABLE_MEMORY" -ge 900 ]] && [[ "$AVAILABLE_MEMORY" -le 1000 ]]; then
       LS_MEMORY="400m"
       LS_MEMORY_HIGH="1000m"
-    elif [ "$AVAILABLE_MEMORY" -ge 1001 ] && [ "$AVAILABLE_MEMORY" -le 3000 ]; then
+    elif [[ "$AVAILABLE_MEMORY" -ge 1001 ]] && [[ "$AVAILABLE_MEMORY" -le 3000 ]]; then
       LS_MEMORY="700m"
       LS_MEMORY_HIGH="1300m"
-    elif [ "$AVAILABLE_MEMORY" -gt 3000 ]; then
+    elif [[ "$AVAILABLE_MEMORY" -gt 3000 ]]; then
       # Set high & low, so logstash doesn't use everything unnecessarily, it will usually flux up and down in usage -- and doesn't "severely" despite what everyone seems to believe
       LS_MEMORY="$(( AVAILABLE_MEMORY / 4 ))m"
       LS_MEMORY_HIGH="$(( AVAILABLE_MEMORY / 2 ))m"
-      if [ "$AVAILABLE_MEMORY" -gt 31000 ]; then
+      if [[ "$AVAILABLE_MEMORY" -gt 31000 ]]; then
         LS_MEMORY="8000m"
         LS_MEMORY_HIGH="31000m"
       fi
@@ -184,17 +184,17 @@ if [[ -z "$PIPELINE_WORKERS" ]]; then
   # Get total CPUs/cores as reported by OS
   TOTAL_CORES=$(getconf _NPROCESSORS_ONLN 2>/dev/null)
   # try one more way
-  [ -z "$TOTAL_CORES" ] && TOTAL_CORES=$(getconf NPROCESSORS_ONLN)
+  [[ -z "$TOTAL_CORES" ]] && TOTAL_CORES=$(getconf NPROCESSORS_ONLN)
   # Unable to get reported cores
-  if [ -z "$TOTAL_CORES" ]; then
+  if [[ -z "$TOTAL_CORES" ]]; then
     TOTAL_CORES=1
     echo "$HELK_ERROR_TAG unable to get number of CPUs/cores as reported by the OS"
   fi
   # Set workers based on available cores
-  if [ "$TOTAL_CORES" -ge 1 ] && [ "$TOTAL_CORES" -le 3 ]; then
+  if [[ "$TOTAL_CORES" -ge 1 ]] && [[ "$TOTAL_CORES" -le 3 ]]; then
     PIPELINE_WORKERS=1
     # Divide by 2
-  elif [ "$TOTAL_CORES" -ge 4 ]; then
+  elif [[ "$TOTAL_CORES" -ge 4 ]]; then
     PIPELINE_WORKERS="$(( TOTAL_CORES / 2 ))"
   # some unknown number
   else
