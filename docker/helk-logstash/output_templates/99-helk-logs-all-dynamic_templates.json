@@ -1,13 +1,13 @@
 {
-  "order": 51,
-  "index_patterns": [ "logs-endpoint-winevent-*" ],
-  "version": 2019090101,
+  "order": 99,
+  "index_patterns": [ "logs-*" ],
+  "version": 2020042501,
   "mappings": {
+    "dynamic": "true",
     "dynamic_templates": [
       {
-        "param_fields": {
-          "match_pattern": "regex",
-          "match": "^param\\d+$",
+        "strings": {
+          "match_mapping_type": "string",
           "mapping": {
             "type": "text",
             "fields": {

@@ -69,7 +69,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 7500,
+            "ignore_above": 32000,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -80,7 +80,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 7500,
+            "ignore_above": 32000,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -91,7 +91,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 7500,
+            "ignore_above": 32000,
             "type": "keyword"
           }
         }
@@ -101,7 +101,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 7500,
+            "ignore_above": 32000,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -112,7 +112,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 7500,
+            "ignore_above": 32000,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -123,7 +123,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 7500,
+            "ignore_above": 32000,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -134,7 +134,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 7500,
+            "ignore_above": 32000,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -145,7 +145,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 7500,
+            "ignore_above": 32000,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
