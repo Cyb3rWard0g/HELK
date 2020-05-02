@@ -1,0 +1,18 @@
+###################### Filebeat Zeek/Corelight Configuration Example #########################
+# You can find the full configuration reference here:
+# https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-reference-yml.html
+#----------------------------- Input Logs --------------------------------
+filebeat.inputs:
+- type: log
+  enabled: true
+  # Change this to the directory of where your Zeek logs are stored
+  paths:
+    - /usr/share/zeek/logs/*.log
+  #json.keys_under_root: true
+  #fields_under_root: true
+#----------------------------- Kafka output --------------------------------
+output.kafka:
+  # Place your HELK IP(s) here (keep the port).
+  hosts: ["<HELK-IP>:9092"]
+  topic: "zeek"
+  max_message_bytes: 1000000

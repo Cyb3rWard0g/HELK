@@ -1,0 +1,1 @@
+{"attributes":{"timeFieldName":"@timestamp","title":"logs-endpoint-winevent-powershell-*"},"id":"logs-endpoint-winevent-powershell-*","migrationVersion":{"index-pattern":"7.6.0"},"references":[],"type":"index-pattern","updated_at":"2020-04-21T08:46:25.581Z","version":"WzE0LDFd"}

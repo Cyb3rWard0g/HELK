@@ -1,0 +1,642 @@
+{
+  "order": 92,
+  "index_patterns": [ "logs-*" ],
+  "version": 2020041401,
+  "mappings": {
+    "properties": {
+      "dst_ip_addr": {
+        "type": "ip",
+        "copy_to": "any_ip_addr",
+        "fields": {
+          "keyword": {
+            "ignore_above": 1024,
+            "type": "keyword"
+          }
+        }
+      },
+      "dst_ip_public": {
+        "type": "boolean"
+      },
+      "dst_ip_rfc": {
+        "type": "keyword"
+      },
+      "dst_ip_type": {
+        "type": "keyword"
+      },
+      "dst_ip_version": {
+        "type": "keyword"
+      },
+      "dst_is_ipv6": {
+        "type": "boolean"
+      },
+      "dst_nat_ip_addr": {
+        "type": "ip",
+        "copy_to": "any_ip_addr",
+        "fields": {
+          "keyword": {
+            "ignore_above": 1024,
+            "type": "keyword"
+          }
+        }
+      },
+      "dst_nat_ip_public": {
+        "type": "boolean"
+      },
+      "dst_nat_ip_rfc": {
+        "type": "keyword"
+      },
+      "dst_nat_ip_type": {
+        "type": "keyword"
+      },
+      "dst_nat_ip_version": {
+        "type": "keyword"
+      },
+      "dst_nat_is_ipv6": {
+        "type": "boolean"
+      },
+      "src_ip_addr": {
+        "type": "ip",
+        "copy_to": "any_ip_addr",
+        "fields": {
+          "keyword": {
+            "ignore_above": 1024,
+            "type": "keyword"
+          }
+        }
+      },
+      "src_ip_public": {
+        "type": "boolean"
+      },
+      "src_ip_rfc": {
+        "type": "keyword"
+      },
+      "src_ip_type": {
+        "type": "keyword"
+      },
+      "src_ip_version": {
+        "type": "keyword"
+      },
+      "src_is_ipv6": {
+        "type": "boolean"
+      },
+      "src_nat_ip_addr": {
+        "type": "ip",
+        "copy_to": "any_ip_addr",
+        "fields": {
+          "keyword": {
+            "ignore_above": 1024,
+            "type": "keyword"
+          }
+        }
+      },
+      "src_nat_ip_public": {
+        "type": "boolean"
+      },
+      "src_nat_ip_rfc": {
+        "type": "keyword"
+      },
+      "src_nat_ip_type": {
+        "type": "keyword"
+      },
+      "src_nat_ip_version": {
+        "type": "keyword"
+      },
+      "src_nat_is_ipv6": {
+        "type": "boolean"
+      },
+      "meta_dst_ip_geo": {
+        "properties": {
+          "asn": {
+            "type": "integer",
+            "copy_to": "any_ip_geo.asn"
+          },
+          "as_org": {
+            "copy_to": "any_ip_geo.as_org",
+            "type": "text",
+            "analyzer": "standard",
+            "fields": {
+              "keyword": {
+                "eager_global_ordinals": true,
+                "type": "keyword"
+              }
+            }
+          },
+          "country_code2": {
+            "type": "keyword"
+          },
+          "country_code3": {
+            "type": "keyword"
+          },
+          "country_name": {
+            "type": "keyword"
+          },
+          "continent_code": {
+            "type": "keyword"
+          },
+          "region_code": {
+            "type": "keyword"
+          },
+          "region_name": {
+            "type": "keyword"
+          },
+          "city_name": {
+            "type": "keyword"
+          },
+          "postal_code": {
+            "type": "keyword"
+          },
+          "latitude": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "longitude": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "dma_code": {
+            "type": "integer"
+          },
+          "area_code": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "keyword",
+            "index": false
+          },
+          "location": {
+            "type": "geo_point"
+          }
+        }
+      },
+      "meta_dst_nat_ip_geo": {
+        "properties": {
+          "asn": {
+            "type": "integer",
+            "copy_to": "any_ip_geo.asn"
+          },
+          "as_org": {
+            "copy_to": "any_ip_geo.as_org",
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "eager_global_ordinals": true,
+                "type": "keyword"
+              }
+            }
+          },
+          "country_code2": {
+            "type": "keyword"
+          },
+          "country_code3": {
+            "type": "keyword"
+          },
+          "country_name": {
+            "type": "keyword"
+          },
+          "continent_code": {
+            "type": "keyword"
+          },
+          "region_code": {
+            "type": "keyword"
+          },
+          "region_name": {
+            "type": "keyword"
+          },
+          "city_name": {
+            "type": "keyword"
+          },
+          "postal_code": {
+            "type": "keyword"
+          },
+          "latitude": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "longitude": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "dma_code": {
+            "type": "integer"
+          },
+          "area_code": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "keyword",
+            "index": false
+          },
+          "location": {
+            "type": "geo_point"
+          }
+        }
+      },
+      "meta_src_ip_geo": {
+        "properties": {
+          "asn": {
+            "type": "integer",
+            "copy_to": "any_ip_geo.asn"
+          },
+          "as_org": {
+            "copy_to": "any_ip_geo.as_org",
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "eager_global_ordinals": true
+              }
+            }
+          },
+          "country_code2": {
+            "type": "keyword"
+          },
+          "country_code3": {
+            "type": "keyword"
+          },
+          "country_name": {
+            "type": "keyword"
+          },
+          "continent_code": {
+            "type": "keyword"
+          },
+          "region_code": {
+            "type": "keyword"
+          },
+          "region_name": {
+            "type": "keyword"
+          },
+          "city_name": {
+            "type": "keyword"
+          },
+          "postal_code": {
+            "type": "keyword"
+          },
+          "latitude": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "longitude": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "dma_code": {
+            "type": "integer"
+          },
+          "area_code": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "keyword",
+            "index": false
+          },
+          "location": {
+            "type": "geo_point"
+          }
+        }
+      },
+      "meta_src_nat_ip_geo": {
+        "properties": {
+          "asn": {
+            "type": "integer",
+            "copy_to": "any_ip_geo.asn"
+          },
+          "as_org": {
+            "copy_to": "any_ip_geo.as_org",
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "eager_global_ordinals": true,
+                "type": "keyword"
+              }
+            }
+          },
+          "country_code2": {
+            "type": "keyword"
+          },
+          "country_code3": {
+            "type": "keyword"
+          },
+          "country_name": {
+            "type": "keyword"
+          },
+          "continent_code": {
+            "type": "keyword"
+          },
+          "region_code": {
+            "type": "keyword"
+          },
+          "region_name": {
+            "type": "keyword"
+          },
+          "city_name": {
+            "type": "keyword"
+          },
+          "postal_code": {
+            "type": "keyword"
+          },
+          "latitude": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "longitude": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "dma_code": {
+            "type": "integer"
+          },
+          "area_code": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "keyword",
+            "index": false
+          },
+          "location": {
+            "type": "geo_point"
+          }
+        }
+      },
+      "destination": {
+        "properties": {
+          "ip": {
+            "type": "alias",
+            "path": "dst_ip_addr"
+          },
+          "as": {
+            "properties": {
+              "number": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.asn"
+              },
+              "organization": {
+                "properties": {
+                  "name": {
+                    "type": "alias",
+                    "path": "meta_dst_ip_geo.as_org"
+                  }
+                }
+              }
+            }
+          },
+          "geo": {
+            "properties": {
+              "continent_code": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.continent_code"
+              },
+              "country_code2": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.country_code2"
+              },
+              "country_code3": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.country_code3"
+              },
+              "country_name": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.country_name"
+              },
+              "latitude": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.latitude"
+              },
+              "location": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.location"
+              },
+              "longitude": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.longitude"
+              },
+              "postal_code": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.postal_code"
+              },
+              "region_name": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.region_name"
+              },
+              "timezone": {
+                "type": "alias",
+                "path": "meta_dst_ip_geo.timezone"
+              }
+            }
+          },
+          "nat": {
+            "properties": {
+              "ip": {
+                "type": "alias",
+                "path": "dst_nat_ip_addr"
+              },
+              "as": {
+                "properties": {
+                  "number": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.asn"
+                  },
+                  "organization": {
+                    "properties": {
+                      "name": {
+                        "type": "alias",
+                        "path": "meta_dst_nat_ip_geo.as_org"
+                      }
+                    }
+                  }
+                }
+              },
+              "geo": {
+                "properties": {
+                  "continent_code": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.continent_code"
+                  },
+                  "country_code2": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.country_code2"
+                  },
+                  "country_code3": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.country_code3"
+                  },
+                  "country_name": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.country_name"
+                  },
+                  "latitude": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.latitude"
+                  },
+                  "location": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.location"
+                  },
+                  "longitude": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.longitude"
+                  },
+                  "postal_code": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.postal_code"
+                  },
+                  "region_name": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.region_name"
+                  },
+                  "timezone": {
+                    "type": "alias",
+                    "path": "meta_dst_nat_ip_geo.timezone"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "source": {
+        "properties": {
+          "ip": {
+            "type": "alias",
+            "path": "src_ip_addr"
+          },
+          "as": {
+            "properties": {
+              "number": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.asn"
+              },
+              "organization": {
+                "properties": {
+                  "name": {
+                    "type": "alias",
+                    "path": "meta_src_ip_geo.as_org"
+                  }
+                }
+              }
+            }
+          },
+          "geo": {
+            "properties": {
+              "continent_code": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.continent_code"
+              },
+              "country_code2": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.country_code2"
+              },
+              "country_code3": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.country_code3"
+              },
+              "country_name": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.country_name"
+              },
+              "latitude": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.latitude"
+              },
+              "location": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.location"
+              },
+              "longitude": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.longitude"
+              },
+              "postal_code": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.postal_code"
+              },
+              "region_name": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.region_name"
+              },
+              "timezone": {
+                "type": "alias",
+                "path": "meta_src_ip_geo.timezone"
+              }
+            }
+          },
+          "nat": {
+            "properties": {
+              "ip": {
+                "type": "alias",
+                "path": "src_nat_ip_addr"
+              },
+              "as": {
+              "properties": {
+                  "number": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.asn"
+                  },
+                  "organization": {
+                    "properties": {
+                      "name": {
+                        "type": "alias",
+                        "path": "meta_src_nat_ip_geo.as_org"
+                      }
+                    }
+                  }
+                }
+              },
+              "geo": {
+                "properties": {
+                  "continent_code": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.continent_code"
+                  },
+                  "country_code2": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.country_code2"
+                  },
+                  "country_code3": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.country_code3"
+                  },
+                  "country_name": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.country_name"
+                  },
+                  "latitude": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.latitude"
+                  },
+                  "location": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.location"
+                  },
+                  "longitude": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.longitude"
+                  },
+                  "postal_code": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.postal_code"
+                  },
+                  "region_name": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.region_name"
+                  },
+                  "timezone": {
+                    "type": "alias",
+                    "path": "meta_src_nat_ip_geo.timezone"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "order": 990,
+  "index_patterns": [
+    "original-logs-clone-*"
+  ],
+  "version": 2019101801,
+  "settings": {
+    "index": {
+      "codec": "best_compression",
+      "mapping": {
+        "total_fields.limit": "10000"
+      }
+    },
+    "refresh_interval": "35s",
+    "number_of_replicas": 0,
+    "number_of_shards": 5
+  },
+  "mappings": {
+    "dynamic": "true",
+    "dynamic_templates": [
+      {
+        "strings": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "keyword",
+            "doc_values": false,
+            "norms": false
+          }
+        }
+      }
+    ],
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "cloned": {
+        "properties": {
+          "@timestamp": {
+            "type": "date"
+          },
+          "agent": {
+            "properties": {
+              "type": {
+                "type": "keyword"
+              }
+            }
+          },
+          "log_hash": {
+            "type": "keyword",
+            "doc_values": false
+          },
+          "type": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}

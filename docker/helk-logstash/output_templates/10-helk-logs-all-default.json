@@ -1,0 +1,93 @@
+{
+  "order": 10,
+  "index_patterns": [ "logs-*" ],
+  "version": 2020042001,
+  "settings": {
+    "index": {
+      "mapping": {
+        "ignore_malformed": true,
+        "total_fields.limit": "10000",
+        "coerce": true
+      }
+    },
+    "refresh_interval": "20s",
+    "number_of_replicas": 0,
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "dynamic": "true",
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "@version": {
+        "type": "keyword"
+      },
+      "z_original_timestamp": {
+        "type": "date"
+      },
+      "meta_log_tags": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "z_logstash_type": {
+        "enabled": false
+      },
+      "event_original_time": {
+        "type": "date"
+      },
+      "event_recorded_time": {
+        "type": "date"
+      },
+      "event_original_message": {
+        "type": "text",
+        "norms": false
+      },
+      "event_vendor": {
+        "type": "keyword"
+      },
+      "etl_pipeline": {
+        "type": "keyword"
+      },
+      "etl_kafka_consumer_group": {
+        "type": "keyword"
+      },
+      "etl_kafka_key": {
+        "type": "keyword"
+      },
+      "etl_kafka_offset": {
+        "type": "long"
+      },
+      "etl_kafka_partition": {
+        "type": "integer"
+      },
+      "etl_kafka_time": {
+        "type": "date",
+        "format": "epoch_millis"
+      },
+      "etl_kafka_topic": {
+        "type": "keyword"
+      },
+      "etl_processed_time": {
+        "type": "date"
+      },
+      "etl_host_agent_type": {
+        "type": "keyword"
+      },
+      "etl_host_agent_uid": {
+        "type": "keyword"
+      },
+      "etl_version": {
+        "type": "keyword"
+      },
+      "message": {
+        "type": "alias",
+        "path": "event_original_message"
+      }
+    }
+  }
+}

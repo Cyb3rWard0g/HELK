@@ -1,0 +1,11 @@
+output {
+  if [type] == "clone" {
+    elasticsearch {
+      hosts => ["helk-elasticsearch:9200"]
+      index => "original-logs-clone-%{+YYYY.ww}"
+      #document_id => "%{[@metadata][clone][log_hash]}"
+      user => 'elastic'
+      #password => 'elasticpassword'
+    }
+  }
+}
