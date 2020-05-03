@@ -16,16 +16,18 @@ CONFIG_FILE="$ESALERT_HOME/pull-sigma-config.yaml"
 HELK_ERROR_FILE="/tmp/helk_error"
 
 getYamlKey() {
-    python3 -c "import yaml;print(yaml.safe_load(open('$1'))$2)" 2>$HELK_ERROR_FILE
+    python3 -c "import yaml;print(yaml.safe_load(open('$1'))['$2'])" 2>$HELK_ERROR_FILE
 }
 
 updatesAreEnabled(){
-    if test -f $HELK_ERROR_FILE && grep -q FileNotFoundError $HELK_ERROR_FILE; then
-        echo "$HELK_ELASTALERT_INFO_TAG Update control file missing, proceeding..."
+    if test -f $CONFIG_FILE; then
+        echo "$HELK_ELASTALERT_INFO_TAG Update control file exists, proceeding..."
+    else
+        echo "$HELK_ELASTALERT_INFO_TAG Update control file missing, proceeding with update by default..."
         return 0
     fi
 
-    local ALLOW_UPDATES=$(getYamlKey $CONFIG_FILE "['allow_updates']")
+    local ALLOW_UPDATES=$(getYamlKey $CONFIG_FILE "allow_updates")
     if test -f $HELK_ERROR_FILE && grep -q KeyError $HELK_ERROR_FILE; then
         echo "$HELK_ELASTALERT_INFO_TAG Update control setting missing, proceeding..."
         return 0
