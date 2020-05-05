@@ -1,0 +1,37 @@
+{
+  "order": 99,
+  "index_patterns": [ "logs-*" ],
+  "version": 2019090101,
+  "mappings": {
+    "properties": {
+      "any_ip_addr": {
+        "type": "ip"
+      },
+      "any_ip_geo": {
+        "properties": {
+          "asn": {
+            "type": "integer",
+            "doc_values": false
+          },
+          "as_org": {
+            "type": "text",
+            "analyzer": "standard",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      },
+      "related": {
+        "properties": {
+          "ip": {
+            "type": "alias",
+            "path": "any_ip_addr"
+          }
+        }
+      }
+    }
+  }
+}

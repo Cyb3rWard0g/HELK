@@ -6,7 +6,7 @@
 # References:
 # https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
 
-FROM docker.elastic.co/logstash/logstash:7.5.2
+FROM docker.elastic.co/logstash/logstash:7.6.2
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
@@ -18,10 +18,10 @@ RUN printf "%s" "$(date +"%Y-%m-%d %T")" > "${plugins_time_file}"
 RUN chown logstash:logstash "${plugins_time_file}"
 
 COPY --chown=logstash:logstash plugins/helk-offline-logstash-codec_and_filter_plugins.zip /usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
-COPY --chown=logstash:logstash plugins/helk-offline-logstash-input_and_output-plugins.zip /usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip
+COPY --chown=logstash:logstash plugins/helk-offline-logstash-input-plugins.zip /usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip
+COPY --chown=logstash:logstash plugins/helk-offline-logstash-output-plugins.zip /usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip
 RUN logstash-plugin update \
     && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip \
-    && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip \
-    && rm /usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip \
-    && rm /usr/share/logstash/plugins/helk-offline-logstash-input_and_output-plugins.zip \
+    && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip \
+    && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip \
     && rm -f /usr/share/logstash/pipeline/logstash.conf

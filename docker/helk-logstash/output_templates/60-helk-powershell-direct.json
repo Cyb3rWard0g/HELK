@@ -1,0 +1,7 @@
+{
+  "order": 60,
+  "index_patterns" : "logs-endpoint-powershell-direct-*",
+  "version": 2019090201,
+  "mappings":{
+  }
+}

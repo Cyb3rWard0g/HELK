@@ -1,0 +1,12 @@
+{
+  "order": 60,
+  "index_patterns": "logs-endpoint-winevent-security-*",
+  "version": 2019090201,
+  "mappings":{
+    "properties":{
+      "@date_new_time":{"type":"date"},
+      "@date_previous_time":{"type":"date"},
+      "version":{"type":"long"}
+    }
+  }
+}

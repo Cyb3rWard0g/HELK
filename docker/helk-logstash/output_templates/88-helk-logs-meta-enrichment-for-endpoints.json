@@ -1,0 +1,27 @@
+{
+  "order": 88,
+  "index_patterns": [ "logs-endpoint-*" ],
+  "version": 2019052901,
+  "mappings": {
+    "properties": {
+      "meta_process_command_line_has_non_ascii": {
+        "type": "boolean"
+      },
+      "meta_process_command_line_has_net": {
+        "type": "boolean"
+      },
+      "meta_process_command_line_length": {
+        "type": "integer"
+      },
+      "meta_user_name_is_machine": {
+        "type": "boolean"
+      },
+      "meta_user_reporter_name_is_machine": {
+        "type": "boolean"
+      },
+      "meta_target_user_name_is_machine": {
+        "type": "boolean"
+      }
+    }
+  }
+}

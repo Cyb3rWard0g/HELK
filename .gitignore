@@ -11,6 +11,7 @@ helk-logstash/.DS_Store
 .swp
 .tmp
 .test
+.backup
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -18,3 +19,4 @@ __pycache__/
 # HELK Custom Configurations
 *custom*
 /docker/docker-compose.yml
+/docker/helk-nginx/htpasswd.user*
