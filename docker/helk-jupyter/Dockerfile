@@ -3,7 +3,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM cyb3rward0g/jupyter-hunter:0.0.8
+FROM cyb3rward0g/jupyter-hunter:0.0.9
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile Notebooks-Forge Jupyter-Hunt Project."
 

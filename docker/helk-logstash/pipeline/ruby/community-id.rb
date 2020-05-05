@@ -1,3 +1,4 @@
+# Author: Derek Ditch (@dcode), Nate Guagenti (@neu5ron)
 require 'socket'
 require 'digest'
 require 'base64'
@@ -91,7 +92,7 @@ def filter(event)
     end
   end
 
-  # Retreive the fields
+  # Retrieve the fields
   src_ip = event.get("#{@source_ip}")
   src_p = event.get("#{@source_port}").to_i
   dst_ip = event.get("#{@dest_ip}")

@@ -7,6 +7,9 @@
 # Script Author: Dev Dua (@devdua)
 # License: GPL-3.0
 
+HELK_BUILD_VERSION="v0.1.9-alpha03272020"
+HELK_ELK_VERSION="7.6.2"
+
 RED='\033[0;31m'
 CYAN='\033[0;36m'
 WAR='\033[1;33m'
@@ -26,14 +29,14 @@ SYSTEM_KERNEL="$(uname -s)"
 show_banner(){
     # *********** Showing HELK Docker menu options ***************
     echo " "
-    echo "**********************************************"
-    echo "**          HELK - THE HUNTING ELK          **"
-    echo "**                                          **"
-    echo "** Author: Roberto Rodriguez (@Cyb3rWard0g) **"
-    echo "** HELK build version: v0.1.8-alpha01032020 **"
-    echo "** HELK ELK version: 7.5.2                  **"
-    echo "** License: GPL-3.0                         **"
-    echo "**********************************************"
+    echo "***********************************************"
+    echo "**          HELK - THE HUNTING ELK           **"
+    echo "**                                           **"
+    echo "** Author: Roberto Rodriguez (@Cyb3rWard0g)  **"
+    echo "** HELK build version: ${HELK_BUILD_VERSION} **"
+    echo "** HELK ELK version: {$HELK_ELK_VERSION}     **"
+    echo "** License: GPL-3.0                          **"
+    echo "***********************************************"
     echo " "
 }
 

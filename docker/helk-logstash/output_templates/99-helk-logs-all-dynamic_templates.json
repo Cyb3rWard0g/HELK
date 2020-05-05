@@ -1,0 +1,24 @@
+{
+  "order": 99,
+  "index_patterns": [ "logs-*" ],
+  "version": 2020042501,
+  "mappings": {
+    "dynamic": "true",
+    "dynamic_templates": [
+      {
+        "strings": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "ignore_above": 32000,
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

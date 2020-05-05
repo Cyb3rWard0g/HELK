@@ -28,6 +28,7 @@ updatesAreEnabled(){
     fi
 
     local ALLOW_UPDATES=$(getYamlKey $CONFIG_FILE "allow_updates")
+
     if test -f $HELK_ERROR_FILE && grep -q KeyError $HELK_ERROR_FILE; then
         echo "$HELK_ELASTALERT_INFO_TAG Update control setting missing, proceeding..."
         return 0
