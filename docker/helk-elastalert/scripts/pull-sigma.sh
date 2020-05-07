@@ -113,6 +113,7 @@ echo "Translating SIGMA rules to Elastalert format.."
 echo "------------------------------------------------"
 echo " "
 rule_counter=0
+# Windows rules
 for  rule_category in rules/windows/* ; do
     echo " "
     echo "Working on Folder: $rule_category:"
@@ -124,7 +125,9 @@ for  rule_category in rules/windows/* ; do
                     continue
                 else
                     echo "[+++] Processing Windows process creation rule: $rule .."
-                    sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
+                    sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_sysmon_$(basename $rule) "$rule"
+                    # Give unique rule name for sysmon
+                    sed -i 's/^name: /name: Sysmon_/' $ESALERT_HOME/rules/sigma_sysmon_$(basename $rule)
                     sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_$(basename $rule) "$rule"
                     rule_counter=$[$rule_counter +1]
                 fi
@@ -140,6 +143,22 @@ for  rule_category in rules/windows/* ; do
                 rule_counter=$[$rule_counter +1]
             fi
         done
+    fi
+done
+# Apt rules
+echo " "
+echo "Working on Folder: apt:"
+echo "-------------------------------------------------------------"
+for rule in rules/apt/* ; do
+    if SIGMAremoveNearRules "$rule"; then
+        continue
+    else
+        echo "[+++] Processing apt rule: $rule .."
+        sigmac -t elastalert -c tools/config/generic/sysmon.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_sysmon_apt_$(basename $rule) "$rule"
+        # Give unique rule name for sysmon
+        sed -i 's/^name: /name: Sysmon_/' $ESALERT_HOME/rules/sigma_sysmon_apt_$(basename $rule)
+        sigmac -t elastalert -c tools/config/generic/windows-audit.yml -c sigmac-config.yml -o $ESALERT_HOME/rules/sigma_apt_$(basename $rule) "$rule"
+        rule_counter=$[$rule_counter +1]
     fi
 done
 echo "-------------------------------------------------------"
