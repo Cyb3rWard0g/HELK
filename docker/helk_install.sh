@@ -73,7 +73,7 @@ persist_conf() {
     #SYSCTL_VM_MAX_MAP_COUNT=$(cat $HELK_CONF_FILE | grep SYSCTL_VM_MAX_MAP_COUNT | cut -d'=' -f2)
     #HOST_IP=$(cat $HELK_CONF_FILE | grep HOST_IP | cut -d'=' -f2)
     #HELK_BUILD=$(cat $HELK_CONF_FILE | grep HELK_BUILD | cut -d'=' -f2)
-    SUBSCRIPTION_CHOICE=$(cat $HELK_CONF_FILE | grep SUBSCRIPTION_CHOICE | cut -d'=' -f2)
+    #SUBSCRIPTION_CHOICE=$(cat $HELK_CONF_FILE | grep SUBSCRIPTION_CHOICE | cut -d'=' -f2)
     {
       sed -i -e "s/^SYSCTL_VM_MAX_MAP_COUNT[[:blank:]]*=[[:blank:]]*.*/SYSCTL_VM_MAX_MAP_COUNT=$SYSCTL_VM_MAX_MAP_COUNT/" $HELK_CONF_FILE
       sed -i -e "s/^SYSCTL_VM_SWAPPINESS[[:blank:]]*=[[:blank:]]*.*/SYSCTL_VM_SWAPPINESS=$SYSCTL_VM_SWAPPINESS/" $HELK_CONF_FILE
