@@ -58,16 +58,6 @@ TestHELKDataWindowsSysmon000001='{ "user_reporter_name": "SYSTEM", "task": "Netw
 
 KIBANA_INDEX_PRIORITY='{"index.priority":100}'
 
-# ******** Set Trial License Variables ***************
-if [[ -n "$ELASTIC_PASSWORD" ]]; then
-  # ****** Updating Pipeline configs ***********
-  for config in /usr/share/logstash/pipeline/*-output.conf
-  do
-      echo -e "${HELK_INFO_TAG} Updating pipeline config $config..."
-      sed -i "s/\(#\)\{0,1\}password \=>.*$/password \=> \'${ELASTIC_PASSWORD}\'/g" "${config}"
-  done
-fi
-
 # *********** Check if Elasticsearch is up ***************
 while true
   do

@@ -72,17 +72,6 @@ fi
 
 # ******** Checking License Type ***************
 ENVIRONMENT_VARIABLES=$(env)
-XPACK_LICENSE_TYPE="$(echo ${ENVIRONMENT_VARIABLES} | grep -oE 'xpack.license.self_generated.type=[^ ]*' | sed s/.*=//)"
-
-# ******** Set Trial License Variables ***************
-if [[ ${XPACK_LICENSE_TYPE} == "trial" ]]; then
-  # *********** HELK ES Password ***************
-  if [[ -z "$ELASTIC_PASSWORD" ]]; then
-    export ELASTIC_PASSWORD=elasticpassword
-  fi
-fi
-
-echo -e "${HELK_INFO_TAG} Setting Elastic license to $XPACK_LICENSE_TYPE"
 
 # ********** Starting Elasticsearch *****************
 echo -e "${HELK_INFO_TAG} Running docker-entrypoint script.."
