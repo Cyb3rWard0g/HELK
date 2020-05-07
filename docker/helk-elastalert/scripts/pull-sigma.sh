@@ -79,6 +79,7 @@ function getUpdates() {
         if [[ $SIGMA_RULES_AVAILABLE == "YES" ]]; then
             echo "[+++++++++] Elastalert rules folder has potentially old SIGMA rules.."
             find $ESALERT_HOME/rules/ -type f -not -name "helk_*" -delete
+            find $ESALERT_HOME/rules/ -type f -not -name "custom_*" -delete
         fi
     elif [ $REMOTE = $BASE ]; then
         echo "[++++++] Need to push"
