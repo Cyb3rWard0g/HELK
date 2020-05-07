@@ -146,7 +146,7 @@ services:
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
       KAFKA_CREATE_TOPICS: winlogbeat, winevent, SYSMON_JOIN, filebeat, zeek
-      KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
+      KAFKA_HEAP_OPTS: -Xmx1G -Xms256M
       LOG_RETENTION_HOURS: 4
     ports:
       - "9092:9092"

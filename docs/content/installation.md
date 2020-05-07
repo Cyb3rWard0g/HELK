@@ -82,7 +82,6 @@ sudo ./helk_install.sh
  
 Enter build choice [ 1 - 4]: 2
 [HELK-INSTALLATION-INFO] HELK build set to 2
-[HELK-INSTALLATION-INFO] Set HELK elastic subscription (basic or trial): basic
 [HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: 10.66.6.35
 
 [HELK-INSTALLATION-INFO] Please make sure to create a custom Kibana password and store it securely for future use.

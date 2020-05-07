@@ -44,23 +44,19 @@ get_persist_conf() {
 }
 
 # *********** Get installation compose-file ***********
-echo -e "${CYAN}${HELK_INFO_TAG}${STD} The following were the HELK install choices and their corresponding docker compose files with the Basic/Trial license:"
+echo -e "${CYAN}${HELK_INFO_TAG}${STD} The following were the HELK install choices and their corresponding docker compose files:"
 echo " "
-echo -e "${CYAN}1.${STD}KAFKA + KSQL + ELK + NGNIX (Basic|Trial):"
+echo -e "${CYAN}1.${STD}KAFKA + KSQL + ELK + NGNIX:"
 echo "'helk-kibana-analysis-basic.yml'"
-echo "'helk-kibana-analysis-trial.yml'"
 echo " "
-echo -e "${CYAN}2.${STD}KAFKA + KSQL + ELK + NGNIX + ELASTALERT (Basic|Trial):"
+echo -e "${CYAN}2.${STD}KAFKA + KSQL + ELK + NGNIX + ELASTALERT:"
 echo "'helk-kibana-analysis-alert-basic.yml'"
-echo "'helk-kibana-analysis-alert-trial.yml'"
 echo " "
-echo -e "${CYAN}3.${STD}KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER (Basic|Trial):"
+echo -e "${CYAN}3.${STD}KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER:"
 echo "'helk-kibana-notebook-analysis-basic.yml'"
-echo "'helk-kibana-notebook-analysis-trial.yml'"
 echo " "
-echo -e "${CYAN}4.${STD}KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT (Basic|Trial):"
+echo -e "${CYAN}4.${STD}KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT:"
 echo "'helk-kibana-notebook-analysis-alert-basic.yml'"
-echo "'helk-kibana-notebook-analysis-alert-trial.yml'"
 echo " "
 get_persist_conf
 while true; do
