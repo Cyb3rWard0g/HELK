@@ -1,0 +1,255 @@
+{
+  "order": 50,
+  "index_patterns": [ "logs-endpoint-winevent-*" ],
+  "version": 2019090101,
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "cli_n_file_analyzer": {
+          "type": "custom",
+          "filter": [ "case_change_only_delim_filter", "three_or_more_tokenizer_limit_filter", "cli_n_file_word_delim_filter", "two_or_more_tokenizer_limit_filter", "lowercase", "unique" ],
+          "tokenizer": "standard"
+        }
+      },
+      "filter": {
+        "cli_n_file_word_delim_filter": {
+          "type": "word_delimiter",
+          "generate_word_parts": true,
+          "split_on_case_change": true,
+          "split_on_numerics": false,
+          "stem_english_possessive": false,
+          "generate_number_parts": true,
+          "preserve_original": true
+        },
+        "case_change_only_delim_filter": {
+          "type": "word_delimiter",
+          "generate_word_parts": true,
+          "split_on_case_change": true,
+          "split_on_numerics": false,
+          "stem_english_possessive": false,
+          "generate_number_parts": false,
+          "preserve_original": true
+        },
+        "two_or_more_tokenizer_limit_filter": {
+          "type": "length",
+          "min": 2
+        },
+        "three_or_more_tokenizer_limit_filter": {
+          "type": "length",
+          "min": 3
+        }
+      },
+      "normalizer": {
+        "lowercase_normalizer": {
+          "type": "custom",
+          "char_filter": [ ],
+          "filter": [ "lowercase" ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties":{
+      "event_id": {
+        "type":"long"
+      },
+      "record_number":{
+        "type":"long"
+      },
+      "keywords": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "file_name": {
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 32000,
+            "eager_global_ordinals": true,
+            "type": "keyword"
+          }
+        }
+      },
+      "logon_process_name": {
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 32000,
+            "eager_global_ordinals": true,
+            "type": "keyword"
+          }
+        }
+      },
+      "object_name": {
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 32000,
+            "type": "keyword"
+          }
+        }
+      },
+      "process_command_line": {
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 32000,
+            "eager_global_ordinals": true,
+            "type": "keyword"
+          }
+        }
+      },
+      "process_current_directory": {
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 32000,
+            "eager_global_ordinals": true,
+            "type": "keyword"
+          }
+        }
+      },
+      "process_parent_path": {
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 32000,
+            "eager_global_ordinals": true,
+            "type": "keyword"
+          }
+        }
+      },
+      "process_parent_command_line": {
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 32000,
+            "eager_global_ordinals": true,
+            "type": "keyword"
+          }
+        }
+      },
+      "process_path": {
+        "analyzer": "cli_n_file_analyzer",
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "ignore_above": 32000,
+            "eager_global_ordinals": true,
+            "type": "keyword"
+          }
+        }
+      },
+      "object_access_mask": {
+        "type": "keyword"
+      },
+      "process_id": {
+        "type":"long"
+      },
+      "process_id_orig": {
+        "type":"keyword"
+      },
+      "process_parent_id": {
+        "type":"long"
+      },
+      "process_parent_id_orig": {
+        "type":"keyword"
+      },
+      "process_granted_access": {
+        "type": "long"
+      },
+      "process_granted_access_orig": {
+        "type": "keyword"
+      },
+      "reporter_logon_id": {
+        "type": "long"
+      },
+      "reporter_logon_id_orig": {
+        "type": "keyword"
+      },
+      "target_process_id": {
+        "type": "long"
+      },
+      "target_process_id_orig": {
+        "type": "keyword"
+      },
+      "thread_id": {
+        "type": "long"
+      },
+      "thread_id_orig": {
+        "type": "keyword"
+      },
+      "thread_new_id": {
+        "type": "long"
+      },
+      "thread_new_id_orig": {
+        "type": "keyword"
+      },
+      "user_logon_id": {
+        "type": "long"
+      },
+      "user_logon_id_orig": {
+        "type": "keyword"
+      },
+      "user_session_id": {
+        "type":"long"
+      },
+      "user_session_id_orig": {
+        "type":"keyword"
+      },
+      "NewProcessId": {
+        "type": "long"
+      },
+      "NewProcessId_orig": {
+        "type": "keyword"
+      },
+      "ProcessId": {
+        "type": "long"
+      },
+      "ProcessId_orig": {
+        "type": "keyword"
+      },
+      "SubjectLogonId": {
+        "type": "long"
+      },
+      "SubjectLogonId_orig": {
+        "type": "keyword"
+      },
+      "TargetLogonId": {
+        "type": "long"
+      },
+      "TargetLogonId_orig": {
+        "type": "keyword"
+      },
+      "TargetProcessId": {
+        "type": "long"
+      },
+      "TargetProcessId_orig": {
+        "type": "keyword"
+      },
+      "ParentProcessId": {
+        "type": "long"
+      },
+      "ParentProcessId_orig": {
+        "type": "keyword"
+      },
+      "SourceProcessId": {
+        "type": "long"
+      },
+      "SourceProcessId_orig": {
+        "type": "keyword"
+      }
+    }
+  }
+}

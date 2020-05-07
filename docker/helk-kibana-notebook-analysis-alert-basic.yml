@@ -22,6 +22,7 @@ services:
       - node.name=helk-1
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=false
+      #- "HELK_ES_MEMORY=-Xms$2g -Xmx2g"
     ulimits:
       memlock:
         soft: -1
@@ -58,6 +59,12 @@ services:
       - "5044:5044"
       - "8531:8531"
       - "3515:3515"
+      - "5514:5514"
+      - "8515:8515"
+      - "8516:8516"
+      - "5514:5514/udp"
+      - "8515:8515/udp"
+      - "8516:8516/udp"
     restart: always
     depends_on:
       - helk-kibana
@@ -138,7 +145,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: winlogbeat, winevent, SYSMON_JOIN, filebeat
+      KAFKA_CREATE_TOPICS: winlogbeat, winevent, SYSMON_JOIN, filebeat, zeek
       KAFKA_HEAP_OPTS: -Xmx1G -Xms1G
       LOG_RETENTION_HOURS: 4
     ports:

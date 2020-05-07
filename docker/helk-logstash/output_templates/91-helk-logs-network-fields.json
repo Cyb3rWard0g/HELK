@@ -1,0 +1,69 @@
+{
+  "order": 91,
+  "index_patterns": [ "logs-*" ],
+  "version": 2019090201,
+  "mappings": {
+    "properties": {
+      "dst_port": {
+        "type": "long"
+      },
+      "dst_nat_port": {
+        "type": "long"
+      },
+      "src_port": {
+        "type": "long"
+      },
+      "src_nat_port": {
+        "type": "long"
+      },
+      "fingerprint_network_community_id": {
+        "type": "keyword"
+      },
+      "network_application_name": {
+        "type": "keyword"
+      },
+      "network_application_protocol": {
+        "type": "keyword"
+      },
+      "network_protocol": {
+        "type": "keyword"
+      },
+      "destination": {
+        "properties": {
+          "port": {
+            "type": "alias",
+            "path": "dst_port"
+          }
+        }
+      },
+      "source": {
+        "properties": {
+          "port": {
+            "type": "alias",
+            "path": "src_port"
+          }
+        }
+      },
+      "network": {
+        "properties": {
+          "application": {
+            "type": "alias",
+            "path": "network_application_name"
+          },
+          "community_id": {
+            "type": "alias",
+            "path": "fingerprint_network_community_id"
+          },
+          "protocol": {
+            "type": "alias",
+            "path": "network_application_protocol"
+          },
+          "transport": {
+            "type": "alias",
+            "path": "network_protocol"
+          }
+        }
+      }
+    }
+  }
+}

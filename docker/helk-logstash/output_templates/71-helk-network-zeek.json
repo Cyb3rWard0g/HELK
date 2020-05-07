@@ -1,0 +1,7 @@
+{
+  "order": 71,
+  "index_patterns": [ "logs-network-zeek-*" ],
+  "version": 2019092401,
+  "mappings":{
+  }
+}

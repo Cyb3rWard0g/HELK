@@ -1,0 +1,24 @@
+{
+  "order": 51,
+  "index_patterns": [ "logs-endpoint-winevent-*" ],
+  "version": 2019090101,
+  "mappings": {
+    "dynamic_templates": [
+      {
+        "param_fields": {
+          "match_pattern": "regex",
+          "match": "^param\\d+$",
+          "mapping": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "ignore_above": 32000,
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "order": 11,
+  "index_patterns": [ "indexme-zeek-*" ],
+  "version": 2020050201,
+  "settings": {
+    "index": {
+      "mapping": {
+        "ignore_malformed": true,
+        "total_fields.limit": "5000",
+        "coerce": true
+      }
+    },
+    "refresh_interval": "30s",
+    "number_of_replicas": 0,
+    "number_of_shards": 1
+  },
+  "mappings": {
+    "dynamic": "true",
+    "dynamic_templates": [
+      {
+        "strings": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "ignore_above": 12048,
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "id.orig_h": {
+        "type": "ip"
+      },
+      "id.resp_h": {
+        "type": "ip"
+      }
+    }
+  }
+}

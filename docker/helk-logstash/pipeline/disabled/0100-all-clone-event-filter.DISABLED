@@ -1,0 +1,54 @@
+# HELK All clone event conf
+# HELK build Stage: Alpha
+# Author: Nate Guagenti (@neu5ron)
+# License: GPL-3.0
+
+#TODO: File needs revisited after changes to `1010-winevent-winlogbeats-filter.conf`
+
+filter {
+
+  ## Only clone events that have been previously hashed and not mitre attack matrix
+  if [@metadata][log_hash] and [@metadata][helk_input_source] != "mitre_attack" {
+    clone {
+      clones => [ "clone" ]
+      add_field => {
+        "[cloned][agent][type]" => "%{[agent][type]}"
+        "[@metadata][cloned][etl_processed_time]" => "%{etl_processed_time}"
+        "[cloned][@timestamp]" => "%{@timestamp}"
+        "[cloned][message]" => "%{message}"
+        "[@metadata][helk_parsed]" => "no"
+      }
+      remove_field =>  [
+        "@timestamp",
+        "[agent][type]",
+        "etl_pipeline",
+        "etl_processed_time",
+        "event_original_message",
+        "message",
+        "meta_log_tags",
+        "event_original_time"
+      ]
+    }
+    if [type] == "clone" {
+      # create a full fledge hash/clone
+      #TODO:good luck creating a full fledge clone without removing empheral agent ids and event.created and all sorts of other things
+      #fingerprint {
+      #  concatenate_all_fields => true
+      #  target => "[@metadata][clone][log_hash]"
+      #  method => "SHA1"
+      #  add_field => {
+      #    "[cloned][log_hash]" => "%{[@metadata][log_hash]}"
+      #  }
+      #}
+      mutate {
+        rename => { "type" => "[cloned][type]" }
+      }
+      # rewrite timestamp
+      date {
+        match => [ "[@metadata][cloned][etl_processed_time]", "ISO8601" ]
+        target => "@timestamp"
+      }
+    }
+  }
+
+}

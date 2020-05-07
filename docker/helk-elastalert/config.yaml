@@ -20,4 +20,4 @@ alert_time_limit:
 writeback_index: elastalert_status
 alert_text: "Index: {0} \nEvent_Timestamp: {1} \nBeat_Name: {2} \nUser_Name: {3} \nHost_Name: {4} \nLog_Name: {5} \nOriginal_Message: \n\n{6}"
 alert_text_type: alert_text_only
-alert_text_args: ["_index","@timestamp","beat.name","user_name","host_name","log_name","z_original_message"]
+alert_text_args: ["_index","@timestamp","beat_name","user_name","host_name","log_name","event_original_message"]

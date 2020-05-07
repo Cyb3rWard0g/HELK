@@ -94,10 +94,10 @@ network.host: 0.0.0.0
 #action.destructive_requires_name: true
 
 #https://www.elastic.co/subscriptions
-# The images are available in three different configurations or "flavors". 
-# The basic flavor, which is the default, ships with X-Pack Basic features pre-installed 
-# and automatically activated with a free licence. The platinum flavor features all X-Pack 
-# functionally under a 30-day trial licence. The oss flavor does not include X-Pack, 
+# The images are available in three different configurations or "flavors".
+# The basic flavor, which is the default, ships with X-Pack Basic features pre-installed
+# and automatically activated with a free licence. The platinum flavor features all X-Pack
+# functionally under a 30-day trial licence. The oss flavor does not include X-Pack,
 # and contains only open-source Elasticsearch.
 
 bootstrap.memory_lock: true
@@ -106,3 +106,6 @@ discovery.type: single-node
 
 #https://www.elastic.co/guide/en/elasticsearch/reference/current/monitoring-settings.html
 xpack.monitoring.collection.enabled: true
+
+# fix max_clause_count
+indices.query.bool.max_clause_count: 4096
