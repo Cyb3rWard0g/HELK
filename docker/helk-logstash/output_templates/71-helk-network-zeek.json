@@ -1,7 +1,77 @@
 {
   "order": 71,
   "index_patterns": [ "logs-network-zeek-*" ],
-  "version": 2019092401,
-  "mappings":{
+  "version": 2020051201,
+  "mappings": {
+     "properties": {
+      "zeek_id_cert_chain_fuids": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_client_cert_chain_fuids": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_client_cert_fuid": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_conn": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_fid": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_fuid": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_fuids": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_id": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_orig_fuids": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_parent_fuid": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_related_fuids": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_resp_fuids": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_server_cert_fuid": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_tunnel_parents": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_uid": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_uids": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      },
+      "zeek_id_uuid": {
+        "type": "keyword",
+        "copy_to": "any_event_id"
+      }
+    }   
   }
 }

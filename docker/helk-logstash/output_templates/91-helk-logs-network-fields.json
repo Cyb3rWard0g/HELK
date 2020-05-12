@@ -28,41 +28,13 @@
       "network_protocol": {
         "type": "keyword"
       },
-      "destination": {
-        "properties": {
-          "port": {
-            "type": "alias",
-            "path": "dst_port"
-          }
-        }
+      "network_inner_vlan_id": {
+        "type": "integer",
+        "copy_to": "any_vlan_id"
       },
-      "source": {
-        "properties": {
-          "port": {
-            "type": "alias",
-            "path": "src_port"
-          }
-        }
-      },
-      "network": {
-        "properties": {
-          "application": {
-            "type": "alias",
-            "path": "network_application_name"
-          },
-          "community_id": {
-            "type": "alias",
-            "path": "fingerprint_network_community_id"
-          },
-          "protocol": {
-            "type": "alias",
-            "path": "network_application_protocol"
-          },
-          "transport": {
-            "type": "alias",
-            "path": "network_protocol"
-          }
-        }
+      "network_outer_vlan_id": {
+        "type": "integer",
+        "copy_to": "any_vlan_id"
       }
     }
   }

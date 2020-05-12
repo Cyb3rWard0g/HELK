@@ -24,13 +24,20 @@
           }
         }
       },
-      "related": {
-        "properties": {
-          "ip": {
-            "type": "alias",
-            "path": "any_ip_addr"
-          }
-        }
+      "any_event_id": {
+        "type": "keyword"
+      },
+      "any_hash": {
+        "type": "keyword"
+      },
+      "any_mac_addr": {
+        "type": "keyword"
+      },
+      "any_user": {
+        "type": "keyword"
+      },
+      "any_vlan_id": {
+        "type": "integer"
       }
     }
   }
