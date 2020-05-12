@@ -99,7 +99,7 @@ logging.dest: /usr/share/kibana/config/kibana_logs.log
 #ops.interval: 5000
 
 # Experimental Visualizations:
-"vega": {"enableExternalUrls": true}
+#"vega": {"enableExternalUrls": true}
 
 # Default Kibana configuration from kibana-docker.
 xpack.monitoring.ui.container.elasticsearch.enabled: true
@@ -115,6 +115,7 @@ xpack.reporting.capture.browser.chromium.disableSandbox: true
 
 # Plugins to disable
 xpack.apm.enabled: false
+xpack.canvas.enabled: false
 xpack.ml.enabled: false
-xpack.uptime.enabled: false
 xpack.siem.enabled: false
+xpack.uptime.enabled: false
