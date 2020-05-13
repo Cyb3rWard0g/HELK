@@ -1,7 +1,7 @@
 {
   "order": 91,
   "index_patterns": [ "logs-*" ],
-  "version": 2019090201,
+  "version": 2020051301,
   "mappings": {
     "properties": {
       "dst_port": {
@@ -17,6 +17,21 @@
         "type": "long"
       },
       "fingerprint_network_community_id": {
+        "type": "keyword"
+      },
+      "fingerprint_ip_addr_any_dst_and_src": {
+        "type": "keyword"
+      },
+      "fingerprint_ip_addr_pair_dst_and_src": {
+        "type": "keyword"
+      },
+      "fingerprint_ip_addr_pair_src_and_dst": {
+        "type": "keyword"
+      },
+      "meta_src_ip_addr_equals_dst_ip_addr": {
+        "type": "boolean"
+      },
+      "fingerprint_network_4tuple": {
         "type": "keyword"
       },
       "network_application_name": {
