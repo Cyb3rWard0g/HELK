@@ -9,9 +9,10 @@ def filter(event)
   # Copy original value before modifying
   pid_orig = pid
 
-  # is hex
-  if pid.start_with?( "0x" )
+  if !pid.nil? && !pid.empty?
+    if pid.to_s.start_with?( "0x" )
       pid = pid.gsub(/^0x/,"").to_s.hex
+    end
   end
 
   event.set("#{@pid}_orig", pid_orig)
