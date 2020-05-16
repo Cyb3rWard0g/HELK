@@ -6,7 +6,7 @@
 # References:
 # https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
 
-FROM docker.elastic.co/logstash/logstash:7.6.2
+FROM docker.elastic.co/logstash/logstash:7.7.0
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
@@ -24,4 +24,5 @@ RUN logstash-plugin update \
     && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip \
     && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip \
     && logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip \
-    && rm -f /usr/share/logstash/pipeline/logstash.conf
+    && rm -f /usr/share/logstash/pipeline/logstash.conf \
+    && rm plugins/helk-offline*
