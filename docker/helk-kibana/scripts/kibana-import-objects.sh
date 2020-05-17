@@ -32,9 +32,9 @@ function importFile
         created=$((created+1))
         echo "Successfully imported ${item} named ${file}"
     else
-        if [[ $retry -ne 1 ]]; then
+        if [[ ${retry} -ne 1 ]]; then
             fail="${DIR}/${item}/${file}"
-            ARRAY+=($fail)
+            ARRAY+=(${fail})
         else
             failed=$((failed+1))
         fi
@@ -43,14 +43,14 @@ function importFile
 }
 
 #Go to the right directory to find objects
-cd $DIR
+cd ${DIR}
 
 for item in config map canvas-workpad canvas-element lens query index-pattern search visualization dashboard url; do
     cd ${item} 2>/dev/null || continue
 
     for file in *.ndjson; do
         echo "$file"
-        importFile $file 0
+        importFile ${file} 0
     done
     cd ..
 done
@@ -62,7 +62,7 @@ echo "length of array is ${#ARRAY[@]}"
 if [[ "${#ARRAY[@]}" -ne "0" ]]; then
     for file in "${ARRAY[@]}"; do
         echo "${file}"
-        importFile $file 1
+        importFile ${file} 1
     done
 fi
 
