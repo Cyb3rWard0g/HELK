@@ -30,7 +30,7 @@ function importFile
     result=$(echo "${response}" | grep -w "success" | cut -d ',' -f 1 | cut -d ':' -f 2 | sed -E 's/[^-[:alnum:]]//g')
     if [[ "${result}" == "true" ]]; then
         created=$((created+1))
-        echo "Successfuly imported ${item} named ${file}"
+        echo "Successfully imported ${item} named ${file}"
     else
         if [[ $retry -ne 1 ]]; then
             fail="${DIR}/${item}/${file}"
@@ -42,7 +42,6 @@ function importFile
     fi
 }
 
-echo "Please be patient as we import 100+ custom dashboards, visualizations, and searches..."
 #Go to the right directory to find objects
 cd $DIR
 
