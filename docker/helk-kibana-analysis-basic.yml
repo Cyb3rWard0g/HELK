@@ -118,7 +118,7 @@ services:
     networks:
       helk:
   helk-zookeeper:
-    image: otrf/helk-zookeeper:2.4.0
+    image: otrf/helk-zookeeper:2.5.0
     container_name: helk-zookeeper
     logging:
       driver: "json-file"
@@ -131,7 +131,7 @@ services:
     networks:
       helk:
   helk-kafka-broker:
-    image: otrf/helk-kafka-broker:2.4.0
+    image: otrf/helk-kafka-broker:2.5.0
     container_name: helk-kafka-broker
     logging:
       driver: "json-file"
