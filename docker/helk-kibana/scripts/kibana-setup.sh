@@ -34,22 +34,9 @@ until [[ "$(curl -s -o /dev/null -w "%{http_code}" "${KIBANA_ACCESS}/status")" =
 done
 echo "$HELK_INFO_TAG Kibana server is up."
 
-# *********** Importing saved objetcs into Kibana ***************
-echo "$HELK_INFO_TAG Importing all the saved objects..."
+# *********** Importing saved objects into Kibana ***************
+echo "$HELK_INFO_TAG Importing the Kibana settings and saved objects (visualizations, dashboards, etc).."
 /usr/share/kibana/scripts/kibana-import-objects.sh
-
-# *********** Set URL session store *********************
-echo "$HELK_INFO_TAG Setting URL session store"
-curl -X POST -u "${ELASTICSEARCH_CREDS}" "$KIBANA_HOST/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
-{
-  \"changes\":{
-      \"state:storeInSessionStorage\": true,
-      \"dashboard:defaultDarkTheme\": true,
-      \"theme:darkMode\": true,
-      \"defaultIndex\": \"logs-*\"
-    }
-}
-"
 
 # ******** Set Elastic License Variables ***************
 if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; then
@@ -91,7 +78,7 @@ if [[ -n "$ELASTICSEARCH_PASSWORD" ]] && [[ -n "$ELASTICSEARCH_USERNAME" ]]; the
   '
 fi
 
-# ******** Modifiying Kibana Interface - HELK Logo **********
+# ******** Modifying Kibana Interface - HELK Logo **********
 #echo "[+++] Updating Kibana Logo..."
 #cp -i /usr/share/kibana/custom/HELK.png /usr/share/kibana/optimize/bundles/HELK.png
 #cp -i /usr/share/kibana/optimize/bundles/commons.style.css /usr/share/kibana/optimize/bundles/commons.style.css_backup
