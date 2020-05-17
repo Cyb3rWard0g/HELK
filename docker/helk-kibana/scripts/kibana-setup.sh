@@ -43,7 +43,10 @@ echo "$HELK_INFO_TAG Setting URL session store"
 curl -X POST -u "${ELASTICSEARCH_CREDS}" "$KIBANA_HOST/api/kibana/settings" -H 'Content-Type: application/json' -H 'kbn-xsrf: true' -d"
 {
   \"changes\":{
-      \"state:storeInSessionStorage\": true
+      \"state:storeInSessionStorage\": true,
+      \"dashboard:defaultDarkTheme\": true,
+      \"theme:darkMode\": true,
+      \"defaultIndex\": \"logs-*\"
     }
 }
 "
