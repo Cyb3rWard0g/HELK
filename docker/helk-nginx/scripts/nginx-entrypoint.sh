@@ -18,11 +18,11 @@ until curl -s helk-elasticsearch:9200 -o /dev/null; do
     sleep 1
 done
 
-# ************* Creating JupyterHub Certificate ***********
+# ************* Creating SSL Certificate ***********
 openssl req \
     -x509 \
     -nodes \
-    -days 365 \
+    -days 730 \
     -newkey rsa:2048 \
     -keyout /etc/ssl/private/HELK_Nginx.key \
     -out /etc/ssl/certs/HELK_Nginx.crt \
