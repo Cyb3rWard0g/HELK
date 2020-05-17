@@ -35,7 +35,7 @@ done
 echo "$HELK_INFO_TAG Kibana server is up."
 
 # *********** Importing saved objects into Kibana ***************
-echo "$HELK_INFO_TAG Importing the Kibana settings and saved objects (visualizations, dashboards, etc).."
+echo "$HELK_INFO_TAG Importing all the saved objects..."
 /usr/share/kibana/scripts/kibana-import-objects.sh
 
 # ******** Set Elastic License Variables ***************
