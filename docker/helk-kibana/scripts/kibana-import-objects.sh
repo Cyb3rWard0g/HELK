@@ -8,6 +8,7 @@
 
 DIR=/usr/share/kibana/objects
 ARRAY=()
+DEFAULT_KIBANA_CONFIG_FILE_NAME="default-kibana-config.ndjson"
 
 created=0
 failed=0
@@ -21,12 +22,25 @@ function importFile
     local file=${1}
     local retry=${2}
 
-    response=$(
-    curl -sk -XPOST -u "${ELASTICSEARCH_CREDS}" \
-        "${KIBANA_HOST}/api/saved_objects/_import?overwrite=true" \
-        -H "kbn-xsrf: true" \
-        --form file=@"${file}"
-    )
+    # Setting configs works different, also want to set one whole file versus multiple that could have conflicts / cause confusion 
+    if [[ "$item" == "config" ]] && [[ "$file" == "$DEFAULT_KIBANA_CONFIG_FILE_NAME" ]]; then
+        #python 2 requires 'json.dumps', because json is returned as unicode and the kibana settings api does not support JSON like normal 
+        kibana_attributes=$(< "${file}" python -c "import sys, json; print(json.dumps(json.load(sys.stdin)['attributes']))")
+        response=$(
+        curl -s -XPOST "${KIBANA_HOST}/api/kibana/settings" \
+            -H "kbn-xsrf: true" \
+            -H "Content-Type: application/json" \
+            -d "@-" \
+            <<< "{ \"changes\": $kibana_attributes }"
+        )
+    else
+        response=$(
+        curl -sk -XPOST -u "${ELASTICSEARCH_CREDS}" \
+            "${KIBANA_HOST}/api/saved_objects/_import?overwrite=true" \
+            -H "kbn-xsrf: true" \
+            --form file=@"${file}"
+        )
+    fi
     result=$(echo "${response}" | grep -w "success" | cut -d ',' -f 1 | cut -d ':' -f 2 | sed -E 's/[^-[:alnum:]]//g')
     if [[ "${result}" == "true" ]]; then
         created=$((created+1))
