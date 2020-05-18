@@ -1,7 +1,10 @@
 {
   "order": 10,
-  "index_patterns": [ "logs-*" ],
-  "version": 2020042001,
+  "index_patterns": [
+    "logs-*",
+    "indexme-*"
+  ],
+  "version": 2020051801,
   "settings": {
     "index": {
       "mapping": {

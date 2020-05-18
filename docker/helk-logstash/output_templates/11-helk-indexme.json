@@ -1,15 +1,8 @@
 {
   "order": 11,
   "index_patterns": [ "indexme-*" ],
-  "version": 2019073001,
+  "version": 2020051801,
   "settings": {
-    "index": {
-      "mapping": {
-        "ignore_malformed": true,
-        "total_fields.limit": "5000",
-        "coerce": true
-      }
-    },
     "refresh_interval": "30s",
     "number_of_replicas": 0,
     "number_of_shards": 1
