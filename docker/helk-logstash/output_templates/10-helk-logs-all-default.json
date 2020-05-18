@@ -26,7 +26,7 @@
       "z_original_timestamp": {
         "type": "date"
       },
-      "meta_log_tags": {
+      "etl_info_tags": {
         "type": "text",
         "fields": {
           "keyword": {
@@ -87,6 +87,10 @@
       "message": {
         "type": "alias",
         "path": "event_original_message"
+      },
+      "meta_log_tags": {
+        "type": "alias",
+        "path": "etl_info_tags"
       }
     }
   }
