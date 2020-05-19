@@ -577,7 +577,6 @@ install_helk() {
   set_helk_build
   set_network
   set_kibana_ui_password
-  set_elasticsearch_password
   prepare_helk
   persist_conf
   set_install_info
