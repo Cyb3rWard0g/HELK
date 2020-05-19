@@ -25,7 +25,7 @@ filter {
         "etl_processed_time",
         "event_original_message",
         "message",
-        "meta_log_tags",
+        "etl_info_tags",
         "event_original_time"
       ]
     }

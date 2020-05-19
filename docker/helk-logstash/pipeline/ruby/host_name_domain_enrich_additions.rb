@@ -107,7 +107,7 @@ def filter(event)
 
     # Things to set regardless of other enrichment
     #event.set("[domain][name]", domain)#TODO:reenable?
-    event.set("meta_#{@domain}_levs", domain_total_levels)
+    event.set("meta_#{@domain}_levels_count", domain_total_levels)
     event.set("meta_#{@domain}_length", domain_total_length)
     event.set("meta_#{@domain}_ends_with_int", domain_ends_with_int)
     event.set("meta_#{@domain}_has_dot", domain_has_dot)
