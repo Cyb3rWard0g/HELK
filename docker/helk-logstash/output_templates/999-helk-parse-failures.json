@@ -1,0 +1,115 @@
+{
+  "order": 999,
+  "version": 2020051901,
+  "index_patterns": [
+    "parse-failures-*"
+  ],
+  "settings": {
+    "index": {
+      "mapping": {
+        "coerce": "false",
+        "total_fields": {
+          "limit": "7500"
+        },
+        "ignore_malformed": "true"
+      },
+      "refresh_interval": "1s"
+    }
+  },
+  "mappings": {
+    "date_detection": false,
+    "dynamic_templates": [
+      {
+        "string_fields": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "index": true,
+            "analyzer": "keyword",
+            "norms": false,
+            "ignore_above": 2048,
+            "type": "keyword"
+          }
+        }
+      }
+    ],
+  "mappings": {
+    "dynamic": "true",
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "@version": {
+        "type": "keyword"
+      },
+      "z_original_timestamp": {
+        "type": "date"
+      },
+      "etl_info_tags": {
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+      },
+      "z_logstash_type": {
+        "enabled": false
+      },
+      "event_original_time": {
+        "type": "date"
+      },
+      "event_recorded_time": {
+        "type": "date"
+      },
+      "event_original_message": {
+        "type": "text",
+        "norms": false
+      },
+      "event_vendor": {
+        "type": "keyword"
+      },
+      "etl_pipeline": {
+        "type": "keyword"
+      },
+      "etl_kafka_consumer_group": {
+        "type": "keyword"
+      },
+      "etl_kafka_key": {
+        "type": "keyword"
+      },
+      "etl_kafka_offset": {
+        "type": "long"
+      },
+      "etl_kafka_partition": {
+        "type": "integer"
+      },
+      "etl_kafka_time": {
+        "type": "date",
+        "format": "epoch_millis"
+      },
+      "etl_kafka_topic": {
+        "type": "keyword"
+      },
+      "etl_processed_time": {
+        "type": "date"
+      },
+      "etl_host_agent_type": {
+        "type": "keyword"
+      },
+      "etl_host_agent_uid": {
+        "type": "keyword"
+      },
+      "etl_version": {
+        "type": "keyword"
+      },
+      "message": {
+        "type": "alias",
+        "path": "event_original_message"
+      },
+      "meta_log_tags": {
+        "type": "alias",
+        "path": "etl_info_tags"
+      }
+    }
+  }
+}
