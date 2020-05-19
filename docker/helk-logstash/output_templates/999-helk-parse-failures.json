@@ -13,7 +13,7 @@
         },
         "ignore_malformed": "true"
       },
-      "refresh_interval": "1s"
+      "refresh_interval": "20s"
     }
   },
   "mappings": {
