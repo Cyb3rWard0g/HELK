@@ -16,7 +16,7 @@
         "type": "keyword",
         "copy_to": "any_event_id"
       },
-      "zeek_id_conn": {
+      "zeek_id_conn_uids": {
         "type": "keyword",
         "copy_to": "any_event_id"
       },
