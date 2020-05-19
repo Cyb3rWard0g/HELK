@@ -2,5 +2,18 @@
 <service>
   <short>helk</short>
   <description>Firewall service for the HELK.</description>
+  <port protocol="tcp" port="3515" />
+  <port protocol="tcp" port="5044" />
+  <port protocol="tcp" port="5514" />
+  <port protocol="tcp" port="8510" />
+  <port protocol="tcp" port="8515" />
+  <port protocol="tcp" port="8516" />
+  <port protocol="tcp" port="8517" />
+  <port protocol="tcp" port="8531" />
   <port protocol="tcp" port="9092" />
+  <port protocol="tcp" port="9092" />
+  <port protocol="udp" port="5514" />
+  <port protocol="udp" port="8515" />
+  <port protocol="udp" port="8516" />
+  <port protocol="udp" port="8517" />
 </service>
