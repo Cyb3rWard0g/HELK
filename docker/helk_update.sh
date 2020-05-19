@@ -387,7 +387,6 @@ update_helk() {
 
     set_network
     set_kibana_ui_password
-    set_elasticsearch_password
 
     echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Stopping HELK and starting update"
     COMPOSE_CONFIG="${HELK_BUILD}-${SUBSCRIPTION_CHOICE}.yml"
