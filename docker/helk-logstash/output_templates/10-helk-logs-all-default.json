@@ -13,7 +13,7 @@
         "coerce": true
       }
     },
-    "refresh_interval": "20s",
+    "refresh_interval": "13s",
     "number_of_replicas": 0,
     "number_of_shards": 1
   },
