@@ -1,6 +1,6 @@
 # HELK Custom
 pipeline.batch.size: 500
-config.reload.automatic: true
+config.reload.automatic: false
 config.reload.interval: 60s
 pipeline.ordered: false
 # Following variables and values be set at docker runtime
