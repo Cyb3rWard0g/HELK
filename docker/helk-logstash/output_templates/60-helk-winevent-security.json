@@ -4,8 +4,8 @@
   "version": 2019090201,
   "mappings":{
     "properties":{
-      "@date_new_time":{"type":"date"},
-      "@date_previous_time":{"type":"date"},
+      "NewTime":{"type":"date"},
+      "PreviousTime":{"type":"date"},
       "version":{"type":"long"}
     }
   }
