@@ -36,21 +36,38 @@ fi
 #MASTER=$1
 #shift
 
-# Determine desired worker port
-if [ "$SPARK_WORKER_WEBUI_PORT" = "" ]; then
+# ****** SETTINGS ******
+# SPARM MASTER
+if [ -z "$SPARK_MASTER" ]; then
+  SPARK_MASTER=spark://localhost:7077
+fi
+echo "[+] Setting SPARK_MASTER to $SPARK_MASTER"
+
+# SPARK_WORKER_MEMORY
+if [ -z "$SPARK_WORKER_MEMORY" ]; then
+  SPARK_WORKER_MEMORY=512M
+fi
+echo "[+] Setting SPARK_WORKER_MEMORY to $SPARK_WORKER_MEMORY"
+
+# SPARK_WORKER_WEBUI_PORT
+if [  -z "$SPARK_WORKER_WEBUI_PORT" ]; then
   SPARK_WORKER_WEBUI_PORT=8081
 fi
+echo "[+] Setting SPARK_WORKER_WEBUI_PORT to $SPARK_WORKER_WEBUI_PORT"
 
-if [ "$SPARK_WORKER_PORT" = "" ]; then
+# SPARK_WORKER_PORT
+if [  -z "$SPARK_WORKER_PORT" ]; then
   PORT_FLAG=
   PORT_NUM=
 else
   PORT_FLAG="--port"
   PORT_NUM="$SPARK_WORKER_PORT"
+  echo "[+] Setting SPARK_WORKER_WEBUI to $SPARK_WORKER_PORT"
 fi
 
+# ***** STARTING WORKER *****
 $SPARK_HOME/bin/spark-class $CLASS \
-  --webui-port $SPARK_WORKER_WEBUI_PORT $PORT_FLAG $PORT_NUM $SPARK_MASTER
+  --webui-port $SPARK_WORKER_WEBUI_PORT $PORT_FLAG $PORT_NUM $SPARK_MASTER --memory $SPARK_WORKER_MEMORY
 
 # Start up the appropriate number of workers on this machine.
 # quick local function to start a worker
