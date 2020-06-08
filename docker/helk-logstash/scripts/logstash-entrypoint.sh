@@ -45,12 +45,12 @@ CLUSTER_SETTINGS='
   "persistent": {
     "search.max_open_scroll_context": 15000,
     "indices.breaker.request.limit" : "90%",
-    "cluster.max_shards_per_node": 3000
+    "cluster.max_shards_per_node": 5000
   },
   "transient": {
     "search.max_open_scroll_context": 15000,
     "indices.breaker.request.limit" : "90%",
-    "cluster.max_shards_per_node": 3000
+    "cluster.max_shards_per_node": 5000
   }
 }
 '
