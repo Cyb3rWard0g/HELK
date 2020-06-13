@@ -5,7 +5,7 @@
 1. Unzip the logstash download and then change into directory. Make sure to change the variable `Logstash_Version=` to the file name that was downloaded 
    ```bash
    rm -rf logstash-binary #cleanup binary (if ran) from last time
-   Logstash_Version='logstash-7.7.0'
+   Logstash_Version='logstash-7.7.1'
    wget https://artifacts.elastic.co/downloads/logstash/${Logstash_Version}.zip
    unzip ${Logstash_Version} && rm "${Logstash_Version}.zip"
    mv ${Logstash_Version} logstash-binary
