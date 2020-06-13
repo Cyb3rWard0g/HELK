@@ -111,13 +111,13 @@ if test -f "$plugins_time_file"; then
   plugins_current_time=$(date -d "$(<"$plugins_time_file")" '+%s')
   plugins_day_diff=$(( ( plugins_current_time - plugins_last_time )/(60*60*24) ))
   if [[ "$plugins_day_diff" -ge 30 ]]; then
-    plugins_oudated="yes"
+    plugins_outdated="yes"
     echo -e "${HELK_INFO_TAG} Plugins have not been updated in over 30 days.."
   else
-    plugins_oudated="no"
+    plugins_outdated="no"
   fi
 else
-  plugins_oudated="yes"
+  plugins_outdated="yes"
 fi
 # Test a few plugins determine if probably all already installed
 if ( logstash-plugin list  2> /dev/null | grep 'logstash-filter-prune' ) && ( logstash-plugin list  2> /dev/null | grep 'logstash-input-wmi' ); then
@@ -130,7 +130,7 @@ else
   logstash-plugin update
 fi
 # If have not been updated in X time or not installed at all.. then install them
-if [[ ${plugins_previous_install} = "no" ]] || [[ ${plugins_oudated} = "yes" ]]; then
+if [[ ${plugins_previous_install} = "no" ]] || [[ ${plugins_outdated} = "yes" ]]; then
 	if [[ -f "/usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-input-plugins.zip" ]] && [[  -f "/usr/share/logstash/plugins/helk-offline-logstash-output-plugins.zip" ]]; then
     echo -e "${HELK_INFO_TAG} Installing Logstash plugins via offline package.."
 	  logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logstash-codec_and_filter_plugins.zip
