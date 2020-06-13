@@ -1,0 +1,27 @@
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": {
+          "rollover": {
+            "max_age": "21d",
+            "max_size": "30gb"
+          },
+          "set_priority": {
+            "priority": 75
+          }
+        }
+      },
+      "warm": {
+        "actions": {
+          "forcemerge": {
+            "max_num_segments": 1
+          },
+          "set_priority": {
+            "priority": 50
+          }
+        }
+      }
+    }
+  }
+}

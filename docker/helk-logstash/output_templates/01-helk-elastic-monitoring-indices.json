@@ -1,0 +1,8 @@
+{
+  "order": 10,
+  "index_patterns": [ ".monitoring-*" ],
+  "version": 2020061301,
+  "settings": {
+    "index.lifecycle.name": "ilm_policy_elastic_monitoring_all"
+  }
+}

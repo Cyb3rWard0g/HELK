@@ -49,6 +49,7 @@ services:
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
       - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
+      - ./helk-logstash/elasticsearch_settings:/usr/share/logstash/elasticsearch_settings
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     environment:
     - xpack.monitoring.enabled=true
