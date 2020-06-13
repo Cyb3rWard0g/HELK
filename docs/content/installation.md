@@ -30,7 +30,7 @@
   * Docker: 18.06.1-ce+ & Docker-Compose (HELK INSTALLS THIS FOR YOU)
   * [Winlogbeat](https://www.elastic.co/downloads/beats/winlogbeat) running on your endpoints or centralized WEF server (that your endpoints are forwarding to).
     * You can install Winlogbeat by following one of [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g) posts [here](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_87.html).
-   * [Winlogbeat config](https://github.com/Cyb3rWard0g/HELK/blob/master/winlogbeat/winlogbeat.yml) recommended by the HELK since it uses the [Kafka output plugin](https://www.elastic.co/guide/en/beats/winlogbeat/current/kafka-output.html) and it is already pointing to the right ports with recommended options. You will just have to add your HELK's IP address.
+   * [Winlogbeat config](https://github.com/Cyb3rWard0g/HELK/blob/master/configs/winlogbeat/winlogbeat.yml) recommended by the HELK since it uses the [Kafka output plugin](https://www.elastic.co/guide/en/beats/winlogbeat/current/kafka-output.html) and it is already pointing to the right ports with recommended options. You will just have to add your HELK's IP address.
  
 # HELK Download
 Run the following commands to clone the HELK repo via git.
