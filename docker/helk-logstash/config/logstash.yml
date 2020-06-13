@@ -8,4 +8,4 @@ pipeline.ordered: false
 #xpack.monitoring.elasticsearch.hosts: http://helk-elasticsearch:9200
 #log.level: warn
 #http.host: "0.0.0.0"
-#xpack.monitoring.enabled: true
+xpack.monitoring.enabled: false
