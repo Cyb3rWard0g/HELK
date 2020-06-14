@@ -5,6 +5,7 @@
         "actions": {
           "rollover": {
             "max_age": "21d",
+            "max_size": "50gb",
             "max_docs": 125000
           },
           "set_priority": {
