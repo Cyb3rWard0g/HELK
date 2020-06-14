@@ -94,10 +94,10 @@ until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT "${ELASTICSEARCH_ACCES
   echo -e "${HELK_WARNING_TAG} Retrying ILM policy 'ilm_policy_logs_all'"
   sleep 2
 done
-until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT "${ELASTICSEARCH_ACCESS}/_ilm/policy/ilm_policy_elastic_monitoring_all" -H 'Content-Type: application/json' --data-binary @"$ilm_policy_logs_all")" == "200" ]]; do
-  echo -e "${HELK_WARNING_TAG} Retrying ILM policy 'ilm_policy_elastic_monitoring_all'"
-  sleep 2
-done
+#until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT "${ELASTICSEARCH_ACCESS}/_ilm/policy/ilm_policy_elastic_monitoring_all" -H 'Content-Type: application/json' --data-binary @"$ilm_policy_logs_all")" == "200" ]]; do
+#  echo -e "${HELK_WARNING_TAG} Retrying ILM policy 'ilm_policy_elastic_monitoring_all'"
+#  sleep 2
+#done
 
 # *********** Bootstrap (ILM) Policies ***************
 #declare -a  ilm_index_aliases=(\
