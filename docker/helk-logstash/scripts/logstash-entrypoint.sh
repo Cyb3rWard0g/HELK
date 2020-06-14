@@ -99,6 +99,17 @@ until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT "${ELASTICSEARCH_ACCES
   sleep 2
 done
 
+# *********** Bootstrap (ILM) Policies ***************
+#declare -a  ilm_index_aliases=(\
+#    "logs-endpoint-winevent-additional"\
+#    "logs-endpoint-winevent-application"\
+#    "logs-endpoint-winevent-etw"\
+#    "logs-endpoint-winevent-powershell"\
+#    "logs-endpoint-winevent-security"\
+#    "logs-endpoint-winevent-system"\
+#    "logs-network-zeek"
+#  )
+
 # ******** Create Data For Kibana Experience ***************
 echo -e "${HELK_INFO_TAG} Setting up additional Kibana/UI experience parameter.."
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST ${ELASTICSEARCH_ACCESS}/logs-endpoint-winevent-sysmon-1990.12.18/_doc/TestHELKDataWindowsSysmon000001 -H 'Content-Type: application/json' -d "$TestHELKDataWindowsSysmon000001")" == "200" ]]; do
