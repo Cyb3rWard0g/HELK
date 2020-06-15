@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Elasticsearch &#8212; The HELK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/mystnb.js"></script>
+    <script src="../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .secondtoggle, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script async="async" src="../_static/thebelab.js"></script>
+    <link rel="canonical" href="https://thehelk.com/architecture/elasticsearch.html" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Logstash" href="logstash.html" />
+    <link rel="prev" title="Installation" href="../installation.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+<!-- Put requirejs at the end so it's always after bootstrap -->
+<!-- TODO: remove this once https://github.com/pandas-dev/pydata-sphinx-theme/pull/149 is merged -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://thehelk.com/architecture/elasticsearch.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Elasticsearch" />
+<meta property="og:description" content="Elasticsearch    HELK’s Elasticsearch Heap Size  Elasticsearch uses heap, which can more specifically be referred to as memory/RAM, in order to perform various " />
+<meta property="og:image"       content="https://thehelk.com/_static/logo.png" />
+
+<meta name="twitter:card" content="summary">
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">The HELK</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  
+  <ul class="nav sidenav_l1">
+<li class="navbar-special">
+<p class="margin-caption">Getting Started</p>
+</li>
+  <li class="">
+    <a href="../installation.html">Installation</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">Architecture</p>
+</li>
+  <li class="active">
+    <a href="">Elasticsearch</a>
+  </li>
+  <li class="">
+    <a href="logstash.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="kibana.html">Kibana</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">How-To</p>
+</li>
+  <li class="">
+    <a href="../how-to/docker/intro.html">Docker</a>
+  </li>
+  <li class="">
+    <a href="../how-to/logstash/intro.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="../how-to/kafka/intro.html">Kafka</a>
+  </li>
+  <li class="">
+    <a href="../how-to/ksql/intro.html">KSQL</a>
+  </li>
+  <li class="">
+    <a href="../how-to/winlogbeat/intro.html">Winlogbeat</a>
+  </li>
+</ul>
+</nav>
+<p class="navbar_footer">Powered by <a href="https://jupyterbook.org">Jupyter Book</a></p>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse" data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu" aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation" title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <div class="dropdown-buttons-trigger">
+            <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i class="fas fa-download"></i></button>
+
+            
+            <div class="dropdown-buttons">
+                <!-- ipynb file if we had a myst markdown file -->
+                
+                <!-- Download raw file -->
+                <a class="dropdown-buttons" href="../_sources/architecture/elasticsearch.md.txt"><button type="button" class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip" data-placement="left">.md</button></a>
+                <!-- Download PDF via print -->
+                <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF" onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+            </div>
+            
+        </div>
+
+        <!-- Edit this page -->
+        <a class="edit-button" href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/architecture/elasticsearch.md"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" title="Edit this page"><i class="fas fa-pencil-alt"></i></button></a>
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+        
+
+        
+    </div>
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+        <li class="nav-item toc-entry toc-h2">
+            <a href="#helk-s-elasticsearch-heap-size" class="nav-link">HELK’s Elasticsearch Heap Size</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#allow-helk-to-calculate-how-much-to-assign" class="nav-link">1) Allow HELK to calculate how much to assign.</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#set-your-own-heap" class="nav-link">2) Set your own heap</a>
+        </li>
+    
+        <li class="nav-item toc-entry toc-h3">
+            <a href="#add-es-java-opts-to-the-docker-config-file" class="nav-link">3) Add ES_JAVA_OPTS to the docker config file</a><ul class="nav section-nav flex-column">
+                
+        <li class="nav-item toc-entry toc-h4">
+            <a href="#set-at-run-time-using-custom-bash-variable" class="nav-link">4) Set at run time using custom bash variable</a>
+        </li>
+    
+            </ul>
+        </li>
+    
+            </ul>
+        </li>
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/architecture/elasticsearch.md">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 col-xxl-7 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="elasticsearch">
+<h1>Elasticsearch<a class="headerlink" href="#elasticsearch" title="Permalink to this headline">¶</a></h1>
+<p><img alt="" src="../_images/ELASTICSEARCH-Design.png" /></p>
+<div class="section" id="helk-s-elasticsearch-heap-size">
+<h2>HELK’s Elasticsearch Heap Size<a class="headerlink" href="#helk-s-elasticsearch-heap-size" title="Permalink to this headline">¶</a></h2>
+<p>Elasticsearch uses heap, which can more specifically be referred to as memory/RAM, in order to perform various functions.<br />
+A list of some of the functions this heap/memory does is as follows (keep in mind this is not an exhaustive list):</p>
+<ul class="simple">
+<li><p>Keep track of indexes</p></li>
+<li><p>When aggregations are run such as calculating sums, mathematical variations, sub aggregations of aggregations, etc..</p></li>
+<li><p>When certain searches are</p></li>
+<li><p>Keep track of offsets of the tokens/terms of indexed values (aka events/logs/data)</p></li>
+</ul>
+<p>As you can see, heap and the amount of it is important in a healthy setup. The HELK installation process uses various functions to try to set the “perfect” amount of heap, however there are thousands of variables in all the different ways people use/install HELK.<br />
+Therefore, we are unable to account for them all and thus our logic will never be perfect and unfortunately may not work best for you. However, we have given you an ability to set your own heap and we have described the logic if you choose to let HELK determine what to set it.</p>
+<p>Heap can and or is set one of four ways, as detailed below.</p>
+<div class="section" id="allow-helk-to-calculate-how-much-to-assign">
+<h3>1) Allow HELK to calculate how much to assign.<a class="headerlink" href="#allow-helk-to-calculate-how-much-to-assign" title="Permalink to this headline">¶</a></h3>
+<p>This is based on the available memory and variables shown in the code block below.<br />
+It’s very important to note <code class="docutils literal notranslate"><span class="pre">available</span> <span class="pre">memory</span></code>, not the amount of memory the host has.<br />
+An example to show why this is critical to understand.. If you have a 100GB RAM server, but the server is actively using 90GBs of RAM - then you will NOT get the max 31GB heap/memory for elasticsearch. In this example you would actually end up getting roughly 3 GBs for the heap. Because, with only 10 GBs of available/free memory, it could cause drastic issues to lock up all of the remaining memory!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">available</span> <span class="n">memory</span> <span class="o">&gt;=</span> <span class="mi">1000</span> <span class="n">MBs</span> <span class="ow">and</span> <span class="o">&lt;=</span> <span class="mi">5999</span> <span class="n">MBs</span><span class="p">:</span>
+  <span class="n">then</span> <span class="nb">set</span> <span class="n">to</span> <span class="mi">2000</span> <span class="n">MBs</span>
+<span class="k">else</span> <span class="k">if</span> <span class="n">available</span> <span class="n">memory</span> <span class="o">=&gt;</span> <span class="mi">6000</span> <span class="n">MBs</span> <span class="ow">and</span> <span class="o">&lt;=</span> <span class="mi">8999</span> <span class="n">MBs</span><span class="p">:</span>
+  <span class="n">then</span> <span class="nb">set</span> <span class="n">to</span> <span class="mi">3200</span> <span class="n">MBs</span>
+<span class="k">else</span> <span class="k">if</span> <span class="n">available</span> <span class="n">memory</span> <span class="o">=&gt;</span> <span class="mi">9000</span> <span class="n">MBs</span> <span class="ow">and</span> <span class="o">&lt;=</span> <span class="mi">12999</span> <span class="n">MBs</span><span class="p">:</span>
+  <span class="n">then</span> <span class="nb">set</span> <span class="n">to</span> <span class="mi">5000</span> <span class="n">MBs</span>
+<span class="k">else</span> <span class="k">if</span> <span class="n">available</span> <span class="n">memory</span> <span class="o">=&gt;</span> <span class="mi">13000</span> <span class="n">MBs</span> <span class="ow">and</span> <span class="o">&lt;=</span> <span class="mi">16000</span> <span class="n">MBs</span><span class="p">:</span>
+  <span class="n">then</span> <span class="nb">set</span> <span class="n">to</span> <span class="mi">7100</span> <span class="n">MBs</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">available</span> <span class="n">memory</span> <span class="o">=&gt;</span> <span class="mi">31</span> <span class="n">GBs</span><span class="p">:</span>
+    <span class="n">then</span> <span class="nb">set</span> <span class="n">to</span> <span class="mi">31</span> <span class="n">GBs</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">set</span> <span class="n">to</span> <span class="n">available</span> <span class="n">memory</span> <span class="ow">in</span> <span class="n">GBs</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-your-own-heap">
+<h3>2) Set your own heap<a class="headerlink" href="#set-your-own-heap" title="Permalink to this headline">¶</a></h3>
+<p>In order to define your own heap settings, in the file <code class="docutils literal notranslate"><span class="pre">HELK/docker/helk-elasticsearch/config/jvm.options</span></code>
+edit the following two lines that begin with</p>
+<p><code class="docutils literal notranslate"><span class="pre">#-Xms</span></code><br />
+<code class="docutils literal notranslate"><span class="pre">#-Xmx</span></code></p>
+<p>Then make sure to restart elasticsearch.<br />
+<strong>Always set the min and max JVM heap size to the same value<br />
+Also, you will be restarting elasticsearch. Therefore your cluster will temporarily be down as the elasticsearch service/database is coming back online</strong></p>
+<p>Here is an example of how to perform the above:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Edit the file jvm file</span>
+<span class="n">sudo</span> <span class="n">nano</span> <span class="n">HELK</span><span class="o">/</span><span class="n">docker</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">elasticsearch</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">jvm</span><span class="o">.</span><span class="n">options</span>
+<span class="c1"># Resulting lines (as mentioned that you should edit from above)</span>
+<span class="c1"># should look something like the following if you wanted to set the heap to 16GBs</span>
+<span class="o">-</span><span class="n">Xms16g</span>
+<span class="o">-</span><span class="n">Xmx16g</span>
+<span class="c1"># Restart elasticsearch</span>
+<span class="n">docker</span> <span class="n">restart</span> <span class="n">helk</span><span class="o">-</span><span class="n">elasticsearch</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-es-java-opts-to-the-docker-config-file">
+<h3>3) Add <code class="docutils literal notranslate"><span class="pre">ES_JAVA_OPTS</span></code> to the docker config file<a class="headerlink" href="#add-es-java-opts-to-the-docker-config-file" title="Permalink to this headline">¶</a></h3>
+<p>Which docker config file to use is shown later.<br />
+You will add this value under <code class="docutils literal notranslate"><span class="pre">services.helk-elasticsearch.environment</span></code>.
+Example, if I used the option for ELK + Kafka with no license and no alerting and I wanted to set the heap to 16GBs<br />
+Then I would edit <code class="docutils literal notranslate"><span class="pre">HELK/docker/helk-kibana-analysis-basic.yml</span></code> and add the following line under the environment seciton:<br />
+<code class="docutils literal notranslate"><span class="pre">-</span> <span class="pre">&quot;ES_JAVA_OPTS=-Xms16g</span> <span class="pre">-Xmx16g&quot;</span></code></p>
+<p>Then make sure rebuild the elasticsearch docker container.<br />
+<strong>Always set the min and max JVM heap size to the same value<br />
+Also, you will be restarting elasticsearch. Therefore your cluster will temporarily be down as the elasticsearch service/database is coming back online</strong><br />
+<strong>Note if you are using (elastic) license you will need to set your ELASTIC_PASSWORD and KIBANA_UI_PASSWORD variables (and logstash password if applicable)</strong></p>
+<p>Here is how to perform the above:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Example config (only showing the beginning lines) Note, that these settings may not match your config exactly, but that the important thing is to have the value under the environment section
+version: &#39;3.5&#39;
+
+services:
+  helk-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    container_name: helk-elasticsearch
+    secrets:
+      - source: elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      - ./helk-elasticsearch/scripts:/usr/share/elasticsearch/scripts
+      - ./helk-elasticsearch/config/jvm.options:/usr/share/elasticsearch/config/jvm.options
+    entrypoint: /usr/share/elasticsearch/scripts/elasticsearch-entrypoint.sh
+    environment:
+      - cluster.name=helk-cluster
+      - node.name=helk-1
+      - xpack.license.self_generated.type=basic
+      - xpack.security.enabled=false
+      - &quot;ES_JAVA_OPTS= -Xms16g -Xmx16g&quot;
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nproc: 20480
+      nofile:
+        soft: 160000
+        hard: 160000
+    restart: always
+    networks:
+      helk:
+# Rebuild the elasticsearch docker container
+`docker-compose -f HELK/docker/helk-kibana-analysis-basic.yml up --build -d`
+</pre></div>
+</div>
+<div class="section" id="set-at-run-time-using-custom-bash-variable">
+<h4>4) Set at run time using custom bash variable<a class="headerlink" href="#set-at-run-time-using-custom-bash-variable" title="Permalink to this headline">¶</a></h4>
+<p>Example bash variable such as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">ES_JAVA_OPTS</span><span class="o">=</span><span class="s2">&quot;-Xms16g -Xmx16g&quot;</span>
+</pre></div>
+</div>
+<p>Then run the following using your own docker config file.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose -f <span class="nv">$PlaceDockerConfigFileNameHere</span> up --build -d
+</pre></div>
+</div>
+<p><strong>Only use this option if you explicitly need to. Please know what your getting into to ;)</strong></p>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "Cyb3rWard0g/HELK",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "architecture"
+        }
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../installation.html" title="previous page">Installation</a>
+    <a class='right-next' id="next-link" href="logstash.html" title="next page">Logstash</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.1.<br/>
+    </p>
+  </div>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../_static/js/index.js"></script>
+    
+  </body>
+</html>

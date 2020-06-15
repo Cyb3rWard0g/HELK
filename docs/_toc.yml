@@ -1,0 +1,25 @@
+- file: intro
+- header: Getting Started
+- file: installation
+- header: Architecture
+- file: architecture/elasticsearch
+- file: architecture/logstash
+- file: architecture/kibana
+- header: How-To
+- file: how-to/docker/intro
+  sections:
+  - file: how-to/docker/export-images
+  - file: how-to/docker/load-images
+- file: how-to/logstash/intro
+  sections:
+  - file: how-to/logstash/create-plugins-offline
+- file: how-to/kafka/intro
+  sections:
+  - file: how-to/kafka/topic-ingestion
+  - file: how-to/kafka/update-ip-address
+- file: how-to/ksql/intro
+  sections:
+  - file: how-to/ksql/deploy-locally
+- file: how-to/winlogbeat/intro
+  sections:
+  - file: how-to/winlogbeat/check-log-shipping
