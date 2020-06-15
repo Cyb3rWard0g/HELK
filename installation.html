@@ -1,0 +1,570 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Installation &#8212; The HELK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/sphinx-book-theme.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/mystnb.js"></script>
+    <script src="_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .secondtoggle, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script async="async" src="_static/thebelab.js"></script>
+    <link rel="canonical" href="https://thehelk.com/installation.html" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Elasticsearch" href="architecture/elasticsearch.html" />
+    <link rel="prev" title="Introduction" href="intro.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+<!-- Put requirejs at the end so it's always after bootstrap -->
+<!-- TODO: remove this once https://github.com/pandas-dev/pydata-sphinx-theme/pull/149 is merged -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://thehelk.com/installation.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Installation" />
+<meta property="og:description" content="InstallationRequirements (Please Read Carefully)  Operating System:  Ubuntu 18.04 (preferred)  Ubuntu 16  CentOS 7 with or without SELinux in enforcement mode  " />
+<meta property="og:image"       content="https://thehelk.com/_static/logo.png" />
+
+<meta name="twitter:card" content="summary">
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="index.html">
+  
+  <img src="_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">The HELK</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  
+  <ul class="nav sidenav_l1">
+<li class="navbar-special">
+<p class="margin-caption">Getting Started</p>
+</li>
+  <li class="active">
+    <a href="">Installation</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">Architecture</p>
+</li>
+  <li class="">
+    <a href="architecture/elasticsearch.html">Elasticsearch</a>
+  </li>
+  <li class="">
+    <a href="architecture/logstash.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="architecture/kibana.html">Kibana</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">How-To</p>
+</li>
+  <li class="">
+    <a href="how-to/docker/intro.html">Docker</a>
+  </li>
+  <li class="">
+    <a href="how-to/logstash/intro.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="how-to/kafka/intro.html">Kafka</a>
+  </li>
+  <li class="">
+    <a href="how-to/ksql/intro.html">KSQL</a>
+  </li>
+  <li class="">
+    <a href="how-to/winlogbeat/intro.html">Winlogbeat</a>
+  </li>
+</ul>
+</nav>
+<p class="navbar_footer">Powered by <a href="https://jupyterbook.org">Jupyter Book</a></p>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse" data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu" aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation" title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <div class="dropdown-buttons-trigger">
+            <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i class="fas fa-download"></i></button>
+
+            
+            <div class="dropdown-buttons">
+                <!-- ipynb file if we had a myst markdown file -->
+                
+                <!-- Download raw file -->
+                <a class="dropdown-buttons" href="_sources/installation.md.txt"><button type="button" class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip" data-placement="left">.md</button></a>
+                <!-- Download PDF via print -->
+                <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF" onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+            </div>
+            
+        </div>
+
+        <!-- Edit this page -->
+        <a class="edit-button" href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/installation.md"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" title="Edit this page"><i class="fas fa-pencil-alt"></i></button></a>
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+        
+
+        
+    </div>
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/installation.md">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 col-xxl-7 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="requirements-please-read-carefully">
+<h1>Requirements (Please Read Carefully)<a class="headerlink" href="#requirements-please-read-carefully" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><strong>Operating System:</strong></p>
+<ul>
+<li><p>Ubuntu 18.04 (preferred)</p></li>
+<li><p>Ubuntu 16</p></li>
+<li><p>CentOS 7 with or without SELinux in enforcement mode</p></li>
+<li><p>CentOS 8 with or without SELinux in enforcement mode</p></li>
+</ul>
+</li>
+<li><p><strong>Docker:</strong></p>
+<ul>
+<li><p>HELK uses the official Docker Community Edition (CE) bash script (Edge Version) to install Docker for you. The Docker CE Edge script supports the following distros: <strong>ubuntu</strong>, <strong>debian</strong>, <strong>raspbian</strong>, <strong>centos</strong>, and <strong>fedora</strong>.</p></li>
+<li><p>You can see the specific distro versions supported in the script <a class="reference external" href="https://get.docker.com/">here</a>.</p></li>
+<li><p>If you have Docker &amp; Docker-Compose already installed in your system, make sure you uninstall them to avoid old incompatible version. Let HELK use the official Docker CE Edge script execution to install Docker.</p></li>
+</ul>
+</li>
+<li><p><strong>Processor/OS Architecture:</strong></p>
+<ul>
+<li><p>64-bit also known as x64, x86_64, AMD64 or Intel 64.</p></li>
+<li><p>FYI: old processors don’t support SSE3 instructions to start ML (Machine Learning) on elasticsearch. Since version 6.1 Elastic has been compiling the ML programs on the assumption that SSE4.2 instructions are available (See: https://github.com/Cyb3rWard0g/HELK/issues/321 and https://discuss.elastic.co/t/failed-to-start-machine-learning-on-elasticsearch-7-0-0/178216/7)</p></li>
+</ul>
+</li>
+<li><p><strong>Cores:</strong> Minimum of 4 cores (whether logical or physical)</p></li>
+<li><p><strong>Network Connection:</strong> NAT or Bridge</p>
+<ul>
+<li><p>IP version 4 address. IPv6 has not been tested yet.</p></li>
+<li><p>If using a proxy, documentation is yet to come - so use a proxy at your own expense. However, open a GitHub issue and we will try to help until it is officially documented/supported.</p></li>
+<li><p>If using a VM then NAT or Bridge will work.</p></li>
+<li><p>Internet access</p>
+<ul>
+<li><p>List of required domains/IPs will be listed in future documentation.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>RAM:</strong> There are four options, and the following are minimum requirements (include more if you are able).</p>
+<ul>
+<li><p><strong>Option 1: 5GB</strong> includes <code class="docutils literal notranslate"><span class="pre">KAFKA</span> <span class="pre">+</span> <span class="pre">KSQL</span> <span class="pre">+</span> <span class="pre">ELK</span> <span class="pre">+</span> <span class="pre">NGNIX.</span></code></p></li>
+<li><p><strong>Option 2: 5GB</strong> includes <code class="docutils literal notranslate"><span class="pre">KAFKA</span> <span class="pre">+</span> <span class="pre">KSQL</span> <span class="pre">+</span> <span class="pre">ELK</span> <span class="pre">+</span> <span class="pre">NGNIX</span> <span class="pre">+</span> <span class="pre">ELASTALERT</span></code></p></li>
+<li><p><strong>Option 3: 7GB</strong> includes <code class="docutils literal notranslate"><span class="pre">KAFKA</span> <span class="pre">+</span> <span class="pre">KSQL</span> <span class="pre">+</span> <span class="pre">ELK</span> <span class="pre">+</span> <span class="pre">NGNIX</span> <span class="pre">+</span> <span class="pre">SPARK</span> <span class="pre">+</span> <span class="pre">JUPYTER</span></code>.</p></li>
+<li><p><strong>Option 4: 8GB</strong> includes <code class="docutils literal notranslate"><span class="pre">KAFKA</span> <span class="pre">+</span> <span class="pre">KSQL</span> <span class="pre">+</span> <span class="pre">ELK</span> <span class="pre">+</span> <span class="pre">NGNIX</span> <span class="pre">+</span> <span class="pre">SPARK</span> <span class="pre">+</span> <span class="pre">JUPYTER</span> <span class="pre">+</span> <span class="pre">ELASTALERT</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Disk:</strong> 20GB for testing purposes and 100GB+ for production (minimum)</p></li>
+<li><p><strong>Applications:</strong></p>
+<ul>
+<li><p>Docker: 18.06.1-ce+ &amp; Docker-Compose (HELK INSTALLS THIS FOR YOU)</p></li>
+<li><p><a class="reference external" href="https://www.elastic.co/downloads/beats/winlogbeat">Winlogbeat</a> running on your endpoints or centralized WEF server (that your endpoints are forwarding to).</p>
+<ul>
+<li><p>You can install Winlogbeat by following one of <a class="reference external" href="https://twitter.com/Cyb3rWard0g">&#64;Cyb3rWard0g</a> posts <a class="reference external" href="https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_87.html">here</a>.</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://github.com/Cyb3rWard0g/HELK/blob/master/configs/winlogbeat/winlogbeat.yml">Winlogbeat config</a> recommended by the HELK since it uses the <a class="reference external" href="https://www.elastic.co/guide/en/beats/winlogbeat/current/kafka-output.html">Kafka output plugin</a> and it is already pointing to the right ports with recommended options. You will just have to add your HELK’s IP address.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="helk-download">
+<h1>HELK Download<a class="headerlink" href="#helk-download" title="Permalink to this headline">¶</a></h1>
+<p>Run the following commands to clone the HELK repo via git.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/Cyb3rWard0g/HELK.git
+</pre></div>
+</div>
+</div>
+<div class="section" id="helk-install">
+<h1>HELK Install<a class="headerlink" href="#helk-install" title="Permalink to this headline">¶</a></h1>
+<p>In order to make the installation of the HELK easy for everyone, the project comes with an install script named <strong>helk_install.sh</strong>. This script builds and runs everything for HELK automatically. During the installation process, the script will allow you to set up the following:</p>
+<ul class="simple">
+<li><p>Set the components/applications for the HELK’</p></li>
+<li><p>Set the Kibana User’s password. Default user is <strong>helk</strong></p></li>
+<li><p>Set the HELK’s IP. By default you can confirm that you want to use your HOST IP address for the HELK, unless you want to use a different one. Press [Return] or let the script continue on its own (90 Seconds sleep).</p></li>
+<li><p>Set the HELK’s License Subscription. By default the HELK has the <strong>basic</strong> subscription selected. You can set it to <strong>trial</strong> if you want and will be valid for 30 days. If you want to learn more about subscriptions go <a class="reference external" href="https://www.elastic.co/subscriptions">here</a></p>
+<ul>
+<li><p>If the license is set to <strong>trial</strong>, HELK asks you to set the password for the <strong>elastic</strong> account.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>To install HELK:</strong><br />
+Change your current directory location to the new HELK directory, and run the <strong>helk_install.sh</strong> bash script as shown:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> HELK/docker
+sudo ./helk_install.sh
+</pre></div>
+</div>
+<p><strong>Here is an example output of installing the HELK using Option 2</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>**********************************************
+**          HELK - THE HUNTING ELK          **
+**                                          **
+** Author: Roberto Rodriguez (@Cyb3rWard0g) **
+** HELK build version: v0.1.8-alpha01032020 **
+** HELK ELK version: 7.6.2                  **
+** License: GPL-3.0                         **
+**********************************************
+ 
+[HELK-INSTALLATION-INFO] HELK hosted on a Linux box
+[HELK-INSTALLATION-INFO] Available Memory: 8345 MBs
+[HELK-INSTALLATION-INFO] You&#39;re using ubuntu version bionic
+ 
+*****************************************************
+*      HELK - Docker Compose Build Choices          *
+*****************************************************
+ 
+1. KAFKA + KSQL + ELK + NGNIX
+2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT
+3. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER
+4. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT
+ 
+Enter build choice [ 1 - 4]: 2
+[HELK-INSTALLATION-INFO] HELK build set to 2
+[HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: 10.66.6.35
+
+[HELK-INSTALLATION-INFO] Please make sure to create a custom Kibana password and store it securely for future use.
+[HELK-INSTALLATION-INFO] Set HELK Kibana UI Password: Mmh3QAvQm3535F4f4VZQD
+[HELK-INSTALLATION-INFO] Verify HELK Kibana UI Password: Mmh3QAvQm3535F4f4VZQD
+[HELK-INSTALLATION-INFO] Docker already installed
+[HELK-INSTALLATION-INFO] Making sure you assigned enough disk space to the current Docker base directory
+[HELK-INSTALLATION-INFO] Available Docker Disk: 107 GBs
+[HELK-INSTALLATION-INFO] Checking local vm.max_map_count variable and setting it to 4120294
+[HELK-INSTALLATION-INFO] Setting local vm.swappiness variable to 25
+[HELK-INSTALLATION-INFO] Building &amp; running HELK from helk-kibana-analysis-alert-basic.yml file..
+[HELK-INSTALLATION-INFO] Waiting for some services to be up .....
+ 
+ 
+***********************************************************************************
+** [HELK-INSTALLATION-INFO] HELK WAS INSTALLED SUCCESSFULLY                      **
+** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
+***********************************************************************************
+ 
+HELK KIBANA URL: https://10.66.6.35
+HELK KIBANA USER: helk
+HELK KIBANA PASSWORD: Mmh3QAvQm3535F4f4VZQD
+HELK ZOOKEEPER: 10.66.6.35:2181
+HELK KSQL SERVER: 10.66.6.35:8088
+ 
+IT IS HUNTING SEASON!!!!!
+ 
+You can stop all the HELK docker containers by running the following command:
+ [+] sudo docker-compose -f helk-kibana-analysis-alert-basic.yml stop
+ 
+</pre></div>
+</div>
+</div>
+<div class="section" id="monitor-helk-installation-logs-always">
+<h1>Monitor HELK installation Logs (Always)<a class="headerlink" href="#monitor-helk-installation-logs-always" title="Permalink to this headline">¶</a></h1>
+<p>Once the installation kicks in, it will start showing you pre-defined messages about the installation, but no all the details of what is actually happening in the background. It is designed that way to keep your main screen clean and let you know where it is in the installation process.</p>
+<p>What I recommend to do all the time is to open another shell and monitor the HELK installation logs by using the <strong>tail</strong> command and pointing it to the <strong>/var/log/helk-install.log</strong> file that gets created by the <strong>helk_install</strong> script as soon as it is run. This log file is available on your local host even if you are deploying the HELK via Docker (I want to make sure it is clear that it is a local file).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail -f /var/log/helk-install.log 
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Adding</span> <span class="n">password</span> <span class="k">for</span> <span class="n">user</span> <span class="n">helk</span>
+<span class="n">Creating</span> <span class="n">network</span> <span class="s2">&quot;docker_helk&quot;</span> <span class="k">with</span> <span class="n">driver</span> <span class="s2">&quot;bridge&quot;</span>
+<span class="n">Creating</span> <span class="n">volume</span> <span class="s2">&quot;docker_esdata&quot;</span> <span class="k">with</span> <span class="n">local</span> <span class="n">driver</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">elasticsearch</span> <span class="p">(</span><span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">elasticsearch</span><span class="o">/</span><span class="n">elasticsearch</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">elasticsearch</span><span class="o">/</span><span class="n">elasticsearch</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="mi">771240</span><span class="n">a8e1c76cc6ac6aa740d2b82de94d4b8b7dbcca5ad0cf49d12b88a3b8e7</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">elasticsearch</span><span class="o">/</span><span class="n">elasticsearch</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">kibana</span> <span class="p">(</span><span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">kibana</span><span class="o">/</span><span class="n">kibana</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">kibana</span><span class="o">/</span><span class="n">kibana</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="n">fb0ac36c40de29b321a30805bcbda4cbe486e1c5979780647458ad77b5ee2f98</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">kibana</span><span class="o">/</span><span class="n">kibana</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">logstash</span> <span class="p">(</span><span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">logstash</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">logstash</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="n">c54057ff1d02d7ebae23e49835060c0b4012844312c674ce2264d8bbaee64f1a</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">logstash</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">nginx</span> <span class="p">(</span><span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">nginx</span><span class="p">:</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">0.0</span><span class="o">.</span><span class="mi">8</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">nginx</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="mf">83e86</span><span class="n">d3ee3891b8a06173f4278ddc9f85cbba9b2dfceada48fb311411e236341</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">nginx</span><span class="p">:</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span> <span class="p">(</span><span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span><span class="p">:</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">2.3</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="mf">3e7</span><span class="n">a0f3a73bcffeac4f239083618c362017005463dd747392a9b43db99535a68</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span><span class="p">:</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span> <span class="p">(</span><span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span><span class="p">:</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">2.3</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="mi">03569</span><span class="n">d98c46028715623778b4adf809bf417a055c3c19d21f426db4e1b2d6f55</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span><span class="p">:</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span> <span class="p">(</span><span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span><span class="p">:</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">5.1</span><span class="o">.</span><span class="mi">3</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="mi">063</span><span class="n">add111cc93b1a0118f88b577e31303045d4cc08eb1d21458429f05cba4b02</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span><span class="p">:</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span> <span class="p">(</span><span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span><span class="p">:</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">3</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">5.1</span><span class="o">.</span><span class="mi">3</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="mi">18</span><span class="n">c0ccb00fbf87679e16e9e0da600548fcb236a2fd173263b09e89b2d3a42cc3</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span><span class="p">:</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">3</span>
+<span class="n">Pulling</span> <span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span> <span class="p">(</span><span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span><span class="p">:</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span><span class="o">...</span>
+<span class="mf">0.2</span><span class="o">.</span><span class="mi">6</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span> <span class="nn">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="n">ae1096829aacbadce42bd4024b36da3a9636f1901ef4e9e62a12b881cfc23cf5</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span><span class="p">:</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">elasticsearch</span> <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">kibana</span>        <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">logstash</span>      <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">nginx</span>         <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span>     <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span>    <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span>  <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span>   <span class="o">...</span> <span class="n">done</span>
+<span class="n">Creating</span> <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span>      <span class="o">...</span> <span class="n">done</span>
+</pre></div>
+</div>
+<p>Once you see that the containers have been created you can check all the containers running by executing the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker ps
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONTAINER</span> <span class="n">ID</span>        <span class="n">IMAGE</span>                                                 <span class="n">COMMAND</span>                  <span class="n">CREATED</span>             <span class="n">STATUS</span>              <span class="n">PORTS</span>                                                                              <span class="n">NAMES</span>
+<span class="mi">2</span><span class="n">caa7d86bc9e</span>        <span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span><span class="p">:</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">3</span>                        <span class="s2">&quot;/bin/sh&quot;</span>                <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>                                                                                           <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span>
+<span class="mi">1</span><span class="n">ee3c0d90b2a</span>        <span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span><span class="p">:</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">3</span>                     <span class="s2">&quot;/etc/confluent/dock…&quot;</span>   <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>        <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">8088</span><span class="o">-&gt;</span><span class="mi">8088</span><span class="o">/</span><span class="n">tcp</span>                                                             <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span>
+<span class="n">e753a811ffd2</span>        <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span><span class="p">:</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span>                          <span class="s2">&quot;./kafka-entrypoint.…&quot;</span>   <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>        <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">9092</span><span class="o">-&gt;</span><span class="mi">9092</span><span class="o">/</span><span class="n">tcp</span>                                                             <span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span>
+<span class="n">f93239de7d95</span>        <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span><span class="p">:</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span>                             <span class="s2">&quot;./zookeeper-entrypo…&quot;</span>   <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>        <span class="mi">2181</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mi">2888</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mi">3888</span><span class="o">/</span><span class="n">tcp</span>                                                       <span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span>
+<span class="mi">229</span><span class="n">ea8467075</span>        <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span><span class="p">:</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">0</span>                            <span class="s2">&quot;./elastalert-entryp…&quot;</span>   <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>                                                                                           <span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span>
+<span class="n">f6fd290d2a9d</span>        <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">nginx</span><span class="p">:</span><span class="mf">0.3</span><span class="o">.</span><span class="mi">0</span>                                 <span class="s2">&quot;/opt/helk/scripts/n…&quot;</span>   <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>        <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">80</span><span class="o">-&gt;</span><span class="mi">80</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">443</span><span class="o">-&gt;</span><span class="mi">443</span><span class="o">/</span><span class="n">tcp</span>                                           <span class="n">helk</span><span class="o">-</span><span class="n">nginx</span>
+<span class="n">d4f2b6d7d21e</span>        <span class="n">otrf</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">logstash</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span>                              <span class="s2">&quot;/usr/share/logstash…&quot;</span>   <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>        <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">3515</span><span class="o">-&gt;</span><span class="mi">3515</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">5044</span><span class="o">-&gt;</span><span class="mi">5044</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">8531</span><span class="o">-&gt;</span><span class="mi">8531</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mi">9600</span><span class="o">/</span><span class="n">tcp</span>   <span class="n">helk</span><span class="o">-</span><span class="n">logstash</span>
+<span class="n">c5ae143741ea</span>        <span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">kibana</span><span class="o">/</span><span class="n">kibana</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span>                 <span class="s2">&quot;/usr/share/kibana/s…&quot;</span>   <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>        <span class="mi">5601</span><span class="o">/</span><span class="n">tcp</span>                                                                           <span class="n">helk</span><span class="o">-</span><span class="n">kibana</span>
+<span class="mf">1729e3234</span><span class="n">b91</span>        <span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">elasticsearch</span><span class="o">/</span><span class="n">elasticsearch</span><span class="p">:</span><span class="mf">7.6</span><span class="o">.</span><span class="mi">2</span>   <span class="s2">&quot;/usr/share/elastics…&quot;</span>   <span class="mi">5</span> <span class="n">minutes</span> <span class="n">ago</span>       <span class="n">Up</span> <span class="mi">5</span> <span class="n">minutes</span>        <span class="mi">9200</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mi">9300</span><span class="o">/</span><span class="n">tcp</span>                                                                 <span class="n">helk</span><span class="o">-</span><span class="n">elasticsearch</span>
+</pre></div>
+</div>
+<p>If you want to monitor the resources being utilized (Memory, CPU, etc), you can run the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@HELK-vm:~$ sudo docker stats --all
+
+CONTAINER ID        NAME                 CPU %               MEM USAGE / LIMIT     MEM %               NET I/O             BLOCK I/O           PIDS
+2caa7d86bc9e        helk-ksql-cli        0.00%               840KiB / 8.703GiB     0.01%               26.3kB / 0B         98.3kB / 0B         1
+1ee3c0d90b2a        helk-ksql-server     0.29%               222.6MiB / 8.703GiB   2.50%               177kB / 125kB       147kB / 197kB       31
+e753a811ffd2        helk-kafka-broker    1.71%               366.4MiB / 8.703GiB   4.11%               381kB / 383kB       823kB / 2.14MB      74
+f93239de7d95        helk-zookeeper       0.18%               74.24MiB / 8.703GiB   0.83%               109kB / 67.2kB      111kB / 1.39MB      48
+229ea8467075        helk-elastalert      10.71%              53.78MiB / 8.703GiB   0.60%               2.34MB / 3.39MB     3.62MB / 1.87MB     12
+f6fd290d2a9d        helk-nginx           0.02%               6.562MiB / 8.703GiB   0.07%               28.7kB / 1.54kB     61.4kB / 12.3kB     7
+d4f2b6d7d21e        helk-logstash        10.46%              1.337GiB / 8.703GiB   15.36%              632kB / 154MB       430MB / 31.5MB      81
+c5ae143741ea        helk-kibana          1.10%               359.7MiB / 8.703GiB   4.04%               345kB / 1.18MB      458MB / 12.3kB      13
+1729e3234b91        helk-elasticsearch   43.62%              3.524GiB / 8.703GiB   40.49%              159MB / 3.14MB      609MB / 600MB       77
+</pre></div>
+</div>
+<p>You should also monitor the logs of each container while they are being initialized:</p>
+<p>Just run the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>user@HELK-vm:~$ sudo docker logs --follow --tail 20 helk-elasticsearch
+
+[HELK-ES-DOCKER-INSTALLATION-INFO] Setting ES_JAVA_OPTS to -Xms3200m -Xmx3200m from custom HELK &quot;algorithm&quot;
+[HELK-ES-DOCKER-INSTALLATION-INFO] Setting Elastic license to basic
+[HELK-ES-DOCKER-INSTALLATION-INFO] Running docker-entrypoint script..
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:19,448Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.e.NodeEnvironment&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;using [1] data paths, mounts [[/usr/share/elasticsearch/data (/dev/mapper/ubuntu--vg-root)]], net usable_space [102.2gb], net total_space [116.6gb], types [ext4]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:19,451Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.e.NodeEnvironment&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;heap size [3gb], compressed ordinary object pointers [true]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:19,458Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.n.Node&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;node name [helk-1], node ID [Ed3L9UydShyLmPCbP3GLxw], cluster name [helk-cluster]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:19,459Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.n.Node&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;version[7.6.2], pid[16], build[default/docker/8bec50e1e0ad29dad5653712cf3bb580cd1afcdf/2020-01-15T12:11:52.313576Z], OS[Linux/4.15.0-74-generic/amd64], JVM[AdoptOpenJDK/OpenJDK 64-Bit Server VM/13.0.1/13.0.1+9]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:19,459Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.n.Node&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;JVM home [/usr/share/elasticsearch/jdk]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:19,460Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.n.Node&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;JVM arguments [-Des.networkaddress.cache.ttl=60, -Des.networkaddress.cache.negative.ttl=10, -XX:+AlwaysPreTouch, -Xss1m, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djna.nosys=true, -XX:-OmitStackTraceInFastThrow, -Dio.netty.noUnsafe=true, -Dio.netty.noKeySetOptimization=true, -Dio.netty.recycler.maxCapacityPerThread=0, -Dio.netty.allocator.numDirectArenas=0, -Dlog4j.shutdownHookEnabled=false, -Dlog4j2.disable.jmx=true, -Djava.locale.providers=COMPAT, -XX:+UseConcMarkSweepGC, -XX:CMSInitiatingOccupancyFraction=75, -XX:+UseCMSInitiatingOccupancyOnly, -Des.networkaddress.cache.ttl=60, -Des.networkaddress.cache.negative.ttl=10, -XX:+AlwaysPreTouch, -Djava.io.tmpdir=/tmp/elasticsearch-3812421782724323797, -XX:+HeapDumpOnOutOfMemoryError, -XX:HeapDumpPath=data, -XX:ErrorFile=logs/hs_err_pid%p.log, -Xlog:gc*,gc+age=trace,safepoint:file=logs/gc.log:utctime,pid,tags:filecount=32,filesize=64m, -Djava.locale.providers=COMPAT, -Des.cgroups.hierarchy.override=/, -Xms3200m, -Xmx3200m, -XX:MaxDirectMemorySize=1677721600, -Des.path.home=/usr/share/elasticsearch, -Des.path.conf=/usr/share/elasticsearch/config, -Des.distribution.flavor=default, -Des.distribution.type=docker, -Des.bundled_jdk=true]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,523Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [aggs-matrix-stats]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,523Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [analysis-common]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,524Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [flattened]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,524Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [frozen-indices]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,524Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [ingest-common]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,524Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [ingest-geoip]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,526Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [ingest-user-agent]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,526Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [lang-expression]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,526Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [lang-mustache]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,526Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [lang-painless]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,526Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [mapper-extras]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,526Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [parent-join]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,526Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [percolator]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,527Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [rank-eval]&quot; }
+{&quot;type&quot;: &quot;server&quot;, &quot;timestamp&quot;: &quot;2020-01-25T04:26:21,527Z&quot;, &quot;level&quot;: &quot;INFO&quot;, &quot;component&quot;: &quot;o.e.p.PluginsService&quot;, &quot;cluster.name&quot;: &quot;helk-cluster&quot;, &quot;node.name&quot;: &quot;helk-1&quot;, &quot;message&quot;: &quot;loaded module [reindex]&quot; }
+
+..
+....
+</pre></div>
+</div>
+<p>All you need to do now for the other ones is just replace helk-elasticsearch with the specific containers name:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker logs --follow &lt;container name&gt;
+</pre></div>
+</div>
+<p>Remember that you can also access your docker images by running the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker <span class="nb">exec</span> -ti helk-elasticsearch bash
+<span class="o">[</span>root@1729e3234b91 elasticsearch<span class="o">]</span><span class="c1"># </span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="final-details">
+<h1>Final Details<a class="headerlink" href="#final-details" title="Permalink to this headline">¶</a></h1>
+<p>Once your HELK installation ends, you will be presented with information that you will need to access the HELK and all its other components.</p>
+<p>You will get the following information:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>***********************************************************************************
+** [HELK-INSTALLATION-INFO] HELK WAS INSTALLED SUCCESSFULLY                      **
+** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
+***********************************************************************************
+ 
+HELK KIBANA URL: https://192.168.1.35
+HELK KIBANA USER: helk
+HELK KIBANA PASSWORD: Mmh3QAvQm3535F4f4VZQD
+HELK ZOOKEEPER: 192.168.1.35:2181
+HELK KSQL SERVER: 192.168.1.35:8088
+ 
+IT IS HUNTING SEASON!!!!!
+ 
+You can stop all the HELK docker containers by running the following command:
+ [+] sudo docker-compose -f helk-kibana-analysis-alert-trial.yml stop
+
+</pre></div>
+</div>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HELK KIBANA URL</p></td>
+<td><p>URL to access the Kibana server. You will need to copy that and paste it in your browser to access Kibana. Make sure you use <strong>https</strong> since Kibana is running behind NGINX via port 443 with a self-signed certificate</p></td>
+</tr>
+<tr class="row-odd"><td><p>HELK KIBANA USER &amp; PASSWORD</p></td>
+<td><p>Credentials used to access Kibana</p></td>
+</tr>
+<tr class="row-even"><td><p>HELK SPARK MASTER UI</p></td>
+<td><p>URL to access the Spark Master server (Spark Standalone). That server manages the Spark Workers used during execution of code by Jupyter Notebooks. Spark Master acts as a proxy to Spark Workers and applications running</p></td>
+</tr>
+<tr class="row-odd"><td><p>HELK JUPYTER SERVER URL</p></td>
+<td><p>URL to access the Jupyter notebook server.</p></td>
+</tr>
+<tr class="row-even"><td><p>HELK JUPYTER CURRENT TOKEN</p></td>
+<td><p>Jupyter token to log in instead of providing a password</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZOOKEEPER</p></td>
+<td><p>URL for the kafka cluster zookeeper</p></td>
+</tr>
+<tr class="row-even"><td><p>KSQL SERVER</p></td>
+<td><p>URL to access the KSQL server and send SQL queries to the data in the kafka brokers</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "Cyb3rWard0g/HELK",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "."
+        }
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">Introduction</a>
+    <a class='right-next' id="next-link" href="architecture/elasticsearch.html" title="next page">Elasticsearch</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.1.<br/>
+    </p>
+  </div>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="_static/js/index.js"></script>
+    
+  </body>
+</html>

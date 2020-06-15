@@ -1,0 +1,414 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>KSQL &#8212; The HELK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/sphinx-book-theme.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/mystnb.js"></script>
+    <script src="../../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .secondtoggle, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script async="async" src="../../_static/thebelab.js"></script>
+    <link rel="canonical" href="https://thehelk.com/how-to/ksql/intro.html" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Deploy KSQL Locally" href="deploy-locally.html" />
+    <link rel="prev" title="Update Kafka Broker IP" href="../kafka/update-ip-address.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+<!-- Put requirejs at the end so it's always after bootstrap -->
+<!-- TODO: remove this once https://github.com/pandas-dev/pydata-sphinx-theme/pull/149 is merged -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://thehelk.com/how-to/ksql/intro.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="KSQL" />
+<meta property="og:description" content="KSQL  You can use KSQL CLI to connect to the HELK’s KSQL Server from a different system. You will have to download the self-managed software Confluent platform " />
+<meta property="og:image"       content="https://thehelk.com/_static/logo.png" />
+
+<meta name="twitter:card" content="summary">
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">The HELK</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  
+  <ul class="nav sidenav_l1">
+<li class="navbar-special">
+<p class="margin-caption">Getting Started</p>
+</li>
+  <li class="">
+    <a href="../../installation.html">Installation</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">Architecture</p>
+</li>
+  <li class="">
+    <a href="../../architecture/elasticsearch.html">Elasticsearch</a>
+  </li>
+  <li class="">
+    <a href="../../architecture/logstash.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="../../architecture/kibana.html">Kibana</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">How-To</p>
+</li>
+  <li class="">
+    <a href="../docker/intro.html">Docker</a>
+  </li>
+  <li class="">
+    <a href="../logstash/intro.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="../kafka/intro.html">Kafka</a>
+  </li>
+  <li class="active">
+    <a href="">KSQL</a>
+  <ul class="nav sidenav_l2">
+    <li class="">
+      <a href="deploy-locally.html">Deploy KSQL Locally</a>
+    </li>
+  </ul>
+  </li>
+  <li class="">
+    <a href="../winlogbeat/intro.html">Winlogbeat</a>
+  </li>
+</ul>
+</nav>
+<p class="navbar_footer">Powered by <a href="https://jupyterbook.org">Jupyter Book</a></p>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse" data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu" aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation" title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <div class="dropdown-buttons-trigger">
+            <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i class="fas fa-download"></i></button>
+
+            
+            <div class="dropdown-buttons">
+                <!-- ipynb file if we had a myst markdown file -->
+                
+                <!-- Download raw file -->
+                <a class="dropdown-buttons" href="../../_sources/how-to/ksql/intro.md.txt"><button type="button" class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip" data-placement="left">.md</button></a>
+                <!-- Download PDF via print -->
+                <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF" onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+            </div>
+            
+        </div>
+
+        <!-- Edit this page -->
+        <a class="edit-button" href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/how-to/ksql/intro.md"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" title="Edit this page"><i class="fas fa-pencil-alt"></i></button></a>
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+        
+
+        
+    </div>
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/how-to/ksql/intro.md">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 col-xxl-7 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="ksql">
+<h1>KSQL<a class="headerlink" href="#ksql" title="Permalink to this headline">¶</a></h1>
+<p>You can use KSQL CLI to connect to the HELK’s KSQL Server from a different system. You will have to download the self-managed software Confluent platform and then run KSQL</p>
+<ul class="simple">
+<li><p>Download the self-managed software Confluent platform in a .tar.gz format from: https://www.confluent.io/download/#popup_form_3109</p></li>
+<li><p>Decompress the folder:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xvzf</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span><span class="o">-</span><span class="mf">2.11</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span>
+<span class="n">x</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span><span class="n">src</span><span class="o">/</span>
+<span class="n">x</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">avro</span><span class="o">-</span><span class="n">cpp</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">confluent5</span><span class="o">.</span><span class="mf">1.2</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">x</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">librdkafka</span><span class="o">-</span><span class="mf">0.11</span><span class="o">.</span><span class="mi">6</span><span class="o">-</span><span class="n">confluent5</span><span class="o">.</span><span class="mf">1.2</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">x</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">confluent</span><span class="o">-</span><span class="n">libserdes</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mf">2.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">x</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">avro</span><span class="o">-</span><span class="n">c</span><span class="o">-</span><span class="mf">1.8</span><span class="o">.</span><span class="mi">0</span><span class="o">-</span><span class="n">confluent5</span><span class="o">.</span><span class="mf">1.2</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">x</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Access the KSQL scripts:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">confluent</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span>
+<span class="n">ls</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">README</span>	<span class="nb">bin</span>	<span class="n">etc</span>	<span class="n">lib</span>	<span class="n">logs</span>	<span class="n">share</span>	<span class="n">src</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="nb">bin</span><span class="o">/</span>
+<span class="n">ls</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>confluent				kafka-acls				kafka-mirror-maker			kafka-server-stop			schema-registry-start
+confluent-hub				kafka-api-start				kafka-mqtt-run-class			kafka-streams-application-reset		schema-registry-stop
+confluent-rebalancer			kafka-avro-console-consumer		kafka-mqtt-start			kafka-topics				schema-registry-stop-service
+connect-distributed			kafka-avro-console-producer		kafka-mqtt-stop				kafka-verifiable-consumer		security-plugins-run-class
+connect-standalone			kafka-broker-api-versions		kafka-preferred-replica-election	kafka-verifiable-producer		sr-acl-cli
+control-center-3_0_0-reset		kafka-configs				kafka-producer-perf-test		ksql					support-metrics-bundle
+control-center-3_0_1-reset		kafka-console-consumer			kafka-reassign-partitions		ksql-datagen				windows
+control-center-console-consumer		kafka-console-producer			kafka-replica-verification		ksql-print-metrics			zookeeper-security-migration
+control-center-export			kafka-consumer-groups			kafka-rest-run-class			ksql-run-class				zookeeper-server-start
+control-center-reset			kafka-consumer-perf-test		kafka-rest-start			ksql-server-start			zookeeper-server-stop
+control-center-run-class		kafka-delegation-tokens			kafka-rest-stop				ksql-server-stop			zookeeper-shell
+control-center-set-acls			kafka-delete-records			kafka-rest-stop-service			ksql-stop
+control-center-start			kafka-dump-log				kafka-run-class				replicator
+control-center-stop			kafka-log-dirs				kafka-server-start			schema-registry-run-class
+Robertos-MBP:bin wardog$ 
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Check the options for KSQL:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">ksql</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>NAME
+        ksql - KSQL CLI
+
+SYNOPSIS
+        ksql [ --config-file &lt;configFile&gt; ] [ {-h | --help} ]
+                [ --output &lt;outputFormat&gt; ]
+                [ --query-row-limit &lt;streamedQueryRowLimit&gt; ]
+                [ --query-timeout &lt;streamedQueryTimeoutMs&gt; ] [--] &lt;server&gt;
+
+OPTIONS
+        --config-file &lt;configFile&gt;
+            A file specifying configs for Ksql and its underlying Kafka Streams
+            instance(s). Refer to KSQL documentation for a list of available
+            configs.
+
+        -h, --help
+            Display help information
+
+        --output &lt;outputFormat&gt;
+            The output format to use (either &#39;JSON&#39; or &#39;TABULAR&#39;; can be
+            changed during REPL as well; defaults to TABULAR)
+
+        --query-row-limit &lt;streamedQueryRowLimit&gt;
+            An optional maximum number of rows to read from streamed queries
+
+            This options value must fall in the following range: value &gt;= 1
+
+
+        --query-timeout &lt;streamedQueryTimeoutMs&gt;
+            An optional time limit (in milliseconds) for streamed queries
+
+            This options value must fall in the following range: value &gt;= 1
+
+
+        --
+            This option can be used to separate command-line options from the
+            list of arguments (useful when arguments might be mistaken for
+            command-line options)
+
+        &lt;server&gt;
+            The address of the Ksql server to connect to (ex:
+            http://confluent.io:9098)
+
+            This option may occur a maximum of 1 times
+
+Robertos-MBP:bin wardog$
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Connect to the HELK KSQL Server. You will just need to point to the IP address of your HELK Docker environment over port 8088</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">ksql</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">64.138</span><span class="p">:</span><span class="mi">8088</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                  ===========================================
+                  =        _  __ _____  ____  _             =
+                  =       | |/ // ____|/ __ \| |            =
+                  =       | &#39; /| (___ | |  | | |            =
+                  =       |  &lt;  \___ \| |  | | |            =
+                  =       | . \ ____) | |__| | |____        =
+                  =       |_|\_\_____/ \___\_\______|       =
+                  =                                         =
+                  =  Streaming SQL Engine for Apache Kafka® =
+                  ===========================================
+
+Copyright 2017-2018 Confluent Inc.
+
+CLI v5.1.2, Server v5.1.0 located at http://192.168.64.138:8088
+
+Having trouble? Type &#39;help&#39; (case-insensitive) for a rundown of how things work!
+
+ksql&gt; 
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Verify that you can see the topics available in the HELK Kafka broker</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">ksql</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">64.138</span><span class="p">:</span><span class="mi">8088</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>                  ===========================================
+                  =        _  __ _____  ____  _             =
+                  =       | |/ // ____|/ __ \| |            =
+                  =       | &#39; /| (___ | |  | | |            =
+                  =       |  &lt;  \___ \| |  | | |            =
+                  =       | . \ ____) | |__| | |____        =
+                  =       |_|\_\_____/ \___\_\______|       =
+                  =                                         =
+                  =  Streaming SQL Engine for Apache Kafka® =
+                  ===========================================
+
+Copyright 2017-2018 Confluent Inc.
+
+CLI v5.1.2, Server v5.1.0 located at http://192.168.64.138:8088
+
+Having trouble? Type &#39;help&#39; (case-insensitive) for a rundown of how things work!
+
+ksql&gt; SHOW TOPICS;
+
+ Kafka Topic | Registered | Partitions | Partition Replicas | Consumers | ConsumerGroups 
+-----------------------------------------------------------------------------------------
+ filebeat    | false      | 1          | 1                  | 0         | 0              
+ SYSMON_JOIN | false      | 1          | 1                  | 0         | 0              
+ winlogbeat  | false      | 1          | 1                  | 0         | 0              
+ winsecurity | false      | 1          | 1                  | 0         | 0              
+ winsysmon   | false      | 1          | 1                  | 0         | 0              
+-----------------------------------------------------------------------------------------
+ksql&gt; 
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "Cyb3rWard0g/HELK",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "how-to/ksql"
+        }
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../kafka/update-ip-address.html" title="previous page">Update Kafka Broker IP</a>
+    <a class='right-next' id="next-link" href="deploy-locally.html" title="next page">Deploy KSQL Locally</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.1.<br/>
+    </p>
+  </div>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../../_static/js/index.js"></script>
+    
+  </body>
+</html>
