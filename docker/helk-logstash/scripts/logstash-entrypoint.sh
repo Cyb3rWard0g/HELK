@@ -75,7 +75,7 @@ done
 
 # ******** Cluster Settings ***************
 echo -e "${HELK_INFO_TAG} Configuring elasticsearch cluster settings.."
-#until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT ${ELASTICSEARCH_ACCESS}/_cluster/settings -H 'Content-Type: application/json' --data-binary @"$settings_cluster" )", == "200" ]]; do
+until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT ${ELASTICSEARCH_ACCESS}/_cluster/settings -H 'Content-Type: application/json' --data-binary @"$settings_cluster" )", == "200" ]]; do
 until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X PUT ${ELASTICSEARCH_ACCESS}/_cluster/settings -H 'Content-Type: application/json' --data-binary @"$settings_cluster" )" == "200" ]]; do
   echo -e "${HELK_WARNING_TAG} Retrying cluster settings"
   sleep 2
