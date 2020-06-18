@@ -25,7 +25,7 @@ input {
       "etl_pipeline" => "udp-input-unknown"
     }
     #TODO:eventually match/add to ossem, should be set to something indicitave of a forwarder ip
-    source_ip_fieldname => "event_log_ip_addr"
+    source_ip_fieldname => "event_ip_addr"
     #id => "syslog-udp-5514-0001"
   }
 
@@ -39,7 +39,7 @@ input {
       "etl_pipeline" => "syslog-udp-input-cisco-asa"
     }
     #TODO:eventually match/add to ossem, should be set to something indicitave of a forwarder ip
-    source_ip_fieldname => "event_log_ip_addr"
+    source_ip_fieldname => "event_ip_addr"
     #id => "syslog-udp-8515-0001"
   }
 
@@ -53,7 +53,7 @@ input {
       "etl_pipeline" => "syslog-udp-input-paloalto"
     }
     #TODO:eventually match/add to ossem, should be set to something indicitave of a forwarder ip
-    source_ip_fieldname => "event_log_ip_addr"
+    source_ip_fieldname => "event_ip_addr"
     #id => "syslog-udp-8516-0001"
   }
 
@@ -67,7 +67,7 @@ input {
       "etl_pipeline" => "syslog-udp-input-cisco-ise"
     }
     #TODO:eventually match/add to ossem, should be set to something indicitave of a forwarder ip
-    source_ip_fieldname => "event_log_ip_addr"
+    source_ip_fieldname => "event_ip_addr"
     #id => "syslog-udp-8515-0001"
   }
 
