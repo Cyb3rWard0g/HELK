@@ -70,9 +70,9 @@
 1. Install the logstash integration plugins
     ```bash
     ./bin/logstash-plugin install \
-         logstash-integration-kafka \
-         logstash-integration-rabbitmq \
-         logstash-integration-jdbc
+        logstash-integration-kafka \
+        logstash-integration-rabbitmq \
+        logstash-integration-jdbc
     ```
 1. Install the logstash input plugins
     ```bash
