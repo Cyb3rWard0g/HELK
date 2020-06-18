@@ -30,7 +30,7 @@
     ```
 1. Install the logstash codec plugins
     ```bash
-    ./bin/logstash-plugin install \
+    LOGSTASH_PACK_URL=https://artifacts.elastic.co/downloads/logstash-plugins ./bin/logstash-plugin install \
         logstash-codec-avro \
         logstash-codec-es_bulk \
         logstash-codec-cef \
@@ -43,7 +43,7 @@
     ```
 1. Install the logstash filter plugins
     ```bash
-    ./bin/logstash-plugin install \
+    LOGSTASH_PACK_URL=https://artifacts.elastic.co/downloads/logstash-plugins ./bin/logstash-plugin install \
         logstash-filter-alter \
         logstash-filter-bytes \
         logstash-filter-cidr \
@@ -69,14 +69,14 @@
         logstash-filter-xml
 1. Install the logstash integration plugins
     ```bash
-    ./bin/logstash-plugin install \
+    LOGSTASH_PACK_URL=https://artifacts.elastic.co/downloads/logstash-plugins ./bin/logstash-plugin install \
         logstash-integration-kafka \
         logstash-integration-rabbitmq \
         logstash-integration-jdbc
     ```
 1. Install the logstash input plugins
     ```bash
-    ./bin/logstash-plugin install \
+    LOGSTASH_PACK_URL=https://artifacts.elastic.co/downloads/logstash-plugins ./bin/logstash-plugin install \
         logstash-input-azure_event_hubs \
         logstash-input-beats \
         logstash-input-cloudwatch \
@@ -95,7 +95,7 @@
     ```
 1. Install the logstash output plugins
     ```bash
-    ./bin/logstash-plugin install \
+    LOGSTASH_PACK_URL=https://artifacts.elastic.co/downloads/logstash-plugins ./bin/logstash-plugin install \
         logstash-output-cloudwatch \
         logstash-output-csv \
         logstash-output-elasticsearch \
@@ -149,5 +149,5 @@
     ```
 2. Move the plugins and files, via your preferred method, to `HELK/docker/helk-logstash/plugins/`
     ```bash
-    cp helk-offline* Gemfile logstash-plugin-information.txt ../
+    cp helk-offline* logstash-plugin-information.txt ../
     ```
