@@ -106,7 +106,7 @@ fieldmappings:
     EventID=4703: target_user_enabled_privilege_list
   EngineVersion: powershell.engine.version
   EventID: event_id
-  EventType: event_type
+  EventType: event_category_type
   EventNamespace:
     EventID=19: wmi_namespace
   Filter:
