@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # HELK script: helk_install.sh
-# HELK script description: HELK installation
+# HELK script description: HELK INSTALL
 # HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
@@ -10,12 +10,20 @@ HELK_BUILD_VERSION="v0.1.9-alpha03272020"
 HELK_ELK_VERSION="7.7.1"
 SUBSCRIPTION_CHOICE="basic"
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+WAR='\033[1;33m'
+STD='\033[0m'
+
 # *********** Helk log tagging variables ***************
 # For more efficient script editing/reading, and also if/when we switch to different install script language
-HELK_INFO_TAG="[HELK-INSTALLATION-INFO]"
-HELK_ERROR_TAG="[HELK-INSTALLATION-ERROR]"
+HELK_INFO_TAG="${CYAN}[HELK-INSTALL-INFO]${STD}"
+HELK_INPUT_TAG="${GREEN}[HELK-INSTALL-INPUT]${STD}"
+HELK_ERROR_TAG="${RED}[HELK-INSTALL-ERROR]${STD}"
+HELK_WARNING_TAG="${WAR}[HELK-INSTALL-WARNING]${STD}"
 # Make sure to use "echo -e" with this variable
-INSTALL_ERROR_CHECK_WIKI="$HELK_ERROR_TAG Check the requirements section in the Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
+INSTALL_ERROR_CHECK_WIKI="${HELK_ERROR_TAG} Check the requirements section in the Installation Wiki: https://github.com/Cyb3rWard0g/HELK/wiki/Installation"
 
 # *********** Variables for user modification ***************
 # Careful editing unless you know what you are doing :)
@@ -36,7 +44,7 @@ export SUBSCRIPTION_CHOICE=${SUBSCRIPTION_CHOICE}
 
 # *********** Check if user is root ***************
 if [[ $EUID -ne 0 ]]; then
-  echo "$HELK_INFO_TAG YOU MUST BE ROOT TO RUN THIS SCRIPT!"
+  echo -e "${HELK_ERROR_TAG} YOU MUST BE ROOT TO RUN THIS SCRIPT!"
   exit 1
 fi
 
@@ -117,27 +125,27 @@ set_install_info() {
 # ********** Check Minimum Requirements **************
 check_min_requirements() {
   # *********** Check System Kernel Name ***************
-  echo "$HELK_INFO_TAG HELK hosted on a $SYSTEM_KERNEL box"
+  echo -e "${HELK_INFO_TAG} HELK hosted on a $SYSTEM_KERNEL box"
   if [ "$SYSTEM_KERNEL" == "Linux" ]; then
     ARCHITECTURE=$(uname -m)
     if [ "${ARCHITECTURE}" != "x86_64" ]; then
-      echo "$HELK_ERROR_TAG HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
-      echo "Your Systems Architecture: ${ARCHITECTURE}"
-      echo -e $INSTALL_ERROR_CHECK_WIKI
+      echo -e "${HELK_ERROR_TAG} HELK REQUIRES AN X86_64 BASED OPERATING SYSTEM TO INSTALL"
+      echo -e "${HELK_ERROR_TAG} Your Systems Architecture: ${ARCHITECTURE}"
+      echo -e "${INSTALL_ERROR_CHECK_WIKI}"
       exit 1
     fi
     if [[ "${AVAILABLE_MEMORY}" -ge $INSTALL_MINIMUM_MEMORY ]]; then
-      echo "$HELK_INFO_TAG Available Memory: $AVAILABLE_MEMORY MBs"
+      echo -e "${HELK_INFO_TAG} Available Memory: $AVAILABLE_MEMORY MBs"
     else
-      echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY"
-      echo "$HELK_INFO_TAG This may be because you are already running the HELK docker containers.. If so, stop them and try again"
-      echo "$HELK_ERROR_TAG Available Memory: $AVAILABLE_MEMORY MBs"
-      echo -e $INSTALL_ERROR_CHECK_WIKI
+      echo -e "${HELK_ERROR_TAG} YOU DO NOT HAVE ENOUGH AVAILABLE MEMORY"
+      echo -e "${HELK_ERROR_TAG} This may be because you are already running the HELK docker containers.. If so, stop the containers and try again"
+      echo -e "${HELK_ERROR_TAG} Available Memory: $AVAILABLE_MEMORY MBs"
+      echo -e "${INSTALL_ERROR_CHECK_WIKI}"
       exit 1
     fi
   else
-    echo "$HELK_ERROR_TAG I could not calculate available memory for $SYSTEM_KERNEL"
-    echo "$HELK_ERROR_TAG Make sure you have at least $INSTALL_MINIMUM_MEMORY MBs of available memory"
+    echo -e "${HELK_ERROR_TAG} Could not calculate available memory for $SYSTEM_KERNEL"
+    echo -e "${HELK_ERROR_TAG} Make sure you have at least $INSTALL_MINIMUM_MEMORY MBs of available memory"
   fi
 }
 
@@ -190,20 +198,20 @@ check_system_info() {
     if [ $ERROR -ne 0 ]; then
       echoerror "Could not verify distribution or version of the OS (Error Code: $ERROR)."
     fi
-    echo "$HELK_INFO_TAG You're using $LSB_DIST version $DIST_VERSION"
+    echo -e "${HELK_INFO_TAG} You're using $LSB_DIST version $DIST_VERSION"
   elif [ "$SYSTEM_KERNEL" == "Darwin" ]; then
     PRODUCT_NAME="$(sw_vers -productName)"
     PRODUCT_VERSION="$(sw_vers -productVersion)"
     BUILD_VERSION="$(sw_vers -buildVersion)"
-    echo "$HELK_INFO_TAG You're using $PRODUCT_NAME version $PRODUCT_VERSION"
+    echo -e "${HELK_INFO_TAG} You're using $PRODUCT_NAME version $PRODUCT_VERSION"
   else
-    echo "$HELK_INFO_TAG We cannot figure out the SYSTEM_KERNEL, distribution or version of the OS"
+    echo -e "${HELK_INFO_TAG} We cannot figure out the SYSTEM_KERNEL, distribution or version of the OS"
   fi
 }
 
 # ********** Install Curl ********************
 install_curl() {
-  echo "$HELK_INFO_TAG Installing curl before installing docker.."
+  echo -e "${HELK_INFO_TAG} Installing curl before installing docker.."
   case "$LSB_DIST" in
   ubuntu | debian | raspbian)
     apt install -y curl >>$LOGFILE 2>&1
@@ -212,7 +220,7 @@ install_curl() {
     yum install -y curl >>$LOGFILE 2>&1
     ;;
   *)
-    echo "$HELK_INFO_TAG Please install curl for $LSB_DIST $DIST_VERSION.."
+    echo -e "${HELK_ERROR_TAG} Please install curl for $LSB_DIST $DIST_VERSION.."
     exit 1
     ;;
   esac
@@ -226,7 +234,7 @@ install_curl() {
 # ********* Install htpasswd ********************
 install_htpasswd() {
   if [ "$SYSTEM_KERNEL" == "Linux" ]; then
-    echo "$HELK_INFO_TAG Installing htpasswd.."
+    echo -e "${HELK_INFO_TAG} Installing htpasswd.."
     case "$LSB_DIST" in
     ubuntu | debian | raspbian)
       apt install -y apache2-utils >>$LOGFILE 2>&1
@@ -235,7 +243,7 @@ install_htpasswd() {
       yum install -y httpd-tools >>$LOGFILE 2>&1
       ;;
     *)
-      echo "$HELK_INFO_TAG Please install htpasswd for $LSB_DIST $DIST_VERSION.."
+      echo -e "${HELK_ERROR_TAG} Please install htpasswd for $LSB_DIST $DIST_VERSION.."
       exit 1
       ;;
     esac
@@ -245,13 +253,13 @@ install_htpasswd() {
       exit 1
     fi
   else
-    echo "$HELK_INFO_TAG Please install htpasswd for $SYSTEM_KERNEL.."
+    echo -e "${HELK_INFO_TAG} Please install htpasswd for $SYSTEM_KERNEL.."
   fi
 }
 
 # ****** Installing docker via convenience script ***********
 install_docker() {
-  echo "$HELK_INFO_TAG Installing docker via convenience script.."
+  echo -e "${HELK_INFO_TAG} Installing docker via convenience script.."
   curl -fsSL https://get.docker.com -o get-docker.sh >>$LOGFILE 2>&1
   chmod +x get-docker.sh >>$LOGFILE 2>&1
   ./get-docker.sh >>$LOGFILE 2>&1
@@ -264,16 +272,16 @@ install_docker() {
     echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
     if [ -x "$(command -v snap)" ]; then
       SNAP_VERSION=$(snap version | grep -w 'snap' | awk '{print $2}')
-      echo "$HELK_INFO_TAG Snap v$SNAP_VERSION is available. Trying to install docker via snap.."
+      echo -e "${HELK_INFO_TAG} Snap v$SNAP_VERSION is available. Trying to install docker via snap.."
       snap install docker >>$LOGFILE 2>&1
       ERROR=$?
       if [ $ERROR -ne 0 ]; then
         echoerror "Could not install docker via snap (Error Code: $ERROR)."
         exit 1
       fi
-      echo "$HELK_INFO_TAG Docker successfully installed via snap."
+      echo -e "${HELK_INFO_TAG} Docker successfully installed via snap."
     else
-      echo "$HELK_INFO_TAG Docker could not be installed. Check $LOGFILE for details."
+      echo -e "${HELK_ERROR_TAG} Docker could not be installed. Check $LOGFILE for details."
       exit 1
     fi
   fi
@@ -281,7 +289,7 @@ install_docker() {
 
 # ****** Installing docker compose from github.com/docker/compose ***********
 install_docker_compose() {
-  echo "$HELK_INFO_TAG Installing docker-compose.."
+  echo -e "${HELK_INFO_TAG} Installing docker-compose.."
   COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)
   curl -L https://github.com/docker/compose/releases/download/"$COMPOSE_VERSION"/docker-compose-"$(uname -s)"-"$(uname -m)" -o /usr/local/bin/docker-compose >>$LOGFILE 2>&1
   chmod +x /usr/local/bin/docker-compose >>$LOGFILE 2>&1
@@ -299,24 +307,23 @@ install_docker_compose() {
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password() {
   if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
-    echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."
+    echo -e "\n${HELK_INFO_TAG} Please make sure to create a custom Kibana password and store it securely for future use."
     sleep 1
     while true; do
-      read -t 90 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+      read -t 90 -p "$(echo -e "${HELK_INPUT_TAG} Set HELK Kibana UI Password: ")" -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
       READ_INPUT=$?
       KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
       if [ $READ_INPUT = 142 ]; then
-        echo -e "\n$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
+        echo -e "\n${HELK_INFO_TAG} HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
         break
       else
-        read -p "$HELK_INFO_TAG Verify HELK Kibana UI Password: " KIBANA_UI_PASSWORD_INPUT_VERIFIED
-        #echo -e "$HELK_INFO_TAG HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
+        read -p "$(echo -e "${HELK_INPUT_TAG} Verify HELK Kibana UI Password: ")" KIBANA_UI_PASSWORD_INPUT_VERIFIED
+        #echo -e "${HELK_INFO_TAG} HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
         # *********** Validating Password Input ***************
         if [[ "$KIBANA_UI_PASSWORD_INPUT" == "$KIBANA_UI_PASSWORD_INPUT_VERIFIED" ]]; then
           break
         else
-          echo -e "${RED}Error...${STD}"
-          echo "$HELK_INFO_TAG Your password values do not match.."
+          echo -e "${HELK_WARNING_TAG} Your password values do not match.."
         fi
       fi
     done
@@ -334,7 +341,7 @@ set_kibana_ui_password() {
       exit 1
     fi
   else
-    echo "$HELK_INFO_TAG Subscription Choice MUST be provided first.."
+    echo -e "${HELK_ERROR_TAG} Subscription Choice MUST be provided first.."
     exit 1
   fi
 }
@@ -344,7 +351,7 @@ set_network() {
   if [[ -z "$HOST_IP" ]]; then
     # *********** Getting Host IP ***************
     # https://github.com/Invoke-IR/ACE/blob/master/ACE-Docker/start.sh
-    #echo "$HELK_INFO_TAG Obtaining current host IP.."
+    #echo -e "${HELK_INFO_TAG} Obtaining current host IP.."
     case "${SYSTEM_KERNEL}" in
     Linux*) HOST_IP=$(ip route get 1 | grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b" | tail -1) ;;
     Darwin*) HOST_IP=$(ifconfig en0 | grep inet | grep -v inet6 | cut -d ' ' -f2) ;;
@@ -352,14 +359,14 @@ set_network() {
     esac
     # *********** Accepting Defaults or Allowing user to set the HELK IP ***************
     local ip_choice
-    read -t 90 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i "${HOST_IP}" ip_choice
+    read -t 90 -p "$(echo -e "${HELK_INPUT_TAG} Set HELK IP. Default value is your current IP: ")" -e -i "${HOST_IP}" ip_choice
     # ******* Validation ************
     #READ_INPUT=$?
     #HOST_IP="${ip_choice:-$HOST_IP}"
     #if [ $READ_INPUT  = 142 ]; then
-    #    echo -e "\n$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+    #    echo -e "\n${HELK_INFO_TAG} HELK IP set to ${HOST_IP}"
     #else
-    #    echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+    #    echo -e "${HELK_INFO_TAG} HELK IP set to ${HOST_IP}"
     #fi
   fi
 }
@@ -369,7 +376,7 @@ build_helk() {
   ## ****** Setting KAFKA ADVERTISED_LISTENER environment variable ***********
   export ADVERTISED_LISTENER=$HOST_IP
 
-  echo "$HELK_INFO_TAG Building & running HELK from $COMPOSE_CONFIG file.."
+  echo -e "${HELK_INFO_TAG} Building & running HELK from $COMPOSE_CONFIG file.."
   docker-compose -f $COMPOSE_CONFIG up --build -d >>$LOGFILE 2>&1
   ERROR=$?
   if [ $ERROR -ne 0 ]; then
@@ -394,22 +401,22 @@ set_helk_build() {
       echo " "
 
       local CONFIG_CHOICE
-      read -t 30 -p "Enter build choice [ 1 - 4]: " -e -i "1" CONFIG_CHOICE
+      read -t 90 -p "$(echo -e "${HELK_INPUT_TAG} Enter build choice [ 1 - 4]: ")" -e -i "1" CONFIG_CHOICE
       READ_INPUT=$?
       HELK_BUILD=${CONFIG_CHOICE:-"helk-kibana-analysis"}
       if [ $READ_INPUT = 142 ]; then
-        echo -e "\n$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
+        echo -e "\n${HELK_INFO_TAG} HELK build set to ${HELK_BUILD}"
         break
       else
-        echo "$HELK_INFO_TAG HELK build set to ${HELK_BUILD}"
+        echo -e "${HELK_INFO_TAG} HELK build set to ${HELK_BUILD}"
         case $CONFIG_CHOICE in
                     1) HELK_BUILD='helk-kibana-analysis';break;;
                     2) HELK_BUILD='helk-kibana-analysis-alert';break;;
         3)
           if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
-            echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
-            echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
-            echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
+            echo -e "${HELK_INFO_TAG} Your available memory for HELK build option ${HELK_BUILD} is not enough."
+            echo -e "${HELK_INFO_TAG} Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
+            echo -e "${HELK_INFO_TAG} Please Select option 1 or re-run the script after assigning the correct amount of memory"
             sleep 4
           else
             HELK_BUILD='helk-kibana-notebook-analysis'
@@ -418,9 +425,9 @@ set_helk_build() {
           ;;
         4)
           if [[ $AVAILABLE_MEMORY -le $INSTALL_MINIMUM_MEMORY_NOTEBOOK ]]; then
-            echo "$HELK_INFO_TAG Your available memory for HELK build option ${HELK_BUILD} is not enough."
-            echo "$HELK_INFO_TAG Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
-            echo "$HELK_INFO_TAG Please Select option 1 or re-run the script after assigning the correct amount of memory"
+            echo -e "${HELK_INFO_TAG} Your available memory for HELK build option ${HELK_BUILD} is not enough."
+            echo -e "${HELK_INFO_TAG} Minimum required for this build option is $INSTALL_MINIMUM_MEMORY_NOTEBOOK MBs."
+            echo -e "${HELK_INFO_TAG} Please Select option 1 or re-run the script after assigning the correct amount of memory"
             sleep 4
           else
             HELK_BUILD='helk-kibana-notebook-analysis-alert'
@@ -428,8 +435,7 @@ set_helk_build() {
           fi
           ;;
         *)
-          echo -e "${RED}Error...${STD}"
-          echo "$HELK_ERROR_TAG Not a valid build"
+          echo -e "${HELK_ERROR_TAG}Not a valid build...${STD}"
           ;;
         esac
       fi
@@ -446,27 +452,27 @@ prepare_helk() {
     fi
     # *********** Check if docker is installed ***************
     if [ -x "$(command -v docker)" ]; then
-      echo "$HELK_INFO_TAG Docker already installed"
+      echo -e "${HELK_INFO_TAG} Docker already installed"
       # Check to make sure docker is started before continuing with all the components that use docker
-      echo "$HELK_INFO_TAG Assesing if Docker is running.."
+      echo -e "${HELK_INFO_TAG} Assessing if Docker is running.."
       while true; do
         if (systemctl --quiet is-active docker.service); then
-          echo "$HELK_INFO_TAG Docker is running."
+          echo -e "${HELK_INFO_TAG} Docker is running."
           break
         else
-          echo "$HELK_ERROR_TAG Docker is not running. Attempting to start it.."
+          echo -e "${HELK_ERROR_TAG} Docker is not running. Attempting to start it.."
           systemctl enable docker.service
           systemctl start docker.service
           sleep 2
         fi
       done
-      echo "$HELK_INFO_TAG Making sure you assigned enough disk space to the current Docker base directory"
+      echo -e "${HELK_INFO_TAG} Making sure you assigned enough disk space to the current Docker base directory"
       AVAILABLE_DOCKER_DISK=$(df -m "$(docker info --format '{{.DockerRootDir}}')" | awk '$1 ~ /\//{printf "%.f", $4 / 1024}')
       if [[ "${AVAILABLE_DOCKER_DISK}" -ge $INSTALL_MINIMUM_DISK ]]; then
-        echo "$HELK_INFO_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
+        echo -e "${HELK_INFO_TAG} Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
       else
-        echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
-        echo "$HELK_ERROR_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
+        echo -e "${HELK_ERROR_TAG} YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
+        echo -e "${HELK_ERROR_TAG} Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
         echo -e "$INSTALL_ERROR_CHECK_WIKI"
         exit 1
       fi
@@ -480,20 +486,20 @@ prepare_helk() {
   else
     # *********** Check if docker is installed ***************
     if ! [ -x "$(command -v docker)" ] && ! [ -x "$(command -v docker-compose)" ]; then
-      echo "$HELK_INFO_TAG Please install Docker & Docker-compose for $SYSTEM_KERNEL"
+      echo -e "${HELK_INFO_TAG} Please install Docker & Docker-compose for $SYSTEM_KERNEL"
       exit 1
     fi
   fi
 
   # *********** Checking internal set up ***************
-  echo "$HELK_INFO_TAG Checking local vm.max_map_count variable and setting it to $SYSCTL_VM_MAX_MAP_COUNT"
+  echo -e "${HELK_INFO_TAG} Checking local vm.max_map_count variable and setting it to $SYSCTL_VM_MAX_MAP_COUNT"
   if [ -n "$SYSCTL_VM_MAX_MAP_COUNT" -a -f /proc/sys/vm/max_map_count ]; then
     sysctl -q -w vm.max_map_count="$SYSCTL_VM_MAX_MAP_COUNT" >>$LOGFILE 2>&1
     if [ $ERROR -ne 0 ]; then
       echoerror "Could not set vm.max_map_count to $SYSCTL_VM_MAX_MAP_COUNT (Error Code: $ERROR)."
     fi
   fi
-  echo "$HELK_INFO_TAG Setting local vm.swappiness variable to $SYSCTL_VM_SWAPPINESS"
+  echo -e "${HELK_INFO_TAG} Setting local vm.swappiness variable to $SYSCTL_VM_SWAPPINESS"
   if [ -n "$SYSCTL_VM_SWAPPINESS" -a -f /proc/sys/vm/swappiness ]; then
     sysctl -q -w vm.swappiness=$SYSCTL_VM_SWAPPINESS >>$LOGFILE 2>&1
     if [ $ERROR -ne 0 ]; then
@@ -508,12 +514,12 @@ get_jupyter_credentials() {
   if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis-alert" ]]; then
     until (docker logs helk-jupyter 2>&1 | grep -q "The Jupyter Notebook is running at"); do sleep 5; done
     jupyter_token="$(docker exec -i helk-jupyter jupyter notebook list | grep "token" | sed 's/.*token=\([^ ]*\).*/\1/')" >>$LOGFILE 2>&1
-    echo "HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
+    echo -e "${HELK_INFO_TAG} HELK JUPYTER CURRENT TOKEN: ${jupyter_token}"
   fi
 }
 
 check_logstash_connected() {
-  echo "$HELK_INFO_TAG Waiting for some services to be up ....."
+  echo -e "${HELK_INFO_TAG} Waiting for some services to be up ....."
   until (docker logs helk-logstash 2>&1 | grep -q "Restored connection to ES instance"); do sleep 5; done
 }
 
@@ -535,8 +541,8 @@ show_final_information() {
   echo " "
   echo " "
   echo "***********************************************************************************"
-  echo "** $HELK_INFO_TAG HELK WAS INSTALLED SUCCESSFULLY                      **"
-  echo "** $HELK_INFO_TAG USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **"
+  echo -e "** ${HELK_INFO_TAG} HELK WAS INSTALLED SUCCESSFULLY                      **"
+  echo -e "** ${HELK_INFO_TAG} USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **"
   echo "***********************************************************************************"
   echo " "
   if [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis" ]] || [[ ${HELK_BUILD} == "helk-kibana-notebook-analysis-alert" ]]; then
@@ -623,7 +629,7 @@ else
   if [[ "$HOST_IP" =~ ^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$ ]]; then
     for i in 1 2 3 4; do
       if [ "$(echo "$HOST_IP" | cut -d. -f$i)" -gt 255 ]; then
-        echo "$HELK_ERROR_TAG $HOST_IP is not a valid IP Address"
+        echo -e "${HELK_ERROR_TAG} $HOST_IP is not a valid IP Address"
         usage
       fi
     done
@@ -634,7 +640,7 @@ else
     helk-kibana-notebook-analysis) ;;
     helk-kibana-notebook-analysis-alert) ;;
     *)
-      echo "$HELK_ERROR_TAG Not a valid build. Valid Options: kafka, helk-kibana-analysis OR helk-kibana-notebook-analysis "
+      echo -e "${HELK_ERROR_TAG} Not a valid build. Valid Options: kafka, helk-kibana-analysis OR helk-kibana-notebook-analysis "
       usage
       ;;
     esac
@@ -645,7 +651,7 @@ else
       install_helk >>$LOGFILE 2>&1
     fi
   else
-    echo "$HELK_ERROR_TAG Make sure you set the right parameters"
+    echo -e "${HELK_ERROR_TAG} Make sure you set the right parameters"
     usage
   fi
 fi
