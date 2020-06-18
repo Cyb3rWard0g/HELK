@@ -57,6 +57,15 @@
 #
 # pipeline.unsafe_shutdown: false
 #
+# Set the pipeline event ordering. Options are "auto" (the default), "true" or "false".
+# "auto" will  automatically enable ordering if the 'pipeline.workers' setting
+# is also set to '1'.
+# "true" will enforce ordering on the pipeline and prevent logstash from starting
+# if there are multiple workers.
+# "false" will disable any extra processing necessary for preserving ordering.
+#
+pipeline.ordered: auto
+#
 # ------------ Pipeline Configuration Settings --------------
 #
 # Where to fetch the pipeline configuration for the main pipeline
@@ -77,6 +86,9 @@
 # config.reload.automatic: false
 #
 # How often to check if the pipeline configuration has changed (in seconds)
+# Note that the unit value (s) is required. Values without a qualifier (e.g. 60) 
+# are treated as nanoseconds.
+# Setting the interval this way is not recommended and might change in later versions.
 #
 # config.reload.interval: 3s
 #
@@ -212,6 +224,10 @@
 # Where to find custom plugins
 # path.plugins: []
 #
+# Flag to output log lines of each pipeline in its separate log file. Each log filename contains the pipeline.name
+# Default is false
+# pipeline.separate_logs: false
+#
 # ------------ X-Pack Settings (not applicable for OSS build)--------------
 #
 # X-Pack Monitoring
@@ -220,6 +236,9 @@
 #xpack.monitoring.elasticsearch.username: logstash_system
 #xpack.monitoring.elasticsearch.password: password
 #xpack.monitoring.elasticsearch.hosts: ["https://es1:9200", "https://es2:9200"]
+# an alternative to hosts + username/password settings is to use cloud_id/cloud_auth
+#xpack.monitoring.elasticsearch.cloud_id: monitoring_cluster_id:xxxxxxxxxx
+#xpack.monitoring.elasticsearch.cloud_auth: logstash_system:password
 #xpack.monitoring.elasticsearch.ssl.certificate_authority: [ "/path/to/ca.crt" ]
 #xpack.monitoring.elasticsearch.ssl.truststore.path: path/to/file
 #xpack.monitoring.elasticsearch.ssl.truststore.password: password
@@ -237,6 +256,9 @@
 #xpack.management.elasticsearch.username: logstash_admin_user
 #xpack.management.elasticsearch.password: password
 #xpack.management.elasticsearch.hosts: ["https://es1:9200", "https://es2:9200"]
+# an alternative to hosts + username/password settings is to use cloud_id/cloud_auth
+#xpack.management.elasticsearch.cloud_id: management_cluster_id:xxxxxxxxxx
+#xpack.management.elasticsearch.cloud_auth: logstash_admin_user:password
 #xpack.management.elasticsearch.ssl.certificate_authority: [ "/path/to/ca.crt" ]
 #xpack.management.elasticsearch.ssl.truststore.path: /path/to/file
 #xpack.management.elasticsearch.ssl.truststore.password: password
