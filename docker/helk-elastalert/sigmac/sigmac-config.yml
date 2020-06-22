@@ -8,6 +8,8 @@ backends:
   - xpack-watcher
   - elastalert
   - elastalert-dsl
+  - elasticsearch-rule
+  - ee-outliers
 logsources:
   windows-application:
     product: windows
@@ -209,6 +211,7 @@ fieldmappings:
   State:
     EventID=4: service_state
     EventID=16: sysmon_configuration_state
+  SubjectDomainName: user_domain
   SubjectUserName:
     EventID=4624: user_reporter_name
     EventId=4648: user_name
