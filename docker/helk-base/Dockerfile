@@ -3,7 +3,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM phusion/baseimage:latest
+FROM phusion/baseimage:18.04-1.0.0
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile HELK Base Image.."
 
@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -qqy --no-install-recommends \
   wget \
   sudo \
   nano \
+  && apt-get -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade \
   && apt-get -qy clean \
   autoremove \
   && rm -rf /var/lib/apt/lists/*
