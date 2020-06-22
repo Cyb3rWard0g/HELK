@@ -82,7 +82,6 @@
         logstash-input-cloudwatch \
         logstash-input-elasticsearch \
         logstash-input-file \
-        logstash-input-lumberjack \
         logstash-input-google_cloud_storage \
         logstash-input-google_pubsub \
         logstash-input-s3-sns-sqs \
@@ -103,7 +102,6 @@
         logstash-output-google_bigquery \
         logstash-output-google_cloud_storage \
         logstash-output-google_pubsub \
-        logstash-output-lumberjack \
         logstash-output-nagios \
         logstash-output-s3 \
         logstash-output-sns \
