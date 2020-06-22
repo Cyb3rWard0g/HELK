@@ -3,10 +3,6 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-# References: 
-# https://github.com/Yelp/elastalert/blob/master/Dockerfile-test
-# https://jordanpotti.com/2017/12/22/using-elastalert-to-help-automate-threat-hunting/
-
 FROM otrf/helk-base:0.0.4
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Elastalert."
