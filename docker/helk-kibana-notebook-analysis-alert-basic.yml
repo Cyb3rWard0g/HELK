@@ -35,7 +35,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    image: otrf/helk-logstash:7.7.1.1
+    build: helk-logstash/
     container_name: helk-logstash
     logging:
       driver: "json-file"
