@@ -310,9 +310,9 @@ set_kibana_ui_password() {
     echo -e "\n${HELK_INFO_TAG} Please make sure to create a custom Kibana password and store it securely for future use."
     sleep 1
     while true; do
-      read -t 90 -p "$(echo -e "${HELK_INPUT_TAG} Set HELK Kibana UI Password: ")" -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
+      read -t 90 -p "$(echo -e "${HELK_INPUT_TAG} Set HELK Kibana UI Password: ")" -e -i "" KIBANA_UI_PASSWORD_INPUT
       READ_INPUT=$?
-      KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-"hunting"}
+      KIBANA_UI_PASSWORD_INPUT=${KIBANA_UI_PASSWORD_INPUT:-""}
       if [ $READ_INPUT = 142 ]; then
         echo -e "\n${HELK_INFO_TAG} HELK Kibana UI password set to ${KIBANA_UI_PASSWORD_INPUT}"
         break
