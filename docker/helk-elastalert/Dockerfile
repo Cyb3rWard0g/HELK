@@ -3,7 +3,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM otrf/helk-base:0.0.4
+FROM otrf/helk-base:0.18.04.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Elastalert."
 
@@ -39,7 +39,6 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   && pip3 install -r requirements.txt \
   && python3 setup.py install \
   # ********* Download SIGMA *******************
-  && pip3 install -U sigmatools \
   && git clone https://github.com/Cyb3rWard0g/sigma.git ${ESALERT_SIGMA_HOME}
 
 # ********* Copy Elastalert files **************
