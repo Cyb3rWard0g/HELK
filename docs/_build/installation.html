@@ -166,14 +166,14 @@ Pulling helk-nginx (otrf/helk-nginx:1.18.0)...
 0.0.8: Pulling from otrf/helk-nginx
 Digest: sha256:83e86d3ee3891b8a06173f4278ddc9f85cbba9b2dfceada48fb311411e236341
 Status: Downloaded newer image for otrf/helk-nginx:1.18.0
-Pulling helk-zookeeper (otrf/helk-zookeeper:2.5.0)...
+Pulling helk-zookeeper (otrf/helk-zookeeper:2.5.0.1)...
 2.3.0: Pulling from otrf/helk-zookeeper
 Digest: sha256:3e7a0f3a73bcffeac4f239083618c362017005463dd747392a9b43db99535a68
-Status: Downloaded newer image for otrf/helk-zookeeper:2.5.0
-Pulling helk-kafka-broker (otrf/helk-kafka-broker:2.5.0)...
+Status: Downloaded newer image for otrf/helk-zookeeper:2.5.0.1
+Pulling helk-kafka-broker (otrf/helk-kafka-broker:2.5.0.1)...
 2.3.0: Pulling from otrf/helk-kafka-broker
 Digest: sha256:03569d98c46028715623778b4adf809bf417a055c3c19d21f426db4e1b2d6f55
-Status: Downloaded newer image for otrf/helk-kafka-broker:2.5.0
+Status: Downloaded newer image for otrf/helk-kafka-broker:2.5.0.1
 Pulling helk-ksql-server (confluentinc/cp-ksql-server:5.1.3)...
 5.1.3: Pulling from confluentinc/cp-ksql-server
 Digest: sha256:063add111cc93b1a0118f88b577e31303045d4cc08eb1d21458429f05cba4b02
@@ -202,8 +202,8 @@ Creating helk-ksql-cli      ... done</code></pre>
 <pre><code>CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                                                                              NAMES
 2caa7d86bc9e        confluentinc/cp-ksql-cli:5.1.3                        "/bin/sh"                5 minutes ago       Up 5 minutes                                                                                           helk-ksql-cli
 1ee3c0d90b2a        confluentinc/cp-ksql-server:5.1.3                     "/etc/confluent/dock…"   5 minutes ago       Up 5 minutes        0.0.0.0:8088-&gt;8088/tcp                                                             helk-ksql-server
-e753a811ffd2        otrf/helk-kafka-broker:2.5.0                          "./kafka-entrypoint.…"   5 minutes ago       Up 5 minutes        0.0.0.0:9092-&gt;9092/tcp                                                             helk-kafka-broker
-f93239de7d95        otrf/helk-zookeeper:2.5.0                             "./zookeeper-entrypo…"   5 minutes ago       Up 5 minutes        2181/tcp, 2888/tcp, 3888/tcp                                                       helk-zookeeper
+e753a811ffd2        otrf/helk-kafka-broker:2.5.0.1                          "./kafka-entrypoint.…"   5 minutes ago       Up 5 minutes        0.0.0.0:9092-&gt;9092/tcp                                                             helk-kafka-broker
+f93239de7d95        otrf/helk-zookeeper:2.5.0.1                             "./zookeeper-entrypo…"   5 minutes ago       Up 5 minutes        2181/tcp, 2888/tcp, 3888/tcp                                                       helk-zookeeper
 229ea8467075        otrf/helk-elastalert:0.3.0                            "./elastalert-entryp…"   5 minutes ago       Up 5 minutes                                                                                           helk-elastalert
 f6fd290d2a9d        otrf/helk-nginx:1.18.0                                 "/opt/helk/scripts/n…"   5 minutes ago       Up 5 minutes        0.0.0.0:80-&gt;80/tcp, 0.0.0.0:443-&gt;443/tcp                                           helk-nginx
 d4f2b6d7d21e        otrf/helk-logstash:7.7.1                              "/usr/share/logstash…"   5 minutes ago       Up 5 minutes        0.0.0.0:3515-&gt;3515/tcp, 0.0.0.0:5044-&gt;5044/tcp, 0.0.0.0:8531-&gt;8531/tcp, 9600/tcp   helk-logstash
