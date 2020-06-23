@@ -174,14 +174,14 @@ Pulling helk-kafka-broker (otrf/helk-kafka-broker:2.5.0.1)...
 2.3.0: Pulling from otrf/helk-kafka-broker
 Digest: sha256:03569d98c46028715623778b4adf809bf417a055c3c19d21f426db4e1b2d6f55
 Status: Downloaded newer image for otrf/helk-kafka-broker:2.5.0.1
-Pulling helk-ksql-server (confluentinc/cp-ksql-server:5.1.3)...
+Pulling helk-ksql-server (confluentinc/cp-ksql-server:5.4.2)...
 5.1.3: Pulling from confluentinc/cp-ksql-server
 Digest: sha256:063add111cc93b1a0118f88b577e31303045d4cc08eb1d21458429f05cba4b02
-Status: Downloaded newer image for confluentinc/cp-ksql-server:5.1.3
-Pulling helk-ksql-cli (confluentinc/cp-ksql-cli:5.1.3)...
+Status: Downloaded newer image for confluentinc/cp-ksql-server:5.4.2
+Pulling helk-ksql-cli (confluentinc/cp-ksql-cli:5.4.2)...
 5.1.3: Pulling from confluentinc/cp-ksql-cli
 Digest: sha256:18c0ccb00fbf87679e16e9e0da600548fcb236a2fd173263b09e89b2d3a42cc3
-Status: Downloaded newer image for confluentinc/cp-ksql-cli:5.1.3
+Status: Downloaded newer image for confluentinc/cp-ksql-cli:5.4.2
 Pulling helk-elastalert (otrf/helk-elastalert:0.3.0)...
 0.2.6: Pulling from otrf/helk-elastalert
 Digest: sha256:ae1096829aacbadce42bd4024b36da3a9636f1901ef4e9e62a12b881cfc23cf5
@@ -200,8 +200,8 @@ Creating helk-ksql-cli      ... done</code></pre>
 </pre></div>
 
 <pre><code>CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                                                                              NAMES
-2caa7d86bc9e        confluentinc/cp-ksql-cli:5.1.3                        "/bin/sh"                5 minutes ago       Up 5 minutes                                                                                           helk-ksql-cli
-1ee3c0d90b2a        confluentinc/cp-ksql-server:5.1.3                     "/etc/confluent/dock…"   5 minutes ago       Up 5 minutes        0.0.0.0:8088-&gt;8088/tcp                                                             helk-ksql-server
+2caa7d86bc9e        confluentinc/cp-ksql-cli:5.4.2                        "/bin/sh"                5 minutes ago       Up 5 minutes                                                                                           helk-ksql-cli
+1ee3c0d90b2a        confluentinc/cp-ksql-server:5.4.2                     "/etc/confluent/dock…"   5 minutes ago       Up 5 minutes        0.0.0.0:8088-&gt;8088/tcp                                                             helk-ksql-server
 e753a811ffd2        otrf/helk-kafka-broker:2.5.0.1                          "./kafka-entrypoint.…"   5 minutes ago       Up 5 minutes        0.0.0.0:9092-&gt;9092/tcp                                                             helk-kafka-broker
 f93239de7d95        otrf/helk-zookeeper:2.5.0.1                             "./zookeeper-entrypo…"   5 minutes ago       Up 5 minutes        2181/tcp, 2888/tcp, 3888/tcp                                                       helk-zookeeper
 229ea8467075        otrf/helk-elastalert:0.3.0                            "./elastalert-entryp…"   5 minutes ago       Up 5 minutes                                                                                           helk-elastalert
