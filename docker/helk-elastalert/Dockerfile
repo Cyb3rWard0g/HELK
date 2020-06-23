@@ -16,6 +16,7 @@ ENV ESALERT_SIGMA_HOME=/opt/sigma
 # *********** Installing Prerequisites ***************
 # -qq : No output except for errors
 RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
+  python3.6 \
   libmagic-dev \
   build-essential \
   python3-setuptools \
