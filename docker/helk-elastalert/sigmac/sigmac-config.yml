@@ -53,7 +53,7 @@ fieldmappings:
     EventID=5143: user_access_list
     EventID=5144: user_access_list
     EventID=5145: user_access_list
-    EventID=5447: object_access_list
+    default: AccessList
   AccessMask:
     EventID=4656: object_access_mask
     EventID=4659: object_access_mask
@@ -67,7 +67,7 @@ fieldmappings:
     EventID=5143: share_access_mask
     EventID=5144: share_access_mask
     EventID=5145: share_access_mask
-    EventID=5447: object_access_mask
+    default: AccessMask
   AccountName: user_name
   AllowedToDelegateTo: target_user_allowed_to_delegate
   AppCorrelationID: dsoperation_app_correlation_id
@@ -86,12 +86,14 @@ fieldmappings:
   ComputerName: host_name
   Configuration:
     EventID=16: sysmon_configuration
+    default: Configuration
   ConnectedViaIPAddress: dst_nat_ip_addr
   CurrentDirectory: process_current_directory
   Description: file_description
   DestAddress: dst_ip_addr
   Destination:
     EventID=20: wmi_consumer_destination
+    default: Destination
   DestinationHostname: dst_host_name
   DestinationIp: dst_ip_addr
   DestinationPort: dst_port
@@ -99,9 +101,11 @@ fieldmappings:
   DestinationIsIpv6: dst_is_ipv6
   Details:
     EventID=13: registry_key_value
+    default: Details
   Device: device_name
   DisabledPrivilegeList:
     EventID=4703: target_user_disabled_privilege_list
+    default: DisabledPrivilegeList
   DSName: host_domain
   DSType: dsobject_domain_type
   EnabledPrivilegeList:
@@ -111,6 +115,7 @@ fieldmappings:
   EventType: event_category_type
   EventNamespace:
     EventID=19: wmi_namespace
+    default: EventNamespace
   Filter:
     EventID=21: wmi_filter_path
   FailureCode: ticket_failure_code
@@ -125,15 +130,19 @@ fieldmappings:
   ImageLoaded:
     EventID=6: driver_loaded
     EventID=7: module_loaded
+    default: ImageLoaded
   Imphash: hash_imphash
   Initiated:
     EventID=3: network_initiated
+    default: Initiated
   IntegrityLevel:
     EventID=1: process_integrity_level
+    default: IntegrityLevel
   ipAddress: dst_ip_addr
   IpAddress: src_original_value
   IpAddresses:
     EventID=5168: ip_addresses
+    default: IpAddresses
   IPString: src_ip_addr
   LaunchedViaIPAddress: dst_ip_addr
   LogonProcessName: logon_process_name
@@ -141,12 +150,14 @@ fieldmappings:
   MachineIpAddress: dst_ip_addr
   MachineName: host_name
   Name:
-    EventID=19: wmi_name
-    EventID=20: wmi_name
+    EventID=19: wmi_filter_name
+    EventID=20: wmi_consumer_name
+    default: Name
   NewObjectDN: dsobject_new_dn
   NewProcessName: process_path
   NewName:
     EventID=14: registry_key_new_name
+    default: NewName
   ObjectClass: dsobject_class
   ObjectDN: dsobject_dn
   ObjectGUID: dsobject_guid
@@ -160,7 +171,16 @@ fieldmappings:
     EventID=19: wmi_operation
     EventID=20: wmi_operation
     EventID=21: wmi_operation
+    EventID=5058: key_operation
+    EventID=5059: key_operation
+    EventID=5061: key_operation
+    default: Operation
   OperationType:
+    EventID=4657: object_operation_type
+    EventID=4660: object_operation_type
+    EventID=4661: object_operation_type
+    EventID=4662: object_operation_type
+    EventID=4663: object_operation_type
     EventID=5136: dsoperation_type
     EventID=5137: dsoperation_type
     EventID=5138: dsoperation_type
@@ -168,7 +188,7 @@ fieldmappings:
     EventID=5141: dsoperation_type
     EventID=5169: dsoperation_type
     EventID=5170: dsoperation_type
-    default: object_operation_type
+    default: OperationType
   OriginalFileName: file_name_original
   ParentImage: process_parent_path
   ParentProcessName: process_parent_path
@@ -184,12 +204,20 @@ fieldmappings:
   Properties: object_properties
   Protocol:
     EventID=3: network_protocol
+    EventID=5152: network_protocol
+    EventID=5154: network_protocol
+    EventID=5156: network_protocol
+    EventID=5157: network_protocol
+    EventID=5158: network_protocol
+    default: Protocol
   Query:
     EventID=19: wmi_query
+    default: Query
   RelativeTargetName: share_relative_target_name
   SamAccountName: user_attribute_samaccount_name
   SchemaVersion:
     EventID=4: sysmon_schema_version
+    default: SchemaVersion
   ServiceFileName: service_image_path
   ServiceName: service_name
   ShareName: share_name
@@ -211,11 +239,136 @@ fieldmappings:
   State:
     EventID=4: service_state
     EventID=16: sysmon_configuration_state
+    default: State
   SubjectDomainName: user_domain
   SubjectUserName:
+    EventID=4611: user_name
+    EventID=4616: user_name
     EventID=4624: user_reporter_name
-    EventId=4648: user_name
+    EventID=4625: user_reporter_name
+    EventID=4626: user_reporter_name
+    EventID=4627: user_reporter_name
+    EventID=4648: user_name
+    EventID=4649: user_reporter_name
+    EventID=4656: user_name
+    EventID=4657: user_name
+    EventID=4658: user_name
+    EventID=4659: user_name
+    EventID=4660: user_name
+    EventID=4661: user_name
+    EventID=4662: user_name
+    EventID=4663: user_name
+    EventID=4664: user_name
+    EventID=4670: user_name
+    EventID=4672: user_name
+    EventID=4673: user_name
+    EventID=4674: user_name
+    EventID=4688: user_name
+    EventID=4689: user_name
+    EventID=4690: user_name
+    EventID=4692: user_name
+    EventID=4693: user_name
+    EventID=4694: user_name
+    EventID=4695: user_name
+    EventID=4696: user_name
+    EventID=4697: user_name
+    EventID=4698: user_name
+    EventID=4699: user_name
+    EventID=4700: user_name
+    EventID=4701: user_name
+    EventID=4702: user_name
+    EventID=4703: user_name
+    EventID=4704: user_name
+    EventID=4715: user_name
+    EventID=4719: user_name
+    EventID=4720: user_name
+    EventID=4722: user_name
+    EventID=4723: user_name
+    EventID=4724: user_name
+    EventID=4725: user_name
+    EventID=4726: user_name
+    EventID=4727: user_name
+    EventID=4728: user_name
+    EventID=4729: user_name
+    EventID=4730: user_name
+    EventID=4731: user_name
+    EventID=4732: user_name
+    EventID=4733: user_name
+    EventID=4734: user_name
+    EventID=4735: user_name
+    EventID=4737: user_name
+    EventID=4738: user_name
+    EventID=4740: user_reporter_name
+    EventID=4741: user_name
+    EventID=4742: user_name
+    EventID=4743: user_name
+    EventID=4744: user_name
+    EventID=4745: user_name
+    EventID=4746: user_name
+    EventID=4747: user_name
+    EventID=4748: user_name
+    EventID=4749: user_name
+    EventID=4750: user_name
+    EventID=4751: user_name
+    EventID=4752: user_name
+    EventID=4753: user_name
+    EventID=4754: user_name
+    EventID=4755: user_name
+    EventID=4756: user_name
+    EventID=4757: user_name
+    EventID=4758: user_name
+    EventID=4759: user_name
+    EventID=4760: user_name
+    EventID=4761: user_name
+    EventID=4762: user_name
+    EventID=4763: user_name
+    EventID=4764: user_name
+    EventID=4767: user_reporter_name
+    EventID=4781: user_name
+    EventID=4782: user_name
+    EventID=4793: user_name
+    EventID=4794: user_name
+    EventID=4797: user_name
+    EventID=4798: user_name
+    EventID=4799: user_name
+    EventID=4817: user_name
+    EventID=4882: user_name
+    EventID=4883: user_name
+    EventID=4902: user_name
+    EventID=4904: user_name
+    EventID=4905: user_name
+    EventID=4906: user_name
+    EventID=4907: user_name
+    EventID=4908: user_name
+    EventID=4912: user_name
+    EventID=4964: user_name
+    EventID=4985: user_name
+    EventID=5051: user_name
+    EventID=5058: user_name
+    EventID=5059: user_name
+    EventID=5061: user_name
+    EventID=5136: user_name
+    EventID=5137: user_name
+    EventID=5138: user_name
+    EventID=5139: user_name
     EventID=5140: user_name
+    EventID=5140: user_name
+    EventID=5141: user_name
+    EventID=5142: user_name
+    EventID=5143: user_name
+    EventID=5144: user_name
+    EventID=5145: user_name
+    EventID=5168: user_name
+    EventID=5169: user_name
+    EventID=5170: user_name
+    EventID=5376: user_name
+    EventID=5377: user_name
+    EventID=5378: user_name
+    EventID=5379: user_name
+    EventID=5632: user_name
+    EventID=5633: user_name
+    EventID=6416: user_name
+    default: SubjectUserName
   TargetServer:
     EventID=5738: dst_original_value
     default: target_server_name
@@ -230,12 +383,17 @@ fieldmappings:
   TransactionId: object_transaction_guid
   Type:
     EventID=20: wmi_consumer_type
+    EventID=5379: credentials_read_type
+    default: Type
   User: user_account
   UserName: user_name
   Value:
     EventID=1102: dst_ip_addr
+    EventID=1104: dst_ip_addr
+    default: Value
   Version:
     EventID=4: sysmon_version
+    default: Version
   Workstation: src_host_name
   WorkstationName: src_host_name
   PrivilegeList:
@@ -288,5 +446,6 @@ fieldmappings:
     EventID=4762: user_privilege_list
     EventID=4763: user_privilege_list
     EventID=4764: user_privilege_list
+    default: PrivilegeList
   UtcTime: '@timestamp'
   EventTime: '@timestamp'
