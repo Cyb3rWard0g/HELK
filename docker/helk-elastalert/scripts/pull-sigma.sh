@@ -17,7 +17,7 @@ HELK_ERROR_TAG="${RED}[HELK-ELASTALERT-DOCKER-INSTALLATION-ERROR]${STD}"
 HELK_WARNING_TAG="${WAR}[HELK-ELASTALERT-DOCKER-INSTALLATION-WARNING]${STD}"
 
 # ******* Read helk-elastalert preferences ************
-CONFIG_FILE="$ESALERT_HOME/pull-sigma-config.yaml"
+CONFIG_FILE="${ESALERT_HOME}/pull-sigma-config.yaml"
 HELK_ERROR_FILE="/tmp/helk_error"
 
 # Additional Settings
