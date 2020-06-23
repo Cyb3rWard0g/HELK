@@ -11,6 +11,9 @@ backends:
   - elasticsearch-rule
   - ee-outliers
 logsources:
+  windows:
+    product: windows
+    index: logs-endpoint-winevent-*
   windows-application:
     product: windows
     service: application
