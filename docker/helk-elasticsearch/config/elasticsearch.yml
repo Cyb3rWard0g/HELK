@@ -100,5 +100,5 @@ discovery.type: single-node
 #https://www.elastic.co/guide/en/elasticsearch/reference/current/monitoring-settings.html
 xpack.monitoring.collection.enabled: true
 
-# fix max_clause_count
+# fix max_clause_count (also described as "field expansion matches too many fields"
 indices.query.bool.max_clause_count: 4096
