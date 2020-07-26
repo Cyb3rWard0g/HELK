@@ -35,7 +35,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 * [An Integrated API for Mixing Graph and Relational Queries](https://cs.stanford.edu/~matei/papers/2016/grades_graphframes.pdf)
 * [Graph queries in Spark SQL](https://www.slideshare.net/SparkSummit/graphframes-graph-queries-in-spark-sql)
 * [Graphframes Overview](http://graphframes.github.io/index.html)
-* [Elastic Producs](https://www.elastic.co/products)
+* [Elastic Products](https://www.elastic.co/products)
 * [Elastic Subscriptions](https://www.elastic.co/subscriptions)
 * [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
 * [spujadas elk-docker](https://github.com/spujadas/elk-docker)
