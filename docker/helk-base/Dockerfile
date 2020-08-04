@@ -1,5 +1,4 @@
 # HELK script: HELK Base Image Dockerfile
-# HELK build version: 0.9 (Alpha)
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 

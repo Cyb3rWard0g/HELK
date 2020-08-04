@@ -92,7 +92,7 @@ sudo ./helk_install.sh
 **          HELK - THE HUNTING ELK          **
 **                                          **
 ** Author: Roberto Rodriguez (@Cyb3rWard0g) **
-** HELK build version: v0.1.8-alpha01032020 **
+** HELK build version: v0.2.0-alpha **
 ** HELK ELK version: 7.7.1                  **
 ** License: GPL-3.0                         **
 **********************************************

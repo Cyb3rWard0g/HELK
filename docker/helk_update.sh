@@ -7,7 +7,7 @@
 # Script Author: Dev Dua (@devdua)
 # License: GPL-3.0
 
-HELK_BUILD_VERSION="v0.1.9-alpha03272020"
+HELK_BUILD_VERSION="v0.2.0-alpha"
 HELK_ELK_VERSION="7.7.1"
 
 RED='\033[0;31m'
