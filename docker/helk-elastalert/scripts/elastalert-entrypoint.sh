@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# HELK script: elastalert-entryppoint.sh
+# HELK script: elastalert-entrypoint.sh
 # HELK script description: Creates Elastalert index
 # HELK build Stage: Alpha
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
