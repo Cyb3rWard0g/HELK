@@ -6,6 +6,7 @@
 # References:
 # https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_98.html
 
-FROM docker.elastic.co/kibana/kibana:7.7.1
+#ENABLE-IF-WANTING-TO-USE-LICENSE#FROM docker.elastic.co/kibana/kibana:7.7.1
+FROM docker.elastic.co/kibana/kibana-oss:7.7.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Kibana."
