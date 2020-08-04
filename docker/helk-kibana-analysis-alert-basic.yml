@@ -3,6 +3,7 @@ version: '3.5'
 services:
   helk-elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    #image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.7.1
     container_name: helk-elasticsearch
     logging:
       driver: "json-file"
@@ -20,8 +21,8 @@ services:
     environment:
       - cluster.name=helk-cluster
       - node.name=helk-1
-      - xpack.license.self_generated.type=basic
-      - xpack.security.enabled=false
+      #ENABLE-IF-WANTING-TO-USE-LICENSE#- xpack.license.self_generated.type=basic
+      #ENABLE-IF-WANTING-TO-USE-LICENSE#- xpack.security.enabled=false
       #- "HELK_ES_MEMORY=-Xms$2g -Xmx2g"
     ulimits:
       memlock:
@@ -35,7 +36,8 @@ services:
     networks:
       helk:
   helk-logstash:
-    build: helk-logstash/
+    #image: otrf/helk-logstash:7.7.1.2
+    image: otrf/helk-logstash:oss-latest
     container_name: helk-logstash
     logging:
       driver: "json-file"
@@ -52,8 +54,8 @@ services:
       - ./helk-logstash/elasticsearch_settings:/usr/share/logstash/elasticsearch_settings
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     environment:
-      - xpack.monitoring.enabled=true
-      - xpack.monitoring.elasticsearch.hosts=http://helk-elasticsearch:9200
+      #ENABLE-IF-WANTING-TO-USE-LICENSE#- xpack.monitoring.enabled=true
+      #ENABLE-IF-WANTING-TO-USE-LICENSE#- xpack.monitoring.elasticsearch.hosts=http://helk-elasticsearch:9200
       - log.level=warn
       - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
@@ -71,11 +73,12 @@ services:
       - "8517:8517/udp"
     restart: always
     depends_on:
-      - helk-kibana
+      - helk-elasticsearch
     networks:
       helk:
   helk-kibana:
-    image: docker.elastic.co/kibana/kibana:7.7.1
+    #ENABLE-IF-WANTING-TO-USE-LICENSE#image: docker.elastic.co/kibana/kibana:7.7.1
+    image: docker.elastic.co/kibana/kibana-oss:7.7.1
     container_name: helk-kibana
     logging:
       driver: "json-file"

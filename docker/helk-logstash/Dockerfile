@@ -3,7 +3,8 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM docker.elastic.co/logstash/logstash:7.7.1
+#ENABLE-IF-WANTING-TO-USE-LICENSE#FROM docker.elastic.co/logstash/logstash:7.7.1
+FROM docker.elastic.co/logstash/logstash-oss:7.7.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
