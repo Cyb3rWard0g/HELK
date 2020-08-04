@@ -8,7 +8,7 @@
 
 The Hunting ELK or simply the HELK is one of the first open source hunt platforms with  advanced analytics capabilities such as SQL declarative language, graphing, structured streaming, and even machine learning via Jupyter notebooks and Apache Spark over an ELK stack. This project was developed primarily for research, but due to its flexible design and core components, it can be deployed in larger environments with the right configurations and scalable infrastructure.
 
-![alt text](docs/content/images/HELK-Design.png "HELK Infrastructure")
+![](docs/images/HELK-Design.png "HELK Infrastructure")
 
 # Goals
 
@@ -23,7 +23,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 
 ## Docs:
 
-* [Introduction](https://thehelk.com/introduction.html)
+* [Introduction](https://thehelk.com/intro.html)
 * [Installation](https://thehelk.com/installation.html)
 
 # Resources
@@ -35,7 +35,7 @@ The project is currently in an alpha stage, which means that the code and the fu
 * [An Integrated API for Mixing Graph and Relational Queries](https://cs.stanford.edu/~matei/papers/2016/grades_graphframes.pdf)
 * [Graph queries in Spark SQL](https://www.slideshare.net/SparkSummit/graphframes-graph-queries-in-spark-sql)
 * [Graphframes Overview](http://graphframes.github.io/index.html)
-* [Elastic Producs](https://www.elastic.co/products)
+* [Elastic Products](https://www.elastic.co/products)
 * [Elastic Subscriptions](https://www.elastic.co/subscriptions)
 * [Elasticsearch Guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
 * [spujadas elk-docker](https://github.com/spujadas/elk-docker)

@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Load Local Docker Images &#8212; The HELK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/sphinx-book-theme.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/mystnb.js"></script>
+    <script src="../../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .secondtoggle, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script async="async" src="../../_static/thebelab.js"></script>
+    <link rel="canonical" href="https://thehelk.com/how-to/docker/load-images.html" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Logstash" href="../logstash/intro.html" />
+    <link rel="prev" title="Export Docker Images locally" href="export-images.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+<!-- Put requirejs at the end so it's always after bootstrap -->
+<!-- TODO: remove this once https://github.com/pandas-dev/pydata-sphinx-theme/pull/149 is merged -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://thehelk.com/how-to/docker/load-images.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Load Local Docker Images" />
+<meta property="og:description" content="Load Local Docker Images  If you followed this document to export your docker images locally, you should be ready to load them into an isolated system where it " />
+<meta property="og:image"       content="https://thehelk.com/_static/logo.png" />
+
+<meta name="twitter:card" content="summary">
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">The HELK</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  
+  <ul class="nav sidenav_l1">
+<li class="navbar-special">
+<p class="margin-caption">Getting Started</p>
+</li>
+  <li class="">
+    <a href="../../installation.html">Installation</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">Architecture</p>
+</li>
+  <li class="">
+    <a href="../../architecture/elasticsearch.html">Elasticsearch</a>
+  </li>
+  <li class="">
+    <a href="../../architecture/logstash.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="../../architecture/kibana.html">Kibana</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">How-To</p>
+</li>
+  <li class="active">
+    <a href="intro.html">Docker</a>
+  <ul class="nav sidenav_l2">
+    <li class="">
+      <a href="export-images.html">Export Docker Images locally</a>
+    </li>
+    <li class="active">
+      <a href="">Load Local Docker Images</a>
+    </li>
+  </ul>
+  </li>
+  <li class="">
+    <a href="../logstash/intro.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="../kafka/intro.html">Kafka</a>
+  </li>
+  <li class="">
+    <a href="../ksql/intro.html">KSQL</a>
+  </li>
+  <li class="">
+    <a href="../winlogbeat/intro.html">Winlogbeat</a>
+  </li>
+</ul>
+</nav>
+<p class="navbar_footer">Powered by <a href="https://jupyterbook.org">Jupyter Book</a></p>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse" data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu" aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation" title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <div class="dropdown-buttons-trigger">
+            <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i class="fas fa-download"></i></button>
+
+            
+            <div class="dropdown-buttons">
+                <!-- ipynb file if we had a myst markdown file -->
+                
+                <!-- Download raw file -->
+                <a class="dropdown-buttons" href="../../_sources/how-to/docker/load-images.md.txt"><button type="button" class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip" data-placement="left">.md</button></a>
+                <!-- Download PDF via print -->
+                <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF" onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+            </div>
+            
+        </div>
+
+        <!-- Edit this page -->
+        <a class="edit-button" href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/how-to/docker/load-images.md"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" title="Edit this page"><i class="fas fa-pencil-alt"></i></button></a>
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+        
+
+        
+    </div>
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/how-to/docker/load-images.md">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 col-xxl-7 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="load-local-docker-images">
+<h1>Load Local Docker Images<a class="headerlink" href="#load-local-docker-images" title="Permalink to this headline">¶</a></h1>
+<p>If you followed <code class="xref any docutils literal notranslate"><span class="pre">this</span> <span class="pre">document</span></code> to export your docker images locally, you should be ready to load them into an isolated system where it cannot access the dockerhub registry.</p>
+<ul class="simple">
+<li><p>Copy images to the isolated (10.0.10.102) system</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> f in /home/helk/*.tar<span class="p">;</span> <span class="k">do</span> scp <span class="nv">$f</span> helk@10.0.10.102:/tmp/<span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">worker</span><span class="o">.</span><span class="n">tar</span>  <span class="mi">100</span><span class="o">%</span>  <span class="mi">560</span><span class="n">MB</span>  <span class="mf">24.4</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span>   <span class="mi">00</span><span class="p">:</span><span class="mi">23</span>    
+<span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="n">tar</span>   <span class="mi">100</span><span class="o">%</span>  <span class="mi">502</span><span class="n">MB</span>  <span class="mf">29.5</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span>   <span class="mi">00</span><span class="p">:</span><span class="mi">17</span>    
+<span class="n">helk</span><span class="o">-</span><span class="n">logstash</span><span class="o">.</span><span class="n">tar</span>      <span class="mi">100</span><span class="o">%</span>  <span class="mi">773</span><span class="n">MB</span>  <span class="mf">28.6</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span>   <span class="mi">00</span><span class="p">:</span><span class="mi">27</span>    
+<span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span><span class="o">.</span><span class="n">tar</span>      <span class="mi">100</span><span class="o">%</span>  <span class="mi">497</span><span class="n">MB</span>  <span class="mf">21.6</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span>   <span class="mi">00</span><span class="p">:</span><span class="mi">23</span>    
+<span class="n">helk</span><span class="o">-</span><span class="n">elasticsearch</span><span class="o">.</span><span class="n">tar</span> <span class="mi">100</span><span class="o">%</span>  <span class="mi">815</span><span class="n">MB</span>  <span class="mf">29.1</span><span class="n">MB</span><span class="o">/</span><span class="n">s</span>   <span class="mi">00</span><span class="p">:</span><span class="mi">28</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Check if images exist in the isolated system</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls /tmp/
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span><span class="o">.</span><span class="n">tar</span> <span class="n">helk</span><span class="o">-</span><span class="n">jupyter</span><span class="o">.</span><span class="n">tar</span> 
+<span class="n">helk</span><span class="o">-</span><span class="n">kibana</span><span class="o">.</span><span class="n">tar</span> <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="n">tar</span> <span class="n">helk</span><span class="o">-</span><span class="n">nginx</span><span class="o">.</span><span class="n">tar</span> 
+<span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">worker</span><span class="o">.</span><span class="n">tar</span> <span class="n">helk</span><span class="o">-</span><span class="n">elasticsearch</span><span class="o">.</span><span class="n">tar</span>
+<span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span><span class="o">.</span><span class="n">tar</span> <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span><span class="o">.</span><span class="n">tar</span> <span class="n">helk</span><span class="o">-</span><span class="n">logstash</span><span class="o">.</span><span class="n">tar</span>
+<span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">master</span><span class="o">.</span><span class="n">tar</span>  <span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span><span class="o">.</span><span class="n">tar</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Load images with the docker load commands:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> i in /tmp/*.tar<span class="p">;</span> <span class="k">do</span> sudo docker load --input <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f49017d4d5ce</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">85.96</span><span class="n">MB</span><span class="o">/</span><span class="mf">85.96</span><span class="n">MB</span>
+<span class="mi">8</span><span class="n">f2b771487e9</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">15.87</span><span class="n">kB</span><span class="o">/</span><span class="mf">15.87</span><span class="n">kB</span>
+<span class="n">ccd4d61916aa</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">10.24</span><span class="n">kB</span><span class="o">/</span><span class="mf">10.24</span><span class="n">kB</span>
+<span class="n">c01d74f99de4</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">5.632</span><span class="n">kB</span><span class="o">/</span><span class="mf">5.632</span><span class="n">kB</span>
+<span class="mi">268</span><span class="n">a067217b5</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">3.072</span><span class="n">kB</span><span class="o">/</span><span class="mf">3.072</span><span class="n">kB</span>
+<span class="mi">831</span><span class="n">fff32e4f2</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">65.02</span><span class="n">kB</span><span class="o">/</span><span class="mf">65.02</span><span class="n">kB</span>
+<span class="n">c89f4fbc01f8</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">103.4</span><span class="n">MB</span><span class="o">/</span><span class="mf">103.4</span><span class="n">MB</span>
+<span class="n">adfd094c5517</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">3.245</span><span class="n">MB</span><span class="o">/</span><span class="mf">3.245</span><span class="n">MB</span>
+<span class="n">c73538215c3e</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">567.6</span><span class="n">MB</span><span class="o">/</span><span class="mf">567.6</span><span class="n">MB</span>
+<span class="mi">080</span><span class="n">f01d1ecbc</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">13.31</span><span class="n">kB</span><span class="o">/</span><span class="mf">13.31</span><span class="n">kB</span>
+<span class="mi">60</span><span class="n">bbd38a907e</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">3.584</span><span class="n">kB</span><span class="o">/</span><span class="mf">3.584</span><span class="n">kB</span>
+<span class="mi">9</span><span class="n">affd17eb100</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">5.632</span><span class="n">kB</span><span class="o">/</span><span class="mf">5.632</span><span class="n">kB</span>
+<span class="mi">0561</span><span class="n">c04cbf7e</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">7.168</span><span class="n">kB</span><span class="o">/</span><span class="mf">7.168</span><span class="n">kB</span>
+<span class="n">ba0201512417</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">18.29</span><span class="n">MB</span><span class="o">/</span><span class="mf">18.29</span><span class="n">MB</span>
+<span class="n">Loaded</span> <span class="n">image</span><span class="p">:</span> <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span><span class="p">:</span><span class="mf">0.2</span><span class="o">.</span><span class="mi">1</span>
+<span class="mi">071</span><span class="n">d8bd76517</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">210.2</span><span class="n">MB</span><span class="o">/</span><span class="mf">210.2</span><span class="n">MB</span>
+<span class="n">a175339dcf83</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">310.5</span><span class="n">MB</span><span class="o">/</span><span class="mf">310.5</span><span class="n">MB</span>
+<span class="mi">9</span><span class="n">a70a6f483f7</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">95.68</span><span class="n">MB</span><span class="o">/</span><span class="mf">95.68</span><span class="n">MB</span>
+<span class="n">f4db77828c81</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">311.3</span><span class="n">kB</span><span class="o">/</span><span class="mf">311.3</span><span class="n">kB</span>
+<span class="n">be48c67e9d13</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">237.5</span><span class="n">MB</span><span class="o">/</span><span class="mf">237.5</span><span class="n">MB</span>
+<span class="mi">432</span><span class="n">cb712190e</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>   <span class="mf">7.68</span><span class="n">kB</span><span class="o">/</span><span class="mf">7.68</span><span class="n">kB</span>
+<span class="n">a512981fd597</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">9.728</span><span class="n">kB</span><span class="o">/</span><span class="mf">9.728</span><span class="n">kB</span>
+<span class="n">Loaded</span> <span class="n">image</span><span class="p">:</span> <span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">elasticsearch</span><span class="o">/</span><span class="n">elasticsearch</span><span class="p">:</span><span class="mf">6.6</span><span class="o">.</span><span class="mi">1</span>
+<span class="mf">49778752e7</span><span class="n">ec</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">394.9</span><span class="n">MB</span><span class="o">/</span><span class="mf">394.9</span><span class="n">MB</span>
+<span class="mi">5</span><span class="n">f3913b1d541</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">1.667</span><span class="n">GB</span><span class="o">/</span><span class="mf">1.667</span><span class="n">GB</span>
+<span class="mi">77</span><span class="n">fa3a9c5ff6</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">7.168</span><span class="n">kB</span><span class="o">/</span><span class="mf">7.168</span><span class="n">kB</span>
+<span class="n">cbc15b984e03</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">10.24</span><span class="n">kB</span><span class="o">/</span><span class="mf">10.24</span><span class="n">kB</span>
+<span class="mi">38</span><span class="n">c44d7a52f6</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>   <span class="mf">5.12</span><span class="n">kB</span><span class="o">/</span><span class="mf">5.12</span><span class="n">kB</span>
+<span class="mi">0</span><span class="n">ec2dbbfd6c7</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">3.584</span><span class="n">kB</span><span class="o">/</span><span class="mf">3.584</span><span class="n">kB</span>
+<span class="n">Loaded</span> <span class="n">image</span><span class="p">:</span> <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">jupyter</span><span class="p">:</span><span class="mf">0.1</span><span class="o">.</span><span class="mi">1</span>
+<span class="mf">4e31</span><span class="n">d8c1cf96</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">203.1</span><span class="n">MB</span><span class="o">/</span><span class="mf">203.1</span><span class="n">MB</span>
+<span class="n">efb23c49455d</span><span class="p">:</span> <span class="n">Loading</span> <span class="n">layer</span> <span class="p">[</span><span class="o">==================================================&gt;</span><span class="p">]</span>  <span class="mf">11.26</span><span class="n">kB</span><span class="o">/</span><span class="mf">11.26</span><span class="n">kB</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>check if images are loaded via the docker images command</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker images
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>REPOSITORY                                      TAG                 IMAGE ID            CREATED             SIZE
+cyb3rward0g/helk-jupyter                        0.1.1               efa46ecc8d32        2 days ago          2.18GB
+confluentinc/cp-ksql-server                     5.1.2               f57298019757        6 days ago          514MB
+confluentinc/cp-ksql-cli                        5.1.2               bd411ce0ba9f        6 days ago          510MB
+docker.elastic.co/logstash/logstash             6.6.1               3e7fbb7964ee        11 days ago         786MB
+docker.elastic.co/kibana/kibana                 6.6.1               b94222148a00        11 days ago         710MB
+docker.elastic.co/elasticsearch/elasticsearch   6.6.1               c6ffcb0ee97e        11 days ago         842MB
+cyb3rward0g/helk-elastalert                     0.2.1               569f588a22fc        3 weeks ago         758MB
+cyb3rward0g/helk-kafka-broker                   2.1.0               7b3e7f9ce732        2 months ago        388MB
+cyb3rward0g/helk-zookeeper                      2.1.0               abb732da3e50        2 months ago        388MB
+cyb3rward0g/helk-spark-worker                   2.4.0               b1545b0582db        2 months ago        579MB
+cyb3rward0g/helk-spark-master                   2.4.0               70fc61de3445        2 months ago        579MB
+cyb3rward0g/helk-nginx                          0.0.7               280d044b6719        6 months ago        329MB
+helk@helk:~$ 
+</pre></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "Cyb3rWard0g/HELK",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "how-to/docker"
+        }
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="export-images.html" title="previous page">Export Docker Images locally</a>
+    <a class='right-next' id="next-link" href="../logstash/intro.html" title="next page">Logstash</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.1.<br/>
+    </p>
+  </div>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../../_static/js/index.js"></script>
+    
+  </body>
+</html>

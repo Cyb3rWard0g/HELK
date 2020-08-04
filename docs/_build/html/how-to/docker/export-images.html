@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Export Docker Images locally &#8212; The HELK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous">
+    <link href="../../_static/css/index.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/sphinx-book-theme.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/mystnb.js"></script>
+    <script src="../../_static/sphinx-book-theme.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .secondtoggle, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script async="async" src="../../_static/thebelab.js"></script>
+    <link rel="canonical" href="https://thehelk.com/how-to/docker/export-images.html" />
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Load Local Docker Images" href="load-images.html" />
+    <link rel="prev" title="Docker" href="intro.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="docsearch:language" content="en">
+<!-- Put requirejs at the end so it's always after bootstrap -->
+<!-- TODO: remove this once https://github.com/pandas-dev/pydata-sphinx-theme/pull/149 is merged -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://thehelk.com/how-to/docker/export-images.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Export Docker Images locally" />
+<meta property="og:description" content="Export Docker Images locally  If the system where you are planning to install HELK is isolated from the Internet, you can run HELK on another system that has ac" />
+<meta property="og:image"       content="https://thehelk.com/_static/logo.png" />
+
+<meta name="twitter:card" content="summary">
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">The HELK</h1>
+  
+</a>
+</div>
+
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  
+  <ul class="nav sidenav_l1">
+<li class="navbar-special">
+<p class="margin-caption">Getting Started</p>
+</li>
+  <li class="">
+    <a href="../../installation.html">Installation</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">Architecture</p>
+</li>
+  <li class="">
+    <a href="../../architecture/elasticsearch.html">Elasticsearch</a>
+  </li>
+  <li class="">
+    <a href="../../architecture/logstash.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="../../architecture/kibana.html">Kibana</a>
+  </li>
+<li class="navbar-special">
+<p class="margin-caption">How-To</p>
+</li>
+  <li class="active">
+    <a href="intro.html">Docker</a>
+  <ul class="nav sidenav_l2">
+    <li class="active">
+      <a href="">Export Docker Images locally</a>
+    </li>
+    <li class="">
+      <a href="load-images.html">Load Local Docker Images</a>
+    </li>
+  </ul>
+  </li>
+  <li class="">
+    <a href="../logstash/intro.html">Logstash</a>
+  </li>
+  <li class="">
+    <a href="../kafka/intro.html">Kafka</a>
+  </li>
+  <li class="">
+    <a href="../ksql/intro.html">KSQL</a>
+  </li>
+  <li class="">
+    <a href="../winlogbeat/intro.html">Winlogbeat</a>
+  </li>
+</ul>
+</nav>
+<p class="navbar_footer">Powered by <a href="https://jupyterbook.org">Jupyter Book</a></p>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse" data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu" aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation" title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <div class="dropdown-buttons-trigger">
+            <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i class="fas fa-download"></i></button>
+
+            
+            <div class="dropdown-buttons">
+                <!-- ipynb file if we had a myst markdown file -->
+                
+                <!-- Download raw file -->
+                <a class="dropdown-buttons" href="../../_sources/how-to/docker/export-images.md.txt"><button type="button" class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip" data-placement="left">.md</button></a>
+                <!-- Download PDF via print -->
+                <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF" onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+            </div>
+            
+        </div>
+
+        <!-- Edit this page -->
+        <a class="edit-button" href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/how-to/docker/export-images.md"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" title="Edit this page"><i class="fas fa-pencil-alt"></i></button></a>
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+        
+
+        
+    </div>
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+
+<nav id="bd-toc-nav">
+    <ul class="nav section-nav flex-column">
+    
+    </ul>
+</nav>
+
+
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/Cyb3rWard0g/HELK/edit/master/docs/how-to/docker/export-images.md">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 col-xxl-7 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="export-docker-images-locally">
+<h1>Export Docker Images locally<a class="headerlink" href="#export-docker-images-locally" title="Permalink to this headline">¶</a></h1>
+<p>If the system where you are planning to install HELK is isolated from the Internet, you can run HELK on another system that has access to the Internet and then export the built/downloaded images to .tar files. You can then LOAD Those image files in the system that is isolated from the Internet.</p>
+<ul class="simple">
+<li><p>List all the images available in the non-isolated system via the docker images command</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker images
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REPOSITORY</span>                                      <span class="n">TAG</span>                 <span class="n">IMAGE</span> <span class="n">ID</span>            <span class="n">CREATED</span>             <span class="n">SIZE</span>
+<span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">jupyter</span>                        <span class="mf">0.1</span><span class="o">.</span><span class="mi">1</span>               <span class="n">efa46ecc8d32</span>        <span class="mi">2</span> <span class="n">days</span> <span class="n">ago</span>          <span class="mf">2.18</span><span class="n">GB</span>
+<span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span>                     <span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span>               <span class="n">f57298019757</span>        <span class="mi">6</span> <span class="n">days</span> <span class="n">ago</span>          <span class="mi">514</span><span class="n">MB</span>
+<span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span>                        <span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span>               <span class="n">bd411ce0ba9f</span>        <span class="mi">6</span> <span class="n">days</span> <span class="n">ago</span>          <span class="mi">510</span><span class="n">MB</span>
+<span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">logstash</span><span class="o">/</span><span class="n">logstash</span>             <span class="mf">6.6</span><span class="o">.</span><span class="mi">1</span>               <span class="mf">3e7</span><span class="n">fbb7964ee</span>        <span class="mi">11</span> <span class="n">days</span> <span class="n">ago</span>         <span class="mi">786</span><span class="n">MB</span>
+<span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">kibana</span><span class="o">/</span><span class="n">kibana</span>                 <span class="mf">6.6</span><span class="o">.</span><span class="mi">1</span>               <span class="n">b94222148a00</span>        <span class="mi">11</span> <span class="n">days</span> <span class="n">ago</span>         <span class="mi">710</span><span class="n">MB</span>
+<span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">elasticsearch</span><span class="o">/</span><span class="n">elasticsearch</span>   <span class="mf">6.6</span><span class="o">.</span><span class="mi">1</span>               <span class="n">c6ffcb0ee97e</span>        <span class="mi">11</span> <span class="n">days</span> <span class="n">ago</span>         <span class="mi">842</span><span class="n">MB</span>
+<span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span>                     <span class="mf">0.2</span><span class="o">.</span><span class="mi">1</span>               <span class="mi">569</span><span class="n">f588a22fc</span>        <span class="mi">3</span> <span class="n">weeks</span> <span class="n">ago</span>         <span class="mi">758</span><span class="n">MB</span>
+<span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span>                   <span class="mf">2.1</span><span class="o">.</span><span class="mi">0</span>               <span class="mi">7</span><span class="n">b3e7f9ce732</span>        <span class="mi">2</span> <span class="n">months</span> <span class="n">ago</span>        <span class="mi">388</span><span class="n">MB</span>
+<span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span>                      <span class="mf">2.1</span><span class="o">.</span><span class="mi">0</span>               <span class="n">abb732da3e50</span>        <span class="mi">2</span> <span class="n">months</span> <span class="n">ago</span>        <span class="mi">388</span><span class="n">MB</span>
+<span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">worker</span>                   <span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span>               <span class="n">b1545b0582db</span>        <span class="mi">2</span> <span class="n">months</span> <span class="n">ago</span>        <span class="mi">579</span><span class="n">MB</span>
+<span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">master</span>                   <span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span>               <span class="mi">70</span><span class="n">fc61de3445</span>        <span class="mi">2</span> <span class="n">months</span> <span class="n">ago</span>        <span class="mi">579</span><span class="n">MB</span>
+<span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">nginx</span>                          <span class="mf">0.0</span><span class="o">.</span><span class="mi">7</span>               <span class="mi">280</span><span class="n">d044b6719</span>        <span class="mi">6</span> <span class="n">months</span> <span class="n">ago</span>        <span class="mi">329</span><span class="n">MB</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>List all the containers running in the non-isolated system via the docker ps command</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker ps
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CONTAINER</span> <span class="n">ID</span>        <span class="n">IMAGE</span>                                                 <span class="n">COMMAND</span>                  <span class="n">CREATED</span>             <span class="n">STATUS</span>              <span class="n">PORTS</span>                                                      <span class="n">NAMES</span>
+<span class="n">de048c88dc7f</span>        <span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span><span class="p">:</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span>                        <span class="s2">&quot;/bin/sh&quot;</span>                <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>                                                                     <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">cli</span>
+<span class="mf">69e06070</span><span class="n">c14c</span>        <span class="n">confluentinc</span><span class="o">/</span><span class="n">cp</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span><span class="p">:</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">2</span>                     <span class="s2">&quot;/etc/confluent/dock…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">8088</span><span class="o">-&gt;</span><span class="mi">8088</span><span class="o">/</span><span class="n">tcp</span>                                     <span class="n">helk</span><span class="o">-</span><span class="n">ksql</span><span class="o">-</span><span class="n">server</span>
+<span class="n">d57967977c9c</span>        <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span><span class="p">:</span><span class="mf">2.1</span><span class="o">.</span><span class="mi">0</span>                   <span class="s2">&quot;./kafka-entrypoint.…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">9092</span><span class="o">-&gt;</span><span class="mi">9092</span><span class="o">/</span><span class="n">tcp</span>                                     <span class="n">helk</span><span class="o">-</span><span class="n">kafka</span><span class="o">-</span><span class="n">broker</span>
+<span class="mf">4889e917</span><span class="n">d76d</span>        <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">worker</span><span class="p">:</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span>                   <span class="s2">&quot;./spark-worker-entr…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>                                                                     <span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">worker</span>
+<span class="n">c0a29d8b18a7</span>        <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">nginx</span><span class="p">:</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">7</span>                          <span class="s2">&quot;/opt/helk/scripts/n…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">80</span><span class="o">-&gt;</span><span class="mi">80</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">443</span><span class="o">-&gt;</span><span class="mi">443</span><span class="o">/</span><span class="n">tcp</span>                   <span class="n">helk</span><span class="o">-</span><span class="n">nginx</span>
+<span class="mi">6</span><span class="n">a887d693a31</span>        <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span><span class="p">:</span><span class="mf">0.2</span><span class="o">.</span><span class="mi">1</span>                     <span class="s2">&quot;./elastalert-entryp…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>                                                                     <span class="n">helk</span><span class="o">-</span><span class="n">elastalert</span>
+<span class="n">a32be7a399c7</span>        <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span><span class="p">:</span><span class="mf">2.1</span><span class="o">.</span><span class="mi">0</span>                      <span class="s2">&quot;./zookeeper-entrypo…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mi">2181</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mi">2888</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mi">3888</span><span class="o">/</span><span class="n">tcp</span>                               <span class="n">helk</span><span class="o">-</span><span class="n">zookeeper</span>
+<span class="n">c636a8a1e8f7</span>        <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">master</span><span class="p">:</span><span class="mf">2.4</span><span class="o">.</span><span class="mi">0</span>                   <span class="s2">&quot;./spark-master-entr…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mi">7077</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">8080</span><span class="o">-&gt;</span><span class="mi">8080</span><span class="o">/</span><span class="n">tcp</span>                           <span class="n">helk</span><span class="o">-</span><span class="n">spark</span><span class="o">-</span><span class="n">master</span>
+<span class="n">ef1b8d8015ab</span>        <span class="n">cyb3rward0g</span><span class="o">/</span><span class="n">helk</span><span class="o">-</span><span class="n">jupyter</span><span class="p">:</span><span class="mf">0.1</span><span class="o">.</span><span class="mi">1</span>                        <span class="s2">&quot;./jupyter-entrypoin…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mi">8000</span><span class="o">/</span><span class="n">tcp</span>                                                   <span class="n">helk</span><span class="o">-</span><span class="n">jupyter</span>
+<span class="n">bafeeb1587cf</span>        <span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">logstash</span><span class="o">/</span><span class="n">logstash</span><span class="p">:</span><span class="mf">6.6</span><span class="o">.</span><span class="mi">1</span>             <span class="s2">&quot;/usr/share/logstash…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">5044</span><span class="o">-&gt;</span><span class="mi">5044</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mf">0.0</span><span class="o">.</span><span class="mf">0.0</span><span class="p">:</span><span class="mi">8531</span><span class="o">-&gt;</span><span class="mi">8531</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mi">9600</span><span class="o">/</span><span class="n">tcp</span>   <span class="n">helk</span><span class="o">-</span><span class="n">logstash</span>
+<span class="mi">29</span><span class="n">b57e5c71e5</span>        <span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">kibana</span><span class="o">/</span><span class="n">kibana</span><span class="p">:</span><span class="mf">6.6</span><span class="o">.</span><span class="mi">1</span>                 <span class="s2">&quot;/usr/share/kibana/s…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mi">5601</span><span class="o">/</span><span class="n">tcp</span>                                                   <span class="n">helk</span><span class="o">-</span><span class="n">kibana</span>
+<span class="mi">48499</span><span class="n">aa83917</span>        <span class="n">docker</span><span class="o">.</span><span class="n">elastic</span><span class="o">.</span><span class="n">co</span><span class="o">/</span><span class="n">elasticsearch</span><span class="o">/</span><span class="n">elasticsearch</span><span class="p">:</span><span class="mf">6.6</span><span class="o">.</span><span class="mi">1</span>   <span class="s2">&quot;/usr/share/elastics…&quot;</span>   <span class="mi">6</span> <span class="n">hours</span> <span class="n">ago</span>         <span class="n">Up</span> <span class="mi">6</span> <span class="n">hours</span>          <span class="mi">9200</span><span class="o">/</span><span class="n">tcp</span><span class="p">,</span> <span class="mi">9300</span><span class="o">/</span><span class="n">tcp</span>                                         <span class="n">helk</span><span class="o">-</span><span class="n">elasticsearch</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Export images as tar files:</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo docker save -o /home/helk/helk-ksql-cli.tar confluentinc/cp-ksql-cli:5.1.2 
+sudo docker save -o /home/helk/helk-ksql-server.tar confluentinc/cp-ksql-server:5.1.2  
+sudo docker save -o /home/helk/helk-kafka-broker.tar cyb3rward0g/helk-kafka-broker:2.1.0
+sudo docker save -o /home/helk/helk-spark-worker.tar cyb3rward0g/helk-spark-worker:2.4.0
+sudo docker save -o /home/helk/helk-nginx.tar cyb3rward0g/helk-nginx:0.0.7
+sudo docker save -o /home/helk/helk-elastalert.tar cyb3rward0g/helk-elastalert:0.2.1
+sudo docker save -o /home/helk/helk-zookeeper.tar cyb3rward0g/helk-zookeeper:2.1.0
+sudo docker save -o /home/helk/helk-spark-master.tar cyb3rward0g/helk-spark-master:2.4.0
+sudo docker save -o /home/helk/helk-logstash.tar docker.elastic.co/logstash/logstash:6.6.1
+sudo docker save -o /home/helk/helk-kibana.tar docker.elastic.co/kibana/kibana:6.6.1
+sudo docker save -o /home/helk/helk-elasticsearch.tar docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+sudo docker save -o /home/helk/helk-jupyter.tar cyb3rward0g/helk-jupyter:0.1.1
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>check if images exist locally</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls -l
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>total 10810584
+drwxrwxr-x 9 helk helk       4096 Feb 24 21:01 HELK
+-rw------- 1 root root  778629632 Feb 25 03:07 helk-elastalert.tar
+-rw------- 1 root root  854236160 Feb 25 03:12 helk-elasticsearch.tar
+-rw------- 1 root root 2254629888 Feb 25 03:14 helk-jupyter.tar
+-rw------- 1 root root  395871744 Feb 25 03:04 helk-kafka-broker.tar
+-rw------- 1 root root  767277568 Feb 25 03:11 helk-kibana.tar
+-rw------- 1 root root  521177600 Feb 25 03:00 helk-ksql-cli.tar
+-rw------- 1 root root  525901824 Feb 25 03:02 helk-ksql-server.tar
+-rw------- 1 root root  810578944 Feb 25 03:09 helk-logstash.tar
+-rw------- 1 root root  335945728 Feb 25 03:06 helk-nginx.tar
+-rw------- 1 root root  587616768 Feb 25 03:08 helk-spark-master.tar
+-rw------- 1 root root  587616768 Feb 25 03:05 helk-spark-worker.tar
+-rw------- 1 root root  395854848 Feb 25 03:08 helk-zookeeper.tar
+
+helk@ubuntu:~$
+</pre></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "Cyb3rWard0g/HELK",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "how-to/docker"
+        }
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="intro.html" title="previous page">Docker</a>
+    <a class='right-next' id="next-link" href="load-images.html" title="next page">Load Local Docker Images</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    <p>
+          &copy; Copyright 2020.<br/>
+        Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.1.<br/>
+    </p>
+  </div>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+
+    <script src="../../_static/js/index.js"></script>
+    
+  </body>
+</html>
