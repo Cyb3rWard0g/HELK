@@ -354,13 +354,13 @@ set_network() {
     local ip_choice
     read -t 90 -p "$HELK_INFO_TAG Set HELK IP. Default value is your current IP: " -e -i "${HOST_IP}" ip_choice
     # ******* Validation ************
-    #READ_INPUT=$?
-    #HOST_IP="${ip_choice:-$HOST_IP}"
-    #if [ $READ_INPUT  = 142 ]; then
-    #    echo -e "\n$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
-    #else
-    #    echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
-    #fi
+    READ_INPUT=$?
+    HOST_IP="${ip_choice:-$HOST_IP}"
+    if [ $READ_INPUT  = 142 ]; then
+        echo -e "\n$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+    else
+        echo "$HELK_INFO_TAG HELK IP set to ${HOST_IP}"
+    fi
   fi
 }
 
