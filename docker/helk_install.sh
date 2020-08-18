@@ -229,6 +229,7 @@ install_htpasswd() {
     echo "$HELK_INFO_TAG Installing htpasswd.."
     case "$LSB_DIST" in
     ubuntu | debian | raspbian)
+      apt-get update >>$LOGFILE 2>&1
       apt install -y apache2-utils >>$LOGFILE 2>&1
       ;;
     centos | rhel)
@@ -299,7 +300,7 @@ install_docker_compose() {
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password() {
   if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
-    echo -e "\n$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."
+    echo "$HELK_INFO_TAG Please make sure to create a custom Kibana password and store it securely for future use."
     sleep 1
     while true; do
       read -t 90 -p "$HELK_INFO_TAG Set HELK Kibana UI Password: " -e -i "hunting" KIBANA_UI_PASSWORD_INPUT
