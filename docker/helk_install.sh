@@ -237,6 +237,7 @@ install_htpasswd() {
     echo -e "${HELK_INFO_TAG} Installing htpasswd.."
     case "$LSB_DIST" in
     ubuntu | debian | raspbian)
+      apt-get update >>$LOGFILE 2>&1
       apt install -y apache2-utils >>$LOGFILE 2>&1
       ;;
     centos | rhel)
@@ -307,7 +308,7 @@ install_docker_compose() {
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password() {
   if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
-    echo -e "\n${HELK_INFO_TAG} Please make sure to create a custom Kibana password and store it securely for future use."
+    echo "${HELK_INFO_TAG} Please make sure to create a custom Kibana password and store it securely for future use."
     sleep 1
     while true; do
       read -t 90 -p "$(echo -e "${HELK_INPUT_TAG} Set HELK Kibana UI Password: ")" -e -i "" KIBANA_UI_PASSWORD_INPUT
@@ -361,13 +362,13 @@ set_network() {
     local ip_choice
     read -t 90 -p "$(echo -e "${HELK_INPUT_TAG} Set HELK IP. Default value is your current IP: ")" -e -i "${HOST_IP}" ip_choice
     # ******* Validation ************
-    #READ_INPUT=$?
-    #HOST_IP="${ip_choice:-$HOST_IP}"
-    #if [ $READ_INPUT  = 142 ]; then
-    #    echo -e "\n${HELK_INFO_TAG} HELK IP set to ${HOST_IP}"
-    #else
-    #    echo -e "${HELK_INFO_TAG} HELK IP set to ${HOST_IP}"
-    #fi
+    READ_INPUT=$?
+    HOST_IP="${ip_choice:-$HOST_IP}"
+    if [ $READ_INPUT  = 142 ]; then
+        echo -e "\n${HELK_INFO_TAG} HELK IP set to ${HOST_IP}"
+    else
+        echo -e "${HELK_INFO_TAG} HELK IP set to ${HOST_IP}"
+    fi
   fi
 }
 
