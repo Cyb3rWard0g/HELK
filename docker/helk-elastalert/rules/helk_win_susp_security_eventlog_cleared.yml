@@ -4,7 +4,7 @@ description: Some threat groups tend to delete the local 'Security' Eventlog.
 filter:
 - query:
     query_string:
-      query: (event_id:("517") OR event_id:("1102"))
+      query: (event_id:("517" OR "1102"))
 index: logs-endpoint-winevent-security-*
 name: Security-Eventlog-Cleared_0
 priority: 2
