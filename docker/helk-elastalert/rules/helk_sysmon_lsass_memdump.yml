@@ -1,0 +1,5 @@
+        TargetImage: 'C:\windows\system32\lsass.exe'
+        GrantedAccess: '0x1fffff'
+        CallTrace:
+         - '*dbghelp.dll*'
+         - '*dbgcore.dll*'
