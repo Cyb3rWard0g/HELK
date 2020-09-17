@@ -1,4 +1,3 @@
-
 alert:
 - debug
 description: Detects process LSASS memory dump using procdump or taskmgr based on
@@ -7,6 +6,7 @@ filter:
 - query:
     query_string:
       query: (event_id:"10" AND target_process_path.keyword:(*\\lsass.exe) AND process_granted_access_orig:0x1fffff AND process_call_trace.keyword:(*dbghelp.dll* OR *dbgcore.dll*))
+index: logs-endpoint-winevent-sysmon-*
 name: LSASS-Memory-Dump_0
 priority: 2
 realert:
