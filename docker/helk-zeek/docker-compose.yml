@@ -1,8 +1,12 @@
-helk-zeek:
-  image: otrf/helk-zeek:latest
-  container_name: helk-zeek
-  command: tail -F anything
-  #network_mode: host
-  volumes:
-    - ./config/local.zeek:/usr/local/zeek/share/zeek/site/local.zeek
-    - ./logs
+version: '3.3'
+services:
+  helk-zeek:
+    #image: otrf/helk-zeek:latest
+    build: .
+    #container_name: helk-zeek
+    #command: tail -F anything
+    tty: true
+    #network_mode: host
+    #volumes:
+      #- ./config/local.zeek:/usr/local/zeek/share/zeek/site/local.zeek
+      #- ./pcap/:/pcap

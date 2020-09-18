@@ -104,11 +104,11 @@ RUN zkg install --force zeek/mitre-attack/bzar
 #RUN zkg install --force zeek/corelight/bro-quic || cat /root/.zkg/logs/bro-quic-build.log
 #RUN zkg install --force zeek/stratosphereips/IRC-Zeek-package
 ## Amazon
-#RUN zkg install --force zeek/amzn/zeek-plugin-bacnet
-#RUN zkg install --force zeek/amzn/zeek-plugin-profinet
-#RUN zkg install --force zeek/amzn/zeek-plugin-enip
-#RUN zkg install --force zeek/amzn/zeek-plugin-s7comm
-#RUN zkg install --force zeek/amzn/zeek-plugin-tds
+#RUN zkg install --force zeek/amzn/zeek-plugin-bacnet && \
+#  zkg install --force zeek/amzn/zeek-plugin-profinet && \
+#  zkg install --force zeek/amzn/zeek-plugin-enip && \
+#  zkg install --force zeek/amzn/zeek-plugin-s7comm && \
+#  zkg install --force zeek/amzn/zeek-plugin-tds
 
 # Set interface/packet capture
 #setcap cap_net_raw,cap_net_admin=eip $ZEEKDIR/bin/zeek

@@ -1,5 +1,4 @@
 # HELK Zeek Conf
-# HELK build Stage: Alpha
 # Author: Nate (@neu5ron)
 # License: GPL-3.0
 
@@ -81,7 +80,7 @@ redef FTP::default_capture_password = T;
 #### SMB
 #@load base/protocols/smb/smb1-main
 #@load base/protocols/smb/smb2-main
-@load base/protocols/smb/smb2-main
+@load protocols/smb/log-cmds
 
 #### SMTP
 @load base/protocols/smtp/entities
@@ -108,3 +107,6 @@ redef SOCKS::default_capture_password = T;
 
 #### Traceroute
 @load misc/detect-traceroute
+
+# Additional Custom
+#@load redef_dce_rpc_ports.zeek
