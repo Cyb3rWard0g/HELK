@@ -76,7 +76,6 @@ RUN pip3 install zkg \
   && zkg autoconfig
 ## Corelight packages
 RUN  zkg install --force zeek/corelight/got_zoom && \
-  #zkg install --force zeek/corelight/json-streaming-logs && \
   zkg install --force zeek/corelight/log-add-http-post-bodies && \
   zkg install --force zeek/corelight/log-add-vlan-everywhere && \
   zkg install --force zeek/corelight/zeek-community-id
@@ -86,29 +85,33 @@ RUN zkg install --force zeek/salesforce/hassh && \
 ## Etc..
 RUN zkg install --force zeek/0xxon/zeek-tls-log-alternative
 RUN zkg install --force zeek/0xxon/cve-2020-13777
-#RUN zkg install --force zeek/apache/metron-bro-plugin-kafka
 RUN zkg install --force zeek/fatemabw/kyd
 RUN zkg install --force zeek/lexibrent/zeek-EternalSafety
 RUN zkg install --force zeek/micrictor/smbfp
 RUN zkg install --force zeek/theparanoids/rdfp
-#RUN zkg install --force zeek/salesforce/GQUIC_Protocol_Analyzer
 RUN zkg install --force zeek/scebro/ldap-analyzer
 RUN zkg install --force zeek/mitre-attack/bzar
-## Etc... maybe
-#RUN zkg install --force zeek/initconf/phish-analysis
-#RUN zkg install --force zeek/corelight/bro-xor-exe-plugin
-#RUN zkg install --force zeek/sethhall/unknown-mime-type-discovery
-#RUN zkg install --force zeek/precurse/zeek-httpattacks
+
+## Enable as necessary / future
+#RUN zkg install --force zeek/apache/metron-bro-plugin-kafka
+#RUN zkg install --force zeek/corelight/json-streaming-logs
+
+## Not working But want to enable #TODO:
 #RUN zkg install --force zeek/ukncsc/zeek-plugin-ikev2 # || cat /root/.zkg/logs/zeek-plugin-ikev2-build.log && exit 1
-## Not working #TODO:
+#RUN zkg install --force zeek/salesforce/GQUIC_Protocol_Analyzer
 #RUN zkg install --force zeek/corelight/bro-quic || cat /root/.zkg/logs/bro-quic-build.log
 #RUN zkg install --force zeek/stratosphereips/IRC-Zeek-package
-## Amazon
 #RUN zkg install --force zeek/amzn/zeek-plugin-bacnet && \
 #  zkg install --force zeek/amzn/zeek-plugin-profinet && \
 #  zkg install --force zeek/amzn/zeek-plugin-enip && \
 #  zkg install --force zeek/amzn/zeek-plugin-s7comm && \
 #  zkg install --force zeek/amzn/zeek-plugin-tds
+
+## Etc... maybe
+#RUN zkg install --force zeek/initconf/phish-analysis
+#RUN zkg install --force zeek/corelight/bro-xor-exe-plugin
+#RUN zkg install --force zeek/sethhall/unknown-mime-type-discovery
+#RUN zkg install --force zeek/precurse/zeek-httpattacks
 
 # Set interface/packet capture
 #setcap cap_net_raw,cap_net_admin=eip $ZEEKDIR/bin/zeek
