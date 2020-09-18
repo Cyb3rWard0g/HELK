@@ -113,8 +113,6 @@ RUN zkg install --force zeek/mitre-attack/bzar
 # Set interface/packet capture
 #setcap cap_net_raw,cap_net_admin=eip $ZEEKDIR/bin/zeek
 
-COPY ./config/local.zeek $ZEEK_HOME/share/zeek/site
-
 # Cleanup
 RUN rm -R ${SRC_DIR}/zeek
 
