@@ -4,12 +4,12 @@
 
     a) pull from OTRF docker repo: 
     ```shell script
-    docker build . -t helk-zeek
+    docker image pull otrf/helk-zeek
     mkdir pcap
     ```
     b) build locally:
-    ```shell script
-    docker image pull otrf/helk-zeek
+   ```shell script
+    docker build . -t helk-zeek
     mkdir pcap
     ```
     
