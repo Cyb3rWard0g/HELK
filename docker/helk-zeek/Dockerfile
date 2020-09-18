@@ -96,8 +96,8 @@ RUN zkg install --force zeek/mitre-attack/bzar
 #RUN zkg install --force zeek/apache/metron-bro-plugin-kafka
 #RUN zkg install --force zeek/corelight/json-streaming-logs
 
-## Not working But want to enable #TODO:
-#RUN zkg install --force zeek/ukncsc/zeek-plugin-ikev2 # || cat /root/.zkg/logs/zeek-plugin-ikev2-build.log && exit 1
+## Not working But want to enable #TODO:, these all install but have runtime errors. actual errors not warning
+#RUN zkg install --force zeek/ukncsc/zeek-plugin-ikev2 
 #RUN zkg install --force zeek/salesforce/GQUIC_Protocol_Analyzer
 #RUN zkg install --force zeek/corelight/bro-quic || cat /root/.zkg/logs/bro-quic-build.log
 #RUN zkg install --force zeek/stratosphereips/IRC-Zeek-package
@@ -106,7 +106,7 @@ RUN zkg install --force zeek/mitre-attack/bzar
 #  zkg install --force zeek/amzn/zeek-plugin-enip && \
 #  zkg install --force zeek/amzn/zeek-plugin-s7comm && \
 #  zkg install --force zeek/amzn/zeek-plugin-tds
-
+# || cat /root/.zkg/logs/zeek-plugin-ikev2-build.log && exit 1
 ## Etc... maybe
 #RUN zkg install --force zeek/initconf/phish-analysis
 #RUN zkg install --force zeek/corelight/bro-xor-exe-plugin
