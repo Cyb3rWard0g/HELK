@@ -8,6 +8,10 @@ LABEL maintainer="Nate Guagenti @neu5ron"
 LABEL description="Dockerfile base for the HELK Zeek."
 
 USER root
+
+# Zeek Version
+ARG zeek_ver='v3.0.10'
+
 # Main user directory 
 ARG HOME_DIR=/root
 # Compiled sources
@@ -45,7 +49,7 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
 
 ############ Download and install Zeek ############
 RUN cd ${SRC_DIR}; \
-  git clone --recursive https://github.com/zeek/zeek
+  git clone --recursive https://github.com/zeek/zeek -b $zeek_ver zeek
 RUN cd ${SRC_DIR}/zeek; \
   ./configure --prefix=${ZEEK_BASE_DIR};
 RUN cd ${SRC_DIR}/zeek; \
@@ -86,30 +90,26 @@ RUN zkg install --force zeek/0xxon/cve-2020-13777
 RUN zkg install --force zeek/fatemabw/kyd
 RUN zkg install --force zeek/lexibrent/zeek-EternalSafety
 RUN zkg install --force zeek/micrictor/smbfp
-RUN zkg install --force zeek/precurse/zeek-httpattacks
 RUN zkg install --force zeek/theparanoids/rdfp
-#RUN zkg install --force zeek/ukncsc/zeek-plugin-ikev2 --skiptests  || true && cat /root/.zkg/logs/zeek-plugin-ikev2-build.log && exit 1 #TODO: eventually remove --skiptests when package is updated
-#RUN zkg install --force https://github.com/neu5ron/zeek-plugin-ikev2  || true && cat /root/.zkg/logs/zeek-plugin-ikev2-build.log && exit 1 #TODO: eventually remove --skiptests when package is updated
 #RUN zkg install --force zeek/salesforce/GQUIC_Protocol_Analyzer
+RUN zkg install --force zeek/scebro/ldap-analyzer
+RUN zkg install --force zeek/mitre-attack/bzar
 ## Etc... maybe
 #RUN zkg install --force zeek/initconf/phish-analysis
-## Not working #TODO:
-#RUN zkg install --force zeek/ukncsc/zeek-plugin-ikev2
-#RUN zkg install --force zeek/scebro/ldap-analyzer
 #RUN zkg install --force zeek/corelight/bro-xor-exe-plugin
-#RUN zkg install --force zeek/corelight/bro-quic
-#RUN zkg install --force zeek/stratosphereips/IRC-Zeek-package #error during runtime / processing of packets / replay of pcap
-#RUN zkg install --force zeek/mitre-attack/bzar #error during runtime / processing of packets / replay of pcap
-#RUN zkg install --force zeek/sethhall/unknown-mime-type-discovery #error during runtime / processing of packets / replay of pcap
+#RUN zkg install --force zeek/sethhall/unknown-mime-type-discovery
+#RUN zkg install --force zeek/precurse/zeek-httpattacks
+#RUN zkg install --force zeek/ukncsc/zeek-plugin-ikev2 # || cat /root/.zkg/logs/zeek-plugin-ikev2-build.log && exit 1
+## Not working #TODO:
+#RUN zkg install --force zeek/corelight/bro-quic || cat /root/.zkg/logs/bro-quic-build.log
+#RUN zkg install --force zeek/stratosphereips/IRC-Zeek-package
 ## Amazon
-#RUN zkg install --force zeek/amzn/zeek-plugin-bacnet && \ #error about ports defined
-#  zkg install --force zeek/amzn/zeek-plugin-profinet && \ #error about ports defined
-#  zkg install --force zeek/amzn/zeek-plugin-enip && \ #error about ports defined
-#  zkg install --force zeek/amzn/zeek-plugin-s7comm && \ #error about ports defined
-#  zkg install --force zeek/amzn/zeek-plugin-tds #error about ports defined
+#RUN zkg install --force zeek/amzn/zeek-plugin-bacnet
+#RUN zkg install --force zeek/amzn/zeek-plugin-profinet
+#RUN zkg install --force zeek/amzn/zeek-plugin-enip
+#RUN zkg install --force zeek/amzn/zeek-plugin-s7comm
+#RUN zkg install --force zeek/amzn/zeek-plugin-tds
 
-# Pcap files
-#ENV PCAP_HOME ${PCAP_DIR}
 # Set interface/packet capture
 #setcap cap_net_raw,cap_net_admin=eip $ZEEKDIR/bin/zeek
 
