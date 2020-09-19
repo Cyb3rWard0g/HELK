@@ -18,9 +18,7 @@
 
 3) set the name of the pcap you moved from the previous step
 ```shell script
-PCAP_FILE_NAME="mimikatz_CVE-2020-1472_authentication.cap"
-#PCAP_FILE_NAME="mimikatz_CVE-2020-1472_exploit.cap"
-#PCAP_FILE_NAME="mimikatz_CVE-2020-1472_exploit_dcsync_authntlm.cap"
+PCAP_FILE_NAME="$ReplaceWithYourPCAPName.pcap"
 ````
 4) Run Zeek on the PCAP. the logs will be stored in the name of the pcap (except its extension) with prepended "zeek_logs-"  
 for example, if your PCAP was named `super_awesome_exploit.pcap` then a directory called `zeek_logs-super_awesome_exploit` would be created with the corresponding zeek logs from that pcap
