@@ -2,6 +2,7 @@
 # Author: Nate (@neu5ron)
 # License: GPL-3.0
 
+#TODO: enable ntp analyzer 
 ## Applicable to framework
 @load misc/loaded-scripts
 @load tuning/defaults
