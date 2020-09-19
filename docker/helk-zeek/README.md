@@ -4,7 +4,7 @@
 
     a) pull from OTRF docker repo: 
     ```shell script
-    docker image pull otrf/helk-zeek
+    docker image pull otrf/helk-zeek && docker image tag otrf/helk-zeek helk-zeek
     mkdir pcap
     ```
     b) build locally:
@@ -31,7 +31,7 @@ mkdir $PCAP_LOG_DIR
 docker run --rm \
          -v `pwd`/pcap:/pcap \
          -v `pwd`/config/local.zeek:/usr/local/zeek/share/zeek/site/local.zeek \
-         otrf/helk-zeek -C -r "$PCAP_FILE_NAME" local # "Site::local_nets += { 192.168.0.0/24 }"
+         helk-zeek -C -r "$PCAP_FILE_NAME" local # "Site::local_nets += { 192.168.0.0/24 }"
 mv pcap/*.log $PCAP_LOG_DIR
 
 ```
