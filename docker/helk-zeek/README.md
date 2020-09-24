@@ -6,11 +6,15 @@
     ```shell script
     docker image pull otrf/helk-zeek && docker image tag otrf/helk-zeek helk-zeek
     mkdir pcap
+    mkdir config
+    wget -P ./config https://raw.githubusercontent.com/Cyb3rWard0g/HELK/neu5ron_helk/docker/helk-zeek/config/local.zeek
     ```
     b) build locally:
    ```shell script
     docker build . -t helk-zeek
     mkdir pcap
+    mkdir config
+    wget -P ./config https://raw.githubusercontent.com/Cyb3rWard0g/HELK/neu5ron_helk/docker/helk-zeek/config/local.zeek
     ```
     
     
