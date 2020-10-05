@@ -1,6 +1,6 @@
 # Installation
 
-# Requirements (Please Read Carefully)
+## Requirements (Please Read Carefully)
 * **Operating System:**
   * Ubuntu 18.04 (preferred)
   * Ubuntu 16
@@ -32,14 +32,14 @@
     * You can install Winlogbeat by following one of [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g) posts [here](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_87.html).
    * [Winlogbeat config](https://github.com/Cyb3rWard0g/HELK/blob/master/configs/winlogbeat/winlogbeat.yml) recommended by the HELK since it uses the [Kafka output plugin](https://www.elastic.co/guide/en/beats/winlogbeat/current/kafka-output.html) and it is already pointing to the right ports with recommended options. You will just have to add your HELK's IP address.
  
-# HELK Download
+## HELK Download
 Run the following commands to clone the HELK repo via git.
 
 ```bash
 git clone https://github.com/Cyb3rWard0g/HELK.git
 ```
 
-# HELK Install
+## HELK Install
 In order to make the installation of the HELK easy for everyone, the project comes with an install script named **helk_install.sh**. This script builds and runs everything for HELK automatically. During the installation process, the script will allow you to set up the following:
 * Set the components/applications for the HELK'
 * Set the Kibana User's password. Default user is **helk**
@@ -113,7 +113,7 @@ You can stop all the HELK docker containers by running the following command:
  [+] sudo docker-compose -f helk-kibana-analysis-alert-basic.yml stop
  
 ```
-# Monitor HELK installation Logs (Always)
+## Monitor HELK installation Logs (Always)
 Once the installation kicks in, it will start showing you pre-defined messages about the installation, but no all the details of what is actually happening in the background. It is designed that way to keep your main screen clean and let you know where it is in the installation process.
 
 What I recommend to do all the time is to open another shell and monitor the HELK installation logs by using the **tail** command and pointing it to the **/var/log/helk-install.log** file that gets created by the **helk_install** script as soon as it is run. This log file is available on your local host even if you are deploying the HELK via Docker (I want to make sure it is clear that it is a local file).
@@ -257,7 +257,7 @@ sudo docker exec -ti helk-elasticsearch bash
 [root@1729e3234b91 elasticsearch]# 
 ```
 
-# Final Details
+## Final Details
 Once your HELK installation ends, you will be presented with information that you will need to access the HELK and all its other components. 
 
 You will get the following information:

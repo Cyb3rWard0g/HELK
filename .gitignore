@@ -4,6 +4,7 @@ helk-logstash/.DS_Store
 .vscode/
 .idea/
 .testing/
+docs/_build
 # Backup files / swap
 .bak
 .BAK
