@@ -10,4 +10,5 @@ name: Windows-Cobalt-Strike-Rundll32_network_0
 priority: 2
 realert:
   minutes: 0
+timestamp_field: etl_processed_time
 type: any

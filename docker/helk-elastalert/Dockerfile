@@ -3,11 +3,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-# References: 
-# https://github.com/Yelp/elastalert/blob/master/Dockerfile-test
-# https://jordanpotti.com/2017/12/22/using-elastalert-to-help-automate-threat-hunting/
-
-FROM otrf/helk-base:0.0.4
+FROM otrf/helk-base:latest
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Elastalert."
 
@@ -20,6 +16,7 @@ ENV ESALERT_SIGMA_HOME=/opt/sigma
 # *********** Installing Prerequisites ***************
 # -qq : No output except for errors
 RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
+  python3.6 \
   libmagic-dev \
   build-essential \
   python3-setuptools \
@@ -40,15 +37,17 @@ RUN apt-get update -qq && apt-get install -qqy --no-install-recommends \
   && sudo pip3 install --upgrade setuptools \
   && pip3 install urllib3 \
   && pip3 install -U enum34 \
+  #TODO: temporary fix  https://github.com/Yelp/elastalert/issues/2725 also https://github.com/Cyb3rWard0g/HELK/issues/505
+  && pip3 install --force-reinstall elasticsearch==7.0.0 \
   && pip3 install -r requirements.txt \
   && python3 setup.py install \
   # ********* Download SIGMA *******************
-  && pip3 install -U sigmatools \
-  && git clone https://github.com/Cyb3rWard0g/sigma.git ${ESALERT_SIGMA_HOME}
+  && git clone https://github.com/Cyb3rWard0g/sigma.git -b helk_neu5ron_updates ${ESALERT_SIGMA_HOME}
 
 # ********* Copy Elastalert files **************
 COPY scripts/* ${ESALERT_HOME}/
 COPY config.yaml ${ESALERT_HOME}/
+COPY pull-sigma-config.yaml ${ESALERT_HOME}/
 COPY rules/* ${ESALERT_HOME}/rules/
 COPY sigmac/sigmac-config.yml ${ESALERT_SIGMA_HOME}/sigmac-config.yml
 
