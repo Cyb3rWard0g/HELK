@@ -114,7 +114,7 @@ You can stop all the HELK docker containers by running the following command:
  
 ```
 ## Monitor HELK installation Logs (Always)
-Once the installation kicks in, it will start showing you pre-defined messages about the installation, but no all the details of what is actually happening in the background. It is designed that way to keep your main screen clean and let you know where it is in the installation process.
+Once the installation kicks in, it will start showing you pre-defined messages about the installation, but not all the details of what is actually happening in the background. It is designed that way to keep your main screen clean and let you know where it is in the installation process.
 
 What I recommend to do all the time is to open another shell and monitor the HELK installation logs by using the **tail** command and pointing it to the **/var/log/helk-install.log** file that gets created by the **helk_install** script as soon as it is run. This log file is available on your local host even if you are deploying the HELK via Docker (I want to make sure it is clear that it is a local file).
 

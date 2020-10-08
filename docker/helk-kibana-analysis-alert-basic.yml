@@ -194,7 +194,8 @@ services:
     networks:
       helk:
   helk-elastalert:
-    image: otrf/helk-elastalert:0.4.0
+    build: helk-elastalert/
+    #image: otrf/helk-elastalert:latest
     container_name: helk-elastalert
     logging:
       driver: "json-file"

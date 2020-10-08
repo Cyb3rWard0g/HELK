@@ -10,4 +10,5 @@ name: Windows-Cobalt-Strike-Named-Pipes_0
 priority: 2
 realert:
   minutes: 0
+timestamp_field: etl_processed_time
 type: any
