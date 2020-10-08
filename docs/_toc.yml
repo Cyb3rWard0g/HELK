@@ -26,3 +26,11 @@
   - file: how-to/winlogbeat/intro
     sections:
     - file: how-to/winlogbeat/check-log-shipping
+- part: Best Practices
+  chapters:
+  - file: best-practices/logstash/intro
+    sections:
+    - file: best-practices/logstash/pipeline
+  - file: best-practices/overall-settings/intro
+    sections:
+    - file: best-practices/overall-settings/utc-time

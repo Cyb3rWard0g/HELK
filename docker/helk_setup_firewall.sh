@@ -1,6 +1,6 @@
 #!/bin/bash
 # Author: @troplolBE
-# Version: v0.0.2
+# Version: v0.0.3
 
 LOGFILE="/var/log/helk-install.log"
 TAG="[HELK-FIREWALL]"
@@ -11,7 +11,22 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # *********** Gather active zones for further use ***********
+if (systemctl --quiet is-active firewalld.service); then
+   echo "$TAG FirewallD is running"
+else
+   echo "$TAG FirewallD is not running. Attempting to start it.."
+   systemctl enable firewalld.service >> $LOGFILE 2>&1
+   systemctl start firewalld.service >> $LOGFILE 2>&1
+   sleep 2
+fi
 ZONES="$(firewall-cmd --get-active-zones | grep -v '^ ' | tr '\n' ' ')"
+if [ -z "$ZONES" ]; then
+   echo "$TAG There are not active zones"
+   INTERFACE=$(route | grep '^default' | grep -o '[^ ]*$')
+   echo "$TAG Enabling Public zone to $INTERFACE"
+   firewall-cmd --zone=public --change-interface=$INTERFACE | tee -a $LOGFILE
+   ZONES="$(firewall-cmd --get-active-zones | grep -v '^ ' | tr '\n' ' ')"
+fi
 echo "$TAG Here is the list of all the active zones found." | tee -a $LOGFILE
 echo "$ZONES" | tee -a $LOGFILE
 
@@ -60,3 +75,5 @@ if [[ "$(firewall-cmd --info-service=helk >> $LOGFILE 2>&1; echo $?)" != 0 ]]; t
 fi
 
 echo "$TAG The new service has succesfully installed on your firewall. HELK should run properly..." | tee -a $LOGFILE
+echo "$TAG Restarting docker service.." | tee -a $LOGFILE
+systemctl start docker.service

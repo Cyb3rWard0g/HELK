@@ -49,10 +49,6 @@ The project is currently in an alpha stage, which means that the code and the fu
 
 * Nate Guagenti [@neu5ron](https://twitter.com/neu5ron)
 
-# Contributing
-
-There are a few things that I would like to accomplish with the HELK as shown in the To-Do list below. I would love to make the HELK a stable build for everyone in the community. If you are interested on making this build a more robust one and adding some cool features to it, PLEASE feel free to submit a pull request. #SharingIsCaring
-
 # License: GPL-3.0
 
 [ HELK's GNU General Public License](https://github.com/Cyb3rWard0g/HELK/blob/master/LICENSE)
