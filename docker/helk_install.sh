@@ -6,7 +6,7 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-HELK_BUILD_VERSION="v0.1.9-alpha03272020"
+HELK_BUILD_VERSION="v0.1.9-alpha10082020"
 HELK_ELK_VERSION="7.6.2"
 SUBSCRIPTION_CHOICE="basic"
 
@@ -263,20 +263,8 @@ install_docker() {
   ERROR=$?
   if [ $ERROR -ne 0 ]; then
     echoerror "Could not install docker via convenience script (Error Code: $ERROR)."
-    if [ -x "$(command -v snap)" ]; then
-      SNAP_VERSION=$(snap version | grep -w 'snap' | awk '{print $2}')
-      echo "$HELK_INFO_TAG Snap v$SNAP_VERSION is available. Trying to install docker via snap.."
-      snap install docker >>$LOGFILE 2>&1
-      ERROR=$?
-      if [ $ERROR -ne 0 ]; then
-        echoerror "Could not install docker via snap (Error Code: $ERROR)."
-        exit 1
-      fi
-      echo "$HELK_INFO_TAG Docker successfully installed via snap."
-    else
-      echo "$HELK_INFO_TAG Docker could not be installed. Check $LOGFILE for details."
-      exit 1
-    fi
+    echo "$HELK_INFO_TAG Docker could not be installed. Check $LOGFILE for details."
+    exit 1
   fi
 }
 
@@ -448,32 +436,46 @@ prepare_helk() {
     # *********** Check if docker is installed ***************
     if [ -x "$(command -v docker)" ]; then
       echo "$HELK_INFO_TAG Docker already installed"
-      # Check to make sure docker is started before continuing with all the components that use docker
-      echo "$HELK_INFO_TAG Assesing if Docker is running.."
-      while true; do
-        if (systemctl --quiet is-active docker.service); then
-          echo "$HELK_INFO_TAG Docker is running."
-          break
+      echo "$HELK_INFO_TAG Checking if it is installed via snap.."
+      if [ -x "$(command -v snap)" ]; then
+        SNAP_VERSION=$(snap version | grep -w 'snap' | awk '{print $2}')
+        echo "$HELK_INFO_TAG Snap v$SNAP_VERSION is available"
+        if [ -x "$(command -v /snap/bin/docker)" ]; then
+          echo "$HELK_INFO_TAG Removing docker installed via snap"
+          snap remove docker >>$LOGFILE 2>&1
+          install_docker
         else
-          echo "$HELK_ERROR_TAG Docker is not running. Attempting to start it.."
-          systemctl enable docker.service
-          systemctl start docker.service
-          sleep 2
+          echo "$HELK_INFO_TAG Docker not installed via snap"
         fi
-      done
-      echo "$HELK_INFO_TAG Making sure you assigned enough disk space to the current Docker base directory"
-      AVAILABLE_DOCKER_DISK=$(df -m "$(docker info --format '{{.DockerRootDir}}')" | awk '$1 ~ /\//{printf "%.f", $4 / 1024}')
-      if [[ "${AVAILABLE_DOCKER_DISK}" -ge $INSTALL_MINIMUM_DISK ]]; then
-        echo "$HELK_INFO_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
-      else
-        echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
-        echo "$HELK_ERROR_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
-        echo -e "$INSTALL_ERROR_CHECK_WIKI"
-        exit 1
       fi
     else
       install_docker
     fi
+    # Check to make sure docker is started before continuing with all the components that use docker
+    echo "$HELK_INFO_TAG Assesing if Docker is running.."
+    while true; do
+      if (systemctl --quiet is-active docker.service); then
+        echo "$HELK_INFO_TAG Docker is running"
+        break
+      else
+        echo "$HELK_ERROR_TAG Docker is not running. Attempting to start it.."
+        systemctl enable docker.service
+        systemctl start docker.service
+        sleep 2
+      fi
+    done
+    # Check Disk space assigned to Docker directory
+    echo "$HELK_INFO_TAG Making sure you assigned enough disk space to the current Docker base directory"
+    AVAILABLE_DOCKER_DISK=$(df -m "$(docker info --format '{{.DockerRootDir}}')" | awk '$1 ~ /\//{printf "%.f", $4 / 1024}')
+    if [[ "${AVAILABLE_DOCKER_DISK}" -ge $INSTALL_MINIMUM_DISK ]]; then
+      echo "$HELK_INFO_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
+    else
+      echo "$HELK_ERROR_TAG YOU DO NOT HAVE ENOUGH DOCKER DISK SPACE ASSIGNED"
+      echo "$HELK_ERROR_TAG Available Docker Disk: ${AVAILABLE_DOCKER_DISK} GBs"
+      echo -e "$INSTALL_ERROR_CHECK_WIKI"
+      exit 1
+    fi
+
     # ********** Check if docker-compose is installed *******
     if ! [ -x "$(command -v docker-compose)" ] && ! [ -x "$(command -v /usr/local/bin/docker-compose)" ]; then
       install_docker_compose
