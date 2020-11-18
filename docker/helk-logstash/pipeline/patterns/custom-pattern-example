@@ -1,0 +1,10 @@
+# -- Custom Pattern Example -- #
+
+# -- Example string -- #
+# Oct  8 14:52:03 dnsmasq[31322]: 61049 192.168.6.123/54710 reply app.slack.com is 8.8.8.8
+
+# -- Example filter from custom pipeline .conf file -- #
+# "^%{DNSMASQPREFIX} reply %{FQDN:domain_request} is %{IP:ip_response}$"
+
+# -- Example custom pattern -- #
+# DNSMASQPREFIX %{SYSLOGTIMESTAMP:date} %{SYSLOGPROG}: %{INT:logrow} %{IP:source_host}\/%{POSINT:source_port}
