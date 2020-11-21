@@ -21,10 +21,10 @@
   * Internet access
     * List of required domains/IPs will be listed in future documentation.
 * **RAM:** There are four options, and the following are minimum requirements (include more if you are able).
-  * **Option 1: 5GB** includes `KAFKA + KSQL + ELK + NGNIX.`
-  * **Option 2: 5GB** includes `KAFKA + KSQL + ELK + NGNIX + ELASTALERT`
-  * **Option 3: 7GB** includes `KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER`.
-  * **Option 4: 8GB** includes `KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT`.
+  * **Option 1: 5GB** includes `KAFKA + KSQL + ELK + NGINX.`
+  * **Option 2: 5GB** includes `KAFKA + KSQL + ELK + NGINX + ELASTALERT`
+  * **Option 3: 7GB** includes `KAFKA + KSQL + ELK + NGINX + SPARK + JUPYTER`.
+  * **Option 4: 8GB** includes `KAFKA + KSQL + ELK + NGINX + SPARK + JUPYTER + ELASTALERT`.
 * **Disk:** 20GB for testing purposes and 100GB+ for production (minimum)
 * **Applications:**
   * Docker: 18.06.1-ce+ & Docker-Compose (HELK INSTALLS THIS FOR YOU)
@@ -75,10 +75,10 @@ sudo ./helk_install.sh
 *      HELK - Docker Compose Build Choices          *
 *****************************************************
  
-1. KAFKA + KSQL + ELK + NGNIX
-2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT
-3. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER
-4. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT
+1. KAFKA + KSQL + ELK + NGINX
+2. KAFKA + KSQL + ELK + NGINX + ELASTALERT
+3. KAFKA + KSQL + ELK + NGINX + SPARK + JUPYTER
+4. KAFKA + KSQL + ELK + NGINX + SPARK + JUPYTER + ELASTALERT
  
 Enter build choice [ 1 - 4]: 2
 [HELK-INSTALLATION-INFO] HELK build set to 2
