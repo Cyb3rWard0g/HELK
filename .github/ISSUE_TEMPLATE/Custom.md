@@ -30,10 +30,9 @@ Place the output here
 
 #### What version of HELK are you using
 
-run the command from within the HELK root directory `cat .git/refs/heads/master`  
-and include what date you cloned the HELK repo
+run the command from within the HELK repo run `git log -1 --oneline`  
 ```
-Place the date here
+Place the output here
 ```
 
 #### What version of Winlogbeat are you using if you are using Windows/WEF logs
