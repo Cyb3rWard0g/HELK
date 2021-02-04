@@ -154,12 +154,12 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="best-practices/logstash/intro.html">
-   Logstash Recommendations
+   Logstash
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="best-practices/overall-settings/intro.html">
-   Overall Additional Settings
+   Overall Settings
   </a>
  </li>
 </ul>
@@ -432,7 +432,7 @@ You can stop all the HELK docker containers by running the following command:
 </div>
 <div class="section" id="monitor-helk-installation-logs-always">
 <h2>Monitor HELK installation Logs (Always)<a class="headerlink" href="#monitor-helk-installation-logs-always" title="Permalink to this headline">¶</a></h2>
-<p>Once the installation kicks in, it will start showing you pre-defined messages about the installation, but no all the details of what is actually happening in the background. It is designed that way to keep your main screen clean and let you know where it is in the installation process.</p>
+<p>Once the installation kicks in, it will start showing you pre-defined messages about the installation, but not all the details of what is actually happening in the background. It is designed that way to keep your main screen clean and let you know where it is in the installation process.</p>
 <p>What I recommend to do all the time is to open another shell and monitor the HELK installation logs by using the <strong>tail</strong> command and pointing it to the <strong>/var/log/helk-install.log</strong> file that gets created by the <strong>helk_install</strong> script as soon as it is run. This log file is available on your local host even if you are deploying the HELK via Docker (I want to make sure it is clear that it is a local file).</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail -f /var/log/helk-install.log 
 </pre></div>
