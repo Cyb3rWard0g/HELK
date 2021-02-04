@@ -376,10 +376,10 @@ set_helk_build() {
       echo "*      HELK - Docker Compose Build Choices          *"
       echo "*****************************************************"
       echo " "
-      echo "1. KAFKA + KSQL + ELK + NGNIX"
-      echo "2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT"
-      echo "3. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER"
-      echo "4. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT"
+      echo "1. KAFKA + KSQL + ELK + NGINX"
+      echo "2. KAFKA + KSQL + ELK + NGINX + ELASTALERT"
+      echo "3. KAFKA + KSQL + ELK + NGINX + SPARK + JUPYTER"
+      echo "4. KAFKA + KSQL + ELK + NGINX + SPARK + JUPYTER + ELASTALERT"
       echo " "
 
       local CONFIG_CHOICE
