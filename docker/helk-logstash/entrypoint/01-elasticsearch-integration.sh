@@ -13,7 +13,7 @@ HELK_INFO_TAG="${CYAN}[HELK-LOGSTASH-DOCKER-INSTALLATION-INFO]${STD}"
 HELK_ERROR_TAG="${RED}[HELK-LOGSTASH-DOCKER-INSTALLATION-ERROR]${STD}"
 HELK_WARNING_TAG="${WAR}[HELK-LOGSTASH-DOCKER-INSTALLATION-WARNING]${STD}"
 
-if [[ -n ${ENABLE_ES} ]] && [[ ${ENABLE_ES} = true ]]; then
+if [[ -n ${ENABLE_ES} ]] && [[ ${ENABLE_ES} == "true" ]]; then
   echo -e "${HELK_INFO_TAG} Configuring Elasticsearch.."
   # *********** Environment Variables ***************
   DIR=/usr/share/logstash/output_templates
@@ -21,13 +21,11 @@ if [[ -n ${ENABLE_ES} ]] && [[ ${ENABLE_ES} = true ]]; then
   if [[ -z "$ES_HOST" ]]; then
     ES_HOST=helk-elasticsearch
   fi
-  export $ES_HOST
   echo -e "${HELK_INFO_TAG} Setting Elasticsearch server name to $ES_HOST"
 
   if [[ -z "$ES_PORT" ]]; then
     ES_PORT=9200
   fi
-  export $ES_PORT
   echo -e "${HELK_INFO_TAG} Setting Elasticsearch server port to $ES_PORT"
 
   if [[ -n "$ELASTIC_PASSWORD" ]]; then

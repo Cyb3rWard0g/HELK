@@ -19,6 +19,7 @@ services:
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     environment:
       - xpack.monitoring.enabled=false
+      - ES_ENABLED=false
       - log.level=warn
       - "HELK_LOGSTASH_JAVA_OPTS=-XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly -XX:+UseG1GC"
     ports:
@@ -48,6 +49,8 @@ services:
       - "80:80"
       - "443:443"
     restart: always
+    depends_on:
+      - helk-jupyter
     networks:
       helk:
   helk-zookeeper:
@@ -81,7 +84,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: raw_winevent, parsed_winevent, raw_zeek, parsed_zeek, other, mordor_winevent
+      KAFKA_CREATE_TOPICS: raw_winevent, parsed_winevent, raw_zeek, parsed_zeek, other, mordor_winevent, catch_all
       KAFKA_HEAP_OPTS: -Xmx1G -Xms256M
       LOG_RETENTION_HOURS: 4
     ports:
@@ -189,5 +192,5 @@ networks:
     driver: bridge
 
 volumes:
-  esdata:
+  notebooks:
     driver: local
