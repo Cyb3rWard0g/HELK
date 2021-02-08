@@ -14,8 +14,8 @@ services:
       - ./helk-logstash/mordor_pipeline:/usr/share/logstash/mordor_pipeline
       - ./helk-logstash/output_templates:/usr/share/logstash/output_templates
       - ./helk-logstash/plugins:/usr/share/logstash/plugins
-      - ./helk-logstash/enrichments/cti:/usr/share/logstash/cti
       - ./helk-logstash/scripts:/usr/share/logstash/scripts
+      - ./helk-logstash/entrypoint:/usr/share/logstash/entrypoint
     entrypoint: /usr/share/logstash/scripts/logstash-entrypoint.sh
     environment:
       - xpack.monitoring.enabled=false
@@ -81,7 +81,7 @@ services:
       REPLICATION_FACTOR: 1
       ADVERTISED_LISTENER: ${ADVERTISED_LISTENER}
       ZOOKEEPER_NAME: helk-zookeeper
-      KAFKA_CREATE_TOPICS: raw_winevents, parsed_winevents, other, zeek
+      KAFKA_CREATE_TOPICS: raw_winevent, parsed_winevent, raw_zeek, parsed_zeek, other, mordor_winevent
       KAFKA_HEAP_OPTS: -Xmx1G -Xms256M
       LOG_RETENTION_HOURS: 4
     ports:
