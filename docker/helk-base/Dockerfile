@@ -2,7 +2,8 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-FROM phusion/baseimage:18.04-1.0.0
+# FROM phusion/baseimage:18.04-1.0.0
+FROM phusion/baseimage:master
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile HELK Base Image.."
 
