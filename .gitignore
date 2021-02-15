@@ -4,6 +4,7 @@ helk-logstash/.DS_Store
 .vscode/
 .idea/
 .testing/
+docs/_build
 # Backup files / swap
 .bak
 .BAK
@@ -20,3 +21,4 @@ __pycache__/
 *custom*
 /docker/docker-compose.yml
 #/docker/helk-nginx/htpasswd.user*
+/.run/
