@@ -1,15 +1,23 @@
 {
   "order": 60,
   "index_patterns": [ "logs-endpoint-winevent-sysmon-*" ],
-  "version": 2020041901,
+  "version": 2020092801,
   "mappings":{
     "properties":{
-      "file_creation_time":{"type":"date"},
-      "file_previous_creation_time":{"type":"date"},
-      "network_initiated":{"type":"boolean"},
-      "thread_new_id":{"type":"integer"},
-      "module_signed":{"type":"boolean"},
-      "process_parent_id":{"type":"long"},
+      "file_creation_time": {
+        "type": "date"
+      },
+      "file_previous_creation_time": {
+        "type": "date"},
+      "network_initiated": {
+        "type": "boolean"},
+      "thread_new_id": {
+        "type": "integer"},
+      "module_signed": {
+        "type": "boolean"},
+      "process_parent_id": {
+        "type": "long"
+      },
       "sysmon_version": {
         "type": "float",
         "fields": {
@@ -18,7 +26,9 @@
           }
         }
       },
-      "version":{"type":"integer"}
+      "version": {
+        "type": "integer"
+      }
     }
   }
 }

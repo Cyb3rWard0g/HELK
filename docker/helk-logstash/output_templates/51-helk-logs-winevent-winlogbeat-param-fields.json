@@ -1,7 +1,7 @@
 {
   "order": 51,
   "index_patterns": [ "logs-endpoint-winevent-*" ],
-  "version": 2019090101,
+  "version": 2020092801,
   "mappings": {
     "dynamic_templates": [
       {
@@ -9,11 +9,14 @@
           "match_pattern": "regex",
           "match": "^param\\d+$",
           "mapping": {
-            "type": "text",
+            "type": "keyword",
+            "ignore_above": 32766,
             "fields": {
-              "keyword": {
-                "ignore_above": 32000,
-                "type": "keyword"
+              "security": {
+                "type": "text",
+                "analyzer": "es_stk_analyzer",
+                "search_analyzer": "es_stk_search_analyzer",
+                "search_quote_analyzer": "es_stk_search_quote_analyzer"
               }
             }
           }

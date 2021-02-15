@@ -4,7 +4,7 @@
 # License: GPL-3.0
 
 #ENABLE-IF-WANTING-TO-USE-LICENSE#FROM docker.elastic.co/logstash/logstash:7.7.1
-FROM docker.elastic.co/logstash/logstash-oss:7.7.1
+FROM docker.elastic.co/logstash/logstash-oss:7.10.2
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
@@ -47,7 +47,7 @@ RUN logstash-plugin install file:///usr/share/logstash/plugins/helk-offline-logs
 #  ./bin/logstash-plugin remove logstash-input-imap; \
 #  ./bin/logstash-plugin remove logstash-input-twitter; \
 #  ./bin/logstash-plugin remove logstash-output-graphite; \
-#  ./bin/logstash-plugin remove logstash-output-nagios; \ 
+#  ./bin/logstash-plugin remove logstash-output-nagios; \
 #  ./bin/logstash-plugin remove logstash-output-webhdfs; \
 #  ./bin/logstash-plugin remove logstash-codec-graphite
 ## Install codec and filter plugins

@@ -1,7 +1,38 @@
 {
   "order": 20,
   "index_patterns": [ "logs-*" ],
-  "version": 2020041901,
+  "version": 2020092801,
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "es_stk_analyzer": {
+          "type": "custom",
+          "filter": [ "path_hierarchy_pattern_filter", "lowercase" ],
+          "tokenizer": "whitespace"
+        },
+        "es_stk_search_analyzer": {
+          "type": "custom",
+          "filter": [ "lowercase" ],
+          "tokenizer": "whitespace"
+        },
+        "es_stk_search_quote_analyzer": {
+          "type": "custom",
+          "filter": [ "lowercase" ],
+          "tokenizer": "whitespace"
+        }
+      },
+      "filter" : {
+        "path_hierarchy_pattern_filter": {
+          "type" : "pattern_capture",
+          "preserve_original": true,
+          "patterns": [
+            "((?:[^\\\\]*\\\\)*)(.*)",
+            "((?:[^/]*/)*)(.*)"
+          ]
+        }
+      }
+    }
+  },
   "mappings": {
     "dynamic_templates": [
       {
@@ -17,24 +48,64 @@
     ],
     "properties": {
       "dst_original_value": {
-        "ignore_above": 32000,
-        "type": "keyword"
+        "ignore_above": 32766,
+        "type": "keyword",
+        "fields": {
+          "security": {
+            "type": "text",
+            "analyzer": "es_stk_analyzer",
+            "search_analyzer": "es_stk_search_analyzer",
+            "search_quote_analyzer": "es_stk_search_quote_analyzer"
+          }
+        }
       },
       "dst_nat_original_value": {
-        "ignore_above": 32000,
-        "type": "keyword"
+        "ignore_above": 32766,
+        "type": "keyword",
+        "fields": {
+          "security": {
+            "type": "text",
+            "analyzer": "es_stk_analyzer",
+            "search_analyzer": "es_stk_search_analyzer",
+            "search_quote_analyzer": "es_stk_search_quote_analyzer"
+          }
+        }
       },
       "host_uid": {
-        "type": "keyword"
+        "type": "keyword",
+        "fields": {
+          "security": {
+            "type": "text",
+            "analyzer": "es_stk_analyzer",
+            "search_analyzer": "es_stk_search_analyzer",
+            "search_quote_analyzer": "es_stk_search_quote_analyzer"
+          }
+        }
       },
       "src_original_value": {
-        "ignore_above": 32000,
-        "type": "keyword"
+        "ignore_above": 32766,
+        "type": "keyword",
+        "fields": {
+          "security": {
+            "type": "text",
+            "analyzer": "es_stk_analyzer",
+            "search_analyzer": "es_stk_search_analyzer",
+            "search_quote_analyzer": "es_stk_search_quote_analyzer"
+          }
+        }
       },
       "src_nat_original_value": {
-        "ignore_above": 32000,
-        "type": "keyword"
+        "ignore_above": 32766,
+        "type": "keyword",
+        "fields": {
+          "security": {
+            "type": "text",
+            "analyzer": "es_stk_analyzer",
+            "search_analyzer": "es_stk_search_analyzer",
+            "search_quote_analyzer": "es_stk_search_quote_analyzer"
+          }
+        }
       }
-    }    
+    }
   }
 }

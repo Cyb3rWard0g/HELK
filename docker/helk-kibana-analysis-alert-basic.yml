@@ -2,8 +2,8 @@ version: '3.5'
 
 services:
   helk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
-    #image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.7.1
+    #ENABLE-IF-WANTING-TO-USE-LICENSE#image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
     container_name: helk-elasticsearch
     logging:
       driver: "json-file"
@@ -36,7 +36,7 @@ services:
     networks:
       helk:
   helk-logstash:
-    #image: otrf/helk-logstash:7.7.1.2
+    #ENABLE-IF-WANTING-TO-USE-LICENSE#image: otrf/helk-logstash:7.10.2.1
     image: otrf/helk-logstash:oss-latest
     container_name: helk-logstash
     logging:
@@ -77,8 +77,8 @@ services:
     networks:
       helk:
   helk-kibana:
-    #ENABLE-IF-WANTING-TO-USE-LICENSE#image: docker.elastic.co/kibana/kibana:7.7.1
-    image: docker.elastic.co/kibana/kibana-oss:7.7.1
+    #ENABLE-IF-WANTING-TO-USE-LICENSE#image: docker.elastic.co/kibana/kibana:7.10.2
+    image: docker.elastic.co/kibana/kibana-oss:7.10.2
     container_name: helk-kibana
     logging:
       driver: "json-file"

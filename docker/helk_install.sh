@@ -6,8 +6,8 @@
 # Author: Roberto Rodriguez (@Cyb3rWard0g)
 # License: GPL-3.0
 
-HELK_BUILD_VERSION="v0.2.0-alpha"
-HELK_ELK_VERSION="7.7.1"
+HELK_BUILD_VERSION="2021020301"
+HELK_ELK_VERSION="7.10.2"
 SUBSCRIPTION_CHOICE="basic"
 
 RED='\033[0;31m'
@@ -308,7 +308,7 @@ install_docker_compose() {
 # *********** Set helk kibana UI password ******************************
 set_kibana_ui_password() {
   if [[ -z "$KIBANA_UI_PASSWORD_INPUT" ]]; then
-    echo "${HELK_INFO_TAG} Please make sure to create a custom Kibana password and store it securely for future use."
+    echo -e "${HELK_INFO_TAG} Please make sure to create a custom Kibana password and store it securely for future use."
     sleep 1
     while true; do
       read -t 90 -p "$(echo -e "${HELK_INPUT_TAG} Set HELK Kibana UI Password: ")" -e -i "" KIBANA_UI_PASSWORD_INPUT

@@ -1,7 +1,38 @@
 {
   "order": 60,
   "index_patterns": [ "logs-endpoint-winevent-powershell-*" ],
-  "version": 2019102401,
+  "version": 2020092801,
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "es_stk_analyzer": {
+          "type": "custom",
+          "filter": [ "path_hierarchy_pattern_filter", "lowercase" ],
+          "tokenizer": "whitespace"
+        },
+        "es_stk_search_analyzer": {
+          "type": "custom",
+          "filter": [ "lowercase" ],
+          "tokenizer": "whitespace"
+        },
+        "es_stk_search_quote_analyzer": {
+          "type": "custom",
+          "filter": [ "lowercase" ],
+          "tokenizer": "whitespace"
+        }
+      },
+      "filter" : {
+        "path_hierarchy_pattern_filter": {
+          "type" : "pattern_capture",
+          "preserve_original": true,
+          "patterns": [
+            "((?:[^\\\\]*\\\\)*)(.*)",
+            "((?:[^/]*/)*)(.*)"
+          ]
+        }
+      }
+    }
+  },
   "mappings":{
     "properties": {
       "powershell": {
@@ -10,227 +41,300 @@
           "command": {
             "properties": {
               "name": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
+                "type": "keyword",
                 "fields": {
-                  "keyword": {
-                    "type": "keyword"
+                  "security": {
+                    "type": "text",
+                    "analyzer": "es_stk_analyzer",
+                    "search_analyzer": "es_stk_search_analyzer",
+                    "search_quote_analyzer": "es_stk_search_quote_analyzer"
                   }
                 }
               },
               "invocation": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
+                "type": "keyword",
                 "fields": {
-                  "keyword": {
-                    "type": "keyword"
+                  "security": {
+                    "type": "text",
+                    "analyzer": "es_stk_analyzer",
+                    "search_analyzer": "es_stk_search_analyzer",
+                    "search_quote_analyzer": "es_stk_search_quote_analyzer"
                   }
                 }
               },
               "line": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
+                "type": "keyword",
                 "fields": {
-                  "keyword": {
-                    "type": "keyword"
+                  "security": {
+                    "type": "text",
+                    "analyzer": "es_stk_analyzer",
+                    "search_analyzer": "es_stk_search_analyzer",
+                    "search_quote_analyzer": "es_stk_search_quote_analyzer"
                   }
                 }
               },
               "path": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
+                "type": "keyword",
                 "fields": {
-                  "keyword": {
-                    "type": "keyword"
+                  "security": {
+                    "type": "text",
+                    "analyzer": "es_stk_analyzer",
+                    "search_analyzer": "es_stk_search_analyzer",
+                    "search_quote_analyzer": "es_stk_search_quote_analyzer"
                   }
                 }
               },
               "type": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
+                "type": "keyword",
                 "fields": {
-                  "keyword": {
-                    "type": "keyword"
+                  "security": {
+                    "type": "text",
+                    "analyzer": "es_stk_analyzer",
+                    "search_analyzer": "es_stk_search_analyzer",
+                    "search_quote_analyzer": "es_stk_search_quote_analyzer"
                   }
                 }
               }
             }
           },
           "connected_user": {
-            "type": "text",
-            "norms": false,
-            "analyzer": "standard",
+            "type": "keyword",
             "fields": {
-              "keyword": {
-                "type": "keyword"
+              "security": {
+                "type": "text",
+                "analyzer": "es_stk_analyzer",
+                "search_analyzer": "es_stk_search_analyzer",
+                "search_quote_analyzer": "es_stk_search_quote_analyzer"
               }
             }
-          },
-          "param": {
-            "properties": {
-              "name": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
-                "fields": {
-                  "keyword": {
-                    "type": "keyword"
-                  }
-                }
-              },
-              "value": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
-                "fields": {
-                  "keyword": {
-                    "type": "keyword"
-                  }
-                }
-              },
-              "value_nonalphanumeric": {
-                "type": "keyword"
-              }
-            }
-          },
-          "pipeline_id": {
-            "type": "integer"
-          },
-          "remaining_payload": {
-            "type": "text",
-            "norms": false,
-            "analyzer": "standard",
-            "fields": {
-              "keyword": {
-                "type": "keyword"
-              }
-            }
-          },
-          "runspace_id": {
-            "type": "keyword"
-          },
-          "scriptblock": {
-            "properties": {
-              "id": {
-                "type": "keyword"
-              },
-              "message_number": {
-                "type": "keyword"
-              },
-              "message_total": {
-                "type": "keyword"
-              },
-              "text": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
-                "fields": {
-                  "keyword": {
-                    "type": "keyword"
-                  }
+          }
+        },
+        "param": {
+          "properties": {
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
                 }
               }
-            }
-          },
-          "sequence_number": {
-            "type": "integer"
-          },
-          "shell_id": {
-            "type": "keyword"
-          },
-          "script": {
-            "properties": {
-              "name": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
-                "fields": {
-                  "keyword": {
-                    "type": "keyword"
-                  }
+            },
+            "value": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
                 }
-              },
-              "path": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
-                "fields": {
-                  "keyword": {
-                    "type": "keyword"
-                  }
+              }
+            },
+            "value_nonalphanumeric": {
+              "type": "keyword"
+            }
+          }
+        },
+        "pipeline_id": {
+          "type": "integer",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
+            }
+          }
+        },
+        "remaining_payload": {
+          "type": "keyword",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
+            }
+          }
+        },
+        "runspace_id": {
+          "type": "keyword"
+        },
+        "scriptblock": {
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "message_number": {
+              "type": "keyword"
+            },
+            "message_total": {
+              "type": "keyword"
+            },
+            "text": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
                 }
               }
             }
-          },
-          "host": {
-            "properties": {
-              "application": {
-                "type": "text",
-                "norms": false,
-                "analyzer": "standard",
-                "fields": {
-                  "keyword": {
-                    "type": "keyword"
-                  }
+          }
+        },
+        "sequence_number": {
+          "type": "integer",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
+            }
+          }
+        },
+        "shell_id": {
+          "type": "keyword",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
+            }
+          }
+        },
+        "script": {
+          "properties": {
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
                 }
-              },
-              "name": {
-                "type": "keyword"
-              },
-              "version": {
-                "type": "keyword"
-              },
-              "id": {
-                "type": "keyword"
+              }
+            },
+            "path": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
+                }
               }
             }
-          },
-          "engine_version": {
-            "type": "keyword"
-          },
-          "newproviderstate": {
-            "type": "text",
-            "norms": false,
-            "analyzer": "standard",
-            "fields": {
-              "keyword": {
-                "type": "keyword"
+          }
+        },
+        "host": {
+          "properties": {
+            "application": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
+                }
+              }
+            },
+            "name": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
+                }
+              }
+            },
+            "version": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
+                }
+              }
+            },
+            "id": {
+              "type": "keyword",
+              "fields": {
+                "security": {
+                  "type": "text",
+                  "analyzer": "es_stk_analyzer",
+                  "search_analyzer": "es_stk_search_analyzer",
+                  "search_quote_analyzer": "es_stk_search_quote_analyzer"
+                }
               }
             }
-          },
-          "providername": {
-            "type": "text",
-            "norms": false,
-            "analyzer": "standard",
-            "fields": {
-              "keyword": {
-                "type": "keyword"
-              }
+          }
+        },
+        "engine_version": {
+          "type": "keyword",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
             }
-          },
-          "newengine_state": {
-            "type": "text",
-            "norms": false,
-            "analyzer": "standard",
-            "fields": {
-              "keyword": {
-                "type": "keyword"
-              }
+          }
+        },
+        "newproviderstate": {
+          "type": "keyword",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
             }
-          },
-          "previousengine_state": {
-            "type": "text",
-            "norms": false,
-            "analyzer": "standard",
-            "fields": {
-              "keyword": {
-                "type": "keyword"
-              }
+          }
+        },
+        "providername": {
+          "type": "keyword",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
+            }
+          }
+        },
+        "newengine_state": {
+          "type": "keyword",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
+            }
+          }
+        },
+        "previousengine_state": {
+          "type": "keyword",
+          "fields": {
+            "security": {
+              "type": "text",
+              "analyzer": "es_stk_analyzer",
+              "search_analyzer": "es_stk_search_analyzer",
+              "search_quote_analyzer": "es_stk_search_quote_analyzer"
             }
           }
         }

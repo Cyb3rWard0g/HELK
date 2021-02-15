@@ -65,12 +65,20 @@ done
 # ********** Uploading templates to Elasticsearch *******
 echo -e "${HELK_INFO_TAG} Uploading templates for field & value mappings and index settings to elasticsearch .."
 for file in "${DIR}"/*.json; do
-    template_name=$(echo "$file" | sed -r ' s/^.*\/[0-9]+\-//' | sed -r ' s/\.json$//')
-    #echo -e "${HELK_INFO_TAG} Uploading $template_name template to elasticsearch.."
-    until [[ "$(curl -s -o /dev/null -w '%{http_code}' -X POST ${ELASTICSEARCH_ACCESS}/_template/"$template_name" -d@"${file}" -H 'Content-Type: application/json')" == "200" ]]; do
-      echo -e "${HELK_WARNING_TAG} Retrying uploading $template_name"
-      sleep 2
-    done
+  while true
+    do  
+      template_name=$(echo "$file" | sed -r ' s/^.*\/[0-9]+\-//' | sed -r ' s/\.json$//')
+      echo -e "${HELK_INFO_TAG} Uploading $template_name template to elasticsearch.."
+      ES_STATUS_CODE=$(curl -s -o "/tmp/template_upload_${template_name}" -w '%{http_code}' -X POST "${ELASTICSEARCH_ACCESS}/_template/${template_name}" -d@"${file}" -H 'Content-Type: application/json')
+      if [[ "$ES_STATUS_CODE" -eq 200 ]]; then
+        break
+      else
+        cat "/tmp/template_upload_${template_name}"
+        echo
+        echo -e "${HELK_WARNING_TAG} Retrying uploading $template_name"
+        sleep 2
+      fi
+  done
 done
 
 # ******** Cluster Settings ***************

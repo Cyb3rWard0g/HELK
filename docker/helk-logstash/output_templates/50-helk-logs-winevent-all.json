@@ -1,7 +1,7 @@
 {
   "order": 50,
   "index_patterns": [ "logs-endpoint-winevent-*" ],
-  "version": 2019090101,
+  "version": 2020092801,
   "settings": {
     "analysis": {
       "analyzer": {
@@ -9,7 +9,22 @@
           "type": "custom",
           "filter": [ "case_change_only_delim_filter", "three_or_more_tokenizer_limit_filter", "cli_n_file_word_delim_filter", "two_or_more_tokenizer_limit_filter", "lowercase", "unique" ],
           "tokenizer": "standard"
-        }
+        },
+        "es_stk_analyzer": {
+          "type": "custom",
+          "filter": [ "path_hierarchy_pattern_filter", "lowercase" ],
+          "tokenizer": "whitespace"
+        },
+        "es_stk_search_analyzer": {
+          "type": "custom",
+          "filter": [ "lowercase" ],
+          "tokenizer": "whitespace"
+        },
+        "es_stk_search_quote_analyzer": {
+          "type": "custom",
+          "filter": [ "lowercase" ],
+          "tokenizer": "whitespace"
+        }        
       },
       "filter": {
         "cli_n_file_word_delim_filter": {
@@ -37,6 +52,16 @@
         "three_or_more_tokenizer_limit_filter": {
           "type": "length",
           "min": 3
+        },
+        "filter" : {
+          "path_hierarchy_pattern_filter": {
+            "type" : "pattern_capture",
+            "preserve_original": true,
+            "patterns": [
+              "((?:[^\\\\]*\\\\)*)(.*)",
+              "((?:[^/]*/)*)(.*)"
+            ]
+          }
         }
       },
       "normalizer": {
@@ -69,7 +94,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 32000,
+            "ignore_above": 32766,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -80,7 +105,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 32000,
+            "ignore_above": 32766,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -91,7 +116,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 32000,
+            "ignore_above": 32766,
             "type": "keyword"
           }
         }
@@ -101,7 +126,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 32000,
+            "ignore_above": 32766,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -112,7 +137,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 32000,
+            "ignore_above": 32766,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -123,7 +148,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 32000,
+            "ignore_above": 32766,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -134,7 +159,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 32000,
+            "ignore_above": 32766,
             "eager_global_ordinals": true,
             "type": "keyword"
           }
@@ -145,7 +170,7 @@
         "type": "text",
         "fields": {
           "keyword": {
-            "ignore_above": 32000,
+            "ignore_above": 32766,
             "eager_global_ordinals": true,
             "type": "keyword"
           }

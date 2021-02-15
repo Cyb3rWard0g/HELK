@@ -1,7 +1,7 @@
 {
   "order": 99,
   "index_patterns": [ "logs-*" ],
-  "version": 2019090101,
+  "version": 2020092801,
   "mappings": {
     "properties": {
       "any_ip_addr": {
@@ -10,15 +10,16 @@
       "any_ip_geo": {
         "properties": {
           "asn": {
-            "type": "integer",
-            "doc_values": false
+            "type": "integer"
           },
           "as_org": {
-            "type": "text",
-            "analyzer": "standard",
+            "type": "keyword",
             "fields": {
-              "keyword": {
-                "type": "keyword"
+              "security": {
+                "type": "text",
+                "analyzer": "es_stk_analyzer",
+                "search_analyzer": "es_stk_search_analyzer",
+                "search_quote_analyzer": "es_stk_search_quote_analyzer"
               }
             }
           }

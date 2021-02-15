@@ -9,7 +9,7 @@
 * **Docker:**
   * HELK uses the official Docker Community Edition (CE) bash script (Edge Version) to install Docker for you. The Docker CE Edge script supports the following distros: **ubuntu**, **debian**, **raspbian**, **centos**, and **fedora**.
   * You can see the specific distro versions supported in the script [here](https://get.docker.com/).
-  * If you have Docker & Docker-Compose already installed in your system, make sure you uninstall them to avoid old incompatible version. Let HELK use the official Docker CE Edge script execution to install Docker. 
+  * If you have Docker & Docker-Compose already installed in your system, make sure you uninstall them to avoid old incompatible version. Let HELK use the official Docker CE Edge script execution to install Docker.
 * **Processor/OS Architecture:**
   * 64-bit also known as x64, x86_64, AMD64 or Intel 64.
   * FYI: old processors don't support SSE3 instructions to start ML (Machine Learning) on elasticsearch. Since version 6.1 Elastic has been compiling the ML programs on the assumption that SSE4.2 instructions are available (See: https://github.com/Cyb3rWard0g/HELK/issues/321 and https://discuss.elastic.co/t/failed-to-start-machine-learning-on-elasticsearch-7-0-0/178216/7)
@@ -31,7 +31,7 @@
   * [Winlogbeat](https://www.elastic.co/downloads/beats/winlogbeat) running on your endpoints or centralized WEF server (that your endpoints are forwarding to).
     * You can install Winlogbeat by following one of [@Cyb3rWard0g](https://twitter.com/Cyb3rWard0g) posts [here](https://cyberwardog.blogspot.com/2017/02/setting-up-pentesting-i-mean-threat_87.html).
    * [Winlogbeat config](https://github.com/Cyb3rWard0g/HELK/blob/master/configs/winlogbeat/winlogbeat.yml) recommended by the HELK since it uses the [Kafka output plugin](https://www.elastic.co/guide/en/beats/winlogbeat/current/kafka-output.html) and it is already pointing to the right ports with recommended options. You will just have to add your HELK's IP address.
- 
+
 # HELK Download
 Run the following commands to clone the HELK repo via git.
 
@@ -47,7 +47,7 @@ In order to make the installation of the HELK easy for everyone, the project com
 * Set the HELK's License Subscription. By default the HELK has the **basic** subscription selected. You can set it to **trial** if you want and will be valid for 30 days. If you want to learn more about subscriptions go [here](https://www.elastic.co/subscriptions)
   * If the license is set to **trial**, HELK asks you to set the password for the **elastic** account.
 
-**To install HELK:**  
+**To install HELK:**
 Change your current directory location to the new HELK directory, and run the **helk_install.sh** bash script as shown:
 
 ```bash
@@ -62,24 +62,24 @@ sudo ./helk_install.sh
 **          HELK - THE HUNTING ELK          **
 **                                          **
 ** Author: Roberto Rodriguez (@Cyb3rWard0g) **
-** HELK build version: v0.2.0-alpha **
+** HELK build version: 2021020301 **
 ** HELK ELK version: 7.7.1                  **
 ** License: GPL-3.0                         **
 **********************************************
- 
+
 [HELK-INSTALLATION-INFO] HELK hosted on a Linux box
 [HELK-INSTALLATION-INFO] Available Memory: 8345 MBs
 [HELK-INSTALLATION-INFO] You're using ubuntu version bionic
- 
+
 *****************************************************
 *      HELK - Docker Compose Build Choices          *
 *****************************************************
- 
+
 1. KAFKA + KSQL + ELK + NGNIX
 2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT
 3. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER
 4. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT
- 
+
 Enter build choice [ 1 - 4]: 2
 [HELK-INSTALLATION-INFO] HELK build set to 2
 [HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: 10.66.6.35
@@ -94,24 +94,24 @@ Enter build choice [ 1 - 4]: 2
 [HELK-INSTALLATION-INFO] Setting local vm.swappiness variable to 25
 [HELK-INSTALLATION-INFO] Building & running HELK from helk-kibana-analysis-alert-basic.yml file..
 [HELK-INSTALLATION-INFO] Waiting for some services to be up .....
- 
- 
+
+
 ***********************************************************************************
 ** [HELK-INSTALLATION-INFO] HELK WAS INSTALLED SUCCESSFULLY                      **
 ** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
 ***********************************************************************************
- 
+
 HELK KIBANA URL: https://10.66.6.35
 HELK KIBANA USER: helk
 HELK KIBANA PASSWORD: Mmh3QAvQm3535F4f4VZQD
 HELK ZOOKEEPER: 10.66.6.35:2181
 HELK KSQL SERVER: 10.66.6.35:8088
- 
+
 IT IS HUNTING SEASON!!!!!
- 
+
 You can stop all the HELK docker containers by running the following command:
  [+] sudo docker-compose -f helk-kibana-analysis-alert-basic.yml stop
- 
+
 ```
 # Monitor HELK installation Logs (Always)
 Once the installation kicks in, it will start showing you pre-defined messages about the installation, but no all the details of what is actually happening in the background. It is designed that way to keep your main screen clean and let you know where it is in the installation process.
@@ -119,7 +119,7 @@ Once the installation kicks in, it will start showing you pre-defined messages a
 What I recommend to do all the time is to open another shell and monitor the HELK installation logs by using the **tail** command and pointing it to the **/var/log/helk-install.log** file that gets created by the **helk_install** script as soon as it is run. This log file is available on your local host even if you are deploying the HELK via Docker (I want to make sure it is clear that it is a local file).
 
 ```bash
-tail -f /var/log/helk-install.log 
+tail -f /var/log/helk-install.log
 ```
 
 ```
@@ -142,14 +142,14 @@ Pulling helk-nginx (otrf/helk-nginx:latest)...
 0.0.8: Pulling from otrf/helk-nginx
 Digest: sha256:83e86d3ee3891b8a06173f4278ddc9f85cbba9b2dfceada48fb311411e236341
 Status: Downloaded newer image for otrf/helk-nginx:latest
-Pulling helk-zookeeper (otrf/helk-zookeeper:2.5.0.1)...
+Pulling helk-zookeeper (otrf/helk-zookeeper:2.7.0.1)...
 2.3.0: Pulling from otrf/helk-zookeeper
 Digest: sha256:3e7a0f3a73bcffeac4f239083618c362017005463dd747392a9b43db99535a68
-Status: Downloaded newer image for otrf/helk-zookeeper:2.5.0.1
-Pulling helk-kafka-broker (otrf/helk-kafka-broker:2.5.0.1)...
+Status: Downloaded newer image for otrf/helk-zookeeper:2.7.0.1
+Pulling helk-kafka-broker (otrf/helk-kafka-broker:2.7.0.1)...
 2.3.0: Pulling from otrf/helk-kafka-broker
 Digest: sha256:03569d98c46028715623778b4adf809bf417a055c3c19d21f426db4e1b2d6f55
-Status: Downloaded newer image for otrf/helk-kafka-broker:2.5.0.1
+Status: Downloaded newer image for otrf/helk-kafka-broker:2.7.0.1
 Pulling helk-ksql-server (confluentinc/cp-ksql-server:5.4.2)...
 5.1.3: Pulling from confluentinc/cp-ksql-server
 Digest: sha256:063add111cc93b1a0118f88b577e31303045d4cc08eb1d21458429f05cba4b02
@@ -182,8 +182,8 @@ sudo docker ps
 CONTAINER ID        IMAGE                                                 COMMAND                  CREATED             STATUS              PORTS                                                                              NAMES
 2caa7d86bc9e        confluentinc/cp-ksql-cli:5.4.2                        "/bin/sh"                5 minutes ago       Up 5 minutes                                                                                           helk-ksql-cli
 1ee3c0d90b2a        confluentinc/cp-ksql-server:5.4.2                     "/etc/confluent/dock…"   5 minutes ago       Up 5 minutes        0.0.0.0:8088->8088/tcp                                                             helk-ksql-server
-e753a811ffd2        otrf/helk-kafka-broker:2.5.0.1                          "./kafka-entrypoint.…"   5 minutes ago       Up 5 minutes        0.0.0.0:9092->9092/tcp                                                             helk-kafka-broker
-f93239de7d95        otrf/helk-zookeeper:2.5.0.1                             "./zookeeper-entrypo…"   5 minutes ago       Up 5 minutes        2181/tcp, 2888/tcp, 3888/tcp                                                       helk-zookeeper
+e753a811ffd2        otrf/helk-kafka-broker:2.7.0.1                          "./kafka-entrypoint.…"   5 minutes ago       Up 5 minutes        0.0.0.0:9092->9092/tcp                                                             helk-kafka-broker
+f93239de7d95        otrf/helk-zookeeper:2.7.0.1                             "./zookeeper-entrypo…"   5 minutes ago       Up 5 minutes        2181/tcp, 2888/tcp, 3888/tcp                                                       helk-zookeeper
 229ea8467075        otrf/helk-elastalert:latest                            "./elastalert-entryp…"   5 minutes ago       Up 5 minutes                                                                                           helk-elastalert
 f6fd290d2a9d        otrf/helk-nginx:latest                                 "/opt/helk/scripts/n…"   5 minutes ago       Up 5 minutes        0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp                                           helk-nginx
 d4f2b6d7d21e        otrf/helk-logstash:7.7.1                              "/usr/share/logstash…"   5 minutes ago       Up 5 minutes        0.0.0.0:3515->3515/tcp, 0.0.0.0:5044->5044/tcp, 0.0.0.0:8531->8531/tcp, 9600/tcp   helk-logstash
@@ -254,11 +254,11 @@ Remember that you can also access your docker images by running the following co
 
 ```bash
 sudo docker exec -ti helk-elasticsearch bash
-[root@1729e3234b91 elasticsearch]# 
+[root@1729e3234b91 elasticsearch]#
 ```
 
 # Final Details
-Once your HELK installation ends, you will be presented with information that you will need to access the HELK and all its other components. 
+Once your HELK installation ends, you will be presented with information that you will need to access the HELK and all its other components.
 
 You will get the following information:
 
@@ -267,15 +267,15 @@ You will get the following information:
 ** [HELK-INSTALLATION-INFO] HELK WAS INSTALLED SUCCESSFULLY                      **
 ** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
 ***********************************************************************************
- 
+
 HELK KIBANA URL: https://192.168.1.35
 HELK KIBANA USER: helk
 HELK KIBANA PASSWORD: Mmh3QAvQm3535F4f4VZQD
 HELK ZOOKEEPER: 192.168.1.35:2181
 HELK KSQL SERVER: 192.168.1.35:8088
- 
+
 IT IS HUNTING SEASON!!!!!
- 
+
 You can stop all the HELK docker containers by running the following command:
  [+] sudo docker-compose -f helk-kibana-analysis-alert-trial.yml stop
 

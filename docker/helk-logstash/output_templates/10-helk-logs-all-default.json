@@ -4,7 +4,7 @@
     "logs-*",
     "indexme-*"
   ],
-  "version": 2020051801,
+  "version": 2020092801,
   "settings": {
     "index": {
       "mapping": {
@@ -15,7 +15,36 @@
     },
     "refresh_interval": "13s",
     "number_of_replicas": 0,
-    "number_of_shards": 1
+    "number_of_shards": 1,
+    "analysis": {
+      "analyzer": {
+        "es_stk_analyzer": {
+          "type": "custom",
+          "filter": [ "path_hierarchy_pattern_filter", "lowercase" ],
+          "tokenizer": "whitespace"
+        },
+        "es_stk_search_analyzer": {
+          "type": "custom",
+          "filter": [ "lowercase" ],
+          "tokenizer": "whitespace"
+        },
+        "es_stk_search_quote_analyzer": {
+          "type": "custom",
+          "filter": [ "lowercase" ],
+          "tokenizer": "whitespace"
+        }
+      },
+      "filter" : {
+        "path_hierarchy_pattern_filter": {
+          "type" : "pattern_capture",
+          "preserve_original": true,
+          "patterns": [
+            "((?:[^\\\\]*\\\\)*)(.*)",
+            "((?:[^/]*/)*)(.*)"
+          ]
+        }
+      }
+    }
   },
   "mappings": {
     "dynamic": "true",
@@ -30,10 +59,13 @@
         "type": "date"
       },
       "etl_info_tags": {
-        "type": "text",
+        "type": "keyword",
         "fields": {
-          "keyword": {
-            "type": "keyword"
+          "security": {
+            "type": "text",
+            "analyzer": "es_stk_analyzer",
+            "search_analyzer": "es_stk_search_analyzer",
+            "search_quote_analyzer": "es_stk_search_quote_analyzer"
           }
         }
       },
@@ -48,6 +80,9 @@
       },
       "event_original_message": {
         "type": "text",
+        "analyzer": "es_stk_analyzer",
+        "search_analyzer": "es_stk_search_analyzer",
+        "search_quote_analyzer": "es_stk_search_quote_analyzer",
         "norms": false
       },
       "event_vendor": {

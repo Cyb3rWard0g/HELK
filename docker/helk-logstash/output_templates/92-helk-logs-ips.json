@@ -1,7 +1,7 @@
 {
   "order": 92,
   "index_patterns": [ "logs-*" ],
-  "version": 2020041401,
+  "version": 2020092801,
   "mappings": {
     "properties": {
       "dst_ip_addr": {
@@ -112,8 +112,7 @@
           },
           "as_org": {
             "copy_to": "any_ip_geo.as_org",
-            "type": "text",
-            "analyzer": "standard",
+            "type": "keyword",
             "fields": {
               "keyword": {
                 "eager_global_ordinals": true,

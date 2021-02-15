@@ -55,21 +55,21 @@
 
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
+
 
     <div class="container-xl">
       <div class="row">
-          
+
 
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     <div class="navbar-brand-box">
 <a class="navbar-brand text-wrap" href="index.html">
-  
+
   <img src="_static/logo.png" class="logo" alt="logo">
-  
-  
+
+
   <h1 class="site-logo" id="site-title">The HELK</h1>
-  
+
 </a>
 </div>
 
@@ -79,7 +79,7 @@
 </form>
 
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-  
+
   <ul class="nav sidenav_l1">
 <li class="navbar-special">
 <p class="margin-caption">Getting Started</p>
@@ -123,17 +123,17 @@
 </div>
 
 
-          
 
 
-          
+
+
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
+
     <div class="row topbar fixed-top container-xl">
     <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
     </div>
     <div class="col pl-2 topbar-main">
-        
+
         <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse" data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu" aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation" title="Toggle navigation" data-toggle="tooltip" data-placement="left">
             <i class="fas fa-bars"></i>
             <i class="fas fa-arrow-left"></i>
@@ -142,16 +142,16 @@
         <div class="dropdown-buttons-trigger">
             <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i class="fas fa-download"></i></button>
 
-            
+
             <div class="dropdown-buttons">
                 <!-- ipynb file if we had a myst markdown file -->
-                
+
                 <!-- Download raw file -->
                 <a class="dropdown-buttons" href="_sources/installation.md.txt"><button type="button" class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip" data-placement="left">.md</button></a>
                 <!-- Download PDF via print -->
                 <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF" onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
             </div>
-            
+
         </div>
 
         <!-- Edit this page -->
@@ -161,15 +161,15 @@
         <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="bottom" onclick="toggleFullScreen()" title="Fullscreen mode"><i class="fas fa-expand"></i></button></a>
 
         <!-- Launch buttons -->
-        
 
-        
+
+
     </div>
     <div class="d-none d-md-block col-md-2 bd-toc show">
 
 <nav id="bd-toc-nav">
     <ul class="nav section-nav flex-column">
-    
+
     </ul>
 </nav>
 
@@ -185,9 +185,9 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 col-xxl-7 pl-md-3 pr-md-0">
-        
+
               <div>
-                
+
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 </div>
@@ -281,24 +281,24 @@ sudo ./helk_install.sh
 **          HELK - THE HUNTING ELK          **
 **                                          **
 ** Author: Roberto Rodriguez (@Cyb3rWard0g) **
-** HELK build version: v0.2.0-alpha **
+** HELK build version: 2021020301 **
 ** HELK ELK version: 7.6.2                  **
 ** License: GPL-3.0                         **
 **********************************************
- 
+
 [HELK-INSTALLATION-INFO] HELK hosted on a Linux box
 [HELK-INSTALLATION-INFO] Available Memory: 8345 MBs
 [HELK-INSTALLATION-INFO] You&#39;re using ubuntu version bionic
- 
+
 *****************************************************
 *      HELK - Docker Compose Build Choices          *
 *****************************************************
- 
+
 1. KAFKA + KSQL + ELK + NGNIX
 2. KAFKA + KSQL + ELK + NGNIX + ELASTALERT
 3. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER
 4. KAFKA + KSQL + ELK + NGNIX + SPARK + JUPYTER + ELASTALERT
- 
+
 Enter build choice [ 1 - 4]: 2
 [HELK-INSTALLATION-INFO] HELK build set to 2
 [HELK-INSTALLATION-INFO] Set HELK IP. Default value is your current IP: 10.66.6.35
@@ -313,24 +313,24 @@ Enter build choice [ 1 - 4]: 2
 [HELK-INSTALLATION-INFO] Setting local vm.swappiness variable to 25
 [HELK-INSTALLATION-INFO] Building &amp; running HELK from helk-kibana-analysis-alert-basic.yml file..
 [HELK-INSTALLATION-INFO] Waiting for some services to be up .....
- 
- 
+
+
 ***********************************************************************************
 ** [HELK-INSTALLATION-INFO] HELK WAS INSTALLED SUCCESSFULLY                      **
 ** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
 ***********************************************************************************
- 
+
 HELK KIBANA URL: https://10.66.6.35
 HELK KIBANA USER: helk
 HELK KIBANA PASSWORD: Mmh3QAvQm3535F4f4VZQD
 HELK ZOOKEEPER: 10.66.6.35:2181
 HELK KSQL SERVER: 10.66.6.35:8088
- 
+
 IT IS HUNTING SEASON!!!!!
- 
+
 You can stop all the HELK docker containers by running the following command:
  [+] sudo docker-compose -f helk-kibana-analysis-alert-basic.yml stop
- 
+
 </pre></div>
 </div>
 </div>
@@ -338,7 +338,7 @@ You can stop all the HELK docker containers by running the following command:
 <h1>Monitor HELK installation Logs (Always)<a class="headerlink" href="#monitor-helk-installation-logs-always" title="Permalink to this headline">¶</a></h1>
 <p>Once the installation kicks in, it will start showing you pre-defined messages about the installation, but no all the details of what is actually happening in the background. It is designed that way to keep your main screen clean and let you know where it is in the installation process.</p>
 <p>What I recommend to do all the time is to open another shell and monitor the HELK installation logs by using the <strong>tail</strong> command and pointing it to the <strong>/var/log/helk-install.log</strong> file that gets created by the <strong>helk_install</strong> script as soon as it is run. This log file is available on your local host even if you are deploying the HELK via Docker (I want to make sure it is clear that it is a local file).</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail -f /var/log/helk-install.log 
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tail -f /var/log/helk-install.log
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Adding</span> <span class="n">password</span> <span class="k">for</span> <span class="n">user</span> <span class="n">helk</span>
@@ -473,15 +473,15 @@ c5ae143741ea        helk-kibana          1.10%               359.7MiB / 8.703GiB
 ** [HELK-INSTALLATION-INFO] HELK WAS INSTALLED SUCCESSFULLY                      **
 ** [HELK-INSTALLATION-INFO] USE THE FOLLOWING SETTINGS TO INTERACT WITH THE HELK **
 ***********************************************************************************
- 
+
 HELK KIBANA URL: https://192.168.1.35
 HELK KIBANA USER: helk
 HELK KIBANA PASSWORD: Mmh3QAvQm3535F4f4VZQD
 HELK ZOOKEEPER: 192.168.1.35:2181
 HELK KSQL SERVER: 192.168.1.35:8088
- 
+
 IT IS HUNTING SEASON!!!!!
- 
+
 You can stop all the HELK docker containers by running the following command:
  [+] sudo docker-compose -f helk-kibana-analysis-alert-trial.yml stop
 
@@ -539,13 +539,13 @@ You can stop all the HELK docker containers by running the following command:
     <script>kernelName = 'python3'</script>
 
               </div>
-              
+
         </div>
     </div>
-    
-    
+
+
     <div class='prev-next-bottom'>
-        
+
     <a class='left-prev' id="prev-link" href="intro.html" title="previous page">Introduction</a>
     <a class='right-next' id="next-link" href="architecture/elasticsearch.html" title="next page">Elasticsearch</a>
 
@@ -565,6 +565,6 @@ You can stop all the HELK docker containers by running the following command:
     </div>
 
     <script src="_static/js/index.js"></script>
-    
+
   </body>
 </html>

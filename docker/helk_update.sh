@@ -7,7 +7,7 @@
 # Script Author: Dev Dua (@devdua)
 # License: GPL-3.0
 
-HELK_BUILD_VERSION="v0.2.0-alpha"
+HELK_BUILD_VERSION="2021020301"
 HELK_ELK_VERSION="7.7.1"
 
 RED='\033[0;31m'
@@ -20,7 +20,7 @@ HELK_ERROR_TAG="[HELK-UPDATE-ERROR]"
 HELK_WARNING_TAG="[HELK-UPDATE-WARNING]"
 
 if [[ $EUID -ne 0 ]]; then
-   echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} YOU MUST BE ROOT TO RUN THIS SCRIPT!!!" 
+   echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} YOU MUST BE ROOT TO RUN THIS SCRIPT!!!"
    exit 1
 fi
 
@@ -243,7 +243,7 @@ set_helk_build(){
 check_min_requirements(){
     systemKernel="$(uname -s)"
     echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} HELK being hosted on a $systemKernel box"
-    if [ "$systemKernel" == "Linux" ]; then 
+    if [ "$systemKernel" == "Linux" ]; then
         AVAILABLE_MEMORY=$(awk '/MemAvailable/{printf "%.f", $2/1024/1024}' /proc/meminfo)
         if [ "${AVAILABLE_MEMORY}" -ge "11" ] ; then
             echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Available Memory (GB): ${AVAILABLE_MEMORY}"
@@ -260,7 +260,7 @@ check_min_requirements(){
 
     # CHECK DOCKER DIRECTORY SPACE
     echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Making sure you assigned enough disk space to the current Docker base directory"
-    AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')    
+    AVAILABLE_DOCKER_DISK=$(df -m $(docker info --format '{{.DockerRootDir}}') | awk '$1 ~ /\//{printf "%.f\t\t", $4 / 1024}')
     if [ "${AVAILABLE_DOCKER_DISK}" -ge "25" ]; then
         echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Available Docker Disk: $AVAILABLE_DOCKER_DISK"
     else
@@ -276,7 +276,7 @@ check_git_status(){
     GIT_STATUS=$(git status 2>&1)
     RETURN_CODE=$?
     echo -e "Git status: $GIT_STATUS, RetVal : $RETURN_CODE" >> $LOGFILE
-    if [[ -z $GIT_STATUS && $RETURN_CODE -gt 0 ]]; then 
+    if [[ -z $GIT_STATUS && $RETURN_CODE -gt 0 ]]; then
         echo -e "${WAR}${HELK_WARNING_TAG}${STD} Git repository corrupted."
         read -p ">> To fix this, all your local modifications to HELK will be overwritten. Do you wish to continue? (y/n) " -n 1 -r
         echo
@@ -291,7 +291,7 @@ check_git_status(){
             exit
         fi
     else
-        echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Sanity check passed."   
+        echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Sanity check passed."
     fi
 }
 
@@ -310,7 +310,7 @@ check_github(){
         echo "Git successfully installed." >> $LOGFILE
     fi
 
-    echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Sanity check..."   
+    echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Sanity check..."
     check_git_status
 
     if [ $GIT_REPO_CLEAN == 1 ]; then
@@ -319,20 +319,20 @@ check_github(){
         else
             echo "HELK repo exists" >> $LOGFILE 2>&1
         fi
-        
+
         git remote update >> $LOGFILE 2>&1
         COMMIT_DIFF=$(git rev-list --count master...helk-repo/master 2>&1)
         CURRENT_COMMIT=$(git rev-parse HEAD 2>&1)
         REMOTE_LATEST_COMMIT=$(git rev-parse helk-repo/master 2>&1)
         echo "[CD:$COMMIT_DIFF] HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1
-        
+
         if  [[ ! "$COMMIT_DIFF" == "0" || ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]]; then
             echo "Possibly new release available. Commit diff --> $COMMIT_DIFF" >> $LOGFILE 2>&1
             IS_MASTER_BEHIND=$(git branch -v | grep master | grep behind)
 
             # IF HELK HAS BEEN CLONED FROM OFFICIAL REPO
             if [[ ! "$CURRENT_COMMIT" == "$REMOTE_LATEST_COMMIT" ]]; then
-                echo "Difference in HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1   
+                echo "Difference in HEAD commits --> Current: $CURRENT_COMMIT | Remote: $REMOTE_LATEST_COMMIT" >> $LOGFILE 2>&1
                 echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} New release(s) available. Attempting to pull new code."
                 git checkout master >> $LOGFILE 2>&1
                 git clean  -d  -fx . >> $LOGFILE 2>&1
@@ -347,7 +347,7 @@ check_github(){
                 echo "Current master branch ahead of remote branch, possibly modified. Exiting..." >> $LOGFILE 2>&1
                 echo -e "${WAR}${HELK_WARNING_TAG}${STD} Current install has been modified."
                 echo -e "${WAR}${HELK_WARNING_TAG}${STD} Please commit your changes using git and then re-run this script."
-                exit 1             
+                exit 1
             fi
             if [[ $REBUILD_NEEDED == 0 ]] && [[ -z $IS_MASTER_BEHIND ]]; then
                 echo "Repository misconfigured. Exiting..." >> $LOGFILE 2>&1
@@ -357,13 +357,13 @@ check_github(){
             fi
 
         else
-            echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available."    
+            echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} No updates available."
         fi
     else
         cd ..
         git clean  -d  -fx . >> $LOGFILE 2>&1
         git remote add helk-repo https://github.com/Cyb3rWard0g/HELK.git  >> $LOGFILE 2>&1
-        git pull helk-repo master >> $LOGFILE 2>&1    
+        git pull helk-repo master >> $LOGFILE 2>&1
     fi
 }
 
@@ -411,7 +411,7 @@ update_helk() {
         echo -e "${RED}[!]${STD} Could not run HELK via docker-compose (Error Code: $ERROR). Check $LOGFILE for details."
         exit 1
     fi
-    
+
     secs=$((3 * 60))
     while [ $secs -gt 0 ]; do
         echo -ne "\033[0K\r${CYAN}[HELK-UPDATE-INFO]${STD} Rebuild succeeded, waiting $secs seconds for services to start..."
@@ -452,7 +452,7 @@ if [[ -e $UPDATES_FETCHED_FILE ]]; then
     fi
 fi
 
-echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Checking GitHub for updates..."   
+echo -e "${CYAN}[HELK-UPDATE-INFO]${STD} Checking GitHub for updates..."
 check_github
 
 if [ $REBUILD_NEEDED == 1 ]; then
