@@ -8,19 +8,19 @@ Elasticsearch uses heap, which can more specifically be referred to as memory/RA
 A list of some of the functions this heap/memory does is as follows (keep in mind this is not an exhaustive list):
 * Keep track of indexes
 * When aggregations are run such as calculating sums, mathematical variations, sub aggregations of aggregations, etc..
-* When certain searches are 
+* When certain searches are performed
 * Keep track of offsets of the tokens/terms of indexed values (aka events/logs/data)
 
 As you can see, heap and the amount of it is important in a healthy setup. The HELK installation process uses various functions to try to set the "perfect" amount of heap, however there are thousands of variables in all the different ways people use/install HELK.  
-Therefore, we are unable to account for them all and thus our logic will never be perfect and unfortunately may not work best for you. However, we have given you an ability to set your own heap and we have described the logic if you choose to let HELK determine what to set it.  
+Therefore, we are unable to account for them all and thus our logic will never be perfect and unfortunately may not work best for you. However, we have given you the ability to set your own heap and we have described the logic if you choose to let HELK determine what to set it.  
 
-Heap can and or is set one of four ways, as detailed below.
+Heap memory can be set in one of four ways, as detailed below.
 
-### 1) Allow HELK to calculate how much to assign.
+### 1) Allow HELK to calculate how much memory to assign.
 
 This is based on the available memory and variables shown in the code block below.  
-It’s very important to note `available memory`, not the amount of memory the host has.  
-An example to show why this is critical to understand.. If you have a 100GB RAM server, but the server is actively using 90GBs of RAM - then you will NOT get the max 31GB heap/memory for elasticsearch. In this example you would actually end up getting roughly 3 GBs for the heap. Because, with only 10 GBs of available/free memory, it could cause drastic issues to lock up all of the remaining memory!
+It’s very important to note `available memory`, not the total memory the host has.  
+An example to show why this is critical to understand.. If you have a 100GB RAM server, but the server is actively using 90GBs of RAM - then you will NOT get the max 31GB heap/memory for elasticsearch. In this example you would actually end up getting allocated closer to 3GB RAM, so as to avoid overusing system resources.
 
 ```
 if available memory >= 1000 MBs and <= 5999 MBs:
@@ -45,7 +45,7 @@ edit the following two lines that begin with
 `#-Xms`  
 `#-Xmx`
 
-Then make sure to restart elasticsearch.  
+Then, make sure to restart elasticsearch.  
 **Always set the min and max JVM heap size to the same value  
 Also, you will be restarting elasticsearch. Therefore your cluster will temporarily be down as the elasticsearch service/database is coming back online**
 
@@ -70,7 +70,7 @@ Example, if I used the option for ELK + Kafka with no license and no alerting an
 Then I would edit `HELK/docker/helk-kibana-analysis-basic.yml` and add the following line under the environment seciton:  
 `- "ES_JAVA_OPTS=-Xms16g -Xmx16g"`
 
-Then make sure rebuild the elasticsearch docker container.  
+Make sure to rebuild the elasticsearch docker container afterwards.  
 **Always set the min and max JVM heap size to the same value  
 Also, you will be restarting elasticsearch. Therefore your cluster will temporarily be down as the elasticsearch service/database is coming back online**  
 **Note if you are using (elastic) license you will need to set your ELASTIC_PASSWORD and KIBANA_UI_PASSWORD variables (and logstash password if applicable)**
