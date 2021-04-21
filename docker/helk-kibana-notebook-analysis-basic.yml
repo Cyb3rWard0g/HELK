@@ -153,7 +153,7 @@ services:
     networks:
       helk:
   helk-ksql-server:
-    image: confluentinc/cp-ksql-server:latest
+    image: confluentinc/ksqldb-server:latest
     container_name: helk-ksql-server
     logging:
       driver: "json-file"
@@ -178,7 +178,7 @@ services:
     networks:
       helk:
   helk-ksql-cli:
-    image: confluentinc/cp-ksql-cli:latest
+    image: confluentinc/ksqldb-cli:latest
     container_name: helk-ksql-cli
     logging:
       driver: "json-file"
