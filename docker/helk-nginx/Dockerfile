@@ -23,6 +23,7 @@ RUN apt-get -qy clean \
 
 # *********** Adding HELK scripts and files to Container ***************
 COPY scripts/nginx-entrypoint.sh /opt/helk/scripts/
+RUN chmod 644 /etc/nginx/htpasswd.users
 RUN chmod +x /opt/helk/scripts/nginx-entrypoint.sh
 
 # *********** RUN HELK ***************
