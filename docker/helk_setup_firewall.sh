@@ -32,7 +32,7 @@ echo "$ZONES" | tee -a $LOGFILE
 
 FIRST="$(echo $ZONES | cut -d ' ' -f 1)"
 while true; do
-   read -e -p "$TAG Please enter the zone you want to add the serivce to: " -i "$FIRST" CHOICE
+   read -e -p "$TAG Please enter the zone you want to add the service to: " -i "$FIRST" CHOICE
    if [[ $ZONES =~ (^| )$CHOICE($| ) ]]; then
       break
    else
